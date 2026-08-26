@@ -4,399 +4,589 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RAP STUDIO</title>
+<title>RAPZONE — Freestyle Quiz</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+    --bg:#070708;
+    --panel:#101012;
+    --panel2:#151518;
+    --border:#25252b;
+    --text:#f4f4f5;
+    --muted:#85858e;
+    --purple:#8b5cf6;
+    --purple2:#6d28d9;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#facc15;
+}
 
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
 }
 
 body{
-    background:#08090c;
-    color:#f5f5f5;
-    font-family:Inter,Arial,sans-serif;
     min-height:100vh;
+    background:
+        radial-gradient(circle at 50% -10%,#241342 0%,transparent 35%),
+        var(--bg);
+    color:var(--text);
+    font-family:Inter,Arial,sans-serif;
 }
 
-/* ---------- BARRA SUPERIOR ---------- */
+button{
+    font-family:inherit;
+}
 
-.topbar{
-    height:64px;
-    background:#0d0f13;
-    border-bottom:1px solid #24262c;
+/* =========================
+   HEADER
+========================= */
+
+header{
+    height:70px;
+    border-bottom:1px solid var(--border);
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:0 25px;
+    padding:0 32px;
+    background:rgba(7,7,8,.85);
+    backdrop-filter:blur(15px);
+    position:sticky;
+    top:0;
+    z-index:20;
 }
 
-.logo{
-    font-size:20px;
-    font-weight:900;
-    letter-spacing:-1px;
-}
-
-.logo span{
-    color:#9b6cff;
-}
-
-.status{
+.brand{
     display:flex;
     align-items:center;
-    gap:8px;
-    color:#8d919b;
+    gap:11px;
+}
+
+.brand-mark{
+    width:36px;
+    height:36px;
+    border-radius:9px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#a78bfa,#6d28d9);
+    font-size:18px;
+    font-weight:900;
+}
+
+.brand-name{
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:-.7px;
+}
+
+.brand-name span{
+    color:#9b78ff;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.best{
+    color:var(--muted);
     font-size:12px;
 }
 
-.status-dot{
-    width:8px;
-    height:8px;
-    background:#35d17b;
-    border-radius:50%;
-    box-shadow:0 0 10px #35d17b;
+.best strong{
+    color:#fff;
+    margin-left:5px;
 }
 
-/* ---------- LAYOUT ---------- */
+/* =========================
+   MAIN
+========================= */
 
-.studio{
-    display:grid;
-    grid-template-columns:230px 1fr 280px;
-    min-height:calc(100vh - 64px);
+main{
+    width:min(1000px,calc(100% - 30px));
+    margin:0 auto;
+    padding:42px 0 60px;
 }
 
-/* ---------- SIDEBAR ---------- */
+/* =========================
+   HOME
+========================= */
 
-.sidebar{
-    background:#0c0e12;
-    border-right:1px solid #24262c;
-    padding:22px 15px;
+.hero{
+    text-align:center;
+    padding:35px 10px 30px;
 }
 
-.section-label{
-    font-size:10px;
-    color:#666b75;
-    font-weight:800;
-    letter-spacing:2px;
-    margin:18px 10px 8px;
-}
-
-.nav-btn{
-    width:100%;
-    background:transparent;
-    border:0;
-    color:#90949d;
-    text-align:left;
-    padding:13px 12px;
-    border-radius:8px;
-    cursor:pointer;
-    margin-bottom:3px;
-    font-size:13px;
-    transition:.2s;
-}
-
-.nav-btn:hover,
-.nav-btn.active{
-    background:#191621;
-    color:white;
-}
-
-.nav-btn.active{
-    border-left:2px solid #9b6cff;
-}
-
-/* ---------- CENTRO ---------- */
-
-.center{
-    padding:25px;
-    overflow:hidden;
-}
-
-.project{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
-}
-
-.project h1{
-    font-size:20px;
-}
-
-.project small{
-    display:block;
-    color:#666b75;
-    margin-top:4px;
-}
-
-.controls{
-    display:flex;
-    gap:8px;
-}
-
-.small-btn{
-    background:#15171c;
-    color:#ddd;
-    border:1px solid #292c33;
-    padding:9px 12px;
-    border-radius:7px;
-    cursor:pointer;
-}
-
-.small-btn:hover{
-    background:#1e2026;
-}
-
-/* ---------- WAVEFORM ---------- */
-
-.wave-container{
-    background:#0d0f13;
-    border:1px solid #252830;
-    border-radius:12px;
-    padding:20px;
-    position:relative;
-    overflow:hidden;
-}
-
-.wave-title{
-    display:flex;
-    justify-content:space-between;
-    color:#70747d;
+.eyebrow{
+    color:#9b78ff;
     font-size:11px;
+    font-weight:800;
+    letter-spacing:3px;
     margin-bottom:15px;
 }
 
-canvas{
-    width:100%;
-    height:230px;
-    display:block;
-    background:
-        linear-gradient(#15171d 1px,transparent 1px),
-        linear-gradient(90deg,#15171d 1px,transparent 1px);
-    background-size:50px 50px;
-    border-radius:7px;
+.hero h1{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(42px,8vw,76px);
+    line-height:.95;
+    letter-spacing:-4px;
 }
 
-.time{
-    display:flex;
-    justify-content:space-between;
-    color:#666a73;
-    font-size:11px;
-    margin-top:8px;
+.hero h1 span{
+    color:#8b5cf6;
 }
 
-/* ---------- GRABADOR ---------- */
-
-.recorder{
-    margin-top:18px;
-    background:#0d0f13;
-    border:1px solid #252830;
-    border-radius:12px;
-    padding:25px;
-}
-
-.rec-info{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.rec-title{
+.hero p{
+    max-width:600px;
+    margin:20px auto 0;
+    color:var(--muted);
+    line-height:1.6;
     font-size:14px;
-    font-weight:700;
 }
 
-.timer{
-    font-family:monospace;
-    color:#a99aff;
-    font-size:18px;
+/* =========================
+   CATEGORIAS
+========================= */
+
+.categories{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:9px;
+    margin:25px 0;
 }
 
-.record-button{
-    width:72px;
-    height:72px;
-    border-radius:50%;
-    border:7px solid #24262d;
-    background:#d94155;
+.category{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:15px 8px;
+    text-align:center;
     cursor:pointer;
-    display:block;
-    margin:28px auto 12px;
-    box-shadow:0 0 0 0 rgba(217,65,85,.4);
     transition:.2s;
 }
 
-.record-button:hover{
-    transform:scale(1.05);
+.category:hover{
+    transform:translateY(-2px);
+    border-color:#49404f;
 }
 
-.record-button.recording{
-    animation:pulse 1.2s infinite;
-    background:#ff334f;
+.category.active{
+    border-color:var(--purple);
+    background:#17111f;
 }
 
-@keyframes pulse{
-    0%{
-        box-shadow:0 0 0 0 rgba(255,51,79,.4);
-    }
-    70%{
-        box-shadow:0 0 0 18px rgba(255,51,79,0);
-    }
-    100%{
-        box-shadow:0 0 0 0 rgba(255,51,79,0);
-    }
+.category .icon{
+    font-size:20px;
+    display:block;
+    margin-bottom:8px;
 }
 
-.record-label{
-    text-align:center;
-    color:#777b84;
-    font-size:11px;
+.category span{
+    font-size:10px;
+    color:#aaaab2;
+    font-weight:700;
 }
 
-/* ---------- PANEL DERECHO ---------- */
+/* =========================
+   START CARD
+========================= */
 
-.rightbar{
-    background:#0c0e12;
-    border-left:1px solid #24262c;
-    padding:22px 18px;
-}
-
-.panel{
-    background:#111318;
-    border:1px solid #252830;
-    border-radius:10px;
-    padding:16px;
-    margin-bottom:12px;
-}
-
-.panel-title{
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:1.5px;
-    color:#8a8e98;
-    margin-bottom:16px;
-}
-
-.control{
-    margin-bottom:19px;
-}
-
-.control-head{
+.start-card{
+    background:
+        linear-gradient(120deg,#121016,#0d0d10);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:27px;
     display:flex;
     justify-content:space-between;
-    margin-bottom:8px;
+    align-items:center;
+    gap:25px;
+}
+
+.start-info h2{
+    font-size:19px;
+    margin-bottom:7px;
+}
+
+.start-info p{
+    color:var(--muted);
     font-size:12px;
-}
-
-.control-head span:last-child{
-    color:#9f8bff;
-}
-
-input[type="range"]{
-    width:100%;
-    accent-color:#8d6bea;
-    cursor:pointer;
-}
-
-select{
-    width:100%;
-    background:#191b21;
-    color:white;
-    border:1px solid #2a2d35;
-    border-radius:7px;
-    padding:10px;
-    outline:none;
-}
-
-/* ---------- BOTONES ---------- */
-
-.action-buttons{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.action{
-    background:#17191f;
-    border:1px solid #2a2d34;
-    color:#eee;
-    border-radius:7px;
-    padding:11px;
-    cursor:pointer;
-    font-size:12px;
-}
-
-.action:hover{
-    background:#202229;
-}
-
-.action.primary{
-    background:#7652d5;
-    border-color:#7652d5;
-}
-
-.action.primary:hover{
-    background:#8663e5;
-}
-
-/* ---------- AYUDA ---------- */
-
-.help{
-    color:#70747d;
-    font-size:11px;
     line-height:1.6;
 }
 
-/* ---------- RESPONSIVE ---------- */
-
-@media(max-width:1000px){
-
-    .studio{
-        grid-template-columns:190px 1fr;
-    }
-
-    .rightbar{
-        grid-column:1/-1;
-        border-left:0;
-        border-top:1px solid #24262c;
-        display:grid;
-        grid-template-columns:1fr 1fr 1fr;
-        gap:12px;
-    }
-
+.start-btn{
+    border:0;
+    color:white;
+    background:linear-gradient(135deg,#8b5cf6,#6d28d9);
+    border-radius:9px;
+    padding:14px 25px;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+    box-shadow:0 8px 30px rgba(109,40,217,.22);
+    transition:.2s;
 }
+
+.start-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* =========================
+   QUIZ
+========================= */
+
+#quizScreen{
+    display:none;
+}
+
+.quiz-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.question-number{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.question-number strong{
+    color:white;
+}
+
+.stats{
+    display:flex;
+    gap:16px;
+    font-size:12px;
+}
+
+.stat{
+    color:var(--muted);
+}
+
+.stat strong{
+    color:white;
+}
+
+.lives{
+    color:#ff5a6b;
+    letter-spacing:2px;
+}
+
+/* timer */
+
+.timer-wrap{
+    height:5px;
+    width:100%;
+    background:#1b1b20;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:28px;
+}
+
+.timer-bar{
+    height:100%;
+    width:100%;
+    background:#8b5cf6;
+    transition:width .1s linear;
+}
+
+/* question */
+
+.question-card{
+    background:linear-gradient(145deg,#121215,#0d0d0f);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:35px;
+    margin-bottom:15px;
+}
+
+.question-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.tag{
+    border:1px solid #3a3149;
+    background:#19131f;
+    color:#ad8cff;
+    padding:6px 9px;
+    border-radius:5px;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.difficulty{
+    font-size:10px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.question{
+    font-family:"Space Grotesk",sans-serif;
+    font-size:clamp(22px,4vw,34px);
+    line-height:1.18;
+    letter-spacing:-1px;
+}
+
+.question-note{
+    margin-top:14px;
+    color:#74747d;
+    font-size:11px;
+    line-height:1.5;
+}
+
+/* answers */
+
+.answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.answer{
+    min-height:70px;
+    background:#111114;
+    border:1px solid #27272d;
+    border-radius:10px;
+    padding:16px;
+    color:#dedee2;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition:.18s;
+}
+
+.answer:hover:not(.disabled){
+    border-color:#55505d;
+    background:#17171b;
+    transform:translateY(-1px);
+}
+
+.answer-letter{
+    width:29px;
+    height:29px;
+    min-width:29px;
+    border-radius:7px;
+    display:grid;
+    place-items:center;
+    background:#1d1d22;
+    color:#9999a2;
+    font-size:11px;
+    font-weight:800;
+}
+
+.answer-text{
+    font-size:12px;
+    line-height:1.45;
+}
+
+.answer.correct{
+    border-color:#23934b;
+    background:rgba(34,197,94,.10);
+}
+
+.answer.correct .answer-letter{
+    background:#1c783d;
+    color:white;
+}
+
+.answer.wrong{
+    border-color:#b93643;
+    background:rgba(239,68,68,.10);
+}
+
+.answer.wrong .answer-letter{
+    background:#962f3a;
+    color:white;
+}
+
+.answer.disabled{
+    cursor:default;
+}
+
+/* result */
+
+.result{
+    display:none;
+    margin-top:14px;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#101012;
+}
+
+.result-title{
+    font-weight:900;
+    margin-bottom:7px;
+}
+
+.result-text{
+    color:#9999a2;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.next-btn{
+    margin-top:14px;
+    border:0;
+    border-radius:7px;
+    padding:10px 17px;
+    background:#f1f1f1;
+    color:#090909;
+    font-size:11px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+/* =========================
+   GAME OVER
+========================= */
+
+#gameOver{
+    display:none;
+    text-align:center;
+}
+
+.gameover-card{
+    background:#101012;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:45px 25px;
+}
+
+.gameover-card .big{
+    font-size:52px;
+    margin-bottom:15px;
+}
+
+.gameover-card h2{
+    font-family:"Space Grotesk";
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.final-score{
+    font-size:42px;
+    font-weight:900;
+    color:#9b78ff;
+    margin:18px 0;
+}
+
+.rank{
+    color:#aaaab2;
+    font-size:12px;
+}
+
+.game-buttons{
+    margin-top:25px;
+    display:flex;
+    justify-content:center;
+    gap:9px;
+}
+
+.secondary-btn{
+    background:#18181c;
+    color:white;
+    border:1px solid #2b2b31;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:700;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,20px);
+    opacity:0;
+    pointer-events:none;
+    padding:12px 17px;
+    border-radius:8px;
+    background:#18181c;
+    border:1px solid #303038;
+    font-size:11px;
+    z-index:50;
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media(max-width:700px){
 
-    .studio{
-        display:block;
+    header{
+        padding:0 15px;
     }
 
-    .sidebar{
+    .best{
         display:none;
     }
 
-    .center{
-        padding:15px;
+    main{
+        width:min(100% - 20px,1000px);
+        padding-top:20px;
     }
 
-    .rightbar{
-        display:block;
+    .hero h1{
+        letter-spacing:-2px;
     }
 
-    .project{
+    .categories{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .start-card{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .start-btn{
+        width:100%;
+    }
+
+    .question-card{
+        padding:23px;
+    }
+
+    .answers{
+        grid-template-columns:1fr;
+    }
+
+    .quiz-top{
         align-items:flex-start;
         gap:10px;
     }
 
-    .project h1{
-        font-size:17px;
-    }
-
-    canvas{
-        height:180px;
+    .stats{
+        gap:8px;
+        flex-wrap:wrap;
+        justify-content:flex-end;
     }
 }
 </style>
@@ -404,865 +594,1426 @@ select{
 
 <body>
 
-<header class="topbar">
+<header>
 
-    <div class="logo">
-        RAP<span>STUDIO</span>
+    <div class="brand">
+
+        <div class="brand-mark">
+            R
+        </div>
+
+        <div class="brand-name">
+            RAP<span>ZONE</span>
+        </div>
+
     </div>
 
-    <div class="status">
-        <div class="status-dot"></div>
-        SISTEMA LISTO
+    <div class="header-right">
+
+        <div class="best">
+            RÉCORD
+            <strong id="bestScore">0</strong>
+        </div>
+
     </div>
 
 </header>
 
 
-<div class="studio">
+<main>
 
-    <!-- SIDEBAR -->
+<!-- =========================
+     HOME
+========================= -->
 
-    <aside class="sidebar">
+<section id="homeScreen">
 
-        <div class="section-label">
-            PROYECTO
+    <div class="hero">
+
+        <div class="eyebrow">
+            FREESTYLE • RAP • CULTURA URBANA
         </div>
 
-        <button class="nav-btn active">
-            🎤 Grabación
-        </button>
+        <h1>
+            ¿CUÁNTO<br>
+            <span>SABÉS DE RAP?</span>
+        </h1>
 
-        <button class="nav-btn">
-            🎛 Mezclador
-        </button>
+        <p>
+            Poné a prueba tu memoria con batallas,
+            competidores, eventos y momentos históricos
+            del freestyle argentino y mundial.
+        </p>
 
-        <button class="nav-btn">
-            🎵 Beats
-        </button>
-
-        <button class="nav-btn">
-            📝 Letras
-        </button>
+    </div>
 
 
-        <div class="section-label">
-            EFECTOS
+    <div class="categories">
+
+        <div class="category active" data-cat="Todas">
+            <span class="icon">🔥</span>
+            <span>TODAS</span>
         </div>
 
-        <button class="nav-btn">
-            AutoTune
-        </button>
-
-        <button class="nav-btn">
-            Reverb
-        </button>
-
-        <button class="nav-btn">
-            Echo
-        </button>
-
-        <button class="nav-btn">
-            Distorsión
-        </button>
-
-
-        <div class="section-label">
-            PROYECTO
+        <div class="category" data-cat="Quinto">
+            <span class="icon">🏆</span>
+            <span>QUINTO</span>
         </div>
 
-        <button class="nav-btn" onclick="nuevoProyecto()">
-            + Nuevo proyecto
-        </button>
+        <div class="category" data-cat="FMS">
+            <span class="icon">🎤</span>
+            <span>FMS</span>
+        </div>
 
-    </aside>
+        <div class="category" data-cat="GodLevel">
+            <span class="icon">⚡</span>
+            <span>GOD LEVEL</span>
+        </div>
+
+        <div class="category" data-cat="RedBull">
+            <span class="icon">🐂</span>
+            <span>RED BULL</span>
+        </div>
+
+    </div>
 
 
-    <!-- CENTRO -->
+    <div class="start-card">
 
-    <main class="center">
+        <div class="start-info">
 
-        <div class="project">
+            <h2>
+                MODO INFINITO
+            </h2>
 
-            <div>
-                <h1>Mi sesión de rap</h1>
-                <small>Voz principal · 01</small>
-            </div>
-
-            <div class="controls">
-
-                <button class="small-btn" onclick="metronomo()">
-                    ♩ Metrónomo
-                </button>
-
-                <button class="small-btn" onclick="resetStudio()">
-                    Reset
-                </button>
-
-            </div>
+            <p>
+                Las preguntas se mezclan y la dificultad
+                aumenta a medida que avanzás.
+                Tres vidas. Una sola meta: demostrar
+                que conocés el freestyle.
+            </p>
 
         </div>
 
+        <button class="start-btn" onclick="startGame()">
+            EMPEZAR QUIZ →
+        </button>
 
-        <!-- WAVEFORM -->
+    </div>
 
-        <div class="wave-container">
+</section>
 
-            <div class="wave-title">
-                <span>VOICE TRACK</span>
-                <span id="waveStatus">ESPERANDO MICRÓFONO</span>
+
+<!-- =========================
+     QUIZ
+========================= -->
+
+<section id="quizScreen">
+
+    <div class="quiz-top">
+
+        <div class="question-number">
+            PREGUNTA <strong id="questionNumber">1</strong>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                PUNTOS <strong id="score">0</strong>
             </div>
 
-            <canvas id="wave"></canvas>
+            <div class="stat">
+                RACHA <strong id="streak">0</strong>
+            </div>
 
-            <div class="time">
-                <span>00:00</span>
-                <span id="currentTime">00:00</span>
-                <span>05:00</span>
+            <div class="lives" id="lives">
+                ♥ ♥ ♥
             </div>
 
         </div>
 
+    </div>
 
-        <!-- GRABADOR -->
 
-        <div class="recorder">
+    <div class="timer-wrap">
+        <div class="timer-bar" id="timerBar"></div>
+    </div>
 
-            <div class="rec-info">
 
-                <div class="rec-title">
-                    Grabación vocal
-                </div>
+    <div class="question-card">
 
-                <div class="timer" id="timer">
-                    00:00
-                </div>
+        <div class="question-meta">
 
+            <div class="tag" id="questionCategory">
+                FMS
             </div>
 
-            <button
-                class="record-button"
-                id="recordButton"
-                onclick="toggleRecording()">
+            <div class="difficulty" id="difficulty">
+                NORMAL
+            </div>
+
+        </div>
+
+        <div class="question" id="question">
+            Cargando pregunta...
+        </div>
+
+        <div class="question-note" id="questionNote">
+        </div>
+
+    </div>
+
+
+    <div class="answers" id="answers">
+    </div>
+
+
+    <div class="result" id="result">
+
+        <div class="result-title" id="resultTitle">
+        </div>
+
+        <div class="result-text" id="resultText">
+        </div>
+
+        <button class="next-btn" onclick="nextQuestion()">
+            SIGUIENTE →
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     GAME OVER
+========================= -->
+
+<section id="gameOver">
+
+    <div class="gameover-card">
+
+        <div class="big">🎤</div>
+
+        <h2>
+            FIN DEL ROUND
+        </h2>
+
+        <div class="final-score" id="finalScore">
+            0
+        </div>
+
+        <div class="rank" id="rank">
+            Rookie
+        </div>
+
+        <div class="game-buttons">
+
+            <button class="start-btn" onclick="startGame()">
+                JUGAR DE NUEVO
             </button>
 
-            <div
-                class="record-label"
-                id="recordLabel">
-                Presioná para comenzar
-            </div>
+            <button class="secondary-btn" onclick="goHome()">
+                MENÚ
+            </button>
 
         </div>
 
-    </main>
+    </div>
 
+</section>
 
-    <!-- PANEL DERECHO -->
+</main>
 
-    <aside class="rightbar">
 
-
-        <!-- AUTOTUNE -->
-
-        <div class="panel">
-
-            <div class="panel-title">
-                AUTOTUNE
-            </div>
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Intensidad</span>
-                    <span id="autoValue">70%</span>
-                </div>
-
-                <input
-                    id="autotune"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="70"
-                    oninput="actualizar('autoValue',this.value,'%')">
-
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Velocidad</span>
-                    <span id="speedValue">50%</span>
-                </div>
-
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="50"
-                    oninput="actualizar('speedValue',this.value,'%')">
-
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Tonalidad</span>
-                </div>
-
-                <select id="key">
-                    <option>C</option>
-                    <option>C#</option>
-                    <option>D</option>
-                    <option>D#</option>
-                    <option>E</option>
-                    <option>F</option>
-                    <option>F#</option>
-                    <option>G</option>
-                    <option>G#</option>
-                    <option>A</option>
-                    <option>A#</option>
-                    <option>B</option>
-                </select>
-
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Escala</span>
-                </div>
-
-                <select>
-                    <option>Mayor</option>
-                    <option>Menor</option>
-                    <option>Pentatónica</option>
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <!-- EFECTOS -->
-
-        <div class="panel">
-
-            <div class="panel-title">
-                EFECTOS
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Reverb</span>
-                    <span id="reverbValue">30%</span>
-                </div>
-
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="30"
-                    oninput="actualizar('reverbValue',this.value,'%')">
-
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Echo</span>
-                    <span id="echoValue">15%</span>
-                </div>
-
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="15"
-                    oninput="actualizar('echoValue',this.value,'%')">
-
-            </div>
-
-
-            <div class="control">
-
-                <div class="control-head">
-                    <span>Distorsión</span>
-                    <span id="distValue">0%</span>
-                </div>
-
-                <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="0"
-                    oninput="actualizar('distValue',this.value,'%')">
-
-            </div>
-
-        </div>
-
-
-        <!-- ACCIONES -->
-
-        <div class="panel">
-
-            <div class="panel-title">
-                ARCHIVO
-            </div>
-
-            <div class="action-buttons">
-
-                <button
-                    class="action primary"
-                    onclick="reproducir()">
-                    ▶ Escuchar
-                </button>
-
-                <button
-                    class="action"
-                    onclick="descargar()">
-                    ↓ Descargar
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="panel">
-
-            <div class="panel-title">
-                ESTADO
-            </div>
-
-            <div class="help">
-
-                Este estudio funciona directamente
-                desde el navegador usando el micrófono
-                de tu dispositivo.
-
-                <br><br>
-
-                Permití el acceso al micrófono cuando
-                el navegador lo solicite.
-
-            </div>
-
-        </div>
-
-    </aside>
-
+<div class="toast" id="toast">
 </div>
 
 
 <script>
 
-/* ==========================================
-   VARIABLES
-========================================== */
+/* =====================================================
+   BANCO DE PREGUNTAS
 
-let audioContext;
-let analyser;
-let microphone;
-let mediaRecorder;
+   Las preguntas son de cultura del freestyle.
+   No se incluyen letras extensas de canciones/batallas.
+===================================================== */
 
-let chunks=[];
+const questions = [
 
-let recording=false;
+/* -------------------------
+   EL QUINTO ESCALÓN
+------------------------- */
 
-let audioBlob=null;
-let audioURL=null;
+{
+cat:"Quinto",
+difficulty:"Fácil",
+q:"¿En qué ciudad argentina nació y se desarrolló El Quinto Escalón?",
+options:[
+"Buenos Aires",
+"Córdoba",
+"Rosario",
+"Mendoza"
+],
+correct:0,
+info:"El Quinto Escalón se convirtió en uno de los fenómenos más importantes de la escena de freestyle de Buenos Aires."
+},
 
-let startTime;
-let timerInterval;
+{
+cat:"Quinto",
+difficulty:"Fácil",
+q:"¿Quién fue uno de los principales organizadores de El Quinto Escalón?",
+options:[
+"Mauro Ezequiel Lombardo",
+"Ysy A",
+"Trueno",
+"Lit Killah"
+],
+correct:1,
+info:"Ysy A fue una figura central en la organización y crecimiento de El Quinto Escalón."
+},
+
+{
+cat:"Quinto",
+difficulty:"Medio",
+q:"¿En qué lugar se realizaban originalmente las primeras ediciones de El Quinto Escalón?",
+options:[
+"Parque Rivadavia",
+"Parque Centenario",
+"Plaza de Mayo",
+"Parque Lezama"
+],
+correct:0,
+info:"Las primeras ediciones se realizaron en Parque Rivadavia, en Buenos Aires."
+},
+
+{
+cat:"Quinto",
+difficulty:"Medio",
+q:"¿Qué rapero ganó la edición 2016 de El Quinto Escalón?",
+options:[
+"Wos",
+"Duki",
+"Trueno",
+"Stuart"
+],
+correct:0,
+info:"Wos fue campeón de El Quinto Escalón 2016."
+},
+
+{
+cat:"Quinto",
+difficulty:"Difícil",
+q:"¿Quién ganó la última edición de El Quinto Escalón?",
+options:[
+"Wos",
+"Trueno",
+"Stuart",
+"Duki"
+],
+correct:1,
+info:"Trueno ganó la edición final de El Quinto Escalón en 2017."
+},
+
+{
+cat:"Quinto",
+difficulty:"Difícil",
+q:"¿Qué evento ayudó especialmente a que varios integrantes de la escena dieran el salto hacia la música profesional?",
+options:[
+"El Quinto Escalón",
+"Batalla de Maestros",
+"Supremacía MC",
+"Combate"
+],
+correct:0,
+info:"El Quinto Escalón funcionó como una enorme plataforma para la generación que luego transformó la escena musical argentina."
+},
+
+/* -------------------------
+   FMS
+------------------------- */
+
+{
+cat:"FMS",
+difficulty:"Fácil",
+q:"¿Qué significa FMS?",
+options:[
+"Freestyle Master Series",
+"Freestyle Music System",
+"Freestyle Masters Show",
+"Famous MC Series"
+],
+correct:0,
+info:"FMS significa Freestyle Master Series."
+},
+
+{
+cat:"FMS",
+difficulty:"Fácil",
+q:"¿Qué organización está detrás de FMS?",
+options:[
+"Urban Roosters",
+"Red Bull",
+"Warner Music",
+"MTV"
+],
+correct:0,
+info:"Urban Roosters creó y organiza el circuito FMS."
+},
+
+{
+cat:"FMS",
+difficulty:"Medio",
+q:"¿Cuál fue una de las primeras ligas nacionales de FMS?",
+options:[
+"Argentina",
+"Japón",
+"Canadá",
+"Brasil"
+],
+correct:0,
+info:"FMS Argentina fue una de las ligas nacionales más importantes del circuito."
+},
+
+{
+cat:"FMS",
+difficulty:"Medio",
+q:"¿Qué sistema se utiliza en FMS para valorar distintos aspectos de una batalla?",
+options:[
+"Puntos y métricas",
+"Solo votos del público",
+"Cantidad de seguidores",
+"Duración del beat"
+],
+correct:0,
+info:"FMS utiliza un sistema de puntuación y métricas para valorar diferentes aspectos del enfrentamiento."
+},
+
+{
+cat:"FMS",
+difficulty:"Difícil",
+q:"¿Qué formato caracteriza a las batallas de FMS?",
+options:[
+"Jornadas y distintos rounds",
+"Un único round sin límite",
+"Solo acapella",
+"Batallas escritas"
+],
+correct:0,
+info:"Las jornadas de FMS tienen diferentes rounds y formatos que permiten evaluar múltiples habilidades."
+},
+
+/* -------------------------
+   GOD LEVEL
+------------------------- */
+
+{
+cat:"GodLevel",
+difficulty:"Fácil",
+q:"¿God Level es principalmente una competencia de qué disciplina?",
+options:[
+"Freestyle",
+"Breakdance",
+"Graffiti",
+"Beatbox"
+],
+correct:0,
+info:"God Level es uno de los grandes circuitos internacionales de freestyle."
+},
+
+{
+cat:"GodLevel",
+difficulty:"Medio",
+q:"¿Qué característica hizo especialmente conocida a God Level?",
+options:[
+"Sus formatos internacionales y por equipos",
+"Sus batallas escritas",
+"Su formato exclusivamente online",
+"Su ausencia de público"
+],
+correct:0,
+info:"God Level se destacó por sus grandes competencias internacionales y formatos por equipos."
+},
+
+{
+cat:"GodLevel",
+difficulty:"Difícil",
+q:"En los formatos por equipos de God Level, ¿qué podía cambiar respecto a una batalla individual?",
+options:[
+"La estrategia colectiva",
+"El idioma obligatorio",
+"El uso de micrófonos",
+"La presencia de beat"
+],
+correct:0,
+info:"Los formatos por equipos obligaban a pensar la estrategia de manera colectiva."
+},
+
+/* -------------------------
+   RED BULL
+------------------------- */
+
+{
+cat:"RedBull",
+difficulty:"Fácil",
+q:"¿Qué bebida da nombre a Red Bull Batalla?",
+options:[
+"Red Bull",
+"Monster",
+"Rockstar",
+"Speed"
+],
+correct:0,
+info:"Red Bull Batalla es uno de los eventos de freestyle más reconocidos del mundo."
+},
+
+{
+cat:"RedBull",
+difficulty:"Fácil",
+q:"¿Qué se necesita principalmente para competir en una batalla de freestyle?",
+options:[
+"Improvisación",
+"Una letra escrita completa",
+"Una guitarra",
+"Un DJ cantando"
+],
+correct:0,
+info:"La improvisación es la base del freestyle competitivo."
+},
+
+{
+cat:"RedBull",
+difficulty:"Medio",
+q:"¿Qué representa una réplica en una batalla?",
+options:[
+"Una ronda adicional para desempatar",
+"Una canción del ganador",
+"Una pausa publicitaria",
+"Una ronda sin jurado"
+],
+correct:0,
+info:"La réplica se utiliza cuando el jurado considera que hace falta una ronda adicional para definir el resultado."
+},
+
+{
+cat:"RedBull",
+difficulty:"Medio",
+q:"¿Qué elemento es fundamental para que un MC pueda responder rápidamente a su rival?",
+options:[
+"Escucha y capacidad de reacción",
+"Memorizar un guion",
+"Cantar siempre igual",
+"No escuchar el beat"
+],
+correct:0,
+info:"La escucha y la reacción son fundamentales para responder al rival y aprovechar sus conceptos."
+},
+
+/* -------------------------
+   CULTURA GENERAL
+------------------------- */
+
+{
+cat:"Todas",
+difficulty:"Fácil",
+q:"¿Qué significa 'MC' dentro de la cultura hip hop?",
+options:[
+"Master of Ceremonies",
+"Music Champion",
+"Master Competition",
+"Microphone Creator"
+],
+correct:0,
+info:"MC viene de Master of Ceremonies y con el tiempo pasó a asociarse fuertemente con los raperos."
+},
+
+{
+cat:"Todas",
+difficulty:"Fácil",
+q:"¿Qué elemento del hip hop se relaciona directamente con la creación de bases musicales?",
+options:[
+"DJ",
+"Graffiti",
+"Breakdance",
+"MC"
+],
+correct:0,
+info:"El DJ es uno de los cuatro elementos clásicos de la cultura hip hop."
+},
+
+{
+cat:"Todas",
+difficulty:"Medio",
+q:"¿Qué habilidad permite conectar varias palabras o conceptos mediante sonidos parecidos?",
+options:[
+"Rima",
+"Tempo",
+"Sampling",
+"Scratching"
+],
+correct:0,
+info:"La rima es uno de los recursos fundamentales del rap y del freestyle."
+},
+
+{
+cat:"Todas",
+difficulty:"Medio",
+q:"¿Qué es un punchline?",
+options:[
+"Una frase o remate pensado para generar impacto",
+"El nombre de un beat",
+"Una pausa del DJ",
+"Una ronda sin instrumental"
+],
+correct:0,
+info:"El punchline es un remate que busca producir impacto, generalmente aprovechando el contexto de la batalla."
+},
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"¿Qué diferencia principalmente una rima consonante de una asonante?",
+options:[
+"Los sonidos que coinciden",
+"La velocidad del rapero",
+"El volumen del beat",
+"La cantidad de público"
+],
+correct:0,
+info:"La consonancia coincide en sonidos vocálicos y consonánticos desde la sílaba tónica, mientras que la asonancia se centra principalmente en las vocales."
+},
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"¿Qué recurso consiste en utilizar varias sílabas relacionadas para construir una rima más compleja?",
+options:[
+"Rima multisilábica",
+"Scratch",
+"Sampling",
+"Ad-lib"
+],
+correct:0,
+info:"Las rimas multisilábicas permiten construir estructuras mucho más complejas."
+},
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"¿Qué caracteriza principalmente al freestyle?",
+options:[
+"La improvisación",
+"La letra memorizada",
+"La ausencia de ritmo",
+"El canto coral"
+],
+correct:0,
+info:"La improvisación es el corazón del freestyle."
+},
+
+/* -------------------------
+   ARTISTAS / ESCENA
+------------------------- */
+
+{
+cat:"Todas",
+difficulty:"Medio",
+q:"¿Qué artista argentino es conocido por su trayectoria desde las batallas hasta la música y por su paso por El Quinto Escalón?",
+options:[
+"Wos",
+"Bizarrap",
+"Nicki Nicole",
+"Emilia"
+],
+correct:0,
+info:"Wos fue una figura fundamental de la escena de batallas argentina antes de consolidarse como artista musical."
+},
+
+{
+cat:"Todas",
+difficulty:"Medio",
+q:"¿Qué artista argentino estuvo fuertemente vinculado a la organización de El Quinto Escalón y luego desarrolló una carrera musical?",
+options:[
+"Ysy A",
+"Tiago PZK",
+"Rusherking",
+"FMK"
+],
+correct:0,
+info:"Ysy A fue organizador de El Quinto Escalón y posteriormente desarrolló una importante carrera musical."
+},
+
+{
+cat:"Todas",
+difficulty:"Medio",
+q:"¿Qué artista fue conocido en la escena de batallas con el nombre de Trueno y posteriormente desarrolló una carrera musical?",
+options:[
+"Mateo Palacios Corazzina",
+"Valentín Oliva",
+"Mauro Lombardo",
+"Agustín Cruz"
+],
+correct:0,
+info:"Mateo Palacios Corazzina es Trueno."
+},
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"¿Qué transformación tuvo la escena argentina después del auge de las grandes competencias de freestyle?",
+options:[
+"Muchos competidores pasaron a desarrollar carreras musicales",
+"Desapareció el rap",
+"Se abandonaron los escenarios",
+"Las batallas dejaron de existir"
+],
+correct:0,
+info:"El auge del freestyle ayudó a que numerosos competidores se transformaran en artistas musicales."
+},
+
+/* -------------------------
+   PREGUNTAS DE BATALLA
+------------------------- */
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"En una batalla, un MC utiliza una referencia que acaba de decir su rival y la transforma en un ataque. ¿Qué recurso está aprovechando?",
+options:[
+"El contexto",
+"El silencio",
+"El tempo únicamente",
+"Una letra escrita"
+],
+correct:0,
+info:"Aprovechar algo que acaba de decir el rival es una de las habilidades más valoradas en el freestyle."
+},
+
+{
+cat:"Todas",
+difficulty:"Difícil",
+q:"Un competidor mantiene una idea durante varios compases y la desarrolla con diferentes rimas. ¿Qué está demostrando especialmente?",
+options:[
+"Desarrollo de concepto",
+"Solo velocidad",
+"Solo volumen",
+"Memorización"
+],
+correct:0,
+info:"Desarrollar un concepto demuestra capacidad para mantener una línea argumental mientras se improvisa."
+},
+
+{
+cat:"Todas",
+difficulty:"Dios",
+q:"¿Qué suele hacer especialmente difícil una batalla de nivel internacional?",
+options:[
+"La combinación de improvisación, referencias, métricas y adaptación al rival",
+"Solamente rapear rápido",
+"Usar siempre la misma estructura",
+"No escuchar al rival"
+],
+correct:0,
+info:"En los niveles más altos se combinan múltiples habilidades simultáneamente."
+},
+
+{
+cat:"Todas",
+difficulty:"Dios",
+q:"Un MC escucha una palabra inesperada del rival, encuentra rápidamente una asociación y construye un remate alrededor de ella. ¿Qué habilidad está mostrando?",
+options:[
+"Asociación y reacción",
+"Memorización",
+"Solo métrica",
+"Solo presencia escénica"
+],
+correct:0,
+info:"La capacidad de asociar conceptos rápidamente es una de las herramientas más importantes de un freestyler."
+},
+
+{
+cat:"Todas",
+difficulty:"Dios",
+q:"¿Por qué una respuesta puede ser considerada más fuerte que una rima técnicamente perfecta?",
+options:[
+"Porque puede tener mejor contenido y conexión con el contexto",
+"Porque siempre tiene más sílabas",
+"Porque es más rápida",
+"Porque tiene más volumen"
+],
+correct:0,
+info:"La técnica es importante, pero el contenido, el contexto y el impacto también pesan muchísimo."
+}
+
+];
 
 
-/* ==========================================
-   CANVAS
-========================================== */
+/* =====================================================
+   VARIABLES DEL JUEGO
+===================================================== */
 
-const canvas=document.getElementById("wave");
-const ctx=canvas.getContext("2d");
+let selectedCategory="Todas";
 
-function resizeCanvas(){
+let gameQuestions=[];
+let currentQuestion=0;
 
-    canvas.width=canvas.clientWidth*devicePixelRatio;
-    canvas.height=canvas.clientHeight*devicePixelRatio;
+let score=0;
+let streak=0;
+let lives=3;
 
-    ctx.scale(
-        devicePixelRatio,
-        devicePixelRatio
-    );
+let answered=false;
+
+let timer=null;
+let timeLeft=15;
+
+let audioCtx=null;
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const homeScreen=
+    document.getElementById("homeScreen");
+
+const quizScreen=
+    document.getElementById("quizScreen");
+
+const gameOver=
+    document.getElementById("gameOver");
+
+const scoreEl=
+    document.getElementById("score");
+
+const streakEl=
+    document.getElementById("streak");
+
+const livesEl=
+    document.getElementById("lives");
+
+const questionNumberEl=
+    document.getElementById("questionNumber");
+
+const questionEl=
+    document.getElementById("question");
+
+const questionCategoryEl=
+    document.getElementById("questionCategory");
+
+const difficultyEl=
+    document.getElementById("difficulty");
+
+const questionNoteEl=
+    document.getElementById("questionNote");
+
+const answersEl=
+    document.getElementById("answers");
+
+const resultEl=
+    document.getElementById("result");
+
+const resultTitleEl=
+    document.getElementById("resultTitle");
+
+const resultTextEl=
+    document.getElementById("resultText");
+
+const timerBar=
+    document.getElementById("timerBar");
+
+
+/* =====================================================
+   CATEGORÍAS
+===================================================== */
+
+document
+.querySelectorAll(".category")
+.forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+        document
+        .querySelectorAll(".category")
+        .forEach(x=>x.classList.remove("active"));
+
+        button.classList.add("active");
+
+        selectedCategory=
+            button.dataset.cat;
+
+    });
+
+});
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+function startGame(){
+
+    playSound("start");
+
+    homeScreen.style.display="none";
+    gameOver.style.display="none";
+    quizScreen.style.display="block";
+
+    score=0;
+    streak=0;
+    lives=3;
+    currentQuestion=0;
+
+    scoreEl.textContent="0";
+    streakEl.textContent="0";
+
+    updateLives();
+
+    let pool=
+        questions.filter(q=>
+            selectedCategory==="Todas" ||
+            q.cat===selectedCategory ||
+            q.cat==="Todas"
+        );
+
+    gameQuestions=
+        shuffle([...pool]);
+
+    showQuestion();
 
 }
 
-resizeCanvas();
 
-window.addEventListener(
-    "resize",
-    resizeCanvas
-);
+/* =====================================================
+   MOSTRAR PREGUNTA
+===================================================== */
 
+function showQuestion(){
 
-/* ==========================================
-   DIBUJAR WAVEFORM
-========================================== */
+    answered=false;
 
-function drawWave(){
+    clearInterval(timer);
 
-    requestAnimationFrame(drawWave);
+    resultEl.style.display="none";
 
-    const width=canvas.clientWidth;
-    const height=canvas.clientHeight;
+    if(currentQuestion>=gameQuestions.length){
 
-    ctx.clearRect(
-        0,
-        0,
-        width,
-        height
-    );
+        gameQuestions=
+            shuffle([...gameQuestions]);
 
-    if(!analyser){
-
-        dibujarLinea(width,height);
-
-        return;
+        currentQuestion=0;
 
     }
 
-    const bufferLength=
-        analyser.fftSize;
+    const q=
+        gameQuestions[currentQuestion];
 
-    const dataArray=
-        new Uint8Array(bufferLength);
+    questionNumberEl.textContent=
+        currentQuestion+1;
 
-    analyser.getByteTimeDomainData(
-        dataArray
-    );
+    questionCategoryEl.textContent=
+        q.cat==="Todas" ? "RAP" : q.cat;
 
-    ctx.beginPath();
+    difficultyEl.textContent=
+        q.difficulty;
 
-    ctx.lineWidth=2;
+    questionEl.textContent=
+        q.q;
 
-    ctx.strokeStyle="#9b6cff";
+    questionNoteEl.textContent=
+        "Elegí la respuesta que creas correcta.";
 
-    const sliceWidth=
-        width/bufferLength;
+    answersEl.innerHTML="";
 
-    let x=0;
+    const letters=["A","B","C","D"];
 
-    for(let i=0;i<bufferLength;i++){
+    q.options.forEach((option,index)=>{
 
-        const v=
-            dataArray[i]/128.0;
+        const button=
+            document.createElement("button");
 
-        const y=
-            v*height/2;
+        button.className="answer";
 
-        if(i===0){
+        button.innerHTML=`
+            <span class="answer-letter">
+                ${letters[index]}
+            </span>
+            <span class="answer-text">
+                ${option}
+            </span>
+        `;
 
-            ctx.moveTo(x,y);
+        button.onclick=()=>answer(index,button);
 
-        }else{
+        answersEl.appendChild(button);
 
-            ctx.lineTo(x,y);
+    });
 
-        }
-
-        x+=sliceWidth;
-
-    }
-
-    ctx.stroke();
-
-}
-
-
-function dibujarLinea(width,height){
-
-    ctx.beginPath();
-
-    ctx.strokeStyle="#292b32";
-
-    ctx.lineWidth=1;
-
-    ctx.moveTo(0,height/2);
-
-    ctx.lineTo(width,height/2);
-
-    ctx.stroke();
+    startTimer();
 
 }
 
-drawWave();
 
+/* =====================================================
+   RESPONDER
+===================================================== */
 
-/* ==========================================
-   GRABACIÓN
-========================================== */
+function answer(index,button){
 
-async function toggleRecording(){
+    if(answered)return;
 
-    if(recording){
+    answered=true;
 
-        detenerGrabacion();
+    clearInterval(timer);
+
+    const q=
+        gameQuestions[currentQuestion];
+
+    const buttons=
+        [...document.querySelectorAll(".answer")];
+
+    buttons.forEach(x=>{
+        x.classList.add("disabled");
+    });
+
+    if(index===q.correct){
+
+        button.classList.add("correct");
+
+        score+=
+            100 +
+            streak*25;
+
+        streak++;
+
+        playSound("correct");
+
+        resultTitleEl.textContent=
+            "✓ CORRECTO";
+
+        resultTitleEl.style.color=
+            "#22c55e";
+
+        resultTextEl.innerHTML=
+            `<b>+${100+(streak-1)*25} puntos</b><br>${q.info}`;
 
     }else{
 
-        await comenzarGrabacion();
+        button.classList.add("wrong");
+
+        buttons[q.correct]
+            .classList.add("correct");
+
+        lives--;
+
+        streak=0;
+
+        playSound("wrong");
+
+        resultTitleEl.textContent=
+            "✕ INCORRECTO";
+
+        resultTitleEl.style.color=
+            "#ef4444";
+
+        resultTextEl.innerHTML=
+            `La respuesta correcta era <b>${lettersFromIndex(q.correct)}: ${q.options[q.correct]}</b>.<br>${q.info}`;
+
+    }
+
+    scoreEl.textContent=score;
+
+    streakEl.textContent=streak;
+
+    updateLives();
+
+    resultEl.style.display="block";
+
+    if(lives<=0){
+
+        setTimeout(gameFinished,1000);
 
     }
 
 }
 
 
-async function comenzarGrabacion(){
+/* =====================================================
+   TIMEOUT
+===================================================== */
+
+function timeOut(){
+
+    if(answered)return;
+
+    answered=true;
+
+    clearInterval(timer);
+
+    const q=
+        gameQuestions[currentQuestion];
+
+    const buttons=
+        [...document.querySelectorAll(".answer")];
+
+    buttons.forEach(x=>{
+        x.classList.add("disabled");
+    });
+
+    buttons[q.correct]
+        .classList.add("correct");
+
+    lives--;
+
+    streak=0;
+
+    playSound("wrong");
+
+    resultTitleEl.textContent=
+        "⌛ SE TERMINÓ EL TIEMPO";
+
+    resultTitleEl.style.color=
+        "#facc15";
+
+    resultTextEl.innerHTML=
+        `La respuesta era <b>${lettersFromIndex(q.correct)}: ${q.options[q.correct]}</b>.<br>${q.info}`;
+
+    streakEl.textContent="0";
+
+    updateLives();
+
+    resultEl.style.display="block";
+
+    if(lives<=0){
+
+        setTimeout(gameFinished,1000);
+
+    }
+
+}
+
+
+/* =====================================================
+   SIGUIENTE
+===================================================== */
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+    showQuestion();
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer(){
+
+    timeLeft=15;
+
+    timerBar.style.width="100%";
+
+    timerBar.style.background=
+        "#8b5cf6";
+
+    const started=
+        Date.now();
+
+    timer=setInterval(()=>{
+
+        const elapsed=
+            (Date.now()-started)/1000;
+
+        timeLeft=
+            15-elapsed;
+
+        const percent=
+            Math.max(0,timeLeft/15*100);
+
+        timerBar.style.width=
+            percent+"%";
+
+        if(timeLeft<5){
+
+            timerBar.style.background=
+                "#ef4444";
+
+        }
+
+        if(timeLeft<=0){
+
+            timeOut();
+
+        }
+
+    },50);
+
+}
+
+
+/* =====================================================
+   VIDAS
+===================================================== */
+
+function updateLives(){
+
+    let hearts="";
+
+    for(let i=0;i<3;i++){
+
+        hearts+=
+            i<lives ? "♥ " : "♡ ";
+
+    }
+
+    livesEl.textContent=
+        hearts;
+
+}
+
+
+/* =====================================================
+   FIN
+===================================================== */
+
+function gameFinished(){
+
+    clearInterval(timer);
+
+    quizScreen.style.display="none";
+
+    gameOver.style.display="block";
+
+    document
+        .getElementById("finalScore")
+        .textContent=score;
+
+    const rank=
+        getRank(score);
+
+    document
+        .getElementById("rank")
+        .textContent=
+        rank;
+
+    const best=
+        Number(
+            localStorage.getItem("rapzoneBest")||0
+        );
+
+    if(score>best){
+
+        localStorage.setItem(
+            "rapzoneBest",
+            score
+        );
+
+        document
+        .getElementById("bestScore")
+        .textContent=score;
+
+    }
+
+    playSound("finish");
+
+}
+
+
+/* =====================================================
+   RANGOS
+===================================================== */
+
+function getRank(score){
+
+    if(score>=3000)
+        return "👑 LEYENDA DEL FREESTYLE";
+
+    if(score>=2200)
+        return "🔥 DIOS DEL RAP";
+
+    if(score>=1500)
+        return "⚡ MC DE ÉLITE";
+
+    if(score>=900)
+        return "🎤 FREESTYLER";
+
+    if(score>=500)
+        return "🎧 RAPERO EN ASCENSO";
+
+    return "🧢 ROOKIE";
+
+}
+
+
+/* =====================================================
+   VOLVER
+===================================================== */
+
+function goHome(){
+
+    clearInterval(timer);
+
+    quizScreen.style.display="none";
+    gameOver.style.display="none";
+    homeScreen.style.display="block";
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffle(array){
+
+    for(let i=array.length-1;i>0;i--){
+
+        const j=
+            Math.floor(
+                Math.random()*(i+1)
+            );
+
+        [
+            array[i],
+            array[j]
+        ]=[
+            array[j],
+            array[i]
+        ];
+
+    }
+
+    return array;
+
+}
+
+
+/* =====================================================
+   LETRAS
+===================================================== */
+
+function lettersFromIndex(index){
+
+    return ["A","B","C","D"][index];
+
+}
+
+
+/* =====================================================
+   SONIDOS
+===================================================== */
+
+function playSound(type){
 
     try{
 
-        const stream=
-            await navigator.mediaDevices
-            .getUserMedia({
-                audio:true
-            });
+        if(!audioCtx){
 
+            audioCtx=
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
 
-        audioContext=
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
+        }
 
+        const osc=
+            audioCtx.createOscillator();
 
-        analyser=
-            audioContext.createAnalyser();
+        const gain=
+            audioCtx.createGain();
 
-        analyser.fftSize=2048;
+        osc.connect(gain);
 
-
-        microphone=
-            audioContext
-            .createMediaStreamSource(stream);
-
-
-        microphone.connect(analyser);
-
-
-        mediaRecorder=
-            new MediaRecorder(stream);
-
-
-        chunks=[];
-
-
-        mediaRecorder.ondataavailable=e=>{
-
-            if(e.data.size>0){
-
-                chunks.push(e.data);
-
-            }
-
-        };
-
-
-        mediaRecorder.onstop=()=>{
-
-            audioBlob=
-                new Blob(
-                    chunks,
-                    {type:"audio/webm"}
-                );
-
-            audioURL=
-                URL.createObjectURL(audioBlob);
-
-        };
-
-
-        mediaRecorder.start();
-
-        recording=true;
-
-        startTime=Date.now();
-
-        timerInterval=
-            setInterval(actualizarTimer,1000);
-
-
-        document
-            .getElementById("recordButton")
-            .classList.add("recording");
-
-
-        document
-            .getElementById("recordLabel")
-            .textContent=
-            "Grabando...";
-
-
-        document
-            .getElementById("waveStatus")
-            .textContent=
-            "GRABANDO";
-
-    }catch(error){
-
-        alert(
-            "No se pudo acceder al micrófono. Revisá los permisos del navegador."
+        gain.connect(
+            audioCtx.destination
         );
 
-        console.error(error);
+        if(type==="correct"){
 
-    }
+            osc.frequency.value=700;
 
-}
-
-
-/* ==========================================
-   DETENER
-========================================== */
-
-function detenerGrabacion(){
-
-    if(mediaRecorder){
-
-        mediaRecorder.stop();
-
-        mediaRecorder.stream
-            .getTracks()
-            .forEach(track=>track.stop());
-
-    }
-
-
-    recording=false;
-
-    clearInterval(timerInterval);
-
-
-    document
-        .getElementById("recordButton")
-        .classList.remove("recording");
-
-
-    document
-        .getElementById("recordLabel")
-        .textContent=
-        "Grabación terminada";
-
-
-    document
-        .getElementById("waveStatus")
-        .textContent=
-        "GRABACIÓN LISTA";
-
-}
-
-
-/* ==========================================
-   TIMER
-========================================== */
-
-function actualizarTimer(){
-
-    const segundos=
-        Math.floor(
-            (Date.now()-startTime)/1000
-        );
-
-    const minutos=
-        Math.floor(segundos/60);
-
-    const secs=
-        segundos%60;
-
-    document
-        .getElementById("timer")
-        .textContent=
-        `${String(minutos).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
-
-}
-
-
-/* ==========================================
-   REPRODUCIR
-========================================== */
-
-function reproducir(){
-
-    if(!audioURL){
-
-        alert(
-            "Primero tenés que grabar una voz."
-        );
-
-        return;
-
-    }
-
-    const audio=
-        new Audio(audioURL);
-
-    audio.play();
-
-}
-
-
-/* ==========================================
-   DESCARGAR
-========================================== */
-
-function descargar(){
-
-    if(!audioURL){
-
-        alert(
-            "No hay ninguna grabación para descargar."
-        );
-
-        return;
-
-    }
-
-    const link=
-        document.createElement("a");
-
-    link.href=audioURL;
-
-    link.download=
-        "mi-rap.webm";
-
-    link.click();
-
-}
-
-
-/* ==========================================
-   SLIDERS
-========================================== */
-
-function actualizar(id,valor,unidad){
-
-    document
-        .getElementById(id)
-        .textContent=
-        valor+unidad;
-
-}
-
-
-/* ==========================================
-   METRÓNOMO
-========================================== */
-
-let metroInterval=null;
-let metroActivo=false;
-
-function metronomo(){
-
-    if(metroActivo){
-
-        clearInterval(metroInterval);
-
-        metroActivo=false;
-
-        return;
-
-    }
-
-    const bpm=120;
-
-    metroInterval=
-        setInterval(()=>{
-
-            const beep=
-                new AudioContext();
-
-            const osc=
-                beep.createOscillator();
-
-            const gain=
-                beep.createGain();
-
-            osc.frequency.value=800;
-
-            gain.gain.value=.08;
-
-            osc.connect(gain);
-
-            gain.connect(
-                beep.destination
+            gain.gain.setValueAtTime(
+                .08,
+                audioCtx.currentTime
             );
 
-            osc.start();
-
-            osc.stop(
-                beep.currentTime+.05
+            gain.gain.exponentialRampToValueAtTime(
+                .001,
+                audioCtx.currentTime+.25
             );
 
-        },60000/bpm);
+        }
 
-    metroActivo=true;
+        else if(type==="wrong"){
 
-}
+            osc.frequency.value=180;
 
+            gain.gain.setValueAtTime(
+                .08,
+                audioCtx.currentTime
+            );
 
-/* ==========================================
-   NUEVO PROYECTO
-========================================== */
+            gain.gain.exponentialRampToValueAtTime(
+                .001,
+                audioCtx.currentTime+.3
+            );
 
-function nuevoProyecto(){
+        }
 
-    const confirmar=
-        confirm(
-            "¿Querés crear un proyecto nuevo?"
+        else if(type==="start"){
+
+            osc.frequency.value=440;
+
+            gain.gain.setValueAtTime(
+                .05,
+                audioCtx.currentTime
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .001,
+                audioCtx.currentTime+.4
+            );
+
+        }
+
+        else{
+
+            osc.frequency.value=300;
+
+            gain.gain.setValueAtTime(
+                .06,
+                audioCtx.currentTime
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                .001,
+                audioCtx.currentTime+.5
+            );
+
+        }
+
+        osc.start();
+
+        osc.stop(
+            audioCtx.currentTime+.5
         );
 
-    if(confirmar){
-
-        resetStudio();
-
-    }
+    }catch(e){}
 
 }
 
 
-/* ==========================================
-   RESET
-========================================== */
+/* =====================================================
+   RÉCORD
+===================================================== */
 
-function resetStudio(){
-
-    if(recording){
-
-        detenerGrabacion();
-
-    }
-
-    audioBlob=null;
-    audioURL=null;
-
-    document
-        .getElementById("timer")
-        .textContent="00:00";
-
-    document
-        .getElementById("recordLabel")
-        .textContent=
-        "Presioná para comenzar";
-
-    document
-        .getElementById("waveStatus")
-        .textContent=
-        "ESPERANDO MICRÓFONO";
-
-}
+document
+.getElementById("bestScore")
+.textContent=
+    localStorage.getItem("rapzoneBest")||0;
 
 </script>
 

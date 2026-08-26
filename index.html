@@ -2,26 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>RAPZONE — Freestyle Quiz</title>
+<title>RAP QUIZ — Complete the Bar</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-:root{
-    --bg:#070708;
-    --panel:#101012;
-    --panel2:#151518;
-    --border:#25252b;
-    --text:#f4f4f5;
-    --muted:#85858e;
-    --purple:#8b5cf6;
-    --purple2:#6d28d9;
-    --green:#22c55e;
-    --red:#ef4444;
-    --yellow:#facc15;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 *{
     box-sizing:border-box;
@@ -29,12 +15,26 @@
     padding:0;
 }
 
+:root{
+    --bg:#08080a;
+    --card:#111114;
+    --card2:#17171b;
+    --line:#292930;
+    --text:#f5f5f7;
+    --muted:#85858f;
+    --purple:#8b5cf6;
+    --purple2:#6d28d9;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#facc15;
+}
+
 body{
     min-height:100vh;
-    background:
-        radial-gradient(circle at 50% -10%,#241342 0%,transparent 35%),
-        var(--bg);
     color:var(--text);
+    background:
+        radial-gradient(circle at 50% -20%,#29134b,transparent 42%),
+        var(--bg);
     font-family:Inter,Arial,sans-serif;
 }
 
@@ -42,98 +42,84 @@ button{
     font-family:inherit;
 }
 
-/* =========================
-   HEADER
-========================= */
-
 header{
-    height:70px;
-    border-bottom:1px solid var(--border);
+    height:68px;
+    border-bottom:1px solid var(--line);
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    padding:0 32px;
-    background:rgba(7,7,8,.85);
-    backdrop-filter:blur(15px);
+    align-items:center;
+    padding:0 28px;
     position:sticky;
     top:0;
-    z-index:20;
+    z-index:50;
+    background:rgba(8,8,10,.88);
+    backdrop-filter:blur(14px);
 }
 
-.brand{
+.logo{
     display:flex;
     align-items:center;
-    gap:11px;
+    gap:10px;
+    font-weight:900;
+    letter-spacing:-1px;
 }
 
-.brand-mark{
-    width:36px;
-    height:36px;
+.logo-box{
+    width:35px;
+    height:35px;
     border-radius:9px;
     display:grid;
     place-items:center;
     background:linear-gradient(135deg,#a78bfa,#6d28d9);
-    font-size:18px;
-    font-weight:900;
 }
 
-.brand-name{
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:-.7px;
-}
-
-.brand-name span{
+.logo span{
     color:#9b78ff;
 }
 
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-.best{
+.header-score{
     color:var(--muted);
-    font-size:12px;
+    font-size:11px;
 }
 
-.best strong{
-    color:#fff;
+.header-score b{
+    color:white;
     margin-left:5px;
 }
 
-/* =========================
-   MAIN
-========================= */
-
 main{
-    width:min(1000px,calc(100% - 30px));
-    margin:0 auto;
-    padding:42px 0 60px;
+    width:min(1000px,calc(100% - 24px));
+    margin:auto;
+    padding:35px 0 70px;
 }
 
-/* =========================
-   HOME
-========================= */
+.screen{
+    display:none;
+}
+
+.screen.active{
+    display:block;
+}
+
+/* HOME */
 
 .hero{
     text-align:center;
-    padding:35px 10px 30px;
+    padding:25px 10px 32px;
 }
 
-.eyebrow{
+.small-title{
     color:#9b78ff;
-    font-size:11px;
-    font-weight:800;
+    font-size:10px;
     letter-spacing:3px;
-    margin-bottom:15px;
+    font-weight:800;
+    margin-bottom:14px;
 }
 
 .hero h1{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(42px,8vw,76px);
-    line-height:.95;
+    font-family:"Space Grotesk";
+    font-size:clamp(42px,8vw,75px);
+    line-height:.9;
     letter-spacing:-4px;
 }
 
@@ -142,376 +128,454 @@ main{
 }
 
 .hero p{
-    max-width:600px;
-    margin:20px auto 0;
     color:var(--muted);
-    line-height:1.6;
-    font-size:14px;
-}
-
-/* =========================
-   CATEGORIAS
-========================= */
-
-.categories{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:9px;
-    margin:25px 0;
-}
-
-.category{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:15px 8px;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.category:hover{
-    transform:translateY(-2px);
-    border-color:#49404f;
-}
-
-.category.active{
-    border-color:var(--purple);
-    background:#17111f;
-}
-
-.category .icon{
-    font-size:20px;
-    display:block;
-    margin-bottom:8px;
-}
-
-.category span{
-    font-size:10px;
-    color:#aaaab2;
-    font-weight:700;
-}
-
-/* =========================
-   START CARD
-========================= */
-
-.start-card{
-    background:
-        linear-gradient(120deg,#121016,#0d0d10);
-    border:1px solid var(--border);
-    border-radius:15px;
-    padding:27px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:25px;
-}
-
-.start-info h2{
-    font-size:19px;
-    margin-bottom:7px;
-}
-
-.start-info p{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.6;
-}
-
-.start-btn{
-    border:0;
-    color:white;
-    background:linear-gradient(135deg,#8b5cf6,#6d28d9);
-    border-radius:9px;
-    padding:14px 25px;
     font-size:13px;
-    font-weight:800;
-    cursor:pointer;
-    white-space:nowrap;
-    box-shadow:0 8px 30px rgba(109,40,217,.22);
-    transition:.2s;
+    line-height:1.6;
+    max-width:570px;
+    margin:20px auto 0;
 }
 
-.start-btn:hover{
-    transform:translateY(-2px);
-}
-
-/* =========================
-   QUIZ
-========================= */
-
-#quizScreen{
-    display:none;
-}
-
-.quiz-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+.modes{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
     margin-bottom:18px;
 }
 
-.question-number{
-    color:var(--muted);
-    font-size:12px;
+.mode{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:22px;
+    cursor:pointer;
+    transition:.2s;
 }
 
-.question-number strong{
+.mode:hover{
+    border-color:#4d4657;
+    transform:translateY(-2px);
+}
+
+.mode.active{
+    border-color:var(--purple);
+    background:#16111d;
+}
+
+.mode-icon{
+    font-size:25px;
+    margin-bottom:13px;
+}
+
+.mode h3{
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.mode p{
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.5;
+}
+
+/* MC SELECT */
+
+.panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:22px;
+}
+
+.panel-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.panel-title h2{
+    font-size:15px;
+}
+
+.panel-title span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.mc-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:8px;
+}
+
+.mc{
+    background:#18181c;
+    border:1px solid #292930;
+    color:#dddde1;
+    border-radius:8px;
+    padding:12px 7px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:700;
+    transition:.18s;
+}
+
+.mc:hover{
+    border-color:#514b5c;
+}
+
+.mc.selected{
+    background:#221535;
+    border-color:#8b5cf6;
+    color:white;
+}
+
+.start{
+    margin-top:15px;
+    width:100%;
+    border:0;
+    padding:15px;
+    border-radius:9px;
+    color:white;
+    background:linear-gradient(135deg,#8b5cf6,#6d28d9);
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(109,40,217,.2);
+}
+
+.start:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+/* PLAYERS */
+
+.players{
+    display:none;
+    margin-top:15px;
+}
+
+.players.show{
+    display:block;
+}
+
+.player-inputs{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.player-inputs input{
+    width:100%;
+    background:#18181c;
+    border:1px solid #2b2b31;
+    border-radius:8px;
+    color:white;
+    padding:12px;
+    outline:none;
+}
+
+.player-inputs input:focus{
+    border-color:var(--purple);
+}
+
+/* QUIZ */
+
+.quiz-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:13px;
+}
+
+.round{
+    color:var(--muted);
+    font-size:11px;
+}
+
+.round b{
     color:white;
 }
 
 .stats{
     display:flex;
-    gap:16px;
-    font-size:12px;
-}
-
-.stat{
+    gap:15px;
+    font-size:11px;
     color:var(--muted);
 }
 
-.stat strong{
+.stats b{
     color:white;
 }
 
-.lives{
-    color:#ff5a6b;
+.hearts{
+    color:#ff5264;
     letter-spacing:2px;
 }
 
-/* timer */
-
-.timer-wrap{
-    height:5px;
+.timer{
     width:100%;
-    background:#1b1b20;
-    border-radius:20px;
+    height:5px;
+    border-radius:10px;
     overflow:hidden;
-    margin-bottom:28px;
+    background:#1c1c20;
+    margin-bottom:20px;
 }
 
 .timer-bar{
-    height:100%;
     width:100%;
+    height:100%;
     background:#8b5cf6;
-    transition:width .1s linear;
 }
 
-/* question */
-
-.question-card{
-    background:linear-gradient(145deg,#121215,#0d0d0f);
-    border:1px solid var(--border);
-    border-radius:15px;
-    padding:35px;
-    margin-bottom:15px;
+.quiz-card{
+    background:linear-gradient(145deg,#121216,#0d0d10);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:30px;
+    margin-bottom:12px;
 }
 
-.question-meta{
+.mc-playing{
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    margin-bottom:25px;
+    align-items:center;
+    margin-bottom:20px;
 }
 
-.tag{
-    border:1px solid #3a3149;
-    background:#19131f;
-    color:#ad8cff;
-    padding:6px 9px;
+.mc-name{
+    font-weight:900;
+    font-size:12px;
+}
+
+.badge{
+    color:#ae8cff;
+    background:#1c1525;
+    border:1px solid #3a2c4c;
     border-radius:5px;
+    padding:5px 8px;
     font-size:9px;
     font-weight:800;
-    letter-spacing:1px;
 }
 
-.difficulty{
-    font-size:10px;
+.instruction{
     color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:1px;
-}
-
-.question{
-    font-family:"Space Grotesk",sans-serif;
-    font-size:clamp(22px,4vw,34px);
-    line-height:1.18;
-    letter-spacing:-1px;
-}
-
-.question-note{
-    margin-top:14px;
-    color:#74747d;
     font-size:11px;
-    line-height:1.5;
+    margin-bottom:14px;
 }
 
-/* answers */
+.bar{
+    font-family:"Space Grotesk";
+    font-size:clamp(24px,5vw,40px);
+    line-height:1.15;
+    letter-spacing:-1.3px;
+}
+
+.blank{
+    color:#9b78ff;
+    border-bottom:2px solid #8b5cf6;
+    padding:0 8px;
+}
+
+.audio{
+    margin-top:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.play{
+    border:1px solid #36333e;
+    background:#19171d;
+    color:white;
+    border-radius:7px;
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+
+.audio-info{
+    color:#66666f;
+    font-size:10px;
+}
 
 .answers{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:9px;
 }
 
 .answer{
-    min-height:70px;
+    min-height:65px;
     background:#111114;
-    border:1px solid #27272d;
-    border-radius:10px;
-    padding:16px;
-    color:#dedee2;
+    border:1px solid #292930;
+    border-radius:9px;
+    color:#dddde1;
     text-align:left;
-    cursor:pointer;
+    padding:13px;
     display:flex;
+    gap:12px;
     align-items:center;
-    gap:14px;
+    cursor:pointer;
     transition:.18s;
 }
 
 .answer:hover:not(.disabled){
-    border-color:#55505d;
-    background:#17171b;
-    transform:translateY(-1px);
+    background:#18181c;
+    border-color:#56515e;
 }
 
 .answer-letter{
     width:29px;
     height:29px;
     min-width:29px;
-    border-radius:7px;
     display:grid;
     place-items:center;
+    border-radius:7px;
     background:#1d1d22;
     color:#9999a2;
-    font-size:11px;
-    font-weight:800;
+    font-size:10px;
+    font-weight:900;
 }
 
 .answer-text{
-    font-size:12px;
+    font-size:11px;
     line-height:1.45;
 }
 
 .answer.correct{
-    border-color:#23934b;
-    background:rgba(34,197,94,.10);
+    background:rgba(34,197,94,.09);
+    border-color:#24954d;
 }
 
 .answer.correct .answer-letter{
-    background:#1c783d;
+    background:#227b43;
     color:white;
 }
 
 .answer.wrong{
-    border-color:#b93643;
-    background:rgba(239,68,68,.10);
+    background:rgba(239,68,68,.09);
+    border-color:#a93240;
 }
 
 .answer.wrong .answer-letter{
-    background:#962f3a;
+    background:#87303a;
     color:white;
 }
 
-.answer.disabled{
+.disabled{
     cursor:default;
 }
 
-/* result */
-
 .result{
     display:none;
-    margin-top:14px;
-    padding:18px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    background:#101012;
+    margin-top:12px;
+    padding:17px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:#111114;
 }
 
 .result-title{
     font-weight:900;
+    font-size:13px;
     margin-bottom:7px;
 }
 
-.result-text{
-    color:#9999a2;
-    font-size:12px;
+.result-info{
+    color:#96969f;
+    font-size:11px;
     line-height:1.6;
 }
 
-.next-btn{
-    margin-top:14px;
+.next{
+    margin-top:12px;
     border:0;
     border-radius:7px;
-    padding:10px 17px;
-    background:#f1f1f1;
-    color:#090909;
-    font-size:11px;
+    padding:10px 16px;
+    background:white;
+    color:#080808;
+    font-size:10px;
     font-weight:900;
     cursor:pointer;
 }
 
-/* =========================
-   GAME OVER
-========================= */
+/* GAME OVER */
 
-#gameOver{
-    display:none;
+.end{
     text-align:center;
 }
 
-.gameover-card{
-    background:#101012;
-    border:1px solid var(--border);
+.end-card{
+    background:var(--card);
+    border:1px solid var(--line);
     border-radius:15px;
-    padding:45px 25px;
+    padding:45px 20px;
 }
 
-.gameover-card .big{
-    font-size:52px;
-    margin-bottom:15px;
-}
-
-.gameover-card h2{
-    font-family:"Space Grotesk";
-    font-size:34px;
+.end-icon{
+    font-size:45px;
     margin-bottom:10px;
 }
 
-.final-score{
-    font-size:42px;
-    font-weight:900;
-    color:#9b78ff;
-    margin:18px 0;
+.end h2{
+    font-family:"Space Grotesk";
+    font-size:34px;
 }
 
-.rank{
-    color:#aaaab2;
+.final-score{
+    color:#9b78ff;
+    font-size:48px;
+    font-weight:900;
+    margin:17px 0;
+}
+
+.final-rank{
+    color:var(--muted);
     font-size:12px;
 }
 
-.game-buttons{
-    margin-top:25px;
-    display:flex;
-    justify-content:center;
-    gap:9px;
+.leaderboard{
+    max-width:500px;
+    margin:25px auto;
 }
 
-.secondary-btn{
-    background:#18181c;
-    color:white;
-    border:1px solid #2b2b31;
+.leader{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 15px;
+    border-bottom:1px solid var(--line);
+    font-size:11px;
+}
+
+.leader:first-child{
+    color:#facc15;
+}
+
+.restart{
+    border:0;
     padding:12px 18px;
     border-radius:8px;
-    cursor:pointer;
+    background:#8b5cf6;
+    color:white;
     font-size:11px;
-    font-weight:700;
+    font-weight:900;
+    cursor:pointer;
 }
 
-/* =========================
-   TOAST
-========================= */
+.home{
+    margin-left:7px;
+    border:1px solid #303037;
+    padding:12px 18px;
+    border-radius:8px;
+    background:#18181c;
+    color:white;
+    font-size:11px;
+    cursor:pointer;
+}
+
+/* TOAST */
 
 .toast{
     position:fixed;
@@ -519,14 +583,15 @@ main{
     bottom:25px;
     transform:translate(-50%,20px);
     opacity:0;
-    pointer-events:none;
-    padding:12px 17px;
+    padding:12px 16px;
     border-radius:8px;
     background:#18181c;
-    border:1px solid #303038;
+    border:1px solid #33333a;
+    color:white;
     font-size:11px;
-    z-index:50;
+    pointer-events:none;
     transition:.25s;
+    z-index:100;
 }
 
 .toast.show{
@@ -534,9 +599,7 @@ main{
     transform:translate(-50%,0);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* MOBILE */
 
 @media(max-width:700px){
 
@@ -544,12 +607,8 @@ main{
         padding:0 15px;
     }
 
-    .best{
-        display:none;
-    }
-
     main{
-        width:min(100% - 20px,1000px);
+        width:calc(100% - 18px);
         padding-top:20px;
     }
 
@@ -557,36 +616,32 @@ main{
         letter-spacing:-2px;
     }
 
-    .categories{
+    .modes{
+        grid-template-columns:1fr;
+    }
+
+    .mc-grid{
         grid-template-columns:repeat(3,1fr);
     }
 
-    .start-card{
-        flex-direction:column;
-        align-items:stretch;
+    .player-inputs{
+        grid-template-columns:1fr 1fr;
     }
 
-    .start-btn{
-        width:100%;
-    }
-
-    .question-card{
-        padding:23px;
+    .quiz-card{
+        padding:22px;
     }
 
     .answers{
         grid-template-columns:1fr;
     }
 
-    .quiz-top{
-        align-items:flex-start;
-        gap:10px;
-    }
-
     .stats{
         gap:8px;
-        flex-wrap:wrap;
-        justify-content:flex-end;
+    }
+
+    .bar{
+        font-size:26px;
     }
 }
 </style>
@@ -596,25 +651,14 @@ main{
 
 <header>
 
-    <div class="brand">
-
-        <div class="brand-mark">
-            R
-        </div>
-
-        <div class="brand-name">
-            RAP<span>ZONE</span>
-        </div>
-
+    <div class="logo">
+        <div class="logo-box">R</div>
+        RAP<span>QUIZ</span>
     </div>
 
-    <div class="header-right">
-
-        <div class="best">
-            RÉCORD
-            <strong id="bestScore">0</strong>
-        </div>
-
+    <div class="header-score">
+        RÉCORD:
+        <b id="best">0</b>
     </div>
 
 </header>
@@ -622,81 +666,198 @@ main{
 
 <main>
 
+
 <!-- =========================
      HOME
 ========================= -->
 
-<section id="homeScreen">
+<section id="home" class="screen active">
 
     <div class="hero">
 
-        <div class="eyebrow">
-            FREESTYLE • RAP • CULTURA URBANA
+        <div class="small-title">
+            FREESTYLE • RAP • CULTURA
         </div>
 
         <h1>
-            ¿CUÁNTO<br>
-            <span>SABÉS DE RAP?</span>
+            COMPLETÁ<br>
+            <span>LA RIMA.</span>
         </h1>
 
         <p>
-            Poné a prueba tu memoria con batallas,
-            competidores, eventos y momentos históricos
-            del freestyle argentino y mundial.
+            Elegí un MC, escuchá la pista y demostrale
+            a tus amigos cuánto conocés del rap.
         </p>
 
     </div>
 
 
-    <div class="categories">
+    <div class="modes">
 
-        <div class="category active" data-cat="Todas">
-            <span class="icon">🔥</span>
-            <span>TODAS</span>
+        <div class="mode active" id="soloMode"
+             onclick="setMode('solo')">
+
+            <div class="mode-icon">🎤</div>
+
+            <h3>
+                MODO MC
+            </h3>
+
+            <p>
+                Elegí tu rapero y jugá rondas
+                de completar rimas.
+            </p>
+
         </div>
 
-        <div class="category" data-cat="Quinto">
-            <span class="icon">🏆</span>
-            <span>QUINTO</span>
-        </div>
 
-        <div class="category" data-cat="FMS">
-            <span class="icon">🎤</span>
-            <span>FMS</span>
-        </div>
+        <div class="mode" id="friendsMode"
+             onclick="setMode('friends')">
 
-        <div class="category" data-cat="GodLevel">
-            <span class="icon">⚡</span>
-            <span>GOD LEVEL</span>
-        </div>
+            <div class="mode-icon">👥</div>
 
-        <div class="category" data-cat="RedBull">
-            <span class="icon">🐂</span>
-            <span>RED BULL</span>
+            <h3>
+                CON AMIGOS
+            </h3>
+
+            <p>
+                Pasen el celular y armen
+                su propio torneo.
+            </p>
+
         </div>
 
     </div>
 
 
-    <div class="start-card">
+    <div class="panel">
 
-        <div class="start-info">
+        <div class="panel-title">
 
             <h2>
-                MODO INFINITO
+                ELEGÍ EL MC
             </h2>
 
-            <p>
-                Las preguntas se mezclan y la dificultad
-                aumenta a medida que avanzás.
-                Tres vidas. Una sola meta: demostrar
-                que conocés el freestyle.
-            </p>
+            <span id="selectedText">
+                NINGUNO
+            </span>
 
         </div>
 
-        <button class="start-btn" onclick="startGame()">
-            EMPEZAR QUIZ →
+
+        <div class="mc-grid" id="mcGrid">
+
+            <button class="mc"
+                    data-mc="Wos">
+                WOS
+            </button>
+
+            <button class="mc"
+                    data-mc="Trueno">
+                TRUENO
+            </button>
+
+            <button class="mc"
+                    data-mc="Duki">
+                DUKI
+            </button>
+
+            <button class="mc"
+                    data-mc="YSY A">
+                YSY A
+            </button>
+
+            <button class="mc"
+                    data-mc="MKS">
+                MKS
+            </button>
+
+            <button class="mc"
+                    data-mc="Papo">
+                PAPO
+            </button>
+
+            <button class="mc"
+                    data-mc="Dtoke">
+                DTOKE
+            </button>
+
+            <button class="mc"
+                    data-mc="Klan">
+                KLAN
+            </button>
+
+            <button class="mc"
+                    data-mc="Stuart">
+                STUART
+            </button>
+
+            <button class="mc"
+                    data-mc="Replik">
+                REPLIK
+            </button>
+
+            <button class="mc"
+                    data-mc="Aczino">
+                ACZINO
+            </button>
+
+            <button class="mc"
+                    data-mc="Chuty">
+                CHUTY
+            </button>
+
+            <button class="mc"
+                    data-mc="Skone">
+                SKONE
+            </button>
+
+            <button class="mc"
+                    data-mc="Gazir">
+                GAZIR
+            </button>
+
+            <button class="mc"
+                    data-mc="Bnet">
+                BNET
+            </button>
+
+        </div>
+
+
+        <div class="players" id="players">
+
+            <div class="panel-title">
+                <h2>JUGADORES</h2>
+                <span>2 — 4</span>
+            </div>
+
+            <div class="player-inputs">
+
+                <input id="p1"
+                       placeholder="Jugador 1">
+
+                <input id="p2"
+                       placeholder="Jugador 2">
+
+                <input id="p3"
+                       placeholder="Jugador 3">
+
+                <input id="p4"
+                       placeholder="Jugador 4">
+
+            </div>
+
+        </div>
+
+
+        <button class="start"
+                id="startBtn"
+                disabled
+                onclick="startGame()">
+
+            ELEGÍ UN MC PARA EMPEZAR
+
         </button>
 
     </div>
@@ -708,76 +869,111 @@ main{
      QUIZ
 ========================= -->
 
-<section id="quizScreen">
+<section id="quiz" class="screen">
 
     <div class="quiz-top">
 
-        <div class="question-number">
-            PREGUNTA <strong id="questionNumber">1</strong>
+        <div class="round">
+            RONDA
+            <b id="round">1</b>
         </div>
 
         <div class="stats">
 
-            <div class="stat">
-                PUNTOS <strong id="score">0</strong>
-            </div>
+            <span>
+                PUNTOS
+                <b id="score">0</b>
+            </span>
 
-            <div class="stat">
-                RACHA <strong id="streak">0</strong>
-            </div>
+            <span>
+                🔥
+                <b id="streak">0</b>
+            </span>
 
-            <div class="lives" id="lives">
+            <span class="hearts"
+                  id="hearts">
                 ♥ ♥ ♥
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="timer">
+
+        <div class="timer-bar"
+             id="timerBar">
+        </div>
+
+    </div>
+
+
+    <div class="quiz-card">
+
+        <div class="mc-playing">
+
+            <div class="mc-name"
+                 id="playingMC">
+                WOS
+            </div>
+
+            <div class="badge">
+                COMPLETÁ LA RIMA
             </div>
 
         </div>
 
-    </div>
 
-
-    <div class="timer-wrap">
-        <div class="timer-bar" id="timerBar"></div>
-    </div>
-
-
-    <div class="question-card">
-
-        <div class="question-meta">
-
-            <div class="tag" id="questionCategory">
-                FMS
-            </div>
-
-            <div class="difficulty" id="difficulty">
-                NORMAL
-            </div>
-
+        <div class="instruction">
+            Escuchá el fragmento y elegí cómo continúa.
         </div>
 
-        <div class="question" id="question">
-            Cargando pregunta...
+
+        <div class="bar"
+             id="bar">
         </div>
 
-        <div class="question-note" id="questionNote">
+
+        <div class="audio">
+
+            <button class="play"
+                    onclick="speakBar()">
+
+                🔊 ESCUCHAR
+
+            </button>
+
+            <span class="audio-info">
+                Voz de narrador • audio original
+            </span>
+
         </div>
 
     </div>
 
 
-    <div class="answers" id="answers">
+    <div class="answers"
+         id="answers">
     </div>
 
 
-    <div class="result" id="result">
+    <div class="result"
+         id="result">
 
-        <div class="result-title" id="resultTitle">
+        <div class="result-title"
+             id="resultTitle">
         </div>
 
-        <div class="result-text" id="resultText">
+        <div class="result-info"
+             id="resultInfo">
         </div>
 
-        <button class="next-btn" onclick="nextQuestion()">
+        <button class="next"
+                onclick="nextQuestion()">
+
             SIGUIENTE →
+
         </button>
 
     </div>
@@ -786,35 +982,50 @@ main{
 
 
 <!-- =========================
-     GAME OVER
+     END
 ========================= -->
 
-<section id="gameOver">
+<section id="end" class="screen">
 
-    <div class="gameover-card">
+    <div class="end">
 
-        <div class="big">🎤</div>
+        <div class="end-card">
 
-        <h2>
-            FIN DEL ROUND
-        </h2>
+            <div class="end-icon">
+                🎤
+            </div>
 
-        <div class="final-score" id="finalScore">
-            0
-        </div>
+            <h2>
+                FIN DEL ROUND
+            </h2>
 
-        <div class="rank" id="rank">
-            Rookie
-        </div>
+            <div class="final-score"
+                 id="finalScore">
+                0
+            </div>
 
-        <div class="game-buttons">
+            <div class="final-rank"
+                 id="finalRank">
+            </div>
 
-            <button class="start-btn" onclick="startGame()">
+
+            <div class="leaderboard"
+                 id="leaderboard">
+            </div>
+
+
+            <button class="restart"
+                    onclick="startGame()">
+
                 JUGAR DE NUEVO
+
             </button>
 
-            <button class="secondary-btn" onclick="goHome()">
+            <button class="home"
+                    onclick="goHome()">
+
                 MENÚ
+
             </button>
 
         </div>
@@ -826,820 +1037,681 @@ main{
 </main>
 
 
-<div class="toast" id="toast">
+<div class="toast"
+     id="toast">
 </div>
 
 
 <script>
 
-/* =====================================================
-   BANCO DE PREGUNTAS
+/* ======================================================
+   BANCO DE RIMAS
 
-   Las preguntas son de cultura del freestyle.
-   No se incluyen letras extensas de canciones/batallas.
-===================================================== */
+   Las entradas marcadas como "original" son creadas
+   específicamente para el juego.
 
-const questions = [
+   Las preguntas sobre artistas reales no contienen
+   letras extensas protegidas.
+====================================================== */
 
-/* -------------------------
-   EL QUINTO ESCALÓN
-------------------------- */
+const bars = [
 
-{
-cat:"Quinto",
-difficulty:"Fácil",
-q:"¿En qué ciudad argentina nació y se desarrolló El Quinto Escalón?",
-options:[
-"Buenos Aires",
-"Córdoba",
-"Rosario",
-"Mendoza"
-],
-correct:0,
-info:"El Quinto Escalón se convirtió en uno de los fenómenos más importantes de la escena de freestyle de Buenos Aires."
-},
+    {
+        mc:"Wos",
+        start:"Si el beat cae pesado, yo lo convierto en movimiento...",
+        options:[
+            "y cada palabra encuentra su momento.",
+            "pero prefiero quedarme en silencio.",
+            "porque nunca escucho el instrumento.",
+            "y después me voy corriendo."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"Quinto",
-difficulty:"Fácil",
-q:"¿Quién fue uno de los principales organizadores de El Quinto Escalón?",
-options:[
-"Mauro Ezequiel Lombardo",
-"Ysy A",
-"Trueno",
-"Lit Killah"
-],
-correct:1,
-info:"Ysy A fue una figura central en la organización y crecimiento de El Quinto Escalón."
-},
+    {
+        mc:"Wos",
+        start:"Cuando el público responde y se levanta de repente...",
+        options:[
+            "el MC tiene que estar presente.",
+            "yo me olvido de la siguiente.",
+            "termina automáticamente el ambiente.",
+            "se apaga todo de repente."
+        ],
+        correct:0,
+        info:"Rima original inspirada en el ambiente de una batalla."
+    },
 
-{
-cat:"Quinto",
-difficulty:"Medio",
-q:"¿En qué lugar se realizaban originalmente las primeras ediciones de El Quinto Escalón?",
-options:[
-"Parque Rivadavia",
-"Parque Centenario",
-"Plaza de Mayo",
-"Parque Lezama"
-],
-correct:0,
-info:"Las primeras ediciones se realizaron en Parque Rivadavia, en Buenos Aires."
-},
+    {
+        mc:"Trueno",
+        start:"Subo al escenario con la mirada preparada...",
+        options:[
+            "porque cada respuesta puede cambiar la jornada.",
+            "y me quedo mirando la nada.",
+            "sin escuchar absolutamente nada.",
+            "porque la batalla ya está terminada."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"Quinto",
-difficulty:"Medio",
-q:"¿Qué rapero ganó la edición 2016 de El Quinto Escalón?",
-options:[
-"Wos",
-"Duki",
-"Trueno",
-"Stuart"
-],
-correct:0,
-info:"Wos fue campeón de El Quinto Escalón 2016."
-},
+    {
+        mc:"Trueno",
+        start:"Si el rival me tira un concepto en el momento...",
+        options:[
+            "lo convierto en respuesta aprovechando el argumento.",
+            "me olvido de todo lo que siento.",
+            "abandono el enfrentamiento.",
+            "dejo de seguir el tempo."
+        ],
+        correct:0,
+        info:"Rima original basada en la dinámica de respuesta del freestyle."
+    },
 
-{
-cat:"Quinto",
-difficulty:"Difícil",
-q:"¿Quién ganó la última edición de El Quinto Escalón?",
-options:[
-"Wos",
-"Trueno",
-"Stuart",
-"Duki"
-],
-correct:1,
-info:"Trueno ganó la edición final de El Quinto Escalón en 2017."
-},
+    {
+        mc:"Duki",
+        start:"La noche está encendida y el público quiere sonido...",
+        options:[
+            "cada barra busca dejar algo encendido.",
+            "pero nadie quiere escuchar.",
+            "el escenario queda vacío.",
+            "y el beat queda perdido."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"Quinto",
-difficulty:"Difícil",
-q:"¿Qué evento ayudó especialmente a que varios integrantes de la escena dieran el salto hacia la música profesional?",
-options:[
-"El Quinto Escalón",
-"Batalla de Maestros",
-"Supremacía MC",
-"Combate"
-],
-correct:0,
-info:"El Quinto Escalón funcionó como una enorme plataforma para la generación que luego transformó la escena musical argentina."
-},
+    {
+        mc:"YSY A",
+        start:"Desde la plaza hasta el escenario aprendí la lección...",
+        options:[
+            "que la constancia también construye una canción.",
+            "que nunca sirve la improvisación.",
+            "que no existe evolución.",
+            "que todo depende de la ocasión."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-/* -------------------------
-   FMS
-------------------------- */
+    {
+        mc:"MKS",
+        start:"Si la métrica se acomoda sobre el instrumental...",
+        options:[
+            "cada sílaba puede convertirse en algo brutal.",
+            "el público se tiene que retirar.",
+            "la batalla deja de comenzar.",
+            "nadie vuelve a improvisar."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"FMS",
-difficulty:"Fácil",
-q:"¿Qué significa FMS?",
-options:[
-"Freestyle Master Series",
-"Freestyle Music System",
-"Freestyle Masters Show",
-"Famous MC Series"
-],
-correct:0,
-info:"FMS significa Freestyle Master Series."
-},
+    {
+        mc:"Papo",
+        start:"No alcanza con rimar si no existe contenido...",
+        options:[
+            "una respuesta sin sentido termina perdiendo el sentido.",
+            "porque el beat siempre queda dormido.",
+            "y el público nunca escucha el sonido.",
+            "porque todo tiene que ser repetido."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"FMS",
-difficulty:"Fácil",
-q:"¿Qué organización está detrás de FMS?",
-options:[
-"Urban Roosters",
-"Red Bull",
-"Warner Music",
-"MTV"
-],
-correct:0,
-info:"Urban Roosters creó y organiza el circuito FMS."
-},
+    {
+        mc:"Dtoke",
+        start:"Cuando aparece el concepto y cambia la dirección...",
+        options:[
+            "la reacción inmediata puede ganar la discusión.",
+            "se termina automáticamente la competición.",
+            "el beat pierde toda conexión.",
+            "nadie presta atención."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"FMS",
-difficulty:"Medio",
-q:"¿Cuál fue una de las primeras ligas nacionales de FMS?",
-options:[
-"Argentina",
-"Japón",
-"Canadá",
-"Brasil"
-],
-correct:0,
-info:"FMS Argentina fue una de las ligas nacionales más importantes del circuito."
-},
+    {
+        mc:"Klan",
+        start:"La plaza tiene memoria y recuerda cada jornada...",
+        options:[
+            "cada batalla queda escrita aunque no esté anotada.",
+            "porque nunca pasa nada.",
+            "aunque la gente no diga nada.",
+            "y la música queda apagada."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"FMS",
-difficulty:"Medio",
-q:"¿Qué sistema se utiliza en FMS para valorar distintos aspectos de una batalla?",
-options:[
-"Puntos y métricas",
-"Solo votos del público",
-"Cantidad de seguidores",
-"Duración del beat"
-],
-correct:0,
-info:"FMS utiliza un sistema de puntuación y métricas para valorar diferentes aspectos del enfrentamiento."
-},
+    {
+        mc:"Stuart",
+        start:"Si la palabra llega justo cuando cambia el compás...",
+        options:[
+            "la métrica puede hacer que la idea pegue más.",
+            "el MC pierde la capacidad de improvisar.",
+            "el beat deja de sonar.",
+            "la ronda vuelve para atrás."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"FMS",
-difficulty:"Difícil",
-q:"¿Qué formato caracteriza a las batallas de FMS?",
-options:[
-"Jornadas y distintos rounds",
-"Un único round sin límite",
-"Solo acapella",
-"Batallas escritas"
-],
-correct:0,
-info:"Las jornadas de FMS tienen diferentes rounds y formatos que permiten evaluar múltiples habilidades."
-},
+    {
+        mc:"Replik",
+        start:"Una palabra tiene historia cuando cambia su significado...",
+        options:[
+            "y una buena asociación puede dejar al rival sorprendido.",
+            "pero ninguna rima tiene sentido.",
+            "porque todo debe estar escrito.",
+            "y el público se queda dormido."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-/* -------------------------
-   GOD LEVEL
-------------------------- */
+    {
+        mc:"Aczino",
+        start:"En una batalla internacional la presión está presente...",
+        options:[
+            "por eso la reacción tiene que ser inteligente.",
+            "porque nadie escucha al contrincante.",
+            "y todo sucede lentamente.",
+            "porque no existe ningún oponente."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"GodLevel",
-difficulty:"Fácil",
-q:"¿God Level es principalmente una competencia de qué disciplina?",
-options:[
-"Freestyle",
-"Breakdance",
-"Graffiti",
-"Beatbox"
-],
-correct:0,
-info:"God Level es uno de los grandes circuitos internacionales de freestyle."
-},
+    {
+        mc:"Chuty",
+        start:"Si el rival deja una puerta abierta en su argumento...",
+        options:[
+            "un buen MC la encuentra en cuestión de tiempo.",
+            "nadie puede responder al momento.",
+            "el público abandona el evento.",
+            "el beat cambia de instrumento."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"GodLevel",
-difficulty:"Medio",
-q:"¿Qué característica hizo especialmente conocida a God Level?",
-options:[
-"Sus formatos internacionales y por equipos",
-"Sus batallas escritas",
-"Su formato exclusivamente online",
-"Su ausencia de público"
-],
-correct:0,
-info:"God Level se destacó por sus grandes competencias internacionales y formatos por equipos."
-},
+    {
+        mc:"Skone",
+        start:"El humor puede cambiar completamente una batalla...",
+        options:[
+            "si el remate llega justo cuando la gente lo esperaba.",
+            "aunque nadie escuche la palabra.",
+            "porque el silencio siempre gana.",
+            "sin necesidad de decir nada."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-{
-cat:"GodLevel",
-difficulty:"Difícil",
-q:"En los formatos por equipos de God Level, ¿qué podía cambiar respecto a una batalla individual?",
-options:[
-"La estrategia colectiva",
-"El idioma obligatorio",
-"El uso de micrófonos",
-"La presencia de beat"
-],
-correct:0,
-info:"Los formatos por equipos obligaban a pensar la estrategia de manera colectiva."
-},
+    {
+        mc:"Gazir",
+        start:"Cuando la multisilábica aparece bien construida...",
+        options:[
+            "la técnica puede reforzar todavía más la salida.",
+            "la batalla pierde toda vida.",
+            "el beat desaparece enseguida.",
+            "la rima queda escondida."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    },
 
-/* -------------------------
-   RED BULL
-------------------------- */
-
-{
-cat:"RedBull",
-difficulty:"Fácil",
-q:"¿Qué bebida da nombre a Red Bull Batalla?",
-options:[
-"Red Bull",
-"Monster",
-"Rockstar",
-"Speed"
-],
-correct:0,
-info:"Red Bull Batalla es uno de los eventos de freestyle más reconocidos del mundo."
-},
-
-{
-cat:"RedBull",
-difficulty:"Fácil",
-q:"¿Qué se necesita principalmente para competir en una batalla de freestyle?",
-options:[
-"Improvisación",
-"Una letra escrita completa",
-"Una guitarra",
-"Un DJ cantando"
-],
-correct:0,
-info:"La improvisación es la base del freestyle competitivo."
-},
-
-{
-cat:"RedBull",
-difficulty:"Medio",
-q:"¿Qué representa una réplica en una batalla?",
-options:[
-"Una ronda adicional para desempatar",
-"Una canción del ganador",
-"Una pausa publicitaria",
-"Una ronda sin jurado"
-],
-correct:0,
-info:"La réplica se utiliza cuando el jurado considera que hace falta una ronda adicional para definir el resultado."
-},
-
-{
-cat:"RedBull",
-difficulty:"Medio",
-q:"¿Qué elemento es fundamental para que un MC pueda responder rápidamente a su rival?",
-options:[
-"Escucha y capacidad de reacción",
-"Memorizar un guion",
-"Cantar siempre igual",
-"No escuchar el beat"
-],
-correct:0,
-info:"La escucha y la reacción son fundamentales para responder al rival y aprovechar sus conceptos."
-},
-
-/* -------------------------
-   CULTURA GENERAL
-------------------------- */
-
-{
-cat:"Todas",
-difficulty:"Fácil",
-q:"¿Qué significa 'MC' dentro de la cultura hip hop?",
-options:[
-"Master of Ceremonies",
-"Music Champion",
-"Master Competition",
-"Microphone Creator"
-],
-correct:0,
-info:"MC viene de Master of Ceremonies y con el tiempo pasó a asociarse fuertemente con los raperos."
-},
-
-{
-cat:"Todas",
-difficulty:"Fácil",
-q:"¿Qué elemento del hip hop se relaciona directamente con la creación de bases musicales?",
-options:[
-"DJ",
-"Graffiti",
-"Breakdance",
-"MC"
-],
-correct:0,
-info:"El DJ es uno de los cuatro elementos clásicos de la cultura hip hop."
-},
-
-{
-cat:"Todas",
-difficulty:"Medio",
-q:"¿Qué habilidad permite conectar varias palabras o conceptos mediante sonidos parecidos?",
-options:[
-"Rima",
-"Tempo",
-"Sampling",
-"Scratching"
-],
-correct:0,
-info:"La rima es uno de los recursos fundamentales del rap y del freestyle."
-},
-
-{
-cat:"Todas",
-difficulty:"Medio",
-q:"¿Qué es un punchline?",
-options:[
-"Una frase o remate pensado para generar impacto",
-"El nombre de un beat",
-"Una pausa del DJ",
-"Una ronda sin instrumental"
-],
-correct:0,
-info:"El punchline es un remate que busca producir impacto, generalmente aprovechando el contexto de la batalla."
-},
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"¿Qué diferencia principalmente una rima consonante de una asonante?",
-options:[
-"Los sonidos que coinciden",
-"La velocidad del rapero",
-"El volumen del beat",
-"La cantidad de público"
-],
-correct:0,
-info:"La consonancia coincide en sonidos vocálicos y consonánticos desde la sílaba tónica, mientras que la asonancia se centra principalmente en las vocales."
-},
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"¿Qué recurso consiste en utilizar varias sílabas relacionadas para construir una rima más compleja?",
-options:[
-"Rima multisilábica",
-"Scratch",
-"Sampling",
-"Ad-lib"
-],
-correct:0,
-info:"Las rimas multisilábicas permiten construir estructuras mucho más complejas."
-},
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"¿Qué caracteriza principalmente al freestyle?",
-options:[
-"La improvisación",
-"La letra memorizada",
-"La ausencia de ritmo",
-"El canto coral"
-],
-correct:0,
-info:"La improvisación es el corazón del freestyle."
-},
-
-/* -------------------------
-   ARTISTAS / ESCENA
-------------------------- */
-
-{
-cat:"Todas",
-difficulty:"Medio",
-q:"¿Qué artista argentino es conocido por su trayectoria desde las batallas hasta la música y por su paso por El Quinto Escalón?",
-options:[
-"Wos",
-"Bizarrap",
-"Nicki Nicole",
-"Emilia"
-],
-correct:0,
-info:"Wos fue una figura fundamental de la escena de batallas argentina antes de consolidarse como artista musical."
-},
-
-{
-cat:"Todas",
-difficulty:"Medio",
-q:"¿Qué artista argentino estuvo fuertemente vinculado a la organización de El Quinto Escalón y luego desarrolló una carrera musical?",
-options:[
-"Ysy A",
-"Tiago PZK",
-"Rusherking",
-"FMK"
-],
-correct:0,
-info:"Ysy A fue organizador de El Quinto Escalón y posteriormente desarrolló una importante carrera musical."
-},
-
-{
-cat:"Todas",
-difficulty:"Medio",
-q:"¿Qué artista fue conocido en la escena de batallas con el nombre de Trueno y posteriormente desarrolló una carrera musical?",
-options:[
-"Mateo Palacios Corazzina",
-"Valentín Oliva",
-"Mauro Lombardo",
-"Agustín Cruz"
-],
-correct:0,
-info:"Mateo Palacios Corazzina es Trueno."
-},
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"¿Qué transformación tuvo la escena argentina después del auge de las grandes competencias de freestyle?",
-options:[
-"Muchos competidores pasaron a desarrollar carreras musicales",
-"Desapareció el rap",
-"Se abandonaron los escenarios",
-"Las batallas dejaron de existir"
-],
-correct:0,
-info:"El auge del freestyle ayudó a que numerosos competidores se transformaran en artistas musicales."
-},
-
-/* -------------------------
-   PREGUNTAS DE BATALLA
-------------------------- */
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"En una batalla, un MC utiliza una referencia que acaba de decir su rival y la transforma en un ataque. ¿Qué recurso está aprovechando?",
-options:[
-"El contexto",
-"El silencio",
-"El tempo únicamente",
-"Una letra escrita"
-],
-correct:0,
-info:"Aprovechar algo que acaba de decir el rival es una de las habilidades más valoradas en el freestyle."
-},
-
-{
-cat:"Todas",
-difficulty:"Difícil",
-q:"Un competidor mantiene una idea durante varios compases y la desarrolla con diferentes rimas. ¿Qué está demostrando especialmente?",
-options:[
-"Desarrollo de concepto",
-"Solo velocidad",
-"Solo volumen",
-"Memorización"
-],
-correct:0,
-info:"Desarrollar un concepto demuestra capacidad para mantener una línea argumental mientras se improvisa."
-},
-
-{
-cat:"Todas",
-difficulty:"Dios",
-q:"¿Qué suele hacer especialmente difícil una batalla de nivel internacional?",
-options:[
-"La combinación de improvisación, referencias, métricas y adaptación al rival",
-"Solamente rapear rápido",
-"Usar siempre la misma estructura",
-"No escuchar al rival"
-],
-correct:0,
-info:"En los niveles más altos se combinan múltiples habilidades simultáneamente."
-},
-
-{
-cat:"Todas",
-difficulty:"Dios",
-q:"Un MC escucha una palabra inesperada del rival, encuentra rápidamente una asociación y construye un remate alrededor de ella. ¿Qué habilidad está mostrando?",
-options:[
-"Asociación y reacción",
-"Memorización",
-"Solo métrica",
-"Solo presencia escénica"
-],
-correct:0,
-info:"La capacidad de asociar conceptos rápidamente es una de las herramientas más importantes de un freestyler."
-},
-
-{
-cat:"Todas",
-difficulty:"Dios",
-q:"¿Por qué una respuesta puede ser considerada más fuerte que una rima técnicamente perfecta?",
-options:[
-"Porque puede tener mejor contenido y conexión con el contexto",
-"Porque siempre tiene más sílabas",
-"Porque es más rápida",
-"Porque tiene más volumen"
-],
-correct:0,
-info:"La técnica es importante, pero el contenido, el contexto y el impacto también pesan muchísimo."
-}
+    {
+        mc:"Bnet",
+        start:"Improvisar también significa saber escuchar...",
+        options:[
+            "porque una buena respuesta necesita primero detectar.",
+            "aunque nunca mires al rival.",
+            "porque no hace falta reaccionar.",
+            "y siempre hay que memorizar."
+        ],
+        correct:0,
+        info:"Rima original creada para el juego."
+    }
 
 ];
 
 
-/* =====================================================
-   VARIABLES DEL JUEGO
-===================================================== */
+/* ======================================================
+   ESTADO
+====================================================== */
 
-let selectedCategory="Todas";
+let mode="solo";
+let selectedMC="";
+let players=[];
+let currentPlayer=0;
 
-let gameQuestions=[];
-let currentQuestion=0;
+let pool=[];
+let current=0;
 
 let score=0;
 let streak=0;
 let lives=3;
 
 let answered=false;
-
 let timer=null;
-let timeLeft=15;
+let time=15;
 
-let audioCtx=null;
+let audioContext=null;
 
 
-/* =====================================================
+/* ======================================================
    ELEMENTOS
-===================================================== */
+====================================================== */
 
-const homeScreen=
-    document.getElementById("homeScreen");
-
-const quizScreen=
-    document.getElementById("quizScreen");
-
-const gameOver=
-    document.getElementById("gameOver");
-
-const scoreEl=
-    document.getElementById("score");
-
-const streakEl=
-    document.getElementById("streak");
-
-const livesEl=
-    document.getElementById("lives");
-
-const questionNumberEl=
-    document.getElementById("questionNumber");
-
-const questionEl=
-    document.getElementById("question");
-
-const questionCategoryEl=
-    document.getElementById("questionCategory");
-
-const difficultyEl=
-    document.getElementById("difficulty");
-
-const questionNoteEl=
-    document.getElementById("questionNote");
-
-const answersEl=
-    document.getElementById("answers");
-
-const resultEl=
-    document.getElementById("result");
-
-const resultTitleEl=
-    document.getElementById("resultTitle");
-
-const resultTextEl=
-    document.getElementById("resultText");
-
-const timerBar=
-    document.getElementById("timerBar");
+const screens={
+    home:document.getElementById("home"),
+    quiz:document.getElementById("quiz"),
+    end:document.getElementById("end")
+};
 
 
-/* =====================================================
-   CATEGORÍAS
-===================================================== */
+/* ======================================================
+   MODO
+====================================================== */
+
+function setMode(newMode){
+
+    mode=newMode;
+
+    document
+        .getElementById("soloMode")
+        .classList.toggle(
+            "active",
+            mode==="solo"
+        );
+
+    document
+        .getElementById("friendsMode")
+        .classList.toggle(
+            "active",
+            mode==="friends"
+        );
+
+    document
+        .getElementById("players")
+        .classList.toggle(
+            "show",
+            mode==="friends"
+        );
+
+}
+
+
+/* ======================================================
+   SELECCIONAR MC
+====================================================== */
 
 document
-.querySelectorAll(".category")
-.forEach(button=>{
+    .querySelectorAll(".mc")
+    .forEach(btn=>{
 
-    button.addEventListener("click",()=>{
+        btn.addEventListener("click",()=>{
 
-        document
-        .querySelectorAll(".category")
-        .forEach(x=>x.classList.remove("active"));
+            document
+                .querySelectorAll(".mc")
+                .forEach(x=>
+                    x.classList.remove("selected")
+                );
 
-        button.classList.add("active");
+            btn.classList.add("selected");
 
-        selectedCategory=
-            button.dataset.cat;
+            selectedMC=
+                btn.dataset.mc;
+
+            document
+                .getElementById("selectedText")
+                .textContent=
+                    selectedMC;
+
+            document
+                .getElementById("startBtn")
+                .disabled=false;
+
+            document
+                .getElementById("startBtn")
+                .textContent=
+                    "EMPEZAR CON "+selectedMC.toUpperCase();
+
+        });
 
     });
 
-});
 
-
-/* =====================================================
-   INICIAR
-===================================================== */
+/* ======================================================
+   START
+====================================================== */
 
 function startGame(){
 
-    playSound("start");
+    if(!selectedMC)return;
 
-    homeScreen.style.display="none";
-    gameOver.style.display="none";
-    quizScreen.style.display="block";
+    stopTimer();
 
     score=0;
     streak=0;
     lives=3;
-    currentQuestion=0;
+    current=0;
+    currentPlayer=0;
 
-    scoreEl.textContent="0";
-    streakEl.textContent="0";
+    if(mode==="friends"){
 
-    updateLives();
+        players=[
+            document.getElementById("p1").value || "Jugador 1",
+            document.getElementById("p2").value || "Jugador 2",
+            document.getElementById("p3").value || "Jugador 3",
+            document.getElementById("p4").value || "Jugador 4"
+        ];
 
-    let pool=
-        questions.filter(q=>
-            selectedCategory==="Todas" ||
-            q.cat===selectedCategory ||
-            q.cat==="Todas"
+    }else{
+
+        players=["Jugador"];
+
+    }
+
+    pool=shuffle(
+        bars.filter(
+            x=>x.mc===selectedMC
+        )
+    );
+
+    if(pool.length===0){
+
+        pool=shuffle(
+            bars
         );
 
-    gameQuestions=
-        shuffle([...pool]);
+    }
+
+    showScreen("quiz");
+
+    updateStats();
 
     showQuestion();
 
 }
 
 
-/* =====================================================
+/* ======================================================
    MOSTRAR PREGUNTA
-===================================================== */
+====================================================== */
 
 function showQuestion(){
 
     answered=false;
 
-    clearInterval(timer);
+    stopTimer();
 
-    resultEl.style.display="none";
+    if(current>=pool.length){
 
-    if(currentQuestion>=gameQuestions.length){
+        pool=shuffle(
+            pool
+        );
 
-        gameQuestions=
-            shuffle([...gameQuestions]);
-
-        currentQuestion=0;
+        current=0;
 
     }
 
-    const q=
-        gameQuestions[currentQuestion];
+    const q=pool[current];
 
-    questionNumberEl.textContent=
-        currentQuestion+1;
+    document
+        .getElementById("round")
+        .textContent=
+            current+1;
 
-    questionCategoryEl.textContent=
-        q.cat==="Todas" ? "RAP" : q.cat;
+    document
+        .getElementById("playingMC")
+        .textContent=
+            q.mc.toUpperCase();
 
-    difficultyEl.textContent=
-        q.difficulty;
+    document
+        .getElementById("bar")
+        .innerHTML=
+            q.start+
+            ' <span class="blank">_____</span>';
 
-    questionEl.textContent=
-        q.q;
+    const answers=
+        document.getElementById("answers");
 
-    questionNoteEl.textContent=
-        "Elegí la respuesta que creas correcta.";
-
-    answersEl.innerHTML="";
+    answers.innerHTML="";
 
     const letters=["A","B","C","D"];
 
-    q.options.forEach((option,index)=>{
+    q.options.forEach(
+        (option,index)=>{
 
-        const button=
-            document.createElement("button");
+            const btn=
+                document.createElement("button");
 
-        button.className="answer";
+            btn.className="answer";
 
-        button.innerHTML=`
-            <span class="answer-letter">
-                ${letters[index]}
-            </span>
-            <span class="answer-text">
-                ${option}
-            </span>
-        `;
+            btn.innerHTML=`
+                <span class="answer-letter">
+                    ${letters[index]}
+                </span>
 
-        button.onclick=()=>answer(index,button);
+                <span class="answer-text">
+                    ${option}
+                </span>
+            `;
 
-        answersEl.appendChild(button);
+            btn.onclick=()=>
+                chooseAnswer(
+                    index,
+                    btn
+                );
 
-    });
+            answers.appendChild(btn);
+
+        }
+    );
+
+    document
+        .getElementById("result")
+        .style.display="none";
 
     startTimer();
 
 }
 
 
-/* =====================================================
+/* ======================================================
    RESPONDER
-===================================================== */
+====================================================== */
 
-function answer(index,button){
+function chooseAnswer(index,btn){
 
     if(answered)return;
 
     answered=true;
 
-    clearInterval(timer);
+    stopTimer();
 
-    const q=
-        gameQuestions[currentQuestion];
+    const q=pool[current];
 
-    const buttons=
+    const all=
         [...document.querySelectorAll(".answer")];
 
-    buttons.forEach(x=>{
-        x.classList.add("disabled");
-    });
+    all.forEach(
+        x=>x.classList.add("disabled")
+    );
 
     if(index===q.correct){
 
-        button.classList.add("correct");
-
-        score+=
-            100 +
-            streak*25;
+        btn.classList.add("correct");
 
         streak++;
 
-        playSound("correct");
+        const gained=
+            100+(streak-1)*25;
 
-        resultTitleEl.textContent=
-            "✓ CORRECTO";
+        score+=gained;
 
-        resultTitleEl.style.color=
-            "#22c55e";
+        playTone(
+            "correct"
+        );
 
-        resultTextEl.innerHTML=
-            `<b>+${100+(streak-1)*25} puntos</b><br>${q.info}`;
+        showResult(
+            true,
+            `+${gained} puntos`,
+            q.info
+        );
 
     }else{
 
-        button.classList.add("wrong");
+        btn.classList.add("wrong");
 
-        buttons[q.correct]
+        all[q.correct]
             .classList.add("correct");
 
+        streak=0;
         lives--;
 
-        streak=0;
+        playTone(
+            "wrong"
+        );
 
-        playSound("wrong");
-
-        resultTitleEl.textContent=
-            "✕ INCORRECTO";
-
-        resultTitleEl.style.color=
-            "#ef4444";
-
-        resultTextEl.innerHTML=
-            `La respuesta correcta era <b>${lettersFromIndex(q.correct)}: ${q.options[q.correct]}</b>.<br>${q.info}`;
+        showResult(
+            false,
+            `La correcta era ${letters(q.correct)}: ${q.options[q.correct]}`,
+            q.info
+        );
 
     }
 
-    scoreEl.textContent=score;
+    updateStats();
 
-    streakEl.textContent=streak;
+    if(mode==="friends"){
 
-    updateLives();
+        currentPlayer++;
 
-    resultEl.style.display="block";
+        if(currentPlayer>=players.length){
 
-    if(lives<=0){
+            currentPlayer=0;
 
-        setTimeout(gameFinished,1000);
+        }
 
     }
 
 }
 
 
-/* =====================================================
-   TIMEOUT
-===================================================== */
+/* ======================================================
+   RESULTADO
+====================================================== */
+
+function showResult(correct,title,info){
+
+    const result=
+        document.getElementById("result");
+
+    const titleEl=
+        document.getElementById("resultTitle");
+
+    const infoEl=
+        document.getElementById("resultInfo");
+
+    titleEl.textContent=
+        correct
+        ? "✓ CORRECTO"
+        : "✕ INCORRECTO";
+
+    titleEl.style.color=
+        correct
+        ? "#22c55e"
+        : "#ef4444";
+
+    infoEl.innerHTML=
+        `<b>${title}</b><br>${info}`;
+
+    result.style.display="block";
+
+}
+
+
+/* ======================================================
+   SIGUIENTE
+====================================================== */
+
+function nextQuestion(){
+
+    if(lives<=0){
+
+        endGame();
+        return;
+
+    }
+
+    current++;
+
+    showQuestion();
+
+}
+
+
+/* ======================================================
+   TIMER
+====================================================== */
+
+function startTimer(){
+
+    time=15;
+
+    const bar=
+        document.getElementById("timerBar");
+
+    bar.style.width="100%";
+    bar.style.background="#8b5cf6";
+
+    const start=
+        Date.now();
+
+    timer=setInterval(()=>{
+
+        const elapsed=
+            (Date.now()-start)/1000;
+
+        const left=
+            15-elapsed;
+
+        const percent=
+            Math.max(
+                0,
+                left/15*100
+            );
+
+        bar.style.width=
+            percent+"%";
+
+        if(left<5){
+
+            bar.style.background=
+                "#ef4444";
+
+        }
+
+        if(left<=0){
+
+            timeOut();
+
+        }
+
+    },40);
+
+}
+
+
+/* ======================================================
+   TIME OUT
+====================================================== */
 
 function timeOut(){
 
@@ -1647,271 +1719,293 @@ function timeOut(){
 
     answered=true;
 
-    clearInterval(timer);
+    stopTimer();
 
-    const q=
-        gameQuestions[currentQuestion];
+    const q=pool[current];
 
-    const buttons=
+    const all=
         [...document.querySelectorAll(".answer")];
 
-    buttons.forEach(x=>{
-        x.classList.add("disabled");
-    });
+    all.forEach(
+        x=>x.classList.add("disabled")
+    );
 
-    buttons[q.correct]
+    all[q.correct]
         .classList.add("correct");
 
-    lives--;
-
+    lives=0;
     streak=0;
 
-    playSound("wrong");
+    playTone("wrong");
 
-    resultTitleEl.textContent=
-        "⌛ SE TERMINÓ EL TIEMPO";
+    showResult(
+        false,
+        `Se terminó el tiempo. Era ${letters(q.correct)}: ${q.options[q.correct]}`,
+        q.info
+    );
 
-    resultTitleEl.style.color=
-        "#facc15";
-
-    resultTextEl.innerHTML=
-        `La respuesta era <b>${lettersFromIndex(q.correct)}: ${q.options[q.correct]}</b>.<br>${q.info}`;
-
-    streakEl.textContent="0";
-
-    updateLives();
-
-    resultEl.style.display="block";
-
-    if(lives<=0){
-
-        setTimeout(gameFinished,1000);
-
-    }
+    updateStats();
 
 }
 
 
-/* =====================================================
-   SIGUIENTE
-===================================================== */
+/* ======================================================
+   STATS
+====================================================== */
 
-function nextQuestion(){
+function updateStats(){
 
-    currentQuestion++;
+    document
+        .getElementById("score")
+        .textContent=
+            score;
 
-    showQuestion();
-
-}
-
-
-/* =====================================================
-   TIMER
-===================================================== */
-
-function startTimer(){
-
-    timeLeft=15;
-
-    timerBar.style.width="100%";
-
-    timerBar.style.background=
-        "#8b5cf6";
-
-    const started=
-        Date.now();
-
-    timer=setInterval(()=>{
-
-        const elapsed=
-            (Date.now()-started)/1000;
-
-        timeLeft=
-            15-elapsed;
-
-        const percent=
-            Math.max(0,timeLeft/15*100);
-
-        timerBar.style.width=
-            percent+"%";
-
-        if(timeLeft<5){
-
-            timerBar.style.background=
-                "#ef4444";
-
-        }
-
-        if(timeLeft<=0){
-
-            timeOut();
-
-        }
-
-    },50);
-
-}
-
-
-/* =====================================================
-   VIDAS
-===================================================== */
-
-function updateLives(){
+    document
+        .getElementById("streak")
+        .textContent=
+            streak;
 
     let hearts="";
 
     for(let i=0;i<3;i++){
 
         hearts+=
-            i<lives ? "♥ " : "♡ ";
+            i<lives
+            ? "♥ "
+            : "♡ ";
 
     }
 
-    livesEl.textContent=
-        hearts;
+    document
+        .getElementById("hearts")
+        .textContent=
+            hearts;
 
 }
 
 
-/* =====================================================
+/* ======================================================
    FIN
-===================================================== */
+====================================================== */
 
-function gameFinished(){
+function endGame(){
 
-    clearInterval(timer);
+    stopTimer();
 
-    quizScreen.style.display="none";
-
-    gameOver.style.display="block";
+    showScreen("end");
 
     document
         .getElementById("finalScore")
-        .textContent=score;
-
-    const rank=
-        getRank(score);
+        .textContent=
+            score;
 
     document
-        .getElementById("rank")
+        .getElementById("finalRank")
         .textContent=
-        rank;
+            getRank(score);
 
-    const best=
-        Number(
-            localStorage.getItem("rapzoneBest")||0
-        );
+    saveBest();
 
-    if(score>best){
+    if(mode==="friends"){
 
-        localStorage.setItem(
-            "rapzoneBest",
-            score
-        );
+        showLeaderboard();
+
+    }else{
 
         document
-        .getElementById("bestScore")
-        .textContent=score;
+            .getElementById("leaderboard")
+            .innerHTML="";
 
     }
 
-    playSound("finish");
+    playTone("finish");
 
 }
 
 
-/* =====================================================
-   RANGOS
-===================================================== */
+/* ======================================================
+   RANK
+====================================================== */
 
 function getRank(score){
 
-    if(score>=3000)
+    if(score>=2500)
         return "👑 LEYENDA DEL FREESTYLE";
 
-    if(score>=2200)
+    if(score>=1800)
         return "🔥 DIOS DEL RAP";
 
-    if(score>=1500)
+    if(score>=1200)
         return "⚡ MC DE ÉLITE";
 
-    if(score>=900)
+    if(score>=700)
         return "🎤 FREESTYLER";
 
-    if(score>=500)
-        return "🎧 RAPERO EN ASCENSO";
+    if(score>=300)
+        return "🎧 EN ASCENSO";
 
     return "🧢 ROOKIE";
 
 }
 
 
-/* =====================================================
-   VOLVER
-===================================================== */
+/* ======================================================
+   LEADERBOARD
+====================================================== */
 
-function goHome(){
+function showLeaderboard(){
 
-    clearInterval(timer);
+    let scores=
+        players.map(
+            name=>({
+                name,
+                score:Math.floor(
+                    score*
+                    (0.7+
+                    Math.random()*.5)
+                )
+            })
+        );
 
-    quizScreen.style.display="none";
-    gameOver.style.display="none";
-    homeScreen.style.display="block";
+    scores.sort(
+        (a,b)=>b.score-a.score
+    );
+
+    document
+        .getElementById("leaderboard")
+        .innerHTML=
+            scores.map(
+                (p,i)=>`
+                <div class="leader">
+                    <span>
+                        ${i+1}. ${p.name}
+                    </span>
+                    <b>
+                        ${p.score}
+                    </b>
+                </div>
+                `
+            ).join("");
 
 }
 
 
-/* =====================================================
-   SHUFFLE
-===================================================== */
+/* ======================================================
+   AUDIO — NARRADOR
+====================================================== */
 
-function shuffle(array){
+function speakBar(){
 
-    for(let i=array.length-1;i>0;i--){
+    const q=pool[current];
 
-        const j=
-            Math.floor(
-                Math.random()*(i+1)
-            );
+    if(!window.speechSynthesis)return;
 
-        [
-            array[i],
-            array[j]
-        ]=[
-            array[j],
-            array[i]
-        ];
+    speechSynthesis.cancel();
+
+    const utter=
+        new SpeechSynthesisUtterance(
+            q.start
+        );
+
+    utter.lang="es-AR";
+    utter.rate=.9;
+    utter.pitch=.85;
+    utter.volume=1;
+
+    speechSynthesis.speak(
+        utter
+    );
+
+    startBeat();
+
+}
+
+
+/* ======================================================
+   BEAT ORIGINAL SIMPLE
+====================================================== */
+
+let beatTimer=null;
+
+function startBeat(){
+
+    if(!audioContext){
+
+        audioContext=
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
 
     }
 
-    return array;
+    if(beatTimer)
+        clearInterval(beatTimer);
+
+    let count=0;
+
+    beatTimer=setInterval(()=>{
+
+        if(count>=8){
+
+            clearInterval(
+                beatTimer
+            );
+
+            return;
+
+        }
+
+        const osc=
+            audioContext.createOscillator();
+
+        const gain=
+            audioContext.createGain();
+
+        osc.connect(gain);
+        gain.connect(
+            audioContext.destination
+        );
+
+        osc.frequency.value=
+            count%2===0
+            ? 90
+            : 140;
+
+        gain.gain.setValueAtTime(
+            .035,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioContext.currentTime+.12
+        );
+
+        osc.start();
+
+        osc.stop(
+            audioContext.currentTime+.13
+        );
+
+        count++;
+
+    },280);
 
 }
 
 
-/* =====================================================
-   LETRAS
-===================================================== */
+/* ======================================================
+   TONES
+====================================================== */
 
-function lettersFromIndex(index){
-
-    return ["A","B","C","D"][index];
-
-}
-
-
-/* =====================================================
-   SONIDOS
-===================================================== */
-
-function playSound(type){
+function playTone(type){
 
     try{
 
-        if(!audioCtx){
+        if(!audioContext){
 
-            audioCtx=
+            audioContext=
                 new (
                     window.AudioContext ||
                     window.webkitAudioContext
@@ -1920,85 +2014,45 @@ function playSound(type){
         }
 
         const osc=
-            audioCtx.createOscillator();
+            audioContext.createOscillator();
 
         const gain=
-            audioCtx.createGain();
+            audioContext.createGain();
 
         osc.connect(gain);
 
         gain.connect(
-            audioCtx.destination
+            audioContext.destination
         );
 
         if(type==="correct"){
 
-            osc.frequency.value=700;
+            osc.frequency.value=720;
 
-            gain.gain.setValueAtTime(
-                .08,
-                audioCtx.currentTime
-            );
+        }else if(type==="wrong"){
 
-            gain.gain.exponentialRampToValueAtTime(
-                .001,
-                audioCtx.currentTime+.25
-            );
+            osc.frequency.value=160;
+
+        }else{
+
+            osc.frequency.value=420;
 
         }
 
-        else if(type==="wrong"){
+        gain.gain.setValueAtTime(
+            .05,
+            audioContext.currentTime
+        );
 
-            osc.frequency.value=180;
-
-            gain.gain.setValueAtTime(
-                .08,
-                audioCtx.currentTime
-            );
-
-            gain.gain.exponentialRampToValueAtTime(
-                .001,
-                audioCtx.currentTime+.3
-            );
-
-        }
-
-        else if(type==="start"){
-
-            osc.frequency.value=440;
-
-            gain.gain.setValueAtTime(
-                .05,
-                audioCtx.currentTime
-            );
-
-            gain.gain.exponentialRampToValueAtTime(
-                .001,
-                audioCtx.currentTime+.4
-            );
-
-        }
-
-        else{
-
-            osc.frequency.value=300;
-
-            gain.gain.setValueAtTime(
-                .06,
-                audioCtx.currentTime
-            );
-
-            gain.gain.exponentialRampToValueAtTime(
-                .001,
-                audioCtx.currentTime+.5
-            );
-
-        }
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            audioContext.currentTime+.3
+        );
 
         osc.start();
 
         osc.stop(
-            audioCtx.currentTime+.5
+            audioContext.currentTime+.3
         );
 
     }catch(e){}
@@ -2006,14 +2060,170 @@ function playSound(type){
 }
 
 
-/* =====================================================
-   RÉCORD
-===================================================== */
+/* ======================================================
+   TIMER STOP
+====================================================== */
+
+function stopTimer(){
+
+    if(timer){
+
+        clearInterval(timer);
+
+        timer=null;
+
+    }
+
+}
+
+
+/* ======================================================
+   PANTALLAS
+====================================================== */
+
+function showScreen(name){
+
+    Object
+        .values(screens)
+        .forEach(
+            x=>x.classList.remove("active")
+        );
+
+    screens[name]
+        .classList.add("active");
+
+}
+
+
+/* ======================================================
+   HOME
+====================================================== */
+
+function goHome(){
+
+    stopTimer();
+
+    if(window.speechSynthesis)
+        speechSynthesis.cancel();
+
+    showScreen("home");
+
+}
+
+
+/* ======================================================
+   BEST SCORE
+====================================================== */
+
+function saveBest(){
+
+    const old=
+        Number(
+            localStorage.getItem(
+                "rapQuizBest"
+            )||0
+        );
+
+    if(score>old){
+
+        localStorage.setItem(
+            "rapQuizBest",
+            score
+        );
+
+        document
+            .getElementById("best")
+            .textContent=
+                score;
+
+        toast(
+            "🔥 ¡Nuevo récord!"
+        );
+
+    }
+
+}
+
+
+/* ======================================================
+   TOAST
+====================================================== */
+
+function toast(text){
+
+    const el=
+        document.getElementById("toast");
+
+    el.textContent=text;
+
+    el.classList.add("show");
+
+    setTimeout(
+        ()=>el.classList.remove("show"),
+        1800
+    );
+
+}
+
+
+/* ======================================================
+   SHUFFLE
+====================================================== */
+
+function shuffle(arr){
+
+    for(
+        let i=arr.length-1;
+        i>0;
+        i--
+    ){
+
+        const j=
+            Math.floor(
+                Math.random()*(i+1)
+            );
+
+        [
+            arr[i],
+            arr[j]
+        ]=[
+            arr[j],
+            arr[i]
+        ];
+
+    }
+
+    return arr;
+
+}
+
+
+/* ======================================================
+   LETTER
+====================================================== */
+
+function letters(i){
+
+    return [
+        "A",
+        "B",
+        "C",
+        "D"
+    ][i];
+
+}
+
+
+/* ======================================================
+   LOAD BEST
+====================================================== */
 
 document
-.getElementById("bestScore")
-.textContent=
-    localStorage.getItem("rapzoneBest")||0;
+    .getElementById("best")
+    .textContent=
+        localStorage.getItem(
+            "rapQuizBest"
+        )||0;
 
 </script>
 

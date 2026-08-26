@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RAP STUDIO</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#08090c;
+    color:#f5f5f5;
+    font-family:Inter,Arial,sans-serif;
+    min-height:100vh;
+}
+
+/* ---------- BARRA SUPERIOR ---------- */
+
+.topbar{
+    height:64px;
+    background:#0d0f13;
+    border-bottom:1px solid #24262c;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    color:#9b6cff;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#8d919b;
+    font-size:12px;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    background:#35d17b;
+    border-radius:50%;
+    box-shadow:0 0 10px #35d17b;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.studio{
+    display:grid;
+    grid-template-columns:230px 1fr 280px;
+    min-height:calc(100vh - 64px);
+}
+
+/* ---------- SIDEBAR ---------- */
+
+.sidebar{
+    background:#0c0e12;
+    border-right:1px solid #24262c;
+    padding:22px 15px;
+}
+
+.section-label{
+    font-size:10px;
+    color:#666b75;
+    font-weight:800;
+    letter-spacing:2px;
+    margin:18px 10px 8px;
+}
+
+.nav-btn{
+    width:100%;
+    background:transparent;
+    border:0;
+    color:#90949d;
+    text-align:left;
+    padding:13px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-bottom:3px;
+    font-size:13px;
+    transition:.2s;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#191621;
+    color:white;
+}
+
+.nav-btn.active{
+    border-left:2px solid #9b6cff;
+}
+
+/* ---------- CENTRO ---------- */
+
+.center{
+    padding:25px;
+    overflow:hidden;
+}
+
+.project{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.project h1{
+    font-size:20px;
+}
+
+.project small{
+    display:block;
+    color:#666b75;
+    margin-top:4px;
+}
+
+.controls{
+    display:flex;
+    gap:8px;
+}
+
+.small-btn{
+    background:#15171c;
+    color:#ddd;
+    border:1px solid #292c33;
+    padding:9px 12px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.small-btn:hover{
+    background:#1e2026;
+}
+
+/* ---------- WAVEFORM ---------- */
+
+.wave-container{
+    background:#0d0f13;
+    border:1px solid #252830;
+    border-radius:12px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+}
+
+.wave-title{
+    display:flex;
+    justify-content:space-between;
+    color:#70747d;
+    font-size:11px;
+    margin-bottom:15px;
+}
+
+canvas{
+    width:100%;
+    height:230px;
+    display:block;
+    background:
+        linear-gradient(#15171d 1px,transparent 1px),
+        linear-gradient(90deg,#15171d 1px,transparent 1px);
+    background-size:50px 50px;
+    border-radius:7px;
+}
+
+.time{
+    display:flex;
+    justify-content:space-between;
+    color:#666a73;
+    font-size:11px;
+    margin-top:8px;
+}
+
+/* ---------- GRABADOR ---------- */
+
+.recorder{
+    margin-top:18px;
+    background:#0d0f13;
+    border:1px solid #252830;
+    border-radius:12px;
+    padding:25px;
+}
+
+.rec-info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.rec-title{
+    font-size:14px;
+    font-weight:700;
+}
+
+.timer{
+    font-family:monospace;
+    color:#a99aff;
+    font-size:18px;
+}
+
+.record-button{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    border:7px solid #24262d;
+    background:#d94155;
+    cursor:pointer;
+    display:block;
+    margin:28px auto 12px;
+    box-shadow:0 0 0 0 rgba(217,65,85,.4);
+    transition:.2s;
+}
+
+.record-button:hover{
+    transform:scale(1.05);
+}
+
+.record-button.recording{
+    animation:pulse 1.2s infinite;
+    background:#ff334f;
+}
+
+@keyframes pulse{
+    0%{
+        box-shadow:0 0 0 0 rgba(255,51,79,.4);
+    }
+    70%{
+        box-shadow:0 0 0 18px rgba(255,51,79,0);
+    }
+    100%{
+        box-shadow:0 0 0 0 rgba(255,51,79,0);
+    }
+}
+
+.record-label{
+    text-align:center;
+    color:#777b84;
+    font-size:11px;
+}
+
+/* ---------- PANEL DERECHO ---------- */
+
+.rightbar{
+    background:#0c0e12;
+    border-left:1px solid #24262c;
+    padding:22px 18px;
+}
+
+.panel{
+    background:#111318;
+    border:1px solid #252830;
+    border-radius:10px;
+    padding:16px;
+    margin-bottom:12px;
+}
+
+.panel-title{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#8a8e98;
+    margin-bottom:16px;
+}
+
+.control{
+    margin-bottom:19px;
+}
+
+.control-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    font-size:12px;
+}
+
+.control-head span:last-child{
+    color:#9f8bff;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:#8d6bea;
+    cursor:pointer;
+}
+
+select{
+    width:100%;
+    background:#191b21;
+    color:white;
+    border:1px solid #2a2d35;
+    border-radius:7px;
+    padding:10px;
+    outline:none;
+}
+
+/* ---------- BOTONES ---------- */
+
+.action-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.action{
+    background:#17191f;
+    border:1px solid #2a2d34;
+    color:#eee;
+    border-radius:7px;
+    padding:11px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.action:hover{
+    background:#202229;
+}
+
+.action.primary{
+    background:#7652d5;
+    border-color:#7652d5;
+}
+
+.action.primary:hover{
+    background:#8663e5;
+}
+
+/* ---------- AYUDA ---------- */
+
+.help{
+    color:#70747d;
+    font-size:11px;
+    line-height:1.6;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:1000px){
+
+    .studio{
+        grid-template-columns:190px 1fr;
+    }
+
+    .rightbar{
+        grid-column:1/-1;
+        border-left:0;
+        border-top:1px solid #24262c;
+        display:grid;
+        grid-template-columns:1fr 1fr 1fr;
+        gap:12px;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .studio{
+        display:block;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .center{
+        padding:15px;
+    }
+
+    .rightbar{
+        display:block;
+    }
+
+    .project{
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .project h1{
+        font-size:17px;
+    }
+
+    canvas{
+        height:180px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="logo">
+        RAP<span>STUDIO</span>
+    </div>
+
+    <div class="status">
+        <div class="status-dot"></div>
+        SISTEMA LISTO
+    </div>
+
+</header>
+
+
+<div class="studio">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="section-label">
+            PROYECTO
+        </div>
+
+        <button class="nav-btn active">
+            🎤 Grabación
+        </button>
+
+        <button class="nav-btn">
+            🎛 Mezclador
+        </button>
+
+        <button class="nav-btn">
+            🎵 Beats
+        </button>
+
+        <button class="nav-btn">
+            📝 Letras
+        </button>
+
+
+        <div class="section-label">
+            EFECTOS
+        </div>
+
+        <button class="nav-btn">
+            AutoTune
+        </button>
+
+        <button class="nav-btn">
+            Reverb
+        </button>
+
+        <button class="nav-btn">
+            Echo
+        </button>
+
+        <button class="nav-btn">
+            Distorsión
+        </button>
+
+
+        <div class="section-label">
+            PROYECTO
+        </div>
+
+        <button class="nav-btn" onclick="nuevoProyecto()">
+            + Nuevo proyecto
+        </button>
+
+    </aside>
+
+
+    <!-- CENTRO -->
+
+    <main class="center">
+
+        <div class="project">
+
+            <div>
+                <h1>Mi sesión de rap</h1>
+                <small>Voz principal · 01</small>
+            </div>
+
+            <div class="controls">
+
+                <button class="small-btn" onclick="metronomo()">
+                    ♩ Metrónomo
+                </button>
+
+                <button class="small-btn" onclick="resetStudio()">
+                    Reset
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- WAVEFORM -->
+
+        <div class="wave-container">
+
+            <div class="wave-title">
+                <span>VOICE TRACK</span>
+                <span id="waveStatus">ESPERANDO MICRÓFONO</span>
+            </div>
+
+            <canvas id="wave"></canvas>
+
+            <div class="time">
+                <span>00:00</span>
+                <span id="currentTime">00:00</span>
+                <span>05:00</span>
+            </div>
+
+        </div>
+
+
+        <!-- GRABADOR -->
+
+        <div class="recorder">
+
+            <div class="rec-info">
+
+                <div class="rec-title">
+                    Grabación vocal
+                </div>
+
+                <div class="timer" id="timer">
+                    00:00
+                </div>
+
+            </div>
+
+            <button
+                class="record-button"
+                id="recordButton"
+                onclick="toggleRecording()">
+            </button>
+
+            <div
+                class="record-label"
+                id="recordLabel">
+                Presioná para comenzar
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- PANEL DERECHO -->
+
+    <aside class="rightbar">
+
+
+        <!-- AUTOTUNE -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+                AUTOTUNE
+            </div>
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Intensidad</span>
+                    <span id="autoValue">70%</span>
+                </div>
+
+                <input
+                    id="autotune"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="70"
+                    oninput="actualizar('autoValue',this.value,'%')">
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Velocidad</span>
+                    <span id="speedValue">50%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    oninput="actualizar('speedValue',this.value,'%')">
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Tonalidad</span>
+                </div>
+
+                <select id="key">
+                    <option>C</option>
+                    <option>C#</option>
+                    <option>D</option>
+                    <option>D#</option>
+                    <option>E</option>
+                    <option>F</option>
+                    <option>F#</option>
+                    <option>G</option>
+                    <option>G#</option>
+                    <option>A</option>
+                    <option>A#</option>
+                    <option>B</option>
+                </select>
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Escala</span>
+                </div>
+
+                <select>
+                    <option>Mayor</option>
+                    <option>Menor</option>
+                    <option>Pentatónica</option>
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- EFECTOS -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+                EFECTOS
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Reverb</span>
+                    <span id="reverbValue">30%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="30"
+                    oninput="actualizar('reverbValue',this.value,'%')">
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Echo</span>
+                    <span id="echoValue">15%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="15"
+                    oninput="actualizar('echoValue',this.value,'%')">
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Distorsión</span>
+                    <span id="distValue">0%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    oninput="actualizar('distValue',this.value,'%')">
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+
+        <div class="panel">
+
+            <div class="panel-title">
+                ARCHIVO
+            </div>
+
+            <div class="action-buttons">
+
+                <button
+                    class="action primary"
+                    onclick="reproducir()">
+                    ▶ Escuchar
+                </button>
+
+                <button
+                    class="action"
+                    onclick="descargar()">
+                    ↓ Descargar
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-title">
+                ESTADO
+            </div>
+
+            <div class="help">
+
+                Este estudio funciona directamente
+                desde el navegador usando el micrófono
+                de tu dispositivo.
+
+                <br><br>
+
+                Permití el acceso al micrófono cuando
+                el navegador lo solicite.
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   VARIABLES
+========================================== */
+
+let audioContext;
+let analyser;
+let microphone;
+let mediaRecorder;
+
+let chunks=[];
+
+let recording=false;
+
+let audioBlob=null;
+let audioURL=null;
+
+let startTime;
+let timerInterval;
+
+
+/* ==========================================
+   CANVAS
+========================================== */
+
+const canvas=document.getElementById("wave");
+const ctx=canvas.getContext("2d");
+
+function resizeCanvas(){
+
+    canvas.width=canvas.clientWidth*devicePixelRatio;
+    canvas.height=canvas.clientHeight*devicePixelRatio;
+
+    ctx.scale(
+        devicePixelRatio,
+        devicePixelRatio
+    );
+
+}
+
+resizeCanvas();
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/* ==========================================
+   DIBUJAR WAVEFORM
+========================================== */
+
+function drawWave(){
+
+    requestAnimationFrame(drawWave);
+
+    const width=canvas.clientWidth;
+    const height=canvas.clientHeight;
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+    if(!analyser){
+
+        dibujarLinea(width,height);
+
+        return;
+
+    }
+
+    const bufferLength=
+        analyser.fftSize;
+
+    const dataArray=
+        new Uint8Array(bufferLength);
+
+    analyser.getByteTimeDomainData(
+        dataArray
+    );
+
+    ctx.beginPath();
+
+    ctx.lineWidth=2;
+
+    ctx.strokeStyle="#9b6cff";
+
+    const sliceWidth=
+        width/bufferLength;
+
+    let x=0;
+
+    for(let i=0;i<bufferLength;i++){
+
+        const v=
+            dataArray[i]/128.0;
+
+        const y=
+            v*height/2;
+
+        if(i===0){
+
+            ctx.moveTo(x,y);
+
+        }else{
+
+            ctx.lineTo(x,y);
+
+        }
+
+        x+=sliceWidth;
+
+    }
+
+    ctx.stroke();
+
+}
+
+
+function dibujarLinea(width,height){
+
+    ctx.beginPath();
+
+    ctx.strokeStyle="#292b32";
+
+    ctx.lineWidth=1;
+
+    ctx.moveTo(0,height/2);
+
+    ctx.lineTo(width,height/2);
+
+    ctx.stroke();
+
+}
+
+drawWave();
+
+
+/* ==========================================
+   GRABACIÓN
+========================================== */
+
+async function toggleRecording(){
+
+    if(recording){
+
+        detenerGrabacion();
+
+    }else{
+
+        await comenzarGrabacion();
+
+    }
+
+}
+
+
+async function comenzarGrabacion(){
+
+    try{
+
+        const stream=
+            await navigator.mediaDevices
+            .getUserMedia({
+                audio:true
+            });
+
+
+        audioContext=
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
+        analyser=
+            audioContext.createAnalyser();
+
+        analyser.fftSize=2048;
+
+
+        microphone=
+            audioContext
+            .createMediaStreamSource(stream);
+
+
+        microphone.connect(analyser);
+
+
+        mediaRecorder=
+            new MediaRecorder(stream);
+
+
+        chunks=[];
+
+
+        mediaRecorder.ondataavailable=e=>{
+
+            if(e.data.size>0){
+
+                chunks.push(e.data);
+
+            }
+
+        };
+
+
+        mediaRecorder.onstop=()=>{
+
+            audioBlob=
+                new Blob(
+                    chunks,
+                    {type:"audio/webm"}
+                );
+
+            audioURL=
+                URL.createObjectURL(audioBlob);
+
+        };
+
+
+        mediaRecorder.start();
+
+        recording=true;
+
+        startTime=Date.now();
+
+        timerInterval=
+            setInterval(actualizarTimer,1000);
+
+
+        document
+            .getElementById("recordButton")
+            .classList.add("recording");
+
+
+        document
+            .getElementById("recordLabel")
+            .textContent=
+            "Grabando...";
+
+
+        document
+            .getElementById("waveStatus")
+            .textContent=
+            "GRABANDO";
+
+    }catch(error){
+
+        alert(
+            "No se pudo acceder al micrófono. Revisá los permisos del navegador."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* ==========================================
+   DETENER
+========================================== */
+
+function detenerGrabacion(){
+
+    if(mediaRecorder){
+
+        mediaRecorder.stop();
+
+        mediaRecorder.stream
+            .getTracks()
+            .forEach(track=>track.stop());
+
+    }
+
+
+    recording=false;
+
+    clearInterval(timerInterval);
+
+
+    document
+        .getElementById("recordButton")
+        .classList.remove("recording");
+
+
+    document
+        .getElementById("recordLabel")
+        .textContent=
+        "Grabación terminada";
+
+
+    document
+        .getElementById("waveStatus")
+        .textContent=
+        "GRABACIÓN LISTA";
+
+}
+
+
+/* ==========================================
+   TIMER
+========================================== */
+
+function actualizarTimer(){
+
+    const segundos=
+        Math.floor(
+            (Date.now()-startTime)/1000
+        );
+
+    const minutos=
+        Math.floor(segundos/60);
+
+    const secs=
+        segundos%60;
+
+    document
+        .getElementById("timer")
+        .textContent=
+        `${String(minutos).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+
+}
+
+
+/* ==========================================
+   REPRODUCIR
+========================================== */
+
+function reproducir(){
+
+    if(!audioURL){
+
+        alert(
+            "Primero tenés que grabar una voz."
+        );
+
+        return;
+
+    }
+
+    const audio=
+        new Audio(audioURL);
+
+    audio.play();
+
+}
+
+
+/* ==========================================
+   DESCARGAR
+========================================== */
+
+function descargar(){
+
+    if(!audioURL){
+
+        alert(
+            "No hay ninguna grabación para descargar."
+        );
+
+        return;
+
+    }
+
+    const link=
+        document.createElement("a");
+
+    link.href=audioURL;
+
+    link.download=
+        "mi-rap.webm";
+
+    link.click();
+
+}
+
+
+/* ==========================================
+   SLIDERS
+========================================== */
+
+function actualizar(id,valor,unidad){
+
+    document
+        .getElementById(id)
+        .textContent=
+        valor+unidad;
+
+}
+
+
+/* ==========================================
+   METRÓNOMO
+========================================== */
+
+let metroInterval=null;
+let metroActivo=false;
+
+function metronomo(){
+
+    if(metroActivo){
+
+        clearInterval(metroInterval);
+
+        metroActivo=false;
+
+        return;
+
+    }
+
+    const bpm=120;
+
+    metroInterval=
+        setInterval(()=>{
+
+            const beep=
+                new AudioContext();
+
+            const osc=
+                beep.createOscillator();
+
+            const gain=
+                beep.createGain();
+
+            osc.frequency.value=800;
+
+            gain.gain.value=.08;
+
+            osc.connect(gain);
+
+            gain.connect(
+                beep.destination
+            );
+
+            osc.start();
+
+            osc.stop(
+                beep.currentTime+.05
+            );
+
+        },60000/bpm);
+
+    metroActivo=true;
+
+}
+
+
+/* ==========================================
+   NUEVO PROYECTO
+========================================== */
+
+function nuevoProyecto(){
+
+    const confirmar=
+        confirm(
+            "¿Querés crear un proyecto nuevo?"
+        );
+
+    if(confirmar){
+
+        resetStudio();
+
+    }
+
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+function resetStudio(){
+
+    if(recording){
+
+        detenerGrabacion();
+
+    }
+
+    audioBlob=null;
+    audioURL=null;
+
+    document
+        .getElementById("timer")
+        .textContent="00:00";
+
+    document
+        .getElementById("recordLabel")
+        .textContent=
+        "Presioná para comenzar";
+
+    document
+        .getElementById("waveStatus")
+        .textContent=
+        "ESPERANDO MICRÓFONO";
+
+}
+
+</script>
+
+</body>
+</html>

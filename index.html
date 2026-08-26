@@ -3,487 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>RAP STUDIO</title>
+<title>RAP LAB — Voice Studio</title>
 
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
-}
-
-:root{
-    --bg:#07080b;
-    --panel:#0e1015;
-    --panel2:#13151b;
-    --border:#272a32;
-    --text:#f4f4f6;
-    --muted:#777c87;
-    --purple:#8b5cf6;
-    --purple2:#6d42d8;
-    --green:#36d27b;
-    --red:#ef4057;
 }
 
 body{
-    min-height:100vh;
-    background:
-        radial-gradient(
-            circle at 50% -20%,
-            rgba(112,62,210,.20),
-            transparent 40%
-        ),
-        var(--bg);
-    color:var(--text);
+    background:#07080b;
+    color:#f5f5f7;
     font-family:Inter,Arial,sans-serif;
+    min-height:100vh;
 }
 
-/* =====================================
-   TOPBAR
-===================================== */
+button,input,select{
+    font:inherit;
+}
 
-.topbar{
-    height:64px;
-    background:rgba(12,14,18,.94);
-    border-bottom:1px solid var(--border);
+button{
+    cursor:pointer;
+}
+
+.top{
+    height:68px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:0 24px;
-    position:sticky;
-    top:0;
-    z-index:20;
-    backdrop-filter:blur(15px);
+    padding:0 25px;
+    background:#0c0d11;
+    border-bottom:1px solid #25262d;
 }
 
 .logo{
-    font-size:20px;
+    font-size:21px;
     font-weight:900;
     letter-spacing:-1px;
 }
 
 .logo span{
-    color:#9d7aff;
+    color:#9b6cff;
 }
 
 .status{
     display:flex;
-    align-items:center;
     gap:8px;
-    color:#8b909a;
+    align-items:center;
     font-size:11px;
+    color:#858993;
 }
 
-.status-dot{
+.dot{
     width:8px;
     height:8px;
     border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 12px rgba(54,210,123,.7);
+    background:#38d27b;
+    box-shadow:0 0 12px #38d27b;
 }
 
-.status.recording .status-dot{
-    background:#ff334f;
-    box-shadow:0 0 12px rgba(255,51,79,.8);
-}
-
-.status.recording{
-    color:#ff7180;
-}
-
-/* =====================================
-   LAYOUT
-===================================== */
-
-.studio{
-    min-height:calc(100vh - 64px);
+.layout{
     display:grid;
-    grid-template-columns:220px minmax(0,1fr) 300px;
+    grid-template-columns:220px 1fr 300px;
+    min-height:calc(100vh - 68px);
 }
-
-/* =====================================
-   SIDEBAR
-===================================== */
 
 .sidebar{
-    background:#0b0d11;
-    border-right:1px solid var(--border);
-    padding:22px 14px;
+    background:#0b0c10;
+    border-right:1px solid #25262d;
+    padding:20px 14px;
 }
 
-.section-label{
-    margin:18px 10px 8px;
-    color:#555a64;
+.label{
     font-size:9px;
-    font-weight:900;
+    color:#666a75;
+    font-weight:800;
     letter-spacing:2px;
+    margin:18px 10px 8px;
 }
 
 .nav{
     width:100%;
     border:0;
     background:transparent;
-    color:#898e98;
-    padding:12px;
-    border-radius:7px;
+    color:#92959e;
     text-align:left;
-    cursor:pointer;
-    font-size:12px;
+    padding:12px;
+    border-radius:8px;
     margin-bottom:3px;
-    transition:.2s;
 }
 
-.nav:hover{
-    background:#171920;
-    color:white;
+.nav:hover,
+.nav.active{
+    background:#191521;
+    color:#fff;
 }
 
 .nav.active{
-    background:#1a1525;
-    color:white;
-    border-left:2px solid var(--purple);
+    border-left:2px solid #9b6cff;
 }
 
-/* =====================================
-   CENTRO
-===================================== */
-
-.center{
-    min-width:0;
+.main{
     padding:24px;
 }
 
-.project{
+.heading{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:15px;
     margin-bottom:18px;
 }
 
-.project h1{
-    font-size:20px;
-    letter-spacing:-.5px;
+.heading h1{
+    font-size:21px;
 }
 
-.project small{
-    color:#656a74;
-    font-size:10px;
-    display:block;
-    margin-top:4px;
-}
-
-.top-actions{
-    display:flex;
-    gap:7px;
+.heading p{
+    color:#696d77;
+    font-size:12px;
+    margin-top:5px;
 }
 
 .btn{
-    border:1px solid var(--border);
+    border:1px solid #292b33;
     background:#15171c;
-    color:#dddfe4;
-    padding:9px 12px;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:10px;
-    font-weight:700;
+    color:#eee;
+    border-radius:8px;
+    padding:10px 13px;
 }
 
 .btn:hover{
-    background:#20232a;
+    background:#20222a;
 }
 
 .btn.primary{
-    background:var(--purple2);
-    border-color:var(--purple2);
-    color:white;
+    background:#7654d8;
+    border-color:#7654d8;
 }
 
 .btn.primary:hover{
-    background:#8053e9;
+    background:#8968eb;
 }
 
-/* =====================================
-   WAVE
-===================================== */
-
-.wave-box{
-    background:var(--panel);
-    border:1px solid var(--border);
+.workspace{
+    background:#0d0f13;
+    border:1px solid #252830;
     border-radius:12px;
-    padding:17px;
+    padding:18px;
 }
 
-.wave-head{
+.wave-title{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    color:#707580;
-    font-size:9px;
-    font-weight:800;
-    letter-spacing:1px;
+    color:#777b86;
+    font-size:10px;
+    font-weight:700;
     margin-bottom:12px;
 }
 
-.wave-status{
-    color:#9a82e9;
-}
-
-#wave{
+canvas{
     width:100%;
-    height:250px;
+    height:240px;
     display:block;
-    border-radius:7px;
+    border-radius:8px;
     background:
-        linear-gradient(#161920 1px,transparent 1px),
-        linear-gradient(90deg,#161920 1px,transparent 1px);
-    background-size:50px 50px;
+        linear-gradient(#15171d 1px,transparent 1px),
+        linear-gradient(90deg,#15171d 1px,transparent 1px);
+    background-size:45px 45px;
 }
 
-.timeline{
-    display:flex;
-    justify-content:space-between;
-    color:#555a63;
-    font-size:9px;
-    margin-top:8px;
-}
-
-/* =====================================
-   RECORDER
-===================================== */
-
-.recorder{
+.player{
     margin-top:15px;
-    background:var(--panel);
-    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.play{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:0;
+    background:#9b6cff;
+    color:white;
+    font-size:17px;
+}
+
+.seek{
+    flex:1;
+}
+
+.time{
+    color:#858994;
+    font-family:monospace;
+    font-size:12px;
+}
+
+.record-box{
+    margin-top:15px;
+    background:#0d0f13;
+    border:1px solid #252830;
     border-radius:12px;
     padding:22px;
+    text-align:center;
 }
 
-.rec-top{
+.record-info{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-}
-
-.rec-title{
-    font-weight:800;
+    color:#858994;
     font-size:12px;
 }
 
 .timer{
+    color:#a88cff;
     font-family:monospace;
-    color:#a993ff;
-    font-size:18px;
+    font-size:17px;
 }
 
-.record-button{
-    width:76px;
-    height:76px;
-    display:block;
-    margin:25px auto 12px;
+.record{
+    width:78px;
+    height:78px;
     border-radius:50%;
-    border:7px solid #24272f;
-    background:#d63d53;
-    cursor:pointer;
-    transition:.2s;
+    border:8px solid #24262d;
+    background:#df4258;
+    margin:25px auto 12px;
+    display:block;
+    box-shadow:0 0 0 0 rgba(223,66,88,.4);
 }
 
-.record-button:hover{
-    transform:scale(1.05);
-}
-
-.record-button.recording{
-    background:#ff3150;
+.record.recording{
     animation:pulse 1.1s infinite;
+    background:#ff3150;
 }
 
 @keyframes pulse{
-
-    0%{
-        box-shadow:0 0 0 0 rgba(255,49,80,.5);
-    }
-
-    70%{
-        box-shadow:0 0 0 18px rgba(255,49,80,0);
-    }
-
-    100%{
-        box-shadow:0 0 0 0 rgba(255,49,80,0);
-    }
-
+    0%{box-shadow:0 0 0 0 rgba(255,49,80,.4)}
+    70%{box-shadow:0 0 0 20px rgba(255,49,80,0)}
+    100%{box-shadow:0 0 0 0 rgba(255,49,80,0)}
 }
 
-.record-label{
-    text-align:center;
-    color:#777c86;
-    font-size:10px;
+.record-text{
+    color:#777b85;
+    font-size:11px;
 }
 
-/* =====================================
-   PLAYER
-===================================== */
-
-.player{
-    margin-top:15px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:15px;
-}
-
-.player-title{
-    color:#747983;
-    font-size:9px;
-    letter-spacing:1px;
-    font-weight:800;
-    margin-bottom:10px;
-}
-
-.player-controls{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.play-button{
-    width:40px;
-    height:40px;
-    border:0;
-    border-radius:8px;
-    background:var(--purple);
-    color:white;
-    cursor:pointer;
-    font-size:15px;
-}
-
-.progress{
-    flex:1;
-    height:5px;
-    background:#22252c;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.progress-bar{
-    width:0%;
-    height:100%;
-    background:#9d7aff;
-}
-
-.player-time{
-    color:#666b75;
-    font-family:monospace;
-    font-size:9px;
-}
-
-/* =====================================
-   RIGHT
-===================================== */
-
-.rightbar{
-    background:#0b0d11;
-    border-left:1px solid var(--border);
-    padding:17px;
+.right{
+    background:#0b0c10;
+    border-left:1px solid #25262d;
+    padding:18px;
     overflow:auto;
 }
 
 .panel{
-    background:var(--panel2);
-    border:1px solid var(--border);
+    background:#111318;
+    border:1px solid #252830;
     border-radius:10px;
-    padding:15px;
-    margin-bottom:11px;
+    padding:16px;
+    margin-bottom:12px;
 }
 
-.panel-title{
-    color:#858a94;
-    font-size:9px;
-    font-weight:900;
-    letter-spacing:1.7px;
-    margin-bottom:15px;
+.panel h2{
+    font-size:10px;
+    color:#8b8f99;
+    letter-spacing:1.5px;
+    margin-bottom:16px;
 }
-
-/* =====================================
-   CONTROLS
-===================================== */
 
 .control{
     margin-bottom:17px;
 }
 
-.control:last-child{
-    margin-bottom:0;
-}
-
 .control-head{
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    font-size:12px;
     margin-bottom:7px;
-    color:#c7c9ce;
-    font-size:10px;
 }
 
-.control-head span:last-child{
-    color:#9f84ff;
+.value{
+    color:#a78bff;
 }
 
 input[type=range]{
     width:100%;
-    accent-color:#8b5cf6;
-    cursor:pointer;
+    accent-color:#936cf0;
 }
 
 select{
     width:100%;
-    background:#191c22;
-    color:#eee;
-    border:1px solid #2a2e36;
+    padding:10px;
     border-radius:7px;
-    padding:9px;
+    border:1px solid #2a2d35;
+    background:#191b21;
+    color:white;
     outline:none;
-    font-size:10px;
 }
 
-/* =====================================
-   VOICE PRESETS
-===================================== */
-
-.voice-grid{
+.presets{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:6px;
+    gap:7px;
 }
 
-.voice{
-    background:#181a20;
+.preset{
+    background:#17191f;
     border:1px solid #292c34;
-    color:#bbbfc7;
-    border-radius:7px;
+    color:#ddd;
     padding:10px 5px;
-    cursor:pointer;
-    font-size:9px;
-    transition:.2s;
+    border-radius:7px;
+    font-size:11px;
 }
 
-.voice:hover{
-    border-color:#55436e;
+.preset:hover{
+    background:#22242b;
 }
-
-.voice.active{
-    background:#241a35;
-    border-color:#8b5cf6;
-    color:white;
-}
-
-/* =====================================
-   ACTIONS
-===================================== */
 
 .actions{
     display:grid;
@@ -491,64 +328,48 @@ select{
     gap:7px;
 }
 
-.action{
-    background:#181a20;
-    color:#ddd;
-    border:1px solid #2a2d34;
-    border-radius:7px;
-    padding:10px;
-    cursor:pointer;
-    font-size:9px;
-    font-weight:700;
+.actions button{
+    padding:11px 5px;
 }
 
-.action:hover{
-    background:#22252c;
+.meter{
+    height:8px;
+    background:#202229;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:8px;
 }
 
-.action.full{
-    grid-column:1/-1;
+.meter-fill{
+    height:100%;
+    width:0%;
+    background:#9b6cff;
+    transition:.05s;
 }
 
-.action.purple{
-    background:#754bd3;
-    border-color:#754bd3;
+.note{
+    color:#70747e;
+    font-size:10px;
+    line-height:1.6;
 }
-
-/* =====================================
-   INFO
-===================================== */
-
-.info{
-    color:#6f747e;
-    font-size:9px;
-    line-height:1.7;
-}
-
-/* =====================================
-   RESPONSIVE
-===================================== */
 
 @media(max-width:1050px){
-
-    .studio{
+    .layout{
         grid-template-columns:190px 1fr;
     }
 
-    .rightbar{
+    .right{
         grid-column:1/-1;
         border-left:0;
-        border-top:1px solid var(--border);
+        border-top:1px solid #25262d;
         display:grid;
         grid-template-columns:repeat(3,1fr);
         gap:10px;
     }
-
 }
 
 @media(max-width:700px){
-
-    .studio{
+    .layout{
         display:block;
     }
 
@@ -556,878 +377,487 @@ select{
         display:none;
     }
 
-    .center{
+    .main{
         padding:12px;
     }
 
-    .rightbar{
+    .right{
         display:block;
     }
 
-    .project{
-        align-items:flex-start;
+    .heading{
+        gap:10px;
     }
 
-    .top-actions{
-        flex-direction:column;
+    canvas{
+        height:190px;
     }
-
-    #wave{
-        height:180px;
-    }
-
-    .voice-grid{
-        grid-template-columns:1fr 1fr;
-    }
-
 }
-
 </style>
 </head>
 
-
 <body>
 
-
-<!-- =====================================
-     TOPBAR
-===================================== -->
-
-<header class="topbar">
+<header class="top">
 
     <div class="logo">
-        RAP<span>STUDIO</span>
+        RAP<span>LAB</span>
     </div>
 
-    <div class="status" id="status">
-
-        <div class="status-dot"></div>
-
-        <span id="statusText">
-            SISTEMA LISTO
-        </span>
-
+    <div class="status">
+        <div class="dot" id="statusDot"></div>
+        <span id="statusText">SISTEMA LISTO</span>
     </div>
 
 </header>
 
 
+<div class="layout">
 
-<div class="studio">
+    <aside class="sidebar">
 
+        <div class="label">ESTUDIO</div>
 
-<!-- =====================================
-     SIDEBAR
-===================================== -->
+        <button class="nav active">🎙 Grabación</button>
+        <button class="nav">🎚 Voz</button>
+        <button class="nav">🎛 Efectos</button>
+        <button class="nav">🎵 Metrónomo</button>
+        <button class="nav">📝 Letras</button>
 
-<aside class="sidebar">
+        <div class="label">PRESETS</div>
 
-    <div class="section-label">
-        PROYECTO
-    </div>
+        <button class="nav" onclick="preset('normal')">Voz limpia</button>
+        <button class="nav" onclick="preset('deep')">Voz grave</button>
+        <button class="nav" onclick="preset('high')">Voz aguda</button>
+        <button class="nav" onclick="preset('robot')">Robot</button>
+        <button class="nav" onclick="preset('alien')">Alien</button>
 
-    <button class="nav active">
-        🎤 Grabación
-    </button>
+        <div class="label">PROYECTO</div>
 
-    <button class="nav"
-            onclick="scrollToEffects()">
-        🎛 Efectos
-    </button>
+        <button class="nav" onclick="nuevoProyecto()">
+            ＋ Nuevo proyecto
+        </button>
 
-    <button class="nav"
-            onclick="toggleMetronome()">
-        ♩ Metrónomo
-    </button>
-
-    <button class="nav"
-            onclick="newProject()">
-        ＋ Nuevo proyecto
-    </button>
+    </aside>
 
 
-    <div class="section-label">
-        VOCES
-    </div>
+    <main class="main">
 
-    <button class="nav"
-            onclick="selectVoice('natural')">
-        ✨ Natural
-    </button>
+        <div class="heading">
 
-    <button class="nav"
-            onclick="selectVoice('autotune')">
-        🎵 AutoTune
-    </button>
+            <div>
+                <h1>Voice Studio</h1>
+                <p>Grabá tu voz y transformala.</p>
+            </div>
 
-    <button class="nav"
-            onclick="selectVoice('cartoon')">
-        👾 Personaje
-    </button>
-
-    <button class="nav"
-            onclick="selectVoice('robot')">
-        🤖 Robot
-    </button>
-
-</aside>
-
-
-
-<!-- =====================================
-     CENTER
-===================================== -->
-
-<main class="center">
-
-    <div class="project">
-
-        <div>
-
-            <h1>
-                Mi sesión de rap
-            </h1>
-
-            <small>
-                Voz principal · Track 01
-            </small>
-
-        </div>
-
-        <div class="top-actions">
-
-            <button class="btn"
-                    onclick="toggleMetronome()">
-                ♩ Metrónomo
-            </button>
-
-            <button class="btn"
-                    onclick="newProject()">
+            <button class="btn" onclick="resetAll()">
                 Reset
             </button>
 
         </div>
 
-    </div>
 
+        <section class="workspace">
 
-
-    <!-- WAVEFORM -->
-
-    <div class="wave-box">
-
-        <div class="wave-head">
-
-            <span>
-                VOICE TRACK
-            </span>
-
-            <span class="wave-status"
-                  id="waveStatus">
-                ESPERANDO MICRÓFONO
-            </span>
-
-        </div>
-
-        <canvas id="wave"></canvas>
-
-        <div class="timeline">
-
-            <span>00:00</span>
-
-            <span id="currentTime">
-                00:00
-            </span>
-
-            <span>05:00</span>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- RECORDER -->
-
-    <div class="recorder">
-
-        <div class="rec-top">
-
-            <div class="rec-title">
-                GRABACIÓN VOCAL
+            <div class="wave-title">
+                <span>VOICE TRACK</span>
+                <span id="waveStatus">ESPERANDO MICRÓFONO</span>
             </div>
 
-            <div class="timer"
-                 id="timer">
-                00:00
+            <canvas id="wave"></canvas>
+
+            <div class="player">
+
+                <button class="play" onclick="playProcessed()">
+                    ▶
+                </button>
+
+                <input
+                    class="seek"
+                    id="seek"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                >
+
+                <span class="time" id="currentTime">
+                    00:00
+                </span>
+
             </div>
 
-        </div>
+        </section>
 
 
-        <button class="record-button"
+        <section class="record-box">
+
+            <div class="record-info">
+                <span>GRABACIÓN VOCAL</span>
+                <span class="timer" id="timer">00:00</span>
+            </div>
+
+            <button
+                class="record"
                 id="recordButton"
                 onclick="toggleRecording()">
-        </button>
-
-
-        <div class="record-label"
-             id="recordLabel">
-
-            Presioná para comenzar
-
-        </div>
-
-    </div>
-
-
-
-    <!-- PLAYER -->
-
-    <div class="player">
-
-        <div class="player-title">
-            GRABACIÓN
-        </div>
-
-        <div class="player-controls">
-
-            <button class="play-button"
-                    onclick="playRecording()">
-
-                ▶
-
             </button>
 
-            <div class="progress">
+            <div
+                class="record-text"
+                id="recordText">
+                Presioná para comenzar
+            </div>
 
-                <div class="progress-bar"
-                     id="progressBar">
+        </section>
+
+    </main>
+
+
+    <aside class="right">
+
+
+        <!-- VOZ -->
+
+        <div class="panel">
+
+            <h2>CAMBIO DE VOZ</h2>
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Pitch</span>
+                    <span class="value" id="pitchValue">0</span>
                 </div>
 
+                <input
+                    id="pitch"
+                    type="range"
+                    min="-12"
+                    max="12"
+                    step="1"
+                    value="0"
+                    oninput="updateValue('pitchValue',this.value)">
+
             </div>
 
-            <div class="player-time"
-                 id="playerTime">
 
-                00:00
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Velocidad</span>
+                    <span class="value" id="speedValue">1.00x</span>
+                </div>
+
+                <input
+                    id="speed"
+                    type="range"
+                    min="0.5"
+                    max="1.5"
+                    step="0.01"
+                    value="1"
+                    oninput="updateValue('speedValue',Number(this.value).toFixed(2)+'x')">
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Volumen</span>
+                    <span class="value" id="volumeValue">100%</span>
+                </div>
+
+                <input
+                    id="volume"
+                    type="range"
+                    min="0"
+                    max="1.5"
+                    step="0.01"
+                    value="1"
+                    oninput="updateValue('volumeValue',Math.round(this.value*100)+'%')">
 
             </div>
 
         </div>
 
-    </div>
 
-</main>
+        <!-- EFECTOS -->
+
+        <div class="panel">
+
+            <h2>EFECTOS</h2>
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Eco</span>
+                    <span class="value" id="echoValue">15%</span>
+                </div>
+
+                <input
+                    id="echo"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step=".01"
+                    value=".15"
+                    oninput="updateValue('echoValue',Math.round(this.value*100)+'%')">
+
+            </div>
 
 
+            <div class="control">
 
-<!-- =====================================
-     RIGHTBAR
-===================================== -->
+                <div class="control-head">
+                    <span>Reverb</span>
+                    <span class="value" id="reverbValue">20%</span>
+                </div>
 
-<aside class="rightbar"
-       id="effectsPanel">
+                <input
+                    id="reverb"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step=".01"
+                    value=".2"
+                    oninput="updateValue('reverbValue',Math.round(this.value*100)+'%')">
 
-
-<!-- =====================================
-     VOICE EFFECT
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        TIPO DE VOZ
-    </div>
+            </div>
 
 
-    <div class="voice-grid">
+            <div class="control">
 
-        <button class="voice active"
-                data-voice="natural"
-                onclick="selectVoice('natural')">
+                <div class="control-head">
+                    <span>Distorsión</span>
+                    <span class="value" id="distValue">0%</span>
+                </div>
 
-            ✨ Natural
+                <input
+                    id="distortion"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    oninput="updateValue('distValue',this.value+'%')">
 
-        </button>
+            </div>
 
-        <button class="voice"
-                data-voice="autotune"
-                onclick="selectVoice('autotune')">
+        </div>
 
-            🎵 AutoTune
 
-        </button>
+        <!-- EQ -->
 
-        <button class="voice"
-                data-voice="cartoon"
-                onclick="selectVoice('cartoon')">
+        <div class="panel">
 
-            👾 Personaje
+            <h2>MEJORADOR DE VOZ</h2>
 
-        </button>
+            <div class="control">
 
-        <button class="voice"
-                data-voice="robot"
-                onclick="selectVoice('robot')">
+                <div class="control-head">
+                    <span>Graves</span>
+                    <span class="value" id="bassValue">0 dB</span>
+                </div>
 
-            🤖 Robot
+                <input
+                    id="bass"
+                    type="range"
+                    min="-15"
+                    max="15"
+                    value="0"
+                    oninput="updateValue('bassValue',this.value+' dB')">
 
-        </button>
+            </div>
 
-        <button class="voice"
-                data-voice="monster"
-                onclick="selectVoice('monster')">
 
-            👹 Monstruo
+            <div class="control">
 
-        </button>
+                <div class="control-head">
+                    <span>Agudos</span>
+                    <span class="value" id="trebleValue">0 dB</span>
+                </div>
 
-        <button class="voice"
-                data-voice="high"
-                onclick="selectVoice('high')">
+                <input
+                    id="treble"
+                    type="range"
+                    min="-15"
+                    max="15"
+                    value="0"
+                    oninput="updateValue('trebleValue',this.value+' dB')">
 
-            🐿️ Aguda
+            </div>
 
-        </button>
 
-        <button class="voice"
-                data-voice="deep"
-                onclick="selectVoice('deep')">
+            <div class="control">
 
-            🔊 Grave
+                <div class="control-head">
+                    <span>Compresor</span>
+                    <span class="value" id="compressValue">50%</span>
+                </div>
 
-        </button>
+                <input
+                    id="compress"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    oninput="updateValue('compressValue',this.value+'%')">
 
-        <button class="voice"
-                data-voice="alien"
-                onclick="selectVoice('alien')">
+            </div>
 
-            👽 Alien
+        </div>
 
-        </button>
 
-    </div>
+        <!-- PRESETS -->
+
+        <div class="panel">
+
+            <h2>PRESETS RÁPIDOS</h2>
+
+            <div class="presets">
+
+                <button class="preset" onclick="preset('normal')">
+                    🎙 Limpia
+                </button>
+
+                <button class="preset" onclick="preset('deep')">
+                    🔊 Grave
+                </button>
+
+                <button class="preset" onclick="preset('high')">
+                    ⚡ Aguda
+                </button>
+
+                <button class="preset" onclick="preset('robot')">
+                    🤖 Robot
+                </button>
+
+                <button class="preset" onclick="preset('alien')">
+                    👽 Alien
+                </button>
+
+                <button class="preset" onclick="preset('radio')">
+                    📻 Radio
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+
+        <div class="panel">
+
+            <h2>ARCHIVO</h2>
+
+            <div class="actions">
+
+                <button
+                    class="btn primary"
+                    onclick="playProcessed()">
+                    ▶ Escuchar
+                </button>
+
+                <button
+                    class="btn"
+                    onclick="downloadAudio()">
+                    ↓ Descargar
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- METRONOMO -->
+
+        <div class="panel">
+
+            <h2>METRÓNOMO</h2>
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>BPM</span>
+                    <span class="value" id="bpmValue">100</span>
+                </div>
+
+                <input
+                    id="bpm"
+                    type="range"
+                    min="60"
+                    max="180"
+                    value="100"
+                    oninput="updateValue('bpmValue',this.value)">
+
+            </div>
+
+            <button
+                class="btn"
+                style="width:100%"
+                onclick="toggleMetro()"
+                id="metroButton">
+                ▶ Activar metrónomo
+            </button>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="note">
+                Los efectos se procesan directamente en tu navegador.
+                El micrófono solo se utiliza cuando iniciás una grabación.
+            </div>
+
+        </div>
+
+    </aside>
 
 </div>
-
-
-
-<!-- =====================================
-     AUTOTUNE
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        AUTOTUNE
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Intensidad
-            </span>
-
-            <span id="autoValue">
-                70%
-            </span>
-
-        </div>
-
-        <input
-            id="autotune"
-            type="range"
-            min="0"
-            max="100"
-            value="70"
-            oninput="
-                updateValue(
-                    'autoValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Velocidad
-            </span>
-
-            <span id="speedValue">
-                70%
-            </span>
-
-        </div>
-
-        <input
-            id="speed"
-            type="range"
-            min="0"
-            max="100"
-            value="70"
-            oninput="
-                updateValue(
-                    'speedValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Tonalidad
-            </span>
-
-        </div>
-
-        <select id="key">
-
-            <option>C</option>
-            <option>C#</option>
-            <option>D</option>
-            <option>D#</option>
-            <option>E</option>
-            <option>F</option>
-            <option>F#</option>
-            <option>G</option>
-            <option>G#</option>
-            <option>A</option>
-            <option>A#</option>
-            <option>B</option>
-
-        </select>
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Escala
-            </span>
-
-        </div>
-
-        <select id="scale">
-
-            <option>Mayor</option>
-            <option>Menor</option>
-            <option>Pentatónica</option>
-
-        </select>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================
-     VOICE
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        PERSONALIDAD DE VOZ
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Tono
-            </span>
-
-            <span id="pitchValue">
-                0
-            </span>
-
-        </div>
-
-        <input
-            id="pitch"
-            type="range"
-            min="-12"
-            max="12"
-            value="0"
-            oninput="
-                updateValue(
-                    'pitchValue',
-                    this.value,
-                    ''
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Intensidad
-            </span>
-
-            <span id="intensityValue">
-                70%
-            </span>
-
-        </div>
-
-        <input
-            id="intensity"
-            type="range"
-            min="0"
-            max="100"
-            value="70"
-            oninput="
-                updateValue(
-                    'intensityValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Mezcla original
-            </span>
-
-            <span id="mixValue">
-                20%
-            </span>
-
-        </div>
-
-        <input
-            id="mix"
-            type="range"
-            min="0"
-            max="100"
-            value="20"
-            oninput="
-                updateValue(
-                    'mixValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================
-     EFFECTS
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        EFECTOS
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Reverb
-            </span>
-
-            <span id="reverbValue">
-                25%
-            </span>
-
-        </div>
-
-        <input
-            id="reverb"
-            type="range"
-            min="0"
-            max="100"
-            value="25"
-            oninput="
-                updateValue(
-                    'reverbValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Echo
-            </span>
-
-            <span id="echoValue">
-                15%
-            </span>
-
-        </div>
-
-        <input
-            id="echo"
-            type="range"
-            min="0"
-            max="100"
-            value="15"
-            oninput="
-                updateValue(
-                    'echoValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Distorsión
-            </span>
-
-            <span id="distValue">
-                0%
-            </span>
-
-        </div>
-
-        <input
-            id="distortion"
-            type="range"
-            min="0"
-            max="100"
-            value="0"
-            oninput="
-                updateValue(
-                    'distValue',
-                    this.value,
-                    '%'
-                )
-            "
-        >
-
-    </div>
-
-
-    <div class="control">
-
-        <div class="control-head">
-
-            <span>
-                Volumen
-            </span>
-
-            <span id="volumeValue">
-                100%
-            </span>
-
-        </div>
-
-        <input
-            id="volume"
-            type="range"
-            min="0"
-            max="150"
-            value="100"
-            oninput="
-                updateValue(
-                    'volumeValue',
-                    this.value,
-                    '%'
-                )
-            "
-
-        >
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================
-     FILE
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        ARCHIVO
-    </div>
-
-
-    <div class="actions">
-
-        <button class="action purple"
-                onclick="playRecording()">
-
-            ▶ ESCUCHAR
-
-        </button>
-
-
-        <button class="action"
-                onclick="downloadRecording()">
-
-            ↓ DESCARGAR
-
-        </button>
-
-
-        <button class="action full"
-                onclick="applyPreview()">
-
-            ✨ PREVISUALIZAR EFECTO
-
-        </button>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================
-     INFO
-===================================== -->
-
-<div class="panel">
-
-    <div class="panel-title">
-        RAP STUDIO
-    </div>
-
-    <div class="info">
-
-        Grabá tu voz, elegí una personalidad
-        y probá diferentes efectos para encontrar
-        tu sonido.
-
-        <br><br>
-
-        El modo personaje modifica el tono y
-        el procesamiento de la voz sin intentar
-        imitar la voz de una persona real.
-
-    </div>
-
-</div>
-
-
-</aside>
-
-</div>
-
 
 
 <script>
 
-/* =====================================================
-   VARIABLES PRINCIPALES
-===================================================== */
-
-let audioContext = null;
-
-let analyser = null;
-
-let microphone = null;
-
-let mediaRecorder = null;
+/* =========================================
+   VARIABLES
+========================================= */
 
 let stream = null;
-
+let recorder = null;
 let chunks = [];
 
+let recording = false;
 let audioBlob = null;
-
 let audioURL = null;
 
-let recording = false;
+let audioContext = null;
+let analyser = null;
+let microphone = null;
 
-let startTime = 0;
-
+let timerStart = 0;
 let timerInterval = null;
+
+let metroTimer = null;
+let metroActive = false;
 
 let currentAudio = null;
 
-let currentVoice = "natural";
 
-let metronomeTimer = null;
-
-let metronomeActive = false;
-
-
-/* =====================================================
+/* =========================================
    CANVAS
-===================================================== */
+========================================= */
 
-const canvas =
-    document.getElementById("wave");
-
-const ctx =
-    canvas.getContext("2d");
-
+const canvas = document.getElementById("wave");
+const ctx = canvas.getContext("2d");
 
 function resizeCanvas(){
 
-    const ratio =
-        window.devicePixelRatio || 1;
+    const ratio = window.devicePixelRatio || 1;
 
-    canvas.width =
-        canvas.clientWidth * ratio;
-
-    canvas.height =
-        canvas.clientHeight * ratio;
+    canvas.width = canvas.clientWidth * ratio;
+    canvas.height = canvas.clientHeight * ratio;
 
     ctx.setTransform(
         ratio,
@@ -1437,9 +867,7 @@ function resizeCanvas(){
         0,
         0
     );
-
 }
-
 
 resizeCanvas();
 
@@ -1449,21 +877,12 @@ window.addEventListener(
 );
 
 
-/* =====================================================
-   WAVEFORM
-===================================================== */
-
 function drawWave(){
 
-    requestAnimationFrame(
-        drawWave
-    );
+    requestAnimationFrame(drawWave);
 
-    const width =
-        canvas.clientWidth;
-
-    const height =
-        canvas.clientHeight;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
 
     ctx.clearRect(
         0,
@@ -1472,148 +891,66 @@ function drawWave(){
         height
     );
 
-
     if(!analyser){
 
-        drawIdleWave(
-            width,
-            height
+        ctx.beginPath();
+
+        ctx.strokeStyle = "#292b32";
+
+        ctx.moveTo(
+            0,
+            height/2
         );
+
+        ctx.lineTo(
+            width,
+            height/2
+        );
+
+        ctx.stroke();
 
         return;
-
     }
 
-
-    const bufferLength =
-        analyser.fftSize;
-
-    const data =
-        new Uint8Array(
-            bufferLength
-        );
-
-
-    analyser.getByteTimeDomainData(
-        data
+    const data = new Uint8Array(
+        analyser.fftSize
     );
 
+    analyser.getByteTimeDomainData(data);
 
     ctx.beginPath();
 
     ctx.lineWidth = 2;
 
-    ctx.strokeStyle =
-        "#9b6cff";
+    ctx.strokeStyle = "#9b6cff";
 
-
-    const slice =
-        width / bufferLength;
+    const slice = width / data.length;
 
     let x = 0;
 
+    for(let i=0;i<data.length;i++){
 
-    for(
-        let i=0;
-        i<bufferLength;
-        i++
-    ){
+        const v = data[i] / 128;
+        const y = v * height / 2;
 
-        const value =
-            data[i] / 128;
-
-        const y =
-            value * height / 2;
-
-
-        if(i===0){
-
-            ctx.moveTo(
-                x,
-                y
-            );
-
+        if(i === 0){
+            ctx.moveTo(x,y);
         }else{
-
-            ctx.lineTo(
-                x,
-                y
-            );
-
+            ctx.lineTo(x,y);
         }
 
-
         x += slice;
-
     }
 
-
     ctx.stroke();
-
 }
-
-
-function drawIdleWave(
-    width,
-    height
-){
-
-    ctx.beginPath();
-
-    ctx.lineWidth = 1;
-
-    ctx.strokeStyle =
-        "#30333b";
-
-    ctx.moveTo(
-        0,
-        height/2
-    );
-
-    ctx.lineTo(
-        width,
-        height/2
-    );
-
-    ctx.stroke();
-
-}
-
 
 drawWave();
 
 
-/* =====================================================
-   AUDIO CONTEXT
-===================================================== */
-
-function createAudioContext(){
-
-    if(!audioContext){
-
-        audioContext =
-            new (
-                window.AudioContext ||
-                window.webkitAudioContext
-            )();
-
-    }
-
-    if(
-        audioContext.state ===
-        "suspended"
-    ){
-
-        audioContext.resume();
-
-    }
-
-}
-
-
-/* =====================================================
-   GRABAR
-===================================================== */
+/* =========================================
+   GRABACIÓN
+========================================= */
 
 async function toggleRecording(){
 
@@ -1626,7 +963,6 @@ async function toggleRecording(){
         await startRecording();
 
     }
-
 }
 
 
@@ -1634,371 +970,617 @@ async function startRecording(){
 
     try{
 
-        createAudioContext();
+        stream = await navigator.mediaDevices.getUserMedia({
+            audio:true
+        });
 
+        audioContext = new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
 
-        stream =
-            await navigator
-            .mediaDevices
-            .getUserMedia({
-                audio:{
-                    echoCancellation:false,
-                    noiseSuppression:false,
-                    autoGainControl:false
-                }
-            });
+        analyser = audioContext.createAnalyser();
 
-
-        analyser =
-            audioContext
-            .createAnalyser();
-
-        analyser.fftSize =
-            2048;
-
+        analyser.fftSize = 2048;
 
         microphone =
-            audioContext
-            .createMediaStreamSource(
-                stream
-            );
+            audioContext.createMediaStreamSource(stream);
+
+        microphone.connect(analyser);
 
 
-        microphone.connect(
-            analyser
-        );
-
-
-        mediaRecorder =
-            new MediaRecorder(
-                stream
-            );
-
+        recorder = new MediaRecorder(stream);
 
         chunks = [];
 
+        recorder.ondataavailable = function(e){
 
-        mediaRecorder.ondataavailable =
-            function(event){
+            if(e.data.size > 0){
 
-                if(event.data.size > 0){
+                chunks.push(e.data);
 
-                    chunks.push(
-                        event.data
-                    );
-
-                }
-
-            };
+            }
+        };
 
 
-        mediaRecorder.onstop =
-            function(){
+        recorder.onstop = function(){
 
-                audioBlob =
-                    new Blob(
-                        chunks,
-                        {
-                            type:
-                            mediaRecorder
-                            .mimeType ||
-                            "audio/webm"
-                        }
-                    );
+            audioBlob = new Blob(
+                chunks,
+                {type:"audio/webm"}
+            );
 
+            audioURL =
+                URL.createObjectURL(audioBlob);
 
-                audioURL =
-                    URL.createObjectURL(
-                        audioBlob
-                    );
+            document.getElementById(
+                "waveStatus"
+            ).textContent =
+                "GRABACIÓN LISTA";
+
+        };
 
 
-                document
-                    .getElementById(
-                        "waveStatus"
-                    )
-                    .textContent =
-                    "GRABACIÓN LISTA";
-
-            };
-
-
-        mediaRecorder.start();
-
+        recorder.start();
 
         recording = true;
 
-        startTime =
-            Date.now();
-
+        timerStart = Date.now();
 
         timerInterval =
-            setInterval(
-                updateTimer,
-                1000
-            );
+            setInterval(updateTimer,1000);
 
 
         document
-            .getElementById(
-                "recordButton"
-            )
-            .classList.add(
-                "recording"
-            );
-
+            .getElementById("recordButton")
+            .classList.add("recording");
 
         document
-            .getElementById(
-                "recordLabel"
-            )
+            .getElementById("recordText")
             .textContent =
             "Grabando...";
 
-
         document
-            .getElementById(
-                "waveStatus"
-            )
+            .getElementById("waveStatus")
             .textContent =
             "GRABANDO";
 
-
         document
-            .getElementById(
-                "status"
-            )
-            .classList.add(
-                "recording"
-            );
-
-
-        document
-            .getElementById(
-                "statusText"
-            )
+            .getElementById("statusText")
             .textContent =
             "GRABANDO";
-
 
     }catch(error){
-
-        console.error(error);
 
         alert(
             "No se pudo acceder al micrófono. Permití el acceso desde el navegador."
         );
 
+        console.error(error);
     }
-
 }
 
-
-/* =====================================================
-   DETENER
-===================================================== */
 
 function stopRecording(){
 
-    if(
-        mediaRecorder &&
-        mediaRecorder.state !== "inactive"
-    ){
+    if(!recorder) return;
 
-        mediaRecorder.stop();
+    recorder.stop();
 
-    }
-
-
-    if(stream){
-
-        stream
-            .getTracks()
-            .forEach(
-                track =>
-                track.stop()
-            );
-
-    }
-
+    stream.getTracks().forEach(
+        track => track.stop()
+    );
 
     recording = false;
 
-
-    clearInterval(
-        timerInterval
-    );
-
+    clearInterval(timerInterval);
 
     document
-        .getElementById(
-            "recordButton"
-        )
-        .classList.remove(
-            "recording"
-        );
-
+        .getElementById("recordButton")
+        .classList.remove("recording");
 
     document
-        .getElementById(
-            "recordLabel"
-        )
+        .getElementById("recordText")
         .textContent =
         "Grabación terminada";
 
-
     document
-        .getElementById(
-            "status"
-        )
-        .classList.remove(
-            "recording"
-        );
-
-
-    document
-        .getElementById(
-            "statusText"
-        )
+        .getElementById("statusText")
         .textContent =
         "SISTEMA LISTO";
-
 }
 
 
-/* =====================================================
+/* =========================================
    TIMER
-===================================================== */
+========================================= */
 
 function updateTimer(){
 
     const seconds =
         Math.floor(
-            (
-                Date.now()
-                -
-                startTime
-            ) / 1000
+            (Date.now() - timerStart) / 1000
         );
-
 
     const minutes =
-        Math.floor(
-            seconds / 60
-        );
+        Math.floor(seconds / 60);
 
-
-    const secs =
+    const sec =
         seconds % 60;
 
-
-    const value =
-        String(minutes)
-        .padStart(2,"0")
-        +
-        ":"
-        +
-        String(secs)
-        .padStart(2,"0");
-
-
-    document
-        .getElementById(
-            "timer"
-        )
+    document.getElementById("timer")
         .textContent =
-        value;
-
-
-    document
-        .getElementById(
-            "currentTime"
-        )
-        .textContent =
-        value;
-
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(sec).padStart(2,"0");
 }
 
 
-/* =====================================================
-   SELECCIONAR VOZ
-===================================================== */
+/* =========================================
+   PROCESADOR DE AUDIO
+========================================= */
 
-function selectVoice(type){
+async function createProcessedAudio(){
 
-    currentVoice =
-        type;
+    if(!audioBlob){
 
-
-    document
-        .querySelectorAll(
-            ".voice"
-        )
-        .forEach(
-            button => {
-
-                button.classList.toggle(
-                    "active",
-                    button.dataset.voice
-                    === type
-                );
-
-            }
+        alert(
+            "Primero grabá una voz."
         );
 
+        return null;
+    }
 
-    /*
-       Ajustamos automáticamente
-       algunos parámetros.
-    */
+    const arrayBuffer =
+        await audioBlob.arrayBuffer();
+
+    const offline =
+        new OfflineAudioContext(
+            2,
+            44100 * 60 * 10,
+            44100
+        );
+
+    const buffer =
+        await offline.decodeAudioData(
+            arrayBuffer
+        );
+
+    const source =
+        offline.createBufferSource();
+
+    source.buffer = buffer;
+
+
+    /* PITCH */
 
     const pitch =
-        document.getElementById(
-            "pitch"
+        Number(
+            document.getElementById("pitch").value
         );
+
+    source.playbackRate.value =
+        Math.pow(2,pitch/12);
+
+
+    /* VOLUMEN */
+
+    const volume =
+        Number(
+            document.getElementById("volume").value
+        );
+
+    const gain =
+        offline.createGain();
+
+    gain.gain.value = volume;
+
+
+    /* EQ */
+
+    const bass =
+        offline.createBiquadFilter();
+
+    bass.type = "lowshelf";
+
+    bass.frequency.value = 180;
+
+    bass.gain.value =
+        Number(
+            document.getElementById("bass").value
+        );
+
+
+    const treble =
+        offline.createBiquadFilter();
+
+    treble.type = "highshelf";
+
+    treble.frequency.value = 4000;
+
+    treble.gain.value =
+        Number(
+            document.getElementById("treble").value
+        );
+
+
+    /* COMPRESOR */
+
+    const compressor =
+        offline.createDynamicsCompressor();
+
+    const comp =
+        Number(
+            document.getElementById("compress").value
+        );
+
+    compressor.threshold.value =
+        -30 + (comp * .2);
+
+    compressor.ratio.value = 2 + comp / 20;
+
+    compressor.attack.value = .003;
+
+    compressor.release.value = .25;
+
+
+    /* DISTORSIÓN */
 
     const distortion =
-        document.getElementById(
-            "distortion"
+        offline.createWaveShaper();
+
+    const amount =
+        Number(
+            document.getElementById("distortion").value
         );
 
-    const reverb =
-        document.getElementById(
-            "reverb"
+    distortion.curve =
+        makeDistortionCurve(amount);
+
+    distortion.oversample = "4x";
+
+
+    /* CADENA */
+
+    source.connect(bass);
+
+    bass.connect(treble);
+
+    treble.connect(compressor);
+
+    compressor.connect(distortion);
+
+    distortion.connect(gain);
+
+
+    /* DELAY / ECO */
+
+    const echoAmount =
+        Number(
+            document.getElementById("echo").value
         );
+
+    const delay =
+        offline.createDelay(2);
+
+    delay.delayTime.value = .25;
+
+
+    const delayGain =
+        offline.createGain();
+
+    delayGain.gain.value =
+        echoAmount;
+
+
+    gain.connect(
+        offline.destination
+    );
+
+    gain.connect(delay);
+
+    delay.connect(delayGain);
+
+    delayGain.connect(
+        offline.destination
+    );
+
+
+    source.start(0);
+
+    return await offline.startRendering();
+}
+
+
+/* =========================================
+   DISTORSIÓN
+========================================= */
+
+function makeDistortionCurve(amount){
+
+    const samples = 44100;
+
+    const curve =
+        new Float32Array(samples);
+
+    const k =
+        amount * 5;
+
+    for(let i=0;i<samples;i++){
+
+        const x =
+            i * 2 / samples - 1;
+
+        curve[i] =
+            k === 0
+            ? x
+            : ((3+k)*x*20*Math.PI/180) /
+              (Math.PI+k*Math.abs(x));
+    }
+
+    return curve;
+}
+
+
+/* =========================================
+   REPRODUCIR
+========================================= */
+
+async function playProcessed(){
+
+    const processed =
+        await createProcessedAudio();
+
+    if(!processed) return;
+
+
+    if(currentAudio){
+
+        currentAudio.pause();
+
+    }
+
+
+    const wav =
+        bufferToWav(processed);
+
+    const url =
+        URL.createObjectURL(wav);
+
+    currentAudio =
+        new Audio(url);
+
+    currentAudio.playbackRate =
+        Number(
+            document.getElementById("speed").value
+        );
+
+    currentAudio.play();
+
+    currentAudio.onended = function(){
+
+        URL.revokeObjectURL(url);
+
+    };
+}
+
+
+/* =========================================
+   CONVERTIR A WAV
+========================================= */
+
+function bufferToWav(buffer){
+
+    const channels =
+        buffer.numberOfChannels;
+
+    const sampleRate =
+        buffer.sampleRate;
+
+    const length =
+        buffer.length * channels * 2 + 44;
+
+    const array =
+        new ArrayBuffer(length);
+
+    const view =
+        new DataView(array);
+
+
+    function writeString(offset,string){
+
+        for(let i=0;i<string.length;i++){
+
+            view.setUint8(
+                offset+i,
+                string.charCodeAt(i)
+            );
+        }
+    }
+
+
+    writeString(0,"RIFF");
+
+    view.setUint32(
+        4,
+        36 + buffer.length * channels * 2,
+        true
+    );
+
+    writeString(8,"WAVE");
+
+    writeString(12,"fmt ");
+
+    view.setUint32(16,16,true);
+
+    view.setUint16(20,1,true);
+
+    view.setUint16(
+        22,
+        channels,
+        true
+    );
+
+    view.setUint32(
+        24,
+        sampleRate,
+        true
+    );
+
+    view.setUint32(
+        28,
+        sampleRate * channels * 2,
+        true
+    );
+
+    view.setUint16(
+        32,
+        channels * 2,
+        true
+    );
+
+    view.setUint16(
+        34,
+        16,
+        true
+    );
+
+    writeString(36,"data");
+
+    view.setUint32(
+        40,
+        buffer.length * channels * 2,
+        true
+    );
+
+
+    let offset = 44;
+
+
+    for(let i=0;i<buffer.length;i++){
+
+        for(let channel=0;channel<channels;channel++){
+
+            let sample =
+                buffer.getChannelData(channel)[i];
+
+            sample =
+                Math.max(-1,Math.min(1,sample));
+
+            view.setInt16(
+                offset,
+                sample < 0
+                ? sample * 0x8000
+                : sample * 0x7fff,
+                true
+            );
+
+            offset += 2;
+        }
+    }
+
+    return new Blob(
+        [array],
+        {type:"audio/wav"}
+    );
+}
+
+
+/* =========================================
+   DESCARGAR
+========================================= */
+
+async function downloadAudio(){
+
+    const processed =
+        await createProcessedAudio();
+
+    if(!processed) return;
+
+    const wav =
+        bufferToWav(processed);
+
+    const url =
+        URL.createObjectURL(wav);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "rap-lab-voz.wav";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(
+        () => URL.revokeObjectURL(url),
+        1000
+    );
+}
+
+
+/* =========================================
+   PRESETS
+========================================= */
+
+function preset(type){
+
+    const pitch =
+        document.getElementById("pitch");
 
     const echo =
-        document.getElementById(
-            "echo"
-        );
+        document.getElementById("echo");
+
+    const reverb =
+        document.getElementById("reverb");
+
+    const distortion =
+        document.getElementById("distortion");
+
+    const bass =
+        document.getElementById("bass");
+
+    const treble =
+        document.getElementById("treble");
 
 
-    if(type === "natural"){
+    if(type === "normal"){
 
         pitch.value = 0;
+        echo.value = .08;
+        reverb.value = .15;
         distortion.value = 0;
-        reverb.value = 20;
-        echo.value = 5;
+        bass.value = 2;
+        treble.value = 2;
 
     }
 
 
-    if(type === "autotune"){
+    if(type === "deep"){
 
-        pitch.value = 0;
-        distortion.value = 0;
-        reverb.value = 18;
-        echo.value = 8;
+        pitch.value = -6;
+        echo.value = .12;
+        reverb.value = .25;
+        distortion.value = 5;
+        bass.value = 8;
+        treble.value = -2;
 
     }
 
 
-    if(type === "cartoon"){
+    if(type === "high"){
 
         pitch.value = 7;
-        distortion.value = 5;
-        reverb.value = 15;
-        echo.value = 10;
+        echo.value = .08;
+        reverb.value = .18;
+        distortion.value = 0;
+        bass.value = -2;
+        treble.value = 7;
 
     }
 
@@ -2006,956 +1588,169 @@ function selectVoice(type){
     if(type === "robot"){
 
         pitch.value = 0;
-        distortion.value = 28;
-        reverb.value = 10;
-        echo.value = 30;
-
-    }
-
-
-    if(type === "monster"){
-
-        pitch.value = -8;
-        distortion.value = 40;
-        reverb.value = 25;
-        echo.value = 15;
-
-    }
-
-
-    if(type === "high"){
-
-        pitch.value = 10;
-        distortion.value = 0;
-        reverb.value = 10;
-        echo.value = 5;
-
-    }
-
-
-    if(type === "deep"){
-
-        pitch.value = -7;
-        distortion.value = 5;
-        reverb.value = 20;
-        echo.value = 8;
+        echo.value = .35;
+        reverb.value = .1;
+        distortion.value = 25;
+        bass.value = 0;
+        treble.value = 5;
 
     }
 
 
     if(type === "alien"){
 
-        pitch.value = 5;
-        distortion.value = 20;
-        reverb.value = 35;
-        echo.value = 45;
+        pitch.value = 10;
+        echo.value = .45;
+        reverb.value = .3;
+        distortion.value = 8;
+        bass.value = -4;
+        treble.value = 8;
 
     }
 
 
-    updateAllLabels();
-
-}
-
-
-/* =====================================================
-   LABELS
-===================================================== */
-
-function updateValue(
-    id,
-    value,
-    suffix
-){
-
-    document
-        .getElementById(id)
-        .textContent =
-        value + suffix;
-
-}
-
-
-function updateAllLabels(){
-
-    const values = [
-
-        [
-            "pitchValue",
-            document.getElementById("pitch").value,
-            ""
-        ],
-
-        [
-            "reverbValue",
-            document.getElementById("reverb").value,
-            "%"
-        ],
-
-        [
-            "echoValue",
-            document.getElementById("echo").value,
-            "%"
-        ],
-
-        [
-            "distValue",
-            document.getElementById("distortion").value,
-            "%"
-        ]
-
-    ];
-
-
-    values.forEach(
-        value =>
-        updateValue(
-            value[0],
-            value[1],
-            value[2]
-        )
-    );
-
-}
-
-
-/* =====================================================
-   REPRODUCIR GRABACIÓN
-===================================================== */
-
-function playRecording(){
-
-    if(!audioURL){
-
-        alert(
-            "Primero grabá algo."
-        );
-
-        return;
-
-    }
-
-
-    if(currentAudio){
-
-        currentAudio.pause();
-
-    }
-
-
-    currentAudio =
-        new Audio(
-            audioURL
-        );
-
-
-    currentAudio.playbackRate =
-        getPlaybackRate();
-
-
-    currentAudio.volume =
-        Math.min(
-            1.5,
-            Number(
-                document
-                .getElementById(
-                    "volume"
-                ).value
-            ) / 100
-        );
-
-
-    currentAudio.ontimeupdate =
-        function(){
-
-            if(!currentAudio.duration)
-                return;
-
-
-            const percentage =
-                currentAudio.currentTime /
-                currentAudio.duration *
-                100;
-
-
-            document
-                .getElementById(
-                    "progressBar"
-                )
-                .style.width =
-                percentage + "%";
-
-
-            document
-                .getElementById(
-                    "playerTime"
-                )
-                .textContent =
-                formatTime(
-                    currentAudio.currentTime
-                );
-
-        };
-
-
-    currentAudio.onended =
-        function(){
-
-            document
-                .getElementById(
-                    "progressBar"
-                )
-                .style.width =
-                "0%";
-
-        };
-
-
-    currentAudio.play();
-
-}
-
-
-/* =====================================================
-   CAMBIO DE TONO
-===================================================== */
-
-function getPlaybackRate(){
-
-    const semitones =
-        Number(
-            document
-            .getElementById(
-                "pitch"
-            ).value
-        );
-
-
-    /*
-       Fórmula musical:
-       cada semitono = 2^(1/12)
-    */
-
-    return Math.pow(
-        2,
-        semitones / 12
-    );
-
-}
-
-
-/* =====================================================
-   PREVISUALIZACIÓN
-===================================================== */
-
-function applyPreview(){
-
-    if(!audioURL){
-
-        alert(
-            "Primero grabá una voz."
-        );
-
-        return;
-
-    }
-
-
-    createAudioContext();
-
-
-    if(currentAudio){
-
-        currentAudio.pause();
-
-    }
-
-
-    const audio =
-        new Audio(
-            audioURL
-        );
-
-
-    currentAudio =
-        audio;
-
-
-    const source =
-        audioContext
-        .createMediaElementSource(
-            audio
-        );
-
-
-    /*
-       NODOS
-    */
-
-    const input =
-        audioContext
-        .createGain();
-
-
-    const filter =
-        audioContext
-        .createBiquadFilter();
-
-
-    const compressor =
-        audioContext
-        .createDynamicsCompressor();
-
-
-    const distortion =
-        audioContext
-        .createWaveShaper();
-
-
-    const delay =
-        audioContext
-        .createDelay(
-            1
-        );
-
-
-    const feedback =
-        audioContext
-        .createGain();
-
-
-    const dry =
-        audioContext
-        .createGain();
-
-
-    const wet =
-        audioContext
-        .createGain();
-
-
-    const master =
-        audioContext
-        .createGain();
-
-
-    /*
-       INPUT
-    */
-
-    source.connect(
-        input
-    );
-
-
-    /*
-       FILTRO DE VOZ
-    */
-
-    filter.type =
-        "peaking";
-
-    filter.frequency.value =
-        1800;
-
-    filter.Q.value =
-        1;
-
-    filter.gain.value =
-        getVoiceEQ();
-
-
-    /*
-       DISTORSIÓN
-    */
-
-    const distortionAmount =
-        Number(
-            document
-            .getElementById(
-                "distortion"
-            ).value
-        );
-
-
-    distortion.curve =
-        createDistortionCurve(
-            distortionAmount
-        );
-
-
-    distortion.oversample =
-        "4x";
-
-
-    /*
-       COMPRESOR
-    */
-
-    compressor.threshold.value =
-        -18;
-
-    compressor.knee.value =
-        25;
-
-    compressor.ratio.value =
-        4;
-
-    compressor.attack.value =
-        .003;
-
-    compressor.release.value =
-        .25;
-
-
-    /*
-       ECHO
-    */
-
-    const echoAmount =
-        Number(
-            document
-            .getElementById(
-                "echo"
-            ).value
-        ) / 100;
-
-
-    delay.delayTime.value =
-        .18;
-
-
-    feedback.gain.value =
-        echoAmount * .45;
-
-
-    /*
-       REVERB SIMULADA
-    */
-
-    const reverbAmount =
-        Number(
-            document
-            .getElementById(
-                "reverb"
-            ).value
-        ) / 100;
-
-
-    /*
-       MIX
-    */
-
-    const mixAmount =
-        Number(
-            document
-            .getElementById(
-                "mix"
-            ).value
-        ) / 100;
-
-
-    dry.gain.value =
-        Math.max(
-            .05,
-            mixAmount
-        );
-
-
-    wet.gain.value =
-        Math.max(
-            .35,
-            1 - mixAmount
-        );
-
-
-    master.gain.value =
-        Math.min(
-            1.5,
-            Number(
-                document
-                .getElementById(
-                    "volume"
-                ).value
-            ) / 100
-        );
-
-
-    /*
-       CADENA PRINCIPAL
-    */
-
-    input.connect(
-        filter
-    );
-
-    filter.connect(
-        compressor
-    );
-
-    compressor.connect(
-        distortion
-    );
-
-
-    /*
-       SEÑAL SECA
-    */
-
-    distortion.connect(
-        dry
-    );
-
-
-    /*
-       ECHO
-    */
-
-    distortion.connect(
-        delay
-    );
-
-    delay.connect(
-        feedback
-    );
-
-    feedback.connect(
-        delay
-    );
-
-    delay.connect(
-        wet
-    );
-
-
-    /*
-       Reverb simulada
-       mediante varios delays
-    */
-
-    const reverb1 =
-        audioContext
-        .createDelay(1);
-
-    const reverb2 =
-        audioContext
-        .createDelay(1);
-
-    const reverbGain =
-        audioContext
-        .createGain();
-
-
-    reverb1.delayTime.value =
-        .09;
-
-    reverb2.delayTime.value =
-        .16;
-
-
-    reverbGain.gain.value =
-        reverbAmount * .45;
-
-
-    distortion.connect(
-        reverb1
-    );
-
-    reverb1.connect(
-        reverb2
-    );
-
-    reverb2.connect(
-        reverbGain
-    );
-
-    reverbGain.connect(
-        wet
-    );
-
-
-    /*
-       MASTER
-    */
-
-    dry.connect(
-        master
-    );
-
-    wet.connect(
-        master
-    );
-
-    master.connect(
-        audioContext.destination
-    );
-
-
-    /*
-       TONO
-    */
-
-    audio.playbackRate =
-        getPlaybackRate();
-
-
-    /*
-       VOLUMEN
-    */
-
-    audio.volume = 1;
-
-
-    audio.play();
-
-
-    document
-        .getElementById(
-            "waveStatus"
-        )
-        .textContent =
-        "EFECTO ACTIVO";
-
-}
-
-
-/* =====================================================
-   EQ SEGÚN VOZ
-===================================================== */
-
-function getVoiceEQ(){
-
-    switch(currentVoice){
-
-        case "robot":
-            return 4;
-
-        case "monster":
-            return 7;
-
-        case "cartoon":
-            return 6;
-
-        case "alien":
-            return 9;
-
-        case "autotune":
-            return 5;
-
-        default:
-            return 0;
+    if(type === "radio"){
+
+        pitch.value = 0;
+        echo.value = .05;
+        reverb.value = .05;
+        distortion.value = 12;
+        bass.value = -8;
+        treble.value = 6;
 
     }
 
 }
 
 
-/* =====================================================
-   DISTORSIÓN
-===================================================== */
-
-function createDistortionCurve(
-    amount
-){
-
-    const samples = 44100;
-
-    const curve =
-        new Float32Array(
-            samples
-        );
-
-
-    const intensity =
-        amount / 100;
-
-
-    for(
-        let i=0;
-        i<samples;
-        i++
-    ){
-
-        const x =
-            i * 2 / samples - 1;
-
-
-        curve[i] =
-            (
-                3 + intensity * 30
-            ) *
-            x *
-            20 *
-            Math.PI /
-            (
-                Math.PI +
-                intensity *
-                Math.abs(x)
-            );
-
-    }
-
-
-    return curve;
-
-}
-
-
-/* =====================================================
-   DESCARGAR
-===================================================== */
-
-function downloadRecording(){
-
-    if(!audioURL){
-
-        alert(
-            "Primero grabá algo."
-        );
-
-        return;
-
-    }
-
-
-    const link =
-        document.createElement(
-            "a"
-        );
-
-
-    link.href =
-        audioURL;
-
-
-    link.download =
-        "mi-rap.webm";
-
-
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    link.remove();
-
-}
-
-
-/* =====================================================
+/* =========================================
    METRÓNOMO
-===================================================== */
+========================================= */
 
-function toggleMetronome(){
+function toggleMetro(){
 
-    if(metronomeActive){
+    if(metroActive){
 
-        clearInterval(
-            metronomeTimer
-        );
+        clearInterval(metroTimer);
 
-        metronomeActive =
-            false;
+        metroActive = false;
+
+        document.getElementById(
+            "metroButton"
+        ).textContent =
+        "▶ Activar metrónomo";
 
         return;
-
     }
 
 
-    createAudioContext();
-
-
-    const bpm = 100;
+    const bpm =
+        Number(
+            document.getElementById("bpm").value
+        );
 
     const interval =
         60000 / bpm;
 
 
-    metronomeTimer =
-        setInterval(
-            metronomeClick,
-            interval
-        );
+    metroTimer =
+        setInterval(playBeep,interval);
 
+    metroActive = true;
 
-    metronomeActive =
-        true;
+    document.getElementById(
+        "metroButton"
+    ).textContent =
+    "■ Detener metrónomo";
 
-
-    metronomeClick();
-
+    playBeep();
 }
 
 
-function metronomeClick(){
+function playBeep(){
 
-    createAudioContext();
+    const ac =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
 
-
-    const osc =
-        audioContext
-        .createOscillator();
-
+    const oscillator =
+        ac.createOscillator();
 
     const gain =
-        audioContext
-        .createGain();
+        ac.createGain();
 
+    oscillator.frequency.value = 800;
 
-    osc.frequency.value =
-        850;
+    gain.gain.value = .08;
 
+    oscillator.connect(gain);
 
-    gain.gain.value =
-        .07;
+    gain.connect(ac.destination);
 
+    oscillator.start();
 
-    osc.connect(
-        gain
+    oscillator.stop(
+        ac.currentTime + .05
     );
-
-
-    gain.connect(
-        audioContext.destination
-    );
-
-
-    osc.start();
-
-
-    osc.stop(
-        audioContext.currentTime
-        +
-        .05
-    );
-
 }
 
 
-/* =====================================================
-   NUEVO PROYECTO
-===================================================== */
+/* =========================================
+   UTILIDADES
+========================================= */
 
-function newProject(){
+function updateValue(id,value){
 
-    if(recording){
-
-        stopRecording();
-
-    }
+    document.getElementById(id)
+        .textContent = value;
+}
 
 
-    if(currentAudio){
+function resetAll(){
 
-        currentAudio.pause();
+    document.getElementById("pitch").value = 0;
+    document.getElementById("speed").value = 1;
+    document.getElementById("volume").value = 1;
 
-    }
+    document.getElementById("echo").value = .15;
+    document.getElementById("reverb").value = .2;
+    document.getElementById("distortion").value = 0;
 
+    document.getElementById("bass").value = 0;
+    document.getElementById("treble").value = 0;
+    document.getElementById("compress").value = 50;
 
-    audioBlob =
-        null;
+    document.getElementById("timer")
+        .textContent = "00:00";
 
-    audioURL =
-        null;
-
-
-    document
-        .getElementById(
-            "timer"
-        )
-        .textContent =
-        "00:00";
-
-
-    document
-        .getElementById(
-            "currentTime"
-        )
-        .textContent =
-        "00:00";
-
-
-    document
-        .getElementById(
-            "playerTime"
-        )
-        .textContent =
-        "00:00";
-
-
-    document
-        .getElementById(
-            "progressBar"
-        )
-        .style.width =
-        "0%";
-
-
-    document
-        .getElementById(
-            "recordLabel"
-        )
+    document.getElementById("recordText")
         .textContent =
         "Presioná para comenzar";
 
-
-    document
-        .getElementById(
-            "waveStatus"
-        )
+    document.getElementById("waveStatus")
         .textContent =
         "ESPERANDO MICRÓFONO";
-
 }
 
 
-/* =====================================================
-   SCROLL
-===================================================== */
+function nuevoProyecto(){
 
-function scrollToEffects(){
-
-    document
-        .getElementById(
-            "effectsPanel"
+    if(
+        confirm(
+            "¿Querés empezar un proyecto nuevo?"
         )
-        .scrollIntoView({
-            behavior:"smooth"
-        });
+    ){
 
-}
+        resetAll();
 
+        audioBlob = null;
 
-/* =====================================================
-   FORMATO DE TIEMPO
-===================================================== */
+        audioURL = null;
 
-function formatTime(seconds){
-
-    const min =
-        Math.floor(
-            seconds / 60
-        );
-
-    const sec =
-        Math.floor(
-            seconds % 60
-        );
-
-
-    return (
-        String(min)
-        .padStart(2,"0")
-        +
-        ":"
-        +
-        String(sec)
-        .padStart(2,"0")
-    );
-
+        chunks = [];
+    }
 }
 
 </script>

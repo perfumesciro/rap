@@ -2,646 +2,401 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RAP QUIZ — Complete the Bar</title>
+<title>RAP STUDIO</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
-}
-
-:root{
-    --bg:#08080a;
-    --card:#111114;
-    --card2:#17171b;
-    --line:#292930;
-    --text:#f5f5f7;
-    --muted:#85858f;
-    --purple:#8b5cf6;
-    --purple2:#6d28d9;
-    --green:#22c55e;
-    --red:#ef4444;
-    --yellow:#facc15;
+    box-sizing:border-box;
 }
 
 body{
-    min-height:100vh;
-    color:var(--text);
-    background:
-        radial-gradient(circle at 50% -20%,#29134b,transparent 42%),
-        var(--bg);
+    background:#08090c;
+    color:#f5f5f5;
     font-family:Inter,Arial,sans-serif;
+    min-height:100vh;
 }
 
-button{
-    font-family:inherit;
-}
+/* ---------- BARRA SUPERIOR ---------- */
 
-header{
-    height:68px;
-    border-bottom:1px solid var(--line);
+.topbar{
+    height:64px;
+    background:#0d0f13;
+    border-bottom:1px solid #24262c;
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    padding:0 28px;
-    position:sticky;
-    top:0;
-    z-index:50;
-    background:rgba(8,8,10,.88);
-    backdrop-filter:blur(14px);
+    justify-content:space-between;
+    padding:0 25px;
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
+    font-size:20px;
     font-weight:900;
     letter-spacing:-1px;
 }
 
-.logo-box{
-    width:35px;
-    height:35px;
-    border-radius:9px;
-    display:grid;
-    place-items:center;
-    background:linear-gradient(135deg,#a78bfa,#6d28d9);
-}
-
 .logo span{
-    color:#9b78ff;
+    color:#9b6cff;
 }
 
-.header-score{
-    color:var(--muted);
-    font-size:11px;
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#8d919b;
+    font-size:12px;
 }
 
-.header-score b{
-    color:white;
-    margin-left:5px;
+.status-dot{
+    width:8px;
+    height:8px;
+    background:#35d17b;
+    border-radius:50%;
+    box-shadow:0 0 10px #35d17b;
 }
 
-main{
-    width:min(1000px,calc(100% - 24px));
-    margin:auto;
-    padding:35px 0 70px;
-}
+/* ---------- LAYOUT ---------- */
 
-.screen{
-    display:none;
-}
-
-.screen.active{
-    display:block;
-}
-
-/* HOME */
-
-.hero{
-    text-align:center;
-    padding:25px 10px 32px;
-}
-
-.small-title{
-    color:#9b78ff;
-    font-size:10px;
-    letter-spacing:3px;
-    font-weight:800;
-    margin-bottom:14px;
-}
-
-.hero h1{
-    font-family:"Space Grotesk";
-    font-size:clamp(42px,8vw,75px);
-    line-height:.9;
-    letter-spacing:-4px;
-}
-
-.hero h1 span{
-    color:#8b5cf6;
-}
-
-.hero p{
-    color:var(--muted);
-    font-size:13px;
-    line-height:1.6;
-    max-width:570px;
-    margin:20px auto 0;
-}
-
-.modes{
+.studio{
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-bottom:18px;
+    grid-template-columns:230px 1fr 280px;
+    min-height:calc(100vh - 64px);
 }
 
-.mode{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:13px;
-    padding:22px;
+/* ---------- SIDEBAR ---------- */
+
+.sidebar{
+    background:#0c0e12;
+    border-right:1px solid #24262c;
+    padding:22px 15px;
+}
+
+.section-label{
+    font-size:10px;
+    color:#666b75;
+    font-weight:800;
+    letter-spacing:2px;
+    margin:18px 10px 8px;
+}
+
+.nav-btn{
+    width:100%;
+    background:transparent;
+    border:0;
+    color:#90949d;
+    text-align:left;
+    padding:13px 12px;
+    border-radius:8px;
     cursor:pointer;
+    margin-bottom:3px;
+    font-size:13px;
     transition:.2s;
 }
 
-.mode:hover{
-    border-color:#4d4657;
-    transform:translateY(-2px);
+.nav-btn:hover,
+.nav-btn.active{
+    background:#191621;
+    color:white;
 }
 
-.mode.active{
-    border-color:var(--purple);
-    background:#16111d;
+.nav-btn.active{
+    border-left:2px solid #9b6cff;
 }
 
-.mode-icon{
-    font-size:25px;
-    margin-bottom:13px;
+/* ---------- CENTRO ---------- */
+
+.center{
+    padding:25px;
+    overflow:hidden;
 }
 
-.mode h3{
-    font-size:15px;
-    margin-bottom:7px;
-}
-
-.mode p{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.5;
-}
-
-/* MC SELECT */
-
-.panel{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:13px;
-    padding:22px;
-}
-
-.panel-title{
+.project{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:16px;
+    margin-bottom:18px;
 }
 
-.panel-title h2{
-    font-size:15px;
+.project h1{
+    font-size:20px;
 }
 
-.panel-title span{
-    color:var(--muted);
-    font-size:10px;
-}
-
-.mc-grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:8px;
-}
-
-.mc{
-    background:#18181c;
-    border:1px solid #292930;
-    color:#dddde1;
-    border-radius:8px;
-    padding:12px 7px;
-    cursor:pointer;
-    font-size:10px;
-    font-weight:700;
-    transition:.18s;
-}
-
-.mc:hover{
-    border-color:#514b5c;
-}
-
-.mc.selected{
-    background:#221535;
-    border-color:#8b5cf6;
-    color:white;
-}
-
-.start{
-    margin-top:15px;
-    width:100%;
-    border:0;
-    padding:15px;
-    border-radius:9px;
-    color:white;
-    background:linear-gradient(135deg,#8b5cf6,#6d28d9);
-    font-weight:900;
-    cursor:pointer;
-    box-shadow:0 10px 30px rgba(109,40,217,.2);
-}
-
-.start:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-}
-
-/* PLAYERS */
-
-.players{
-    display:none;
-    margin-top:15px;
-}
-
-.players.show{
+.project small{
     display:block;
+    color:#666b75;
+    margin-top:4px;
 }
 
-.player-inputs{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
+.controls{
+    display:flex;
     gap:8px;
 }
 
-.player-inputs input{
+.small-btn{
+    background:#15171c;
+    color:#ddd;
+    border:1px solid #292c33;
+    padding:9px 12px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.small-btn:hover{
+    background:#1e2026;
+}
+
+/* ---------- WAVEFORM ---------- */
+
+.wave-container{
+    background:#0d0f13;
+    border:1px solid #252830;
+    border-radius:12px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+}
+
+.wave-title{
+    display:flex;
+    justify-content:space-between;
+    color:#70747d;
+    font-size:11px;
+    margin-bottom:15px;
+}
+
+canvas{
     width:100%;
-    background:#18181c;
-    border:1px solid #2b2b31;
-    border-radius:8px;
-    color:white;
-    padding:12px;
-    outline:none;
+    height:230px;
+    display:block;
+    background:
+        linear-gradient(#15171d 1px,transparent 1px),
+        linear-gradient(90deg,#15171d 1px,transparent 1px);
+    background-size:50px 50px;
+    border-radius:7px;
 }
 
-.player-inputs input:focus{
-    border-color:var(--purple);
+.time{
+    display:flex;
+    justify-content:space-between;
+    color:#666a73;
+    font-size:11px;
+    margin-top:8px;
 }
 
-/* QUIZ */
+/* ---------- GRABADOR ---------- */
 
-.quiz-top{
+.recorder{
+    margin-top:18px;
+    background:#0d0f13;
+    border:1px solid #252830;
+    border-radius:12px;
+    padding:25px;
+}
+
+.rec-info{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:13px;
 }
 
-.round{
-    color:var(--muted);
-    font-size:11px;
-}
-
-.round b{
-    color:white;
-}
-
-.stats{
-    display:flex;
-    gap:15px;
-    font-size:11px;
-    color:var(--muted);
-}
-
-.stats b{
-    color:white;
-}
-
-.hearts{
-    color:#ff5264;
-    letter-spacing:2px;
+.rec-title{
+    font-size:14px;
+    font-weight:700;
 }
 
 .timer{
-    width:100%;
-    height:5px;
+    font-family:monospace;
+    color:#a99aff;
+    font-size:18px;
+}
+
+.record-button{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    border:7px solid #24262d;
+    background:#d94155;
+    cursor:pointer;
+    display:block;
+    margin:28px auto 12px;
+    box-shadow:0 0 0 0 rgba(217,65,85,.4);
+    transition:.2s;
+}
+
+.record-button:hover{
+    transform:scale(1.05);
+}
+
+.record-button.recording{
+    animation:pulse 1.2s infinite;
+    background:#ff334f;
+}
+
+@keyframes pulse{
+    0%{
+        box-shadow:0 0 0 0 rgba(255,51,79,.4);
+    }
+    70%{
+        box-shadow:0 0 0 18px rgba(255,51,79,0);
+    }
+    100%{
+        box-shadow:0 0 0 0 rgba(255,51,79,0);
+    }
+}
+
+.record-label{
+    text-align:center;
+    color:#777b84;
+    font-size:11px;
+}
+
+/* ---------- PANEL DERECHO ---------- */
+
+.rightbar{
+    background:#0c0e12;
+    border-left:1px solid #24262c;
+    padding:22px 18px;
+}
+
+.panel{
+    background:#111318;
+    border:1px solid #252830;
     border-radius:10px;
-    overflow:hidden;
-    background:#1c1c20;
-    margin-bottom:20px;
-}
-
-.timer-bar{
-    width:100%;
-    height:100%;
-    background:#8b5cf6;
-}
-
-.quiz-card{
-    background:linear-gradient(145deg,#121216,#0d0d10);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:30px;
+    padding:16px;
     margin-bottom:12px;
 }
 
-.mc-playing{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+.panel-title{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#8a8e98;
+    margin-bottom:16px;
 }
 
-.mc-name{
-    font-weight:900;
+.control{
+    margin-bottom:19px;
+}
+
+.control-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
     font-size:12px;
 }
 
-.badge{
-    color:#ae8cff;
-    background:#1c1525;
-    border:1px solid #3a2c4c;
-    border-radius:5px;
-    padding:5px 8px;
-    font-size:9px;
-    font-weight:800;
+.control-head span:last-child{
+    color:#9f8bff;
 }
 
-.instruction{
-    color:var(--muted);
-    font-size:11px;
-    margin-bottom:14px;
-}
-
-.bar{
-    font-family:"Space Grotesk";
-    font-size:clamp(24px,5vw,40px);
-    line-height:1.15;
-    letter-spacing:-1.3px;
-}
-
-.blank{
-    color:#9b78ff;
-    border-bottom:2px solid #8b5cf6;
-    padding:0 8px;
-}
-
-.audio{
-    margin-top:20px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.play{
-    border:1px solid #36333e;
-    background:#19171d;
-    color:white;
-    border-radius:7px;
-    padding:9px 12px;
+input[type="range"]{
+    width:100%;
+    accent-color:#8d6bea;
     cursor:pointer;
-    font-size:10px;
-    font-weight:800;
 }
 
-.audio-info{
-    color:#66666f;
-    font-size:10px;
+select{
+    width:100%;
+    background:#191b21;
+    color:white;
+    border:1px solid #2a2d35;
+    border-radius:7px;
+    padding:10px;
+    outline:none;
 }
 
-.answers{
+/* ---------- BOTONES ---------- */
+
+.action-buttons{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:9px;
+    gap:8px;
 }
 
-.answer{
-    min-height:65px;
-    background:#111114;
-    border:1px solid #292930;
-    border-radius:9px;
-    color:#dddde1;
-    text-align:left;
-    padding:13px;
-    display:flex;
-    gap:12px;
-    align-items:center;
-    cursor:pointer;
-    transition:.18s;
-}
-
-.answer:hover:not(.disabled){
-    background:#18181c;
-    border-color:#56515e;
-}
-
-.answer-letter{
-    width:29px;
-    height:29px;
-    min-width:29px;
-    display:grid;
-    place-items:center;
+.action{
+    background:#17191f;
+    border:1px solid #2a2d34;
+    color:#eee;
     border-radius:7px;
-    background:#1d1d22;
-    color:#9999a2;
-    font-size:10px;
-    font-weight:900;
+    padding:11px;
+    cursor:pointer;
+    font-size:12px;
 }
 
-.answer-text{
-    font-size:11px;
-    line-height:1.45;
+.action:hover{
+    background:#202229;
 }
 
-.answer.correct{
-    background:rgba(34,197,94,.09);
-    border-color:#24954d;
+.action.primary{
+    background:#7652d5;
+    border-color:#7652d5;
 }
 
-.answer.correct .answer-letter{
-    background:#227b43;
-    color:white;
+.action.primary:hover{
+    background:#8663e5;
 }
 
-.answer.wrong{
-    background:rgba(239,68,68,.09);
-    border-color:#a93240;
-}
+/* ---------- AYUDA ---------- */
 
-.answer.wrong .answer-letter{
-    background:#87303a;
-    color:white;
-}
-
-.disabled{
-    cursor:default;
-}
-
-.result{
-    display:none;
-    margin-top:12px;
-    padding:17px;
-    border:1px solid var(--line);
-    border-radius:10px;
-    background:#111114;
-}
-
-.result-title{
-    font-weight:900;
-    font-size:13px;
-    margin-bottom:7px;
-}
-
-.result-info{
-    color:#96969f;
+.help{
+    color:#70747d;
     font-size:11px;
     line-height:1.6;
 }
 
-.next{
-    margin-top:12px;
-    border:0;
-    border-radius:7px;
-    padding:10px 16px;
-    background:white;
-    color:#080808;
-    font-size:10px;
-    font-weight:900;
-    cursor:pointer;
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:1000px){
+
+    .studio{
+        grid-template-columns:190px 1fr;
+    }
+
+    .rightbar{
+        grid-column:1/-1;
+        border-left:0;
+        border-top:1px solid #24262c;
+        display:grid;
+        grid-template-columns:1fr 1fr 1fr;
+        gap:12px;
+    }
+
 }
-
-/* GAME OVER */
-
-.end{
-    text-align:center;
-}
-
-.end-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:15px;
-    padding:45px 20px;
-}
-
-.end-icon{
-    font-size:45px;
-    margin-bottom:10px;
-}
-
-.end h2{
-    font-family:"Space Grotesk";
-    font-size:34px;
-}
-
-.final-score{
-    color:#9b78ff;
-    font-size:48px;
-    font-weight:900;
-    margin:17px 0;
-}
-
-.final-rank{
-    color:var(--muted);
-    font-size:12px;
-}
-
-.leaderboard{
-    max-width:500px;
-    margin:25px auto;
-}
-
-.leader{
-    display:flex;
-    justify-content:space-between;
-    padding:12px 15px;
-    border-bottom:1px solid var(--line);
-    font-size:11px;
-}
-
-.leader:first-child{
-    color:#facc15;
-}
-
-.restart{
-    border:0;
-    padding:12px 18px;
-    border-radius:8px;
-    background:#8b5cf6;
-    color:white;
-    font-size:11px;
-    font-weight:900;
-    cursor:pointer;
-}
-
-.home{
-    margin-left:7px;
-    border:1px solid #303037;
-    padding:12px 18px;
-    border-radius:8px;
-    background:#18181c;
-    color:white;
-    font-size:11px;
-    cursor:pointer;
-}
-
-/* TOAST */
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:25px;
-    transform:translate(-50%,20px);
-    opacity:0;
-    padding:12px 16px;
-    border-radius:8px;
-    background:#18181c;
-    border:1px solid #33333a;
-    color:white;
-    font-size:11px;
-    pointer-events:none;
-    transition:.25s;
-    z-index:100;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-/* MOBILE */
 
 @media(max-width:700px){
 
-    header{
-        padding:0 15px;
+    .studio{
+        display:block;
     }
 
-    main{
-        width:calc(100% - 18px);
-        padding-top:20px;
+    .sidebar{
+        display:none;
     }
 
-    .hero h1{
-        letter-spacing:-2px;
+    .center{
+        padding:15px;
     }
 
-    .modes{
-        grid-template-columns:1fr;
+    .rightbar{
+        display:block;
     }
 
-    .mc-grid{
-        grid-template-columns:repeat(3,1fr);
+    .project{
+        align-items:flex-start;
+        gap:10px;
     }
 
-    .player-inputs{
-        grid-template-columns:1fr 1fr;
+    .project h1{
+        font-size:17px;
     }
 
-    .quiz-card{
-        padding:22px;
-    }
-
-    .answers{
-        grid-template-columns:1fr;
-    }
-
-    .stats{
-        gap:8px;
-    }
-
-    .bar{
-        font-size:26px;
+    canvas{
+        height:180px;
     }
 }
 </style>
@@ -649,1287 +404,533 @@ main{
 
 <body>
 
-<header>
+<header class="topbar">
 
     <div class="logo">
-        <div class="logo-box">R</div>
-        RAP<span>QUIZ</span>
+        RAP<span>STUDIO</span>
     </div>
 
-    <div class="header-score">
-        RÉCORD:
-        <b id="best">0</b>
+    <div class="status">
+        <div class="status-dot"></div>
+        SISTEMA LISTO
     </div>
 
 </header>
 
 
-<main>
+<div class="studio">
 
+    <!-- SIDEBAR -->
 
-<!-- =========================
-     HOME
-========================= -->
+    <aside class="sidebar">
 
-<section id="home" class="screen active">
-
-    <div class="hero">
-
-        <div class="small-title">
-            FREESTYLE • RAP • CULTURA
+        <div class="section-label">
+            PROYECTO
         </div>
 
-        <h1>
-            COMPLETÁ<br>
-            <span>LA RIMA.</span>
-        </h1>
+        <button class="nav-btn active">
+            🎤 Grabación
+        </button>
 
-        <p>
-            Elegí un MC, escuchá la pista y demostrale
-            a tus amigos cuánto conocés del rap.
-        </p>
+        <button class="nav-btn">
+            🎛 Mezclador
+        </button>
 
-    </div>
+        <button class="nav-btn">
+            🎵 Beats
+        </button>
+
+        <button class="nav-btn">
+            📝 Letras
+        </button>
 
 
-    <div class="modes">
-
-        <div class="mode active" id="soloMode"
-             onclick="setMode('solo')">
-
-            <div class="mode-icon">🎤</div>
-
-            <h3>
-                MODO MC
-            </h3>
-
-            <p>
-                Elegí tu rapero y jugá rondas
-                de completar rimas.
-            </p>
-
+        <div class="section-label">
+            EFECTOS
         </div>
 
+        <button class="nav-btn">
+            AutoTune
+        </button>
 
-        <div class="mode" id="friendsMode"
-             onclick="setMode('friends')">
+        <button class="nav-btn">
+            Reverb
+        </button>
 
-            <div class="mode-icon">👥</div>
+        <button class="nav-btn">
+            Echo
+        </button>
 
-            <h3>
-                CON AMIGOS
-            </h3>
+        <button class="nav-btn">
+            Distorsión
+        </button>
 
-            <p>
-                Pasen el celular y armen
-                su propio torneo.
-            </p>
 
+        <div class="section-label">
+            PROYECTO
         </div>
 
-    </div>
+        <button class="nav-btn" onclick="nuevoProyecto()">
+            + Nuevo proyecto
+        </button>
+
+    </aside>
 
 
-    <div class="panel">
+    <!-- CENTRO -->
 
-        <div class="panel-title">
+    <main class="center">
 
-            <h2>
-                ELEGÍ EL MC
-            </h2>
+        <div class="project">
 
-            <span id="selectedText">
-                NINGUNO
-            </span>
+            <div>
+                <h1>Mi sesión de rap</h1>
+                <small>Voz principal · 01</small>
+            </div>
 
-        </div>
+            <div class="controls">
 
+                <button class="small-btn" onclick="metronomo()">
+                    ♩ Metrónomo
+                </button>
 
-        <div class="mc-grid" id="mcGrid">
+                <button class="small-btn" onclick="resetStudio()">
+                    Reset
+                </button>
 
-            <button class="mc"
-                    data-mc="Wos">
-                WOS
-            </button>
-
-            <button class="mc"
-                    data-mc="Trueno">
-                TRUENO
-            </button>
-
-            <button class="mc"
-                    data-mc="Duki">
-                DUKI
-            </button>
-
-            <button class="mc"
-                    data-mc="YSY A">
-                YSY A
-            </button>
-
-            <button class="mc"
-                    data-mc="MKS">
-                MKS
-            </button>
-
-            <button class="mc"
-                    data-mc="Papo">
-                PAPO
-            </button>
-
-            <button class="mc"
-                    data-mc="Dtoke">
-                DTOKE
-            </button>
-
-            <button class="mc"
-                    data-mc="Klan">
-                KLAN
-            </button>
-
-            <button class="mc"
-                    data-mc="Stuart">
-                STUART
-            </button>
-
-            <button class="mc"
-                    data-mc="Replik">
-                REPLIK
-            </button>
-
-            <button class="mc"
-                    data-mc="Aczino">
-                ACZINO
-            </button>
-
-            <button class="mc"
-                    data-mc="Chuty">
-                CHUTY
-            </button>
-
-            <button class="mc"
-                    data-mc="Skone">
-                SKONE
-            </button>
-
-            <button class="mc"
-                    data-mc="Gazir">
-                GAZIR
-            </button>
-
-            <button class="mc"
-                    data-mc="Bnet">
-                BNET
-            </button>
+            </div>
 
         </div>
 
 
-        <div class="players" id="players">
+        <!-- WAVEFORM -->
+
+        <div class="wave-container">
+
+            <div class="wave-title">
+                <span>VOICE TRACK</span>
+                <span id="waveStatus">ESPERANDO MICRÓFONO</span>
+            </div>
+
+            <canvas id="wave"></canvas>
+
+            <div class="time">
+                <span>00:00</span>
+                <span id="currentTime">00:00</span>
+                <span>05:00</span>
+            </div>
+
+        </div>
+
+
+        <!-- GRABADOR -->
+
+        <div class="recorder">
+
+            <div class="rec-info">
+
+                <div class="rec-title">
+                    Grabación vocal
+                </div>
+
+                <div class="timer" id="timer">
+                    00:00
+                </div>
+
+            </div>
+
+            <button
+                class="record-button"
+                id="recordButton"
+                onclick="toggleRecording()">
+            </button>
+
+            <div
+                class="record-label"
+                id="recordLabel">
+                Presioná para comenzar
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- PANEL DERECHO -->
+
+    <aside class="rightbar">
+
+
+        <!-- AUTOTUNE -->
+
+        <div class="panel">
 
             <div class="panel-title">
-                <h2>JUGADORES</h2>
-                <span>2 — 4</span>
+                AUTOTUNE
             </div>
 
-            <div class="player-inputs">
+            <div class="control">
 
-                <input id="p1"
-                       placeholder="Jugador 1">
+                <div class="control-head">
+                    <span>Intensidad</span>
+                    <span id="autoValue">70%</span>
+                </div>
 
-                <input id="p2"
-                       placeholder="Jugador 2">
-
-                <input id="p3"
-                       placeholder="Jugador 3">
-
-                <input id="p4"
-                       placeholder="Jugador 4">
+                <input
+                    id="autotune"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="70"
+                    oninput="actualizar('autoValue',this.value,'%')">
 
             </div>
 
-        </div>
 
+            <div class="control">
 
-        <button class="start"
-                id="startBtn"
-                disabled
-                onclick="startGame()">
+                <div class="control-head">
+                    <span>Velocidad</span>
+                    <span id="speedValue">50%</span>
+                </div>
 
-            ELEGÍ UN MC PARA EMPEZAR
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                    oninput="actualizar('speedValue',this.value,'%')">
 
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     QUIZ
-========================= -->
-
-<section id="quiz" class="screen">
-
-    <div class="quiz-top">
-
-        <div class="round">
-            RONDA
-            <b id="round">1</b>
-        </div>
-
-        <div class="stats">
-
-            <span>
-                PUNTOS
-                <b id="score">0</b>
-            </span>
-
-            <span>
-                🔥
-                <b id="streak">0</b>
-            </span>
-
-            <span class="hearts"
-                  id="hearts">
-                ♥ ♥ ♥
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div class="timer">
-
-        <div class="timer-bar"
-             id="timerBar">
-        </div>
-
-    </div>
-
-
-    <div class="quiz-card">
-
-        <div class="mc-playing">
-
-            <div class="mc-name"
-                 id="playingMC">
-                WOS
             </div>
 
-            <div class="badge">
-                COMPLETÁ LA RIMA
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Tonalidad</span>
+                </div>
+
+                <select id="key">
+                    <option>C</option>
+                    <option>C#</option>
+                    <option>D</option>
+                    <option>D#</option>
+                    <option>E</option>
+                    <option>F</option>
+                    <option>F#</option>
+                    <option>G</option>
+                    <option>G#</option>
+                    <option>A</option>
+                    <option>A#</option>
+                    <option>B</option>
+                </select>
+
+            </div>
+
+
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Escala</span>
+                </div>
+
+                <select>
+                    <option>Mayor</option>
+                    <option>Menor</option>
+                    <option>Pentatónica</option>
+                </select>
+
             </div>
 
         </div>
 
 
-        <div class="instruction">
-            Escuchá el fragmento y elegí cómo continúa.
-        </div>
+        <!-- EFECTOS -->
 
+        <div class="panel">
 
-        <div class="bar"
-             id="bar">
-        </div>
-
-
-        <div class="audio">
-
-            <button class="play"
-                    onclick="speakBar()">
-
-                🔊 ESCUCHAR
-
-            </button>
-
-            <span class="audio-info">
-                Voz de narrador • audio original
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div class="answers"
-         id="answers">
-    </div>
-
-
-    <div class="result"
-         id="result">
-
-        <div class="result-title"
-             id="resultTitle">
-        </div>
-
-        <div class="result-info"
-             id="resultInfo">
-        </div>
-
-        <button class="next"
-                onclick="nextQuestion()">
-
-            SIGUIENTE →
-
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     END
-========================= -->
-
-<section id="end" class="screen">
-
-    <div class="end">
-
-        <div class="end-card">
-
-            <div class="end-icon">
-                🎤
-            </div>
-
-            <h2>
-                FIN DEL ROUND
-            </h2>
-
-            <div class="final-score"
-                 id="finalScore">
-                0
-            </div>
-
-            <div class="final-rank"
-                 id="finalRank">
+            <div class="panel-title">
+                EFECTOS
             </div>
 
 
-            <div class="leaderboard"
-                 id="leaderboard">
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Reverb</span>
+                    <span id="reverbValue">30%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="30"
+                    oninput="actualizar('reverbValue',this.value,'%')">
+
             </div>
 
 
-            <button class="restart"
-                    onclick="startGame()">
+            <div class="control">
 
-                JUGAR DE NUEVO
+                <div class="control-head">
+                    <span>Echo</span>
+                    <span id="echoValue">15%</span>
+                </div>
 
-            </button>
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="15"
+                    oninput="actualizar('echoValue',this.value,'%')">
 
-            <button class="home"
-                    onclick="goHome()">
+            </div>
 
-                MENÚ
 
-            </button>
+            <div class="control">
+
+                <div class="control-head">
+                    <span>Distorsión</span>
+                    <span id="distValue">0%</span>
+                </div>
+
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="0"
+                    oninput="actualizar('distValue',this.value,'%')">
+
+            </div>
 
         </div>
 
-    </div>
 
-</section>
+        <!-- ACCIONES -->
 
-</main>
+        <div class="panel">
+
+            <div class="panel-title">
+                ARCHIVO
+            </div>
+
+            <div class="action-buttons">
+
+                <button
+                    class="action primary"
+                    onclick="reproducir()">
+                    ▶ Escuchar
+                </button>
+
+                <button
+                    class="action"
+                    onclick="descargar()">
+                    ↓ Descargar
+                </button>
+
+            </div>
+
+        </div>
 
 
-<div class="toast"
-     id="toast">
+        <div class="panel">
+
+            <div class="panel-title">
+                ESTADO
+            </div>
+
+            <div class="help">
+
+                Este estudio funciona directamente
+                desde el navegador usando el micrófono
+                de tu dispositivo.
+
+                <br><br>
+
+                Permití el acceso al micrófono cuando
+                el navegador lo solicite.
+
+            </div>
+
+        </div>
+
+    </aside>
+
 </div>
 
 
 <script>
 
-/* ======================================================
-   BANCO DE RIMAS
+/* ==========================================
+   VARIABLES
+========================================== */
 
-   Las entradas marcadas como "original" son creadas
-   específicamente para el juego.
+let audioContext;
+let analyser;
+let microphone;
+let mediaRecorder;
 
-   Las preguntas sobre artistas reales no contienen
-   letras extensas protegidas.
-====================================================== */
+let chunks=[];
 
-const bars = [
+let recording=false;
 
-    {
-        mc:"Wos",
-        start:"Si el beat cae pesado, yo lo convierto en movimiento...",
-        options:[
-            "y cada palabra encuentra su momento.",
-            "pero prefiero quedarme en silencio.",
-            "porque nunca escucho el instrumento.",
-            "y después me voy corriendo."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
+let audioBlob=null;
+let audioURL=null;
 
-    {
-        mc:"Wos",
-        start:"Cuando el público responde y se levanta de repente...",
-        options:[
-            "el MC tiene que estar presente.",
-            "yo me olvido de la siguiente.",
-            "termina automáticamente el ambiente.",
-            "se apaga todo de repente."
-        ],
-        correct:0,
-        info:"Rima original inspirada en el ambiente de una batalla."
-    },
-
-    {
-        mc:"Trueno",
-        start:"Subo al escenario con la mirada preparada...",
-        options:[
-            "porque cada respuesta puede cambiar la jornada.",
-            "y me quedo mirando la nada.",
-            "sin escuchar absolutamente nada.",
-            "porque la batalla ya está terminada."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Trueno",
-        start:"Si el rival me tira un concepto en el momento...",
-        options:[
-            "lo convierto en respuesta aprovechando el argumento.",
-            "me olvido de todo lo que siento.",
-            "abandono el enfrentamiento.",
-            "dejo de seguir el tempo."
-        ],
-        correct:0,
-        info:"Rima original basada en la dinámica de respuesta del freestyle."
-    },
-
-    {
-        mc:"Duki",
-        start:"La noche está encendida y el público quiere sonido...",
-        options:[
-            "cada barra busca dejar algo encendido.",
-            "pero nadie quiere escuchar.",
-            "el escenario queda vacío.",
-            "y el beat queda perdido."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"YSY A",
-        start:"Desde la plaza hasta el escenario aprendí la lección...",
-        options:[
-            "que la constancia también construye una canción.",
-            "que nunca sirve la improvisación.",
-            "que no existe evolución.",
-            "que todo depende de la ocasión."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"MKS",
-        start:"Si la métrica se acomoda sobre el instrumental...",
-        options:[
-            "cada sílaba puede convertirse en algo brutal.",
-            "el público se tiene que retirar.",
-            "la batalla deja de comenzar.",
-            "nadie vuelve a improvisar."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Papo",
-        start:"No alcanza con rimar si no existe contenido...",
-        options:[
-            "una respuesta sin sentido termina perdiendo el sentido.",
-            "porque el beat siempre queda dormido.",
-            "y el público nunca escucha el sonido.",
-            "porque todo tiene que ser repetido."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Dtoke",
-        start:"Cuando aparece el concepto y cambia la dirección...",
-        options:[
-            "la reacción inmediata puede ganar la discusión.",
-            "se termina automáticamente la competición.",
-            "el beat pierde toda conexión.",
-            "nadie presta atención."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Klan",
-        start:"La plaza tiene memoria y recuerda cada jornada...",
-        options:[
-            "cada batalla queda escrita aunque no esté anotada.",
-            "porque nunca pasa nada.",
-            "aunque la gente no diga nada.",
-            "y la música queda apagada."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Stuart",
-        start:"Si la palabra llega justo cuando cambia el compás...",
-        options:[
-            "la métrica puede hacer que la idea pegue más.",
-            "el MC pierde la capacidad de improvisar.",
-            "el beat deja de sonar.",
-            "la ronda vuelve para atrás."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Replik",
-        start:"Una palabra tiene historia cuando cambia su significado...",
-        options:[
-            "y una buena asociación puede dejar al rival sorprendido.",
-            "pero ninguna rima tiene sentido.",
-            "porque todo debe estar escrito.",
-            "y el público se queda dormido."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Aczino",
-        start:"En una batalla internacional la presión está presente...",
-        options:[
-            "por eso la reacción tiene que ser inteligente.",
-            "porque nadie escucha al contrincante.",
-            "y todo sucede lentamente.",
-            "porque no existe ningún oponente."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Chuty",
-        start:"Si el rival deja una puerta abierta en su argumento...",
-        options:[
-            "un buen MC la encuentra en cuestión de tiempo.",
-            "nadie puede responder al momento.",
-            "el público abandona el evento.",
-            "el beat cambia de instrumento."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Skone",
-        start:"El humor puede cambiar completamente una batalla...",
-        options:[
-            "si el remate llega justo cuando la gente lo esperaba.",
-            "aunque nadie escuche la palabra.",
-            "porque el silencio siempre gana.",
-            "sin necesidad de decir nada."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Gazir",
-        start:"Cuando la multisilábica aparece bien construida...",
-        options:[
-            "la técnica puede reforzar todavía más la salida.",
-            "la batalla pierde toda vida.",
-            "el beat desaparece enseguida.",
-            "la rima queda escondida."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    },
-
-    {
-        mc:"Bnet",
-        start:"Improvisar también significa saber escuchar...",
-        options:[
-            "porque una buena respuesta necesita primero detectar.",
-            "aunque nunca mires al rival.",
-            "porque no hace falta reaccionar.",
-            "y siempre hay que memorizar."
-        ],
-        correct:0,
-        info:"Rima original creada para el juego."
-    }
-
-];
+let startTime;
+let timerInterval;
 
 
-/* ======================================================
-   ESTADO
-====================================================== */
+/* ==========================================
+   CANVAS
+========================================== */
 
-let mode="solo";
-let selectedMC="";
-let players=[];
-let currentPlayer=0;
+const canvas=document.getElementById("wave");
+const ctx=canvas.getContext("2d");
 
-let pool=[];
-let current=0;
+function resizeCanvas(){
 
-let score=0;
-let streak=0;
-let lives=3;
+    canvas.width=canvas.clientWidth*devicePixelRatio;
+    canvas.height=canvas.clientHeight*devicePixelRatio;
 
-let answered=false;
-let timer=null;
-let time=15;
-
-let audioContext=null;
-
-
-/* ======================================================
-   ELEMENTOS
-====================================================== */
-
-const screens={
-    home:document.getElementById("home"),
-    quiz:document.getElementById("quiz"),
-    end:document.getElementById("end")
-};
-
-
-/* ======================================================
-   MODO
-====================================================== */
-
-function setMode(newMode){
-
-    mode=newMode;
-
-    document
-        .getElementById("soloMode")
-        .classList.toggle(
-            "active",
-            mode==="solo"
-        );
-
-    document
-        .getElementById("friendsMode")
-        .classList.toggle(
-            "active",
-            mode==="friends"
-        );
-
-    document
-        .getElementById("players")
-        .classList.toggle(
-            "show",
-            mode==="friends"
-        );
-
-}
-
-
-/* ======================================================
-   SELECCIONAR MC
-====================================================== */
-
-document
-    .querySelectorAll(".mc")
-    .forEach(btn=>{
-
-        btn.addEventListener("click",()=>{
-
-            document
-                .querySelectorAll(".mc")
-                .forEach(x=>
-                    x.classList.remove("selected")
-                );
-
-            btn.classList.add("selected");
-
-            selectedMC=
-                btn.dataset.mc;
-
-            document
-                .getElementById("selectedText")
-                .textContent=
-                    selectedMC;
-
-            document
-                .getElementById("startBtn")
-                .disabled=false;
-
-            document
-                .getElementById("startBtn")
-                .textContent=
-                    "EMPEZAR CON "+selectedMC.toUpperCase();
-
-        });
-
-    });
-
-
-/* ======================================================
-   START
-====================================================== */
-
-function startGame(){
-
-    if(!selectedMC)return;
-
-    stopTimer();
-
-    score=0;
-    streak=0;
-    lives=3;
-    current=0;
-    currentPlayer=0;
-
-    if(mode==="friends"){
-
-        players=[
-            document.getElementById("p1").value || "Jugador 1",
-            document.getElementById("p2").value || "Jugador 2",
-            document.getElementById("p3").value || "Jugador 3",
-            document.getElementById("p4").value || "Jugador 4"
-        ];
-
-    }else{
-
-        players=["Jugador"];
-
-    }
-
-    pool=shuffle(
-        bars.filter(
-            x=>x.mc===selectedMC
-        )
+    ctx.scale(
+        devicePixelRatio,
+        devicePixelRatio
     );
 
-    if(pool.length===0){
-
-        pool=shuffle(
-            bars
-        );
-
-    }
-
-    showScreen("quiz");
-
-    updateStats();
-
-    showQuestion();
-
 }
 
+resizeCanvas();
 
-/* ======================================================
-   MOSTRAR PREGUNTA
-====================================================== */
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
 
-function showQuestion(){
 
-    answered=false;
+/* ==========================================
+   DIBUJAR WAVEFORM
+========================================== */
 
-    stopTimer();
+function drawWave(){
 
-    if(current>=pool.length){
+    requestAnimationFrame(drawWave);
 
-        pool=shuffle(
-            pool
-        );
+    const width=canvas.clientWidth;
+    const height=canvas.clientHeight;
 
-        current=0;
-
-    }
-
-    const q=pool[current];
-
-    document
-        .getElementById("round")
-        .textContent=
-            current+1;
-
-    document
-        .getElementById("playingMC")
-        .textContent=
-            q.mc.toUpperCase();
-
-    document
-        .getElementById("bar")
-        .innerHTML=
-            q.start+
-            ' <span class="blank">_____</span>';
-
-    const answers=
-        document.getElementById("answers");
-
-    answers.innerHTML="";
-
-    const letters=["A","B","C","D"];
-
-    q.options.forEach(
-        (option,index)=>{
-
-            const btn=
-                document.createElement("button");
-
-            btn.className="answer";
-
-            btn.innerHTML=`
-                <span class="answer-letter">
-                    ${letters[index]}
-                </span>
-
-                <span class="answer-text">
-                    ${option}
-                </span>
-            `;
-
-            btn.onclick=()=>
-                chooseAnswer(
-                    index,
-                    btn
-                );
-
-            answers.appendChild(btn);
-
-        }
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
     );
 
-    document
-        .getElementById("result")
-        .style.display="none";
+    if(!analyser){
 
-    startTimer();
+        dibujarLinea(width,height);
 
-}
-
-
-/* ======================================================
-   RESPONDER
-====================================================== */
-
-function chooseAnswer(index,btn){
-
-    if(answered)return;
-
-    answered=true;
-
-    stopTimer();
-
-    const q=pool[current];
-
-    const all=
-        [...document.querySelectorAll(".answer")];
-
-    all.forEach(
-        x=>x.classList.add("disabled")
-    );
-
-    if(index===q.correct){
-
-        btn.classList.add("correct");
-
-        streak++;
-
-        const gained=
-            100+(streak-1)*25;
-
-        score+=gained;
-
-        playTone(
-            "correct"
-        );
-
-        showResult(
-            true,
-            `+${gained} puntos`,
-            q.info
-        );
-
-    }else{
-
-        btn.classList.add("wrong");
-
-        all[q.correct]
-            .classList.add("correct");
-
-        streak=0;
-        lives--;
-
-        playTone(
-            "wrong"
-        );
-
-        showResult(
-            false,
-            `La correcta era ${letters(q.correct)}: ${q.options[q.correct]}`,
-            q.info
-        );
-
-    }
-
-    updateStats();
-
-    if(mode==="friends"){
-
-        currentPlayer++;
-
-        if(currentPlayer>=players.length){
-
-            currentPlayer=0;
-
-        }
-
-    }
-
-}
-
-
-/* ======================================================
-   RESULTADO
-====================================================== */
-
-function showResult(correct,title,info){
-
-    const result=
-        document.getElementById("result");
-
-    const titleEl=
-        document.getElementById("resultTitle");
-
-    const infoEl=
-        document.getElementById("resultInfo");
-
-    titleEl.textContent=
-        correct
-        ? "✓ CORRECTO"
-        : "✕ INCORRECTO";
-
-    titleEl.style.color=
-        correct
-        ? "#22c55e"
-        : "#ef4444";
-
-    infoEl.innerHTML=
-        `<b>${title}</b><br>${info}`;
-
-    result.style.display="block";
-
-}
-
-
-/* ======================================================
-   SIGUIENTE
-====================================================== */
-
-function nextQuestion(){
-
-    if(lives<=0){
-
-        endGame();
         return;
 
     }
 
-    current++;
+    const bufferLength=
+        analyser.fftSize;
 
-    showQuestion();
+    const dataArray=
+        new Uint8Array(bufferLength);
 
-}
+    analyser.getByteTimeDomainData(
+        dataArray
+    );
 
+    ctx.beginPath();
 
-/* ======================================================
-   TIMER
-====================================================== */
+    ctx.lineWidth=2;
 
-function startTimer(){
+    ctx.strokeStyle="#9b6cff";
 
-    time=15;
+    const sliceWidth=
+        width/bufferLength;
 
-    const bar=
-        document.getElementById("timerBar");
+    let x=0;
 
-    bar.style.width="100%";
-    bar.style.background="#8b5cf6";
+    for(let i=0;i<bufferLength;i++){
 
-    const start=
-        Date.now();
+        const v=
+            dataArray[i]/128.0;
 
-    timer=setInterval(()=>{
+        const y=
+            v*height/2;
 
-        const elapsed=
-            (Date.now()-start)/1000;
+        if(i===0){
 
-        const left=
-            15-elapsed;
+            ctx.moveTo(x,y);
 
-        const percent=
-            Math.max(
-                0,
-                left/15*100
-            );
+        }else{
 
-        bar.style.width=
-            percent+"%";
-
-        if(left<5){
-
-            bar.style.background=
-                "#ef4444";
+            ctx.lineTo(x,y);
 
         }
 
-        if(left<=0){
-
-            timeOut();
-
-        }
-
-    },40);
-
-}
-
-
-/* ======================================================
-   TIME OUT
-====================================================== */
-
-function timeOut(){
-
-    if(answered)return;
-
-    answered=true;
-
-    stopTimer();
-
-    const q=pool[current];
-
-    const all=
-        [...document.querySelectorAll(".answer")];
-
-    all.forEach(
-        x=>x.classList.add("disabled")
-    );
-
-    all[q.correct]
-        .classList.add("correct");
-
-    lives=0;
-    streak=0;
-
-    playTone("wrong");
-
-    showResult(
-        false,
-        `Se terminó el tiempo. Era ${letters(q.correct)}: ${q.options[q.correct]}`,
-        q.info
-    );
-
-    updateStats();
-
-}
-
-
-/* ======================================================
-   STATS
-====================================================== */
-
-function updateStats(){
-
-    document
-        .getElementById("score")
-        .textContent=
-            score;
-
-    document
-        .getElementById("streak")
-        .textContent=
-            streak;
-
-    let hearts="";
-
-    for(let i=0;i<3;i++){
-
-        hearts+=
-            i<lives
-            ? "♥ "
-            : "♡ ";
+        x+=sliceWidth;
 
     }
 
-    document
-        .getElementById("hearts")
-        .textContent=
-            hearts;
+    ctx.stroke();
 
 }
 
 
-/* ======================================================
-   FIN
-====================================================== */
+function dibujarLinea(width,height){
 
-function endGame(){
+    ctx.beginPath();
 
-    stopTimer();
+    ctx.strokeStyle="#292b32";
 
-    showScreen("end");
+    ctx.lineWidth=1;
 
-    document
-        .getElementById("finalScore")
-        .textContent=
-            score;
+    ctx.moveTo(0,height/2);
 
-    document
-        .getElementById("finalRank")
-        .textContent=
-            getRank(score);
+    ctx.lineTo(width,height/2);
 
-    saveBest();
+    ctx.stroke();
 
-    if(mode==="friends"){
+}
 
-        showLeaderboard();
+drawWave();
+
+
+/* ==========================================
+   GRABACIÓN
+========================================== */
+
+async function toggleRecording(){
+
+    if(recording){
+
+        detenerGrabacion();
 
     }else{
 
-        document
-            .getElementById("leaderboard")
-            .innerHTML="";
+        await comenzarGrabacion();
 
     }
 
-    playTone("finish");
-
 }
 
 
-/* ======================================================
-   RANK
-====================================================== */
+async function comenzarGrabacion(){
 
-function getRank(score){
+    try{
 
-    if(score>=2500)
-        return "👑 LEYENDA DEL FREESTYLE";
+        const stream=
+            await navigator.mediaDevices
+            .getUserMedia({
+                audio:true
+            });
 
-    if(score>=1800)
-        return "🔥 DIOS DEL RAP";
-
-    if(score>=1200)
-        return "⚡ MC DE ÉLITE";
-
-    if(score>=700)
-        return "🎤 FREESTYLER";
-
-    if(score>=300)
-        return "🎧 EN ASCENSO";
-
-    return "🧢 ROOKIE";
-
-}
-
-
-/* ======================================================
-   LEADERBOARD
-====================================================== */
-
-function showLeaderboard(){
-
-    let scores=
-        players.map(
-            name=>({
-                name,
-                score:Math.floor(
-                    score*
-                    (0.7+
-                    Math.random()*.5)
-                )
-            })
-        );
-
-    scores.sort(
-        (a,b)=>b.score-a.score
-    );
-
-    document
-        .getElementById("leaderboard")
-        .innerHTML=
-            scores.map(
-                (p,i)=>`
-                <div class="leader">
-                    <span>
-                        ${i+1}. ${p.name}
-                    </span>
-                    <b>
-                        ${p.score}
-                    </b>
-                </div>
-                `
-            ).join("");
-
-}
-
-
-/* ======================================================
-   AUDIO — NARRADOR
-====================================================== */
-
-function speakBar(){
-
-    const q=pool[current];
-
-    if(!window.speechSynthesis)return;
-
-    speechSynthesis.cancel();
-
-    const utter=
-        new SpeechSynthesisUtterance(
-            q.start
-        );
-
-    utter.lang="es-AR";
-    utter.rate=.9;
-    utter.pitch=.85;
-    utter.volume=1;
-
-    speechSynthesis.speak(
-        utter
-    );
-
-    startBeat();
-
-}
-
-
-/* ======================================================
-   BEAT ORIGINAL SIMPLE
-====================================================== */
-
-let beatTimer=null;
-
-function startBeat(){
-
-    if(!audioContext){
 
         audioContext=
             new (
@@ -1937,293 +938,331 @@ function startBeat(){
                 window.webkitAudioContext
             )();
 
-    }
 
-    if(beatTimer)
-        clearInterval(beatTimer);
+        analyser=
+            audioContext.createAnalyser();
 
-    let count=0;
+        analyser.fftSize=2048;
 
-    beatTimer=setInterval(()=>{
 
-        if(count>=8){
+        microphone=
+            audioContext
+            .createMediaStreamSource(stream);
 
-            clearInterval(
-                beatTimer
-            );
 
-            return;
+        microphone.connect(analyser);
 
-        }
 
-        const osc=
-            audioContext.createOscillator();
+        mediaRecorder=
+            new MediaRecorder(stream);
 
-        const gain=
-            audioContext.createGain();
 
-        osc.connect(gain);
-        gain.connect(
-            audioContext.destination
-        );
+        chunks=[];
 
-        osc.frequency.value=
-            count%2===0
-            ? 90
-            : 140;
 
-        gain.gain.setValueAtTime(
-            .035,
-            audioContext.currentTime
-        );
+        mediaRecorder.ondataavailable=e=>{
 
-        gain.gain.exponentialRampToValueAtTime(
-            .001,
-            audioContext.currentTime+.12
-        );
+            if(e.data.size>0){
 
-        osc.start();
+                chunks.push(e.data);
 
-        osc.stop(
-            audioContext.currentTime+.13
-        );
+            }
 
-        count++;
+        };
 
-    },280);
 
-}
+        mediaRecorder.onstop=()=>{
 
+            audioBlob=
+                new Blob(
+                    chunks,
+                    {type:"audio/webm"}
+                );
 
-/* ======================================================
-   TONES
-====================================================== */
+            audioURL=
+                URL.createObjectURL(audioBlob);
 
-function playTone(type){
+        };
 
-    try{
 
-        if(!audioContext){
+        mediaRecorder.start();
 
-            audioContext=
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
+        recording=true;
 
-        }
+        startTime=Date.now();
 
-        const osc=
-            audioContext.createOscillator();
+        timerInterval=
+            setInterval(actualizarTimer,1000);
 
-        const gain=
-            audioContext.createGain();
-
-        osc.connect(gain);
-
-        gain.connect(
-            audioContext.destination
-        );
-
-        if(type==="correct"){
-
-            osc.frequency.value=720;
-
-        }else if(type==="wrong"){
-
-            osc.frequency.value=160;
-
-        }else{
-
-            osc.frequency.value=420;
-
-        }
-
-        gain.gain.setValueAtTime(
-            .05,
-            audioContext.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            .001,
-            audioContext.currentTime+.3
-        );
-
-        osc.start();
-
-        osc.stop(
-            audioContext.currentTime+.3
-        );
-
-    }catch(e){}
-
-}
-
-
-/* ======================================================
-   TIMER STOP
-====================================================== */
-
-function stopTimer(){
-
-    if(timer){
-
-        clearInterval(timer);
-
-        timer=null;
-
-    }
-
-}
-
-
-/* ======================================================
-   PANTALLAS
-====================================================== */
-
-function showScreen(name){
-
-    Object
-        .values(screens)
-        .forEach(
-            x=>x.classList.remove("active")
-        );
-
-    screens[name]
-        .classList.add("active");
-
-}
-
-
-/* ======================================================
-   HOME
-====================================================== */
-
-function goHome(){
-
-    stopTimer();
-
-    if(window.speechSynthesis)
-        speechSynthesis.cancel();
-
-    showScreen("home");
-
-}
-
-
-/* ======================================================
-   BEST SCORE
-====================================================== */
-
-function saveBest(){
-
-    const old=
-        Number(
-            localStorage.getItem(
-                "rapQuizBest"
-            )||0
-        );
-
-    if(score>old){
-
-        localStorage.setItem(
-            "rapQuizBest",
-            score
-        );
 
         document
-            .getElementById("best")
-            .textContent=
-                score;
+            .getElementById("recordButton")
+            .classList.add("recording");
 
-        toast(
-            "🔥 ¡Nuevo récord!"
+
+        document
+            .getElementById("recordLabel")
+            .textContent=
+            "Grabando...";
+
+
+        document
+            .getElementById("waveStatus")
+            .textContent=
+            "GRABANDO";
+
+    }catch(error){
+
+        alert(
+            "No se pudo acceder al micrófono. Revisá los permisos del navegador."
         );
 
+        console.error(error);
+
     }
 
 }
 
 
-/* ======================================================
-   TOAST
-====================================================== */
+/* ==========================================
+   DETENER
+========================================== */
 
-function toast(text){
+function detenerGrabacion(){
 
-    const el=
-        document.getElementById("toast");
+    if(mediaRecorder){
 
-    el.textContent=text;
+        mediaRecorder.stop();
 
-    el.classList.add("show");
+        mediaRecorder.stream
+            .getTracks()
+            .forEach(track=>track.stop());
 
-    setTimeout(
-        ()=>el.classList.remove("show"),
-        1800
-    );
+    }
+
+
+    recording=false;
+
+    clearInterval(timerInterval);
+
+
+    document
+        .getElementById("recordButton")
+        .classList.remove("recording");
+
+
+    document
+        .getElementById("recordLabel")
+        .textContent=
+        "Grabación terminada";
+
+
+    document
+        .getElementById("waveStatus")
+        .textContent=
+        "GRABACIÓN LISTA";
 
 }
 
 
-/* ======================================================
-   SHUFFLE
-====================================================== */
+/* ==========================================
+   TIMER
+========================================== */
 
-function shuffle(arr){
+function actualizarTimer(){
 
-    for(
-        let i=arr.length-1;
-        i>0;
-        i--
-    ){
+    const segundos=
+        Math.floor(
+            (Date.now()-startTime)/1000
+        );
 
-        const j=
-            Math.floor(
-                Math.random()*(i+1)
+    const minutos=
+        Math.floor(segundos/60);
+
+    const secs=
+        segundos%60;
+
+    document
+        .getElementById("timer")
+        .textContent=
+        `${String(minutos).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+
+}
+
+
+/* ==========================================
+   REPRODUCIR
+========================================== */
+
+function reproducir(){
+
+    if(!audioURL){
+
+        alert(
+            "Primero tenés que grabar una voz."
+        );
+
+        return;
+
+    }
+
+    const audio=
+        new Audio(audioURL);
+
+    audio.play();
+
+}
+
+
+/* ==========================================
+   DESCARGAR
+========================================== */
+
+function descargar(){
+
+    if(!audioURL){
+
+        alert(
+            "No hay ninguna grabación para descargar."
+        );
+
+        return;
+
+    }
+
+    const link=
+        document.createElement("a");
+
+    link.href=audioURL;
+
+    link.download=
+        "mi-rap.webm";
+
+    link.click();
+
+}
+
+
+/* ==========================================
+   SLIDERS
+========================================== */
+
+function actualizar(id,valor,unidad){
+
+    document
+        .getElementById(id)
+        .textContent=
+        valor+unidad;
+
+}
+
+
+/* ==========================================
+   METRÓNOMO
+========================================== */
+
+let metroInterval=null;
+let metroActivo=false;
+
+function metronomo(){
+
+    if(metroActivo){
+
+        clearInterval(metroInterval);
+
+        metroActivo=false;
+
+        return;
+
+    }
+
+    const bpm=120;
+
+    metroInterval=
+        setInterval(()=>{
+
+            const beep=
+                new AudioContext();
+
+            const osc=
+                beep.createOscillator();
+
+            const gain=
+                beep.createGain();
+
+            osc.frequency.value=800;
+
+            gain.gain.value=.08;
+
+            osc.connect(gain);
+
+            gain.connect(
+                beep.destination
             );
 
-        [
-            arr[i],
-            arr[j]
-        ]=[
-            arr[j],
-            arr[i]
-        ];
+            osc.start();
+
+            osc.stop(
+                beep.currentTime+.05
+            );
+
+        },60000/bpm);
+
+    metroActivo=true;
+
+}
+
+
+/* ==========================================
+   NUEVO PROYECTO
+========================================== */
+
+function nuevoProyecto(){
+
+    const confirmar=
+        confirm(
+            "¿Querés crear un proyecto nuevo?"
+        );
+
+    if(confirmar){
+
+        resetStudio();
 
     }
 
-    return arr;
-
 }
 
 
-/* ======================================================
-   LETTER
-====================================================== */
+/* ==========================================
+   RESET
+========================================== */
 
-function letters(i){
+function resetStudio(){
 
-    return [
-        "A",
-        "B",
-        "C",
-        "D"
-    ][i];
+    if(recording){
+
+        detenerGrabacion();
+
+    }
+
+    audioBlob=null;
+    audioURL=null;
+
+    document
+        .getElementById("timer")
+        .textContent="00:00";
+
+    document
+        .getElementById("recordLabel")
+        .textContent=
+        "Presioná para comenzar";
+
+    document
+        .getElementById("waveStatus")
+        .textContent=
+        "ESPERANDO MICRÓFONO";
 
 }
-
-
-/* ======================================================
-   LOAD BEST
-====================================================== */
-
-document
-    .getElementById("best")
-    .textContent=
-        localStorage.getItem(
-            "rapQuizBest"
-        )||0;
 
 </script>
 

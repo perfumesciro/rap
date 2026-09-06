@@ -2,33 +2,33 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Negocio — Simulador</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NODE//ZERO</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 *{
     box-sizing:border-box;
 }
 
 :root{
-    --bg:#111315;
-    --panel:#191c1f;
-    --panel2:#202428;
-    --border:#30353a;
-    --text:#e8e9ea;
-    --muted:#92989e;
-    --accent:#d9ff62;
-    --danger:#ff6b6b;
-    --warning:#ffc857;
+    --bg:#080a0c;
+    --panel:#0d1114;
+    --panel2:#11171b;
+    --border:#20292e;
+    --text:#d9e1e5;
+    --muted:#68757d;
+    --green:#7dff91;
+    --blue:#6bb7ff;
+    --red:#ff6262;
+    --yellow:#ffd166;
 }
 
 body{
     margin:0;
     background:var(--bg);
     color:var(--text);
-    font-family:Inter,Arial,sans-serif;
+    font-family:Consolas,"Courier New",monospace;
+    overflow-x:hidden;
 }
 
 button,input{
@@ -41,661 +41,454 @@ button{
 
 .app{
     min-height:100vh;
-    display:flex;
+    display:grid;
+    grid-template-columns:230px 1fr;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-    width:230px;
-    min-height:100vh;
+    background:#090b0d;
     border-right:1px solid var(--border);
-    background:#151719;
-    padding:24px 15px;
+    padding:18px;
     position:fixed;
-    left:0;
+    width:230px;
     top:0;
     bottom:0;
 }
 
-.logo{
-    padding:0 12px 25px;
-    font-size:21px;
-    font-weight:700;
-    letter-spacing:-1px;
+.brand{
+    font-size:19px;
+    font-weight:bold;
+    color:var(--green);
+    letter-spacing:2px;
+    margin-bottom:25px;
 }
 
-.logo span{
-    color:var(--accent);
-}
-
-.day-box{
-    margin:0 5px 22px;
-    padding:13px;
-    background:#1e2225;
-    border:1px solid var(--border);
-    border-radius:9px;
-}
-
-.day-box small{
+.brand small{
     display:block;
     color:var(--muted);
-    margin-bottom:5px;
+    font-size:9px;
+    letter-spacing:1px;
+    margin-top:5px;
 }
 
-.day-box strong{
-    font-size:17px;
+.profile{
+    border:1px solid var(--border);
+    background:var(--panel);
+    padding:13px;
+    margin-bottom:20px;
+}
+
+.profile small{
+    color:var(--muted);
+}
+
+.profile strong{
+    display:block;
+    margin:5px 0 10px;
+}
+
+.xp{
+    height:4px;
+    background:#1c2428;
+}
+
+.xp div{
+    height:100%;
+    width:0%;
+    background:var(--green);
+    transition:.3s;
 }
 
 nav button{
     width:100%;
-    border:0;
-    background:transparent;
-    color:#aeb3b7;
     text-align:left;
-    padding:11px 12px;
+    color:#7e898f;
+    border:0;
+    background:none;
+    padding:10px;
     margin-bottom:3px;
-    border-radius:7px;
+    border-left:2px solid transparent;
 }
 
 nav button:hover,
 nav button.active{
-    background:#252a2e;
-    color:white;
+    background:#10161a;
+    color:var(--green);
+    border-left-color:var(--green);
 }
 
-nav button.active{
-    box-shadow:inset 3px 0 0 var(--accent);
-}
-
-.bottom-side{
+.side-bottom{
     position:absolute;
     bottom:20px;
-    left:20px;
-    right:20px;
+    left:18px;
+    right:18px;
 }
 
-.save-btn{
+.save{
     width:100%;
-    background:#252a2e;
+    background:#10171a;
+    color:#9ba6ab;
     border:1px solid var(--border);
-    color:white;
-    padding:10px;
-    border-radius:7px;
+    padding:9px;
 }
 
 /* MAIN */
 
 main{
     margin-left:230px;
-    width:calc(100% - 230px);
-    padding:28px;
+    padding:25px;
     max-width:1500px;
+    width:calc(100% - 230px);
 }
 
-.topbar{
+.top{
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    margin-bottom:25px;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    padding-bottom:18px;
+    margin-bottom:18px;
 }
 
 .title h1{
+    font-size:22px;
     margin:0;
-    font-size:26px;
-    letter-spacing:-1px;
+    color:#f0f4f5;
 }
 
 .title p{
     color:var(--muted);
-    margin:6px 0 0;
-    font-size:13px;
+    margin:5px 0 0;
+    font-size:11px;
 }
 
-.next-day{
-    background:var(--accent);
-    color:#111;
-    border:0;
-    padding:11px 17px;
-    border-radius:7px;
-    font-weight:700;
+.clock{
+    color:var(--green);
+    font-size:12px;
 }
 
-.next-day:hover{
-    filter:brightness(.92);
-}
-
-/* DASHBOARD */
+/* CARDS */
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:15px;
+    gap:10px;
+    margin-bottom:12px;
 }
 
 .stat{
     background:var(--panel);
     border:1px solid var(--border);
-    border-radius:9px;
-    padding:18px;
+    padding:15px;
 }
 
 .stat small{
     color:var(--muted);
     display:block;
-    margin-bottom:9px;
+    margin-bottom:8px;
 }
 
 .stat strong{
-    font-size:24px;
-    letter-spacing:-1px;
+    font-size:20px;
 }
 
-.stat .green{
-    color:var(--accent);
+.green{
+    color:var(--green);
 }
 
-.content-grid{
+.blue{
+    color:var(--blue);
+}
+
+.yellow{
+    color:var(--yellow);
+}
+
+/* GRID */
+
+.grid{
     display:grid;
     grid-template-columns:1.5fr 1fr;
-    gap:15px;
+    gap:12px;
 }
 
 .panel{
     background:var(--panel);
     border:1px solid var(--border);
-    border-radius:9px;
-    padding:18px;
-    margin-bottom:15px;
+    padding:16px;
+    margin-bottom:12px;
 }
 
-.panel-head{
+.panel-title{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:15px;
+    margin-bottom:13px;
 }
 
-.panel h2{
+.panel-title h2{
+    font-size:14px;
     margin:0;
-    font-size:16px;
 }
 
-.panel-head span{
+.panel-title span{
     color:var(--muted);
-    font-size:12px;
+    font-size:10px;
 }
 
-/* ACTIVITY */
+/* TERMINAL */
 
-.activity{
-    max-height:340px;
+.terminal{
+    height:420px;
+    background:#050708;
+    border:1px solid #182025;
+    padding:15px;
     overflow:auto;
+    font-size:13px;
+    line-height:1.65;
 }
 
-.activity-item{
+.line{
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+.line.system{
+    color:var(--muted);
+}
+
+.line.success{
+    color:var(--green);
+}
+
+.line.error{
+    color:var(--red);
+}
+
+.line.info{
+    color:var(--blue);
+}
+
+.input-row{
     display:flex;
-    gap:12px;
-    padding:12px 0;
-    border-bottom:1px solid #292d31;
+    gap:8px;
+    border-top:1px solid #151c20;
+    padding-top:10px;
+    margin-top:10px;
+}
+
+.prompt{
+    color:var(--green);
+}
+
+#commandInput{
+    flex:1;
+    background:none;
+    border:0;
+    outline:0;
+    color:#e7edef;
+}
+
+/* MISSIONS */
+
+.mission{
+    border:1px solid var(--border);
+    padding:13px;
+    margin-bottom:8px;
+    background:#0b0f11;
+}
+
+.mission h3{
+    margin:0 0 5px;
     font-size:13px;
 }
 
-.activity-item:last-child{
-    border-bottom:0;
-}
-
-.activity-icon{
-    width:30px;
-    height:30px;
-    border-radius:7px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#252a2e;
-}
-
-.activity-text{
-    flex:1;
-}
-
-.activity-text small{
-    display:block;
-    color:var(--muted);
-    margin-top:4px;
-}
-
-/* PRODUCTS */
-
-.product-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:12px;
-}
-
-.product{
-    background:#1e2225;
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:15px;
-}
-
-.product-top{
-    display:flex;
-    justify-content:space-between;
-}
-
-.product-name{
-    font-weight:600;
-}
-
-.product-icon{
-    font-size:21px;
-}
-
-.product-info{
-    margin:12px 0;
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.8;
-}
-
-.product-info b{
-    color:#ddd;
-}
-
-.sell-btn,
-.buy-btn{
-    border:1px solid var(--border);
-    background:#292e32;
-    color:white;
-    width:100%;
-    padding:9px;
-    border-radius:6px;
-}
-
-.sell-btn:hover,
-.buy-btn:hover{
-    background:#33393e;
-}
-
-.sell-btn{
-    background:#252a2d;
-}
-
-/* TABLE */
-
-.table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-.table th{
-    text-align:left;
+.mission p{
+    margin:0 0 9px;
     color:var(--muted);
     font-size:11px;
-    font-weight:500;
-    padding:10px;
+    line-height:1.5;
+}
+
+.mission button{
+    border:1px solid #283237;
+    background:#12191d;
+    color:#aab5ba;
+    padding:7px 10px;
+}
+
+.mission button:hover{
+    color:var(--green);
+    border-color:#3c5143;
+}
+
+.mission.locked{
+    opacity:.45;
+}
+
+/* FILES */
+
+.file{
+    display:flex;
+    align-items:center;
+    gap:10px;
     border-bottom:1px solid var(--border);
+    padding:10px 0;
 }
 
-.table td{
-    padding:13px 10px;
-    border-bottom:1px solid #292d31;
-    font-size:13px;
-}
-
-.table tr:last-child td{
-    border-bottom:0;
-}
-
-/* MARKET */
-
-.market-card{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid var(--border);
-    padding:14px 0;
-}
-
-.market-card:last-child{
-    border-bottom:0;
-}
-
-.market-left{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.market-icon{
-    width:42px;
-    height:42px;
-    background:#252a2e;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border-radius:8px;
-    font-size:21px;
-}
-
-.market-name strong{
-    display:block;
-    margin-bottom:4px;
-}
-
-.market-name small{
-    color:var(--muted);
-}
-
-.price{
-    text-align:right;
-}
-
-.price strong{
-    display:block;
-}
-
-.up{
-    color:#8fd36b;
-}
-
-.down{
-    color:var(--danger);
-}
-
-/* EMPLOYEES */
-
-.employee{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:14px;
-    background:#1e2225;
-    border:1px solid var(--border);
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.employee-info strong{
-    display:block;
-    margin-bottom:5px;
-}
-
-.employee-info small{
-    color:var(--muted);
-}
-
-.hire{
+.file:last-child{
     border:0;
-    background:#2b3034;
-    color:white;
-    padding:8px 11px;
-    border-radius:6px;
 }
 
-/* ADVERTISING */
-
-.ad-box{
-    border:1px solid var(--border);
-    background:#1e2225;
-    padding:17px;
-    border-radius:8px;
-    margin-bottom:10px;
+.file-icon{
+    color:var(--blue);
 }
 
-.ad-box h3{
-    margin:0 0 6px;
-    font-size:14px;
-}
-
-.ad-box p{
-    color:var(--muted);
-    font-size:12px;
-}
-
-.ad-box button{
-    background:#292e32;
-    color:white;
-    border:1px solid var(--border);
-    padding:8px 12px;
-    border-radius:6px;
-}
-
-/* COMPANY */
-
-.company-header{
-    background:#1c2023;
-    border:1px solid var(--border);
-    border-radius:9px;
-    padding:25px;
-    margin-bottom:15px;
-}
-
-.company-name{
-    font-size:29px;
-    font-weight:700;
-}
-
-.company-name span{
-    color:var(--accent);
-}
-
-.progress{
-    height:7px;
-    background:#292e32;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:10px;
-}
-
-.progress div{
-    height:100%;
-    background:var(--accent);
-    width:0;
-    transition:.4s;
-}
-
-/* NEWS */
-
-.news{
-    padding:14px 0;
-    border-bottom:1px solid var(--border);
-}
-
-.news:last-child{
-    border-bottom:0;
-}
-
-.news small{
-    color:var(--muted);
-}
-
-.news strong{
+.file small{
     display:block;
-    margin:6px 0;
-}
-
-/* GOALS */
-
-.goal{
-    margin-bottom:17px;
-}
-
-.goal-head{
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-}
-
-.goal-head span{
     color:var(--muted);
+    margin-top:3px;
 }
 
-.goal-progress{
-    height:5px;
-    background:#292e32;
-    border-radius:10px;
-    margin-top:8px;
-    overflow:hidden;
-}
+/* ACHIEVEMENTS */
 
-.goal-progress div{
-    background:var(--accent);
-    height:100%;
-}
-
-/* LOAN */
-
-.loan{
-    padding:15px;
-    background:#1e2225;
-    border:1px solid var(--border);
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.loan button{
-    width:100%;
-    margin-top:10px;
-    padding:9px;
-    background:#292e32;
-    color:white;
-    border:1px solid var(--border);
-    border-radius:6px;
-}
-
-/* CHART */
-
-.chart{
-    height:180px;
+.achievement{
     display:flex;
-    align-items:flex-end;
-    gap:5px;
-    padding-top:15px;
+    gap:12px;
+    align-items:center;
+    padding:10px;
+    border:1px solid var(--border);
+    margin-bottom:7px;
 }
 
-.bar{
-    flex:1;
-    min-height:4px;
-    background:#687078;
-    border-radius:3px 3px 0 0;
-    position:relative;
+.achievement.locked{
+    opacity:.35;
 }
 
-.bar:hover{
-    background:var(--accent);
+.badge{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
 }
 
-.empty{
-    text-align:center;
-    padding:30px;
+/* NETWORK */
+
+.node{
+    border:1px solid var(--border);
+    padding:13px;
+    margin-bottom:8px;
+    background:#0b0f11;
+}
+
+.node strong{
+    color:var(--green);
+}
+
+.node small{
+    display:block;
     color:var(--muted);
+    margin:4px 0 9px;
+}
+
+.node button{
+    background:#11181c;
+    color:#9da8ad;
+    border:1px solid var(--border);
+    padding:6px 9px;
 }
 
 /* NOTIFICATION */
 
-.notification{
+.notice{
     position:fixed;
-    right:25px;
-    bottom:25px;
-    background:#22272b;
-    border:1px solid #3b4248;
-    padding:14px 17px;
-    border-radius:8px;
+    right:20px;
+    bottom:20px;
     width:290px;
-    transform:translateY(130%);
-    transition:.35s;
-    z-index:100;
-    box-shadow:0 15px 40px #0008;
+    background:#10171a;
+    border:1px solid #2d393e;
+    padding:13px;
+    transform:translateY(140%);
+    transition:.3s;
+    z-index:20;
 }
 
-.notification.show{
+.notice.show{
     transform:translateY(0);
 }
 
-.notification strong{
+.notice strong{
     display:block;
+    color:var(--green);
     margin-bottom:5px;
 }
 
-.notification p{
+.notice p{
     margin:0;
-    font-size:12px;
-    color:#aeb3b7;
+    color:#89959b;
+    font-size:11px;
 }
 
 /* RESPONSIVE */
 
-@media(max-width:1000px){
+@media(max-width:950px){
+
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .content-grid{
+    .grid{
         grid-template-columns:1fr;
-    }
-
-    .product-grid{
-        grid-template-columns:repeat(2,1fr);
     }
 }
 
 @media(max-width:700px){
+
     .sidebar{
-        width:65px;
-        padding:18px 8px;
+        width:62px;
+        padding:12px 7px;
     }
 
-    .logo{
+    .brand{
+        font-size:0;
         text-align:center;
-        padding:5px 0 20px;
-        font-size:16px;
     }
 
-    .logo span{
-        display:none;
+    .brand:first-letter{
+        font-size:20px;
     }
 
-    .day-box{
+    .brand small,
+    .profile{
         display:none;
     }
 
     nav button{
         font-size:0;
         text-align:center;
+        border-left:0;
     }
 
     nav button::first-letter{
         font-size:18px;
     }
 
-    .bottom-side{
+    .side-bottom{
         display:none;
     }
 
     main{
-        margin-left:65px;
-        width:calc(100% - 65px);
-        padding:15px;
+        margin-left:62px;
+        width:calc(100% - 62px);
+        padding:12px;
     }
 
-    .topbar{
-        gap:10px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .product-grid{
-        grid-template-columns:1fr;
-    }
-
-    .stat strong{
-        font-size:18px;
+    .terminal{
+        height:350px;
     }
 }
 </style>
@@ -707,26 +500,30 @@ main{
 
 <aside class="sidebar">
 
-    <div class="logo">NEGO<span>CIO</span></div>
+    <div class="brand">
+        NODE//ZERO
+        <small>OFFLINE SIMULATION</small>
+    </div>
 
-    <div class="day-box">
-        <small>Jornada</small>
-        <strong>Día <span id="sideDay">1</span></strong>
+    <div class="profile">
+        <small>OPERADOR</small>
+        <strong id="sideLevel">NOVATO · LV 1</strong>
+
+        <div class="xp">
+            <div id="sideXP"></div>
+        </div>
     </div>
 
     <nav>
-        <button class="active" onclick="showPage('inicio',this)">⌂ Inicio</button>
-        <button onclick="showPage('mercado',this)">◈ Mercado</button>
-        <button onclick="showPage('inventario',this)">▣ Inventario</button>
-        <button onclick="showPage('empleados',this)">♙ Empleados</button>
-        <button onclick="showPage('publicidad',this)">◉ Publicidad</button>
-        <button onclick="showPage('finanzas',this)">▤ Finanzas</button>
-        <button onclick="showPage('empresa',this)">◆ Empresa</button>
-        <button onclick="showPage('noticias',this)">▤ Noticias</button>
+        <button class="active" onclick="page('terminal',this)">▣ Terminal</button>
+        <button onclick="page('missions',this)">◆ Misiones</button>
+        <button onclick="page('files',this)">▤ Archivos</button>
+        <button onclick="page('network',this)">◉ Red ficticia</button>
+        <button onclick="page('achievements',this)">★ Logros</button>
     </nav>
 
-    <div class="bottom-side">
-        <button class="save-btn" onclick="saveGame()">Guardar partida</button>
+    <div class="side-bottom">
+        <button class="save" onclick="saveGame()">[ GUARDAR ]</button>
     </div>
 
 </aside>
@@ -734,410 +531,184 @@ main{
 
 <main>
 
-<!-- ================= INICIO ================= -->
+<!-- TERMINAL -->
 
-<section id="inicio" class="page">
+<section id="terminal" class="screen">
 
-<div class="topbar">
-    <div class="title">
-        <h1>Resumen</h1>
-        <p>Controlá tu negocio antes de que el mercado cambie.</p>
-    </div>
+    <div class="top">
 
-    <button class="next-day" onclick="nextDay()">Terminar día →</button>
-</div>
-
-<div class="stats">
-
-    <div class="stat">
-        <small>Dinero disponible</small>
-        <strong class="green" id="money">$10.000</strong>
-    </div>
-
-    <div class="stat">
-        <small>Ventas acumuladas</small>
-        <strong id="sales">$0</strong>
-    </div>
-
-    <div class="stat">
-        <small>Ganancia</small>
-        <strong id="profit">$0</strong>
-    </div>
-
-    <div class="stat">
-        <small>Clientes</small>
-        <strong id="customers">0</strong>
-    </div>
-
-</div>
-
-
-<div class="content-grid">
-
-<div>
-
-<div class="panel">
-    <div class="panel-head">
-        <h2>Actividad reciente</h2>
-        <span>últimos movimientos</span>
-    </div>
-
-    <div id="activity" class="activity"></div>
-</div>
-
-
-<div class="panel">
-    <div class="panel-head">
-        <h2>Productos</h2>
-        <span>venta rápida</span>
-    </div>
-
-    <div id="quickProducts" class="product-grid"></div>
-</div>
-
-</div>
-
-
-<div>
-
-<div class="panel">
-
-    <div class="panel-head">
-        <h2>Situación</h2>
-    </div>
-
-    <div class="goal">
-
-        <div class="goal-head">
-            <span>Reputación</span>
-            <b id="reputationText">50/100</b>
+        <div class="title">
+            <h1>Terminal</h1>
+            <p>Entorno virtual de entrenamiento</p>
         </div>
 
-        <div class="progress">
-            <div id="reputationBar"></div>
+        <div class="clock" id="clock"></div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <small>Nivel</small>
+            <strong class="green" id="level">1</strong>
+        </div>
+
+        <div class="stat">
+            <small>Experiencia</small>
+            <strong id="xp">0</strong>
+        </div>
+
+        <div class="stat">
+            <small>Créditos</small>
+            <strong class="yellow" id="credits">500</strong>
+        </div>
+
+        <div class="stat">
+            <small>Misiones</small>
+            <strong class="blue" id="missionsDone">0</strong>
         </div>
 
     </div>
 
-    <div class="goal">
 
-        <div class="goal-head">
-            <span>Experiencia empresarial</span>
-            <b id="xpText">0%</b>
+    <div class="panel">
+
+        <div class="panel-title">
+            <h2>CONSOLE://LOCAL</h2>
+            <span>SIMULATION MODE</span>
         </div>
 
-        <div class="progress">
-            <div id="xpBar"></div>
+        <div class="terminal" id="terminalOutput">
+
+            <div class="line system">
+                NODE//ZERO v2.4.1
+            </div>
+
+            <div class="line system">
+                -----------------------------------------
+            </div>
+
+            <div class="line success">
+                Sistema iniciado correctamente.
+            </div>
+
+            <div class="line">
+                Este entorno es completamente ficticio.
+            </div>
+
+            <div class="line">
+                Escribí "help" para ver los comandos disponibles.
+            </div>
+
+        </div>
+
+        <div class="input-row">
+
+            <span class="prompt">operator@node:~$</span>
+
+            <input
+                id="commandInput"
+                autocomplete="off"
+                spellcheck="false"
+                autofocus
+            >
+
         </div>
 
     </div>
 
-</div>
 
+    <div class="panel">
 
-<div class="panel">
+        <div class="panel-title">
+            <h2>Actividad</h2>
+            <span>LOG</span>
+        </div>
 
-    <div class="panel-head">
-        <h2>Noticias</h2>
+        <div id="activity"></div>
+
     </div>
-
-    <div id="miniNews"></div>
-
-</div>
-
-
-<div class="panel">
-
-    <div class="panel-head">
-        <h2>Objetivos</h2>
-    </div>
-
-    <div id="goals"></div>
-
-</div>
-
-</div>
-
-</div>
 
 </section>
 
 
-<!-- ================= MERCADO ================= -->
+<!-- MISIONES -->
 
-<section id="mercado" class="page" style="display:none">
+<section id="missions" class="screen" style="display:none">
 
-<div class="topbar">
-    <div class="title">
-        <h1>Mercado</h1>
-        <p>Los precios cambian todos los días.</p>
+    <div class="top">
+        <div class="title">
+            <h1>Misiones</h1>
+            <p>Resolvé escenarios de seguridad completamente ficticios.</p>
+        </div>
     </div>
-</div>
 
-<div class="panel">
+    <div class="panel">
 
-<div id="market"></div>
+        <div id="missionList"></div>
 
-</div>
+    </div>
 
 </section>
 
 
-<!-- ================= INVENTARIO ================= -->
+<!-- ARCHIVOS -->
 
-<section id="inventario" class="page" style="display:none">
+<section id="files" class="screen" style="display:none">
 
-<div class="topbar">
-    <div class="title">
-        <h1>Inventario</h1>
-        <p>Comprá mercadería y mantené el stock.</p>
+    <div class="top">
+        <div class="title">
+            <h1>Archivos</h1>
+            <p>Documentos encontrados durante las simulaciones.</p>
+        </div>
     </div>
-</div>
 
-<div class="panel">
+    <div class="panel">
 
-<table class="table">
+        <div id="fileList"></div>
 
-<thead>
-<tr>
-<th>Producto</th>
-<th>Stock</th>
-<th>Costo</th>
-<th>Precio</th>
-<th>Demanda</th>
-<th></th>
-</tr>
-</thead>
-
-<tbody id="inventoryTable"></tbody>
-
-</table>
-
-</div>
+    </div>
 
 </section>
 
 
-<!-- ================= EMPLEADOS ================= -->
+<!-- RED -->
 
-<section id="empleados" class="page" style="display:none">
+<section id="network" class="screen" style="display:none">
 
-<div class="topbar">
-    <div class="title">
-        <h1>Empleados</h1>
-        <p>Contratar gente mejora el negocio, pero cuesta dinero.</p>
+    <div class="top">
+        <div class="title">
+            <h1>Red ficticia</h1>
+            <p>Explorá nodos virtuales sin conexión a Internet.</p>
+        </div>
     </div>
-</div>
 
-<div class="panel">
+    <div class="panel">
 
-<h2 style="margin-top:0">Personal disponible</h2>
+        <div id="networkList"></div>
 
-<div id="employeeList"></div>
-
-</div>
+    </div>
 
 </section>
 
 
-<!-- ================= PUBLICIDAD ================= -->
+<!-- LOGROS -->
 
-<section id="publicidad" class="page" style="display:none">
+<section id="achievements" class="screen" style="display:none">
 
-<div class="topbar">
-    <div class="title">
-        <h1>Publicidad</h1>
-        <p>Invertí para conseguir nuevos clientes.</p>
+    <div class="top">
+        <div class="title">
+            <h1>Logros</h1>
+            <p>Desbloqueá desafíos del simulador.</p>
+        </div>
     </div>
-</div>
 
-<div class="panel">
+    <div class="panel">
 
-<div class="ad-box">
-<h3>Redes sociales</h3>
-<p>Una campaña pequeña para aumentar la cantidad de clientes.</p>
-<strong>$500</strong>
-<br><br>
-<button onclick="advertise(500,5)">Lanzar campaña</button>
-</div>
+        <div id="achievementList"></div>
 
-<div class="ad-box">
-<h3>Publicidad local</h3>
-<p>Carteles y anuncios cerca de tu zona.</p>
-<strong>$1.500</strong>
-<br><br>
-<button onclick="advertise(1500,12)">Lanzar campaña</button>
-</div>
-
-<div class="ad-box">
-<h3>Campaña grande</h3>
-<p>Una campaña fuerte que puede cambiar la situación del negocio.</p>
-<strong>$4.000</strong>
-<br><br>
-<button onclick="advertise(4000,30)">Lanzar campaña</button>
-</div>
-
-</div>
-
-</section>
-
-
-<!-- ================= FINANZAS ================= -->
-
-<section id="finanzas" class="page" style="display:none">
-
-<div class="topbar">
-    <div class="title">
-        <h1>Finanzas</h1>
-        <p>Revisá tus ingresos, gastos y préstamos.</p>
     </div>
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<small>Ingresos</small>
-<strong id="financeSales">$0</strong>
-</div>
-
-<div class="stat">
-<small>Costos</small>
-<strong id="financeCosts">$0</strong>
-</div>
-
-<div class="stat">
-<small>Ganancia total</small>
-<strong id="financeProfit">$0</strong>
-</div>
-
-<div class="stat">
-<small>Deuda</small>
-<strong id="debt">$0</strong>
-</div>
-
-</div>
-
-<div class="panel">
-
-<div class="panel-head">
-<h2>Historial de ganancias</h2>
-</div>
-
-<div id="chart" class="chart"></div>
-
-</div>
-
-<div class="panel">
-
-<h2 style="margin-top:0">Banco</h2>
-
-<div class="loan">
-<strong>Préstamo pequeño</strong>
-<p style="color:#999;font-size:12px">
-Recibís $5.000. Devolvés $5.750.
-</p>
-<button onclick="takeLoan(5000,5750)">Pedir préstamo</button>
-</div>
-
-<div class="loan">
-<strong>Préstamo empresarial</strong>
-<p style="color:#999;font-size:12px">
-Recibís $20.000. Devolvés $24.000.
-</p>
-<button onclick="takeLoan(20000,24000)">Pedir préstamo</button>
-</div>
-
-<button class="save-btn" style="margin-top:10px" onclick="payDebt()">
-Pagar deuda
-</button>
-
-</div>
-
-</section>
-
-
-<!-- ================= EMPRESA ================= -->
-
-<section id="empresa" class="page" style="display:none">
-
-<div class="topbar">
-    <div class="title">
-        <h1>Empresa</h1>
-        <p>Tu negocio crece con cada decisión.</p>
-    </div>
-</div>
-
-<div class="company-header">
-
-<div class="company-name">
-<span id="companyName">Tu Negocio</span>
-</div>
-
-<p style="color:#999">
-Nivel <b id="companyLevel">1</b> · Experiencia empresarial
-</p>
-
-<div class="progress">
-<div id="companyXP"></div>
-</div>
-
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<small>Reputación</small>
-<strong id="companyRep">50</strong>
-</div>
-
-<div class="stat">
-<small>Empleados</small>
-<strong id="employeeCount">0</strong>
-</div>
-
-<div class="stat">
-<small>Días activos</small>
-<strong id="companyDays">1</strong>
-</div>
-
-<div class="stat">
-<small>Valor estimado</small>
-<strong id="companyValue">$10.000</strong>
-</div>
-
-</div>
-
-<div class="panel">
-
-<h2>Información</h2>
-
-<p style="color:#999;font-size:13px;line-height:1.7">
-No existe una única forma de ganar. Podés vender barato y moverte rápido,
-apostar por productos caros, invertir en publicidad o ahorrar hasta poder
-abrir un local.
-</p>
-
-</div>
-
-</section>
-
-
-<!-- ================= NOTICIAS ================= -->
-
-<section id="noticias" class="page" style="display:none">
-
-<div class="topbar">
-    <div class="title">
-        <h1>Noticias</h1>
-        <p>Lo que ocurre en el mercado puede afectar tus decisiones.</p>
-    </div>
-</div>
-
-<div class="panel">
-
-<div id="newsPage"></div>
-
-</div>
 
 </section>
 
@@ -1146,838 +717,1022 @@ abrir un local.
 </div>
 
 
-<div id="notification" class="notification">
-<strong id="notificationTitle"></strong>
-<p id="notificationText"></p>
+<div class="notice" id="notice">
+    <strong id="noticeTitle"></strong>
+    <p id="noticeText"></p>
 </div>
 
 
 <script>
 
-/* =========================================================
-   DATOS DEL JUEGO
-========================================================= */
-
-const initialProducts = [
-
-{
-    id:"agua",
-    name:"Agua mineral",
-    icon:"💧",
-    baseCost:250,
-    price:450,
-    stock:8,
-    demand:65
-},
-
-{
-    id:"snacks",
-    name:"Snacks",
-    icon:"🥨",
-    baseCost:400,
-    price:700,
-    stock:6,
-    demand:72
-},
-
-{
-    id:"auriculares",
-    name:"Auriculares",
-    icon:"🎧",
-    baseCost:1800,
-    price:2900,
-    stock:2,
-    demand:38
-},
-
-{
-    id:"zapatillas",
-    name:"Zapatillas",
-    icon:"👟",
-    baseCost:5000,
-    price:7500,
-    stock:1,
-    demand:25
-},
-
-{
-    id:"mochila",
-    name:"Mochila",
-    icon:"🎒",
-    baseCost:2200,
-    price:3600,
-    stock:2,
-    demand:42
-},
-
-{
-    id:"cargador",
-    name:"Cargador",
-    icon:"🔌",
-    baseCost:1000,
-    price:1700,
-    stock:3,
-    demand:52
-}
-
-];
-
-
-const employeeTypes = [
-
-{
-    name:"Vendedor",
-    salary:500,
-    bonus:10
-},
-
-{
-    name:"Repartidor",
-    salary:700,
-    bonus:12
-},
-
-{
-    name:"Publicista",
-    salary:900,
-    bonus:18
-},
-
-{
-    name:"Contador",
-    salary:1200,
-    bonus:8
-},
-
-{
-    name:"Encargado",
-    salary:1800,
-    bonus:22
-}
-
-];
-
-
-/* =========================================================
+/* =====================================================
    ESTADO
-========================================================= */
+===================================================== */
 
 let game = {
 
-    money:10000,
-
-    sales:0,
-
-    costs:0,
-
-    profit:0,
-
-    customers:0,
-
-    day:1,
-
-    reputation:50,
-
-    xp:0,
-
     level:1,
+    xp:0,
+    credits:500,
 
-    debt:0,
+    completed:0,
 
-    debtPayment:0,
-
-    employees:[],
-
-    products:JSON.parse(JSON.stringify(initialProducts)),
-
-    history:[],
-
-    news:[
-
-        {
-            day:1,
-            title:"El mercado abre tranquilo",
-            text:"Los precios se mantienen relativamente estables durante los primeros días."
-        }
-
-    ],
+    files:[],
 
     activities:[
+        "Sistema de simulación iniciado."
+    ],
 
-        {
-            icon:"🏁",
-            text:"Comenzaste tu negocio con $10.000.",
-            day:1
-        }
+    achievements:[],
 
-    ]
+    discovered:[]
 
 };
 
 
-/* =========================================================
-   UTILIDADES
-========================================================= */
+/* =====================================================
+   DATOS
+===================================================== */
 
-function money(n){
+const missions = [
 
-    return "$" + Math.round(n).toLocaleString("es-AR");
+{
+    id:1,
+    name:"PRIMER ACCESO",
+    description:
+    "Un sistema ficticio dejó una terminal abierta. Descubrí la contraseña usando las pistas proporcionadas.",
+    reward:150,
+    xp:50,
+    password:"NOVA",
+    minLevel:1
+},
 
+{
+    id:2,
+    name:"ARCHIVO PERDIDO",
+    description:
+    "Encontrá el código escondido en los archivos virtuales del sistema.",
+    reward:250,
+    xp:80,
+    password:"4172",
+    minLevel:2
+},
+
+{
+    id:3,
+    name:"NODO OSCURO",
+    description:
+    "Explorá el nodo ficticio y encontrá la palabra clave.",
+    reward:400,
+    xp:120,
+    password:"ORBIT",
+    minLevel:3
+},
+
+{
+    id:4,
+    name:"PROTOCOLO CERO",
+    description:
+    "La simulación final requiere combinar varias pistas.",
+    reward:700,
+    xp:200,
+    password:"ZERO",
+    minLevel:4
 }
 
+];
+
+
+const files = [
+
+{
+    name:"readme.txt",
+    icon:"TXT",
+    text:
+    "NODE//ZERO es un entorno de entrenamiento ficticio."
+},
+
+{
+    name:"memo_07.log",
+    icon:"LOG",
+    text:
+    "Pista: la palabra NOVA aparece relacionada con el primer escenario."
+},
+
+{
+    name:"archive_4172.dat",
+    icon:"DAT",
+    text:
+    "Código detectado: 4172"
+},
+
+{
+    name:"orbit_note.txt",
+    icon:"TXT",
+    text:
+    "El tercer escenario menciona constantemente una órbita."
+},
+
+{
+    name:"zero_protocol.cfg",
+    icon:"CFG",
+    text:
+    "PROTOCOLO FINAL: ZERO"
+}
+
+];
+
+
+const nodes = [
+
+{
+    id:"NODE-A",
+    name:"Atlas",
+    description:"Nodo de entrenamiento básico.",
+    required:1
+},
+
+{
+    id:"NODE-B",
+    name:"Helix",
+    description:"Nodo intermedio con datos ocultos.",
+    required:2
+},
+
+{
+    id:"NODE-C",
+    name:"Orion",
+    description:"Nodo avanzado.",
+    required:3
+},
+
+{
+    id:"NODE-X",
+    name:"Zero",
+    description:"Nodo final de la simulación.",
+    required:4
+}
+
+];
+
+
+const achievementData = [
+
+{
+    id:"first",
+    name:"Primer paso",
+    description:"Completá tu primera misión.",
+    check:()=>game.completed>=1
+},
+
+{
+    id:"five",
+    name:"Operador",
+    description:"Llegá al nivel 3.",
+    check:()=>game.level>=3
+},
+
+{
+    id:"rich",
+    name:"Financiado",
+    description:"Conseguí 1.000 créditos.",
+    check:()=>game.credits>=1000
+},
+
+{
+    id:"explorer",
+    name:"Explorador",
+    description:"Descubrí todos los nodos.",
+    check:()=>game.discovered.length>=4
+},
+
+{
+    id:"master",
+    name:"NODE//ZERO",
+    description:"Completá todas las misiones.",
+    check:()=>game.completed>=4
+}
+
+];
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
 
 function notify(title,text){
 
-    const box=document.getElementById("notification");
+    const n=document.getElementById("notice");
 
-    document.getElementById("notificationTitle").textContent=title;
+    document.getElementById("noticeTitle").textContent=title;
 
-    document.getElementById("notificationText").textContent=text;
+    document.getElementById("noticeText").textContent=text;
 
-    box.classList.add("show");
+    n.classList.add("show");
 
     setTimeout(()=>{
-
-        box.classList.remove("show");
-
+        n.classList.remove("show");
     },3500);
 
 }
 
 
-function activity(icon,text){
+function log(text,type=""){
 
-    game.activities.unshift({
+    game.activities.unshift(text);
 
-        icon,
-        text,
-        day:game.day
-
-    });
-
-    if(game.activities.length>30){
-
+    if(game.activities.length>12){
         game.activities.pop();
-
     }
+
+    const output=document.getElementById("terminalOutput");
+
+    const div=document.createElement("div");
+
+    div.className="line "+type;
+
+    div.textContent=text;
+
+    output.appendChild(div);
+
+    output.scrollTop=output.scrollHeight;
 
 }
 
 
-function addNews(title,text){
+function addXP(amount){
 
-    game.news.unshift({
+    game.xp+=amount;
 
-        day:game.day,
-        title,
-        text
+    while(game.xp>=game.level*100){
 
-    });
-
-    if(game.news.length>15){
-
-        game.news.pop();
-
-    }
-
-}
-
-
-/* =========================================================
-   NAVEGACIÓN
-========================================================= */
-
-function showPage(page,button){
-
-    document.querySelectorAll(".page").forEach(p=>{
-
-        p.style.display="none";
-
-    });
-
-    document.getElementById(page).style.display="block";
-
-    document.querySelectorAll("nav button").forEach(b=>{
-
-        b.classList.remove("active");
-
-    });
-
-    if(button){
-
-        button.classList.add("active");
-
-    }
-
-    render();
-
-}
-
-
-/* =========================================================
-   VENDER
-========================================================= */
-
-function sellProduct(id){
-
-    const p=game.products.find(x=>x.id===id);
-
-    if(!p) return;
-
-    if(p.stock<=0){
-
-        notify("Sin stock","Necesitás comprar más unidades.");
-
-        return;
-
-    }
-
-    let chance=p.demand + game.reputation/5;
-
-    let sellerBonus=0;
-
-    game.employees.forEach(e=>{
-
-        const type=employeeTypes[e];
-
-        if(type.name==="Vendedor") sellerBonus+=10;
-
-    });
-
-    chance+=sellerBonus;
-
-    if(Math.random()*100 > chance){
-
-        notify("No hubo venta","Hoy nadie quiso comprar " + p.name + ".");
-
-        return;
-
-    }
-
-    const sale=p.price;
-
-    const cost=p.baseCost;
-
-    p.stock--;
-
-    game.money+=sale;
-
-    game.sales+=sale;
-
-    game.costs+=cost;
-
-    game.profit+=sale-cost;
-
-    game.customers++;
-
-    game.xp+=3;
-
-    game.reputation=Math.min(100,game.reputation+0.1);
-
-    activity("🛒","Vendiste " + p.name + " por " + money(sale) + ".");
-
-    notify("Venta realizada","Ganaste " + money(sale-cost) + " con esta venta.");
-
-    levelCheck();
-
-    render();
-
-}
-
-
-/* =========================================================
-   COMPRAR STOCK
-========================================================= */
-
-function buyProduct(id){
-
-    const p=game.products.find(x=>x.id===id);
-
-    if(!p) return;
-
-    const price=Math.round(p.baseCost * (1 + (Math.random()*0.15)));
-
-    if(game.money<price){
-
-        notify("Dinero insuficiente","No podés comprar esta unidad.");
-
-        return;
-
-    }
-
-    game.money-=price;
-
-    game.costs+=price;
-
-    p.stock++;
-
-    activity("📦","Compraste " + p.name + " por " + money(price) + ".");
-
-    render();
-
-}
-
-
-/* =========================================================
-   PUBLICIDAD
-========================================================= */
-
-function advertise(cost,bonus){
-
-    if(game.money<cost){
-
-        notify("No alcanza","No tenés suficiente dinero para esta campaña.");
-
-        return;
-
-    }
-
-    game.money-=cost;
-
-    game.costs+=cost;
-
-    const result=bonus + Math.floor(Math.random()*bonus);
-
-    game.reputation=Math.min(100,game.reputation+result/5);
-
-    game.xp+=Math.round(result/2);
-
-    activity("📣","Invertiste " + money(cost) + " en publicidad.");
-
-    addNews(
-        "Nueva campaña publicitaria",
-        "Tu empresa aumentó su presencia y ganó visibilidad."
-    );
-
-    notify(
-        "Campaña lanzada",
-        "La campaña consiguió aproximadamente " + result + " puntos de alcance."
-    );
-
-    levelCheck();
-
-    render();
-
-}
-
-
-/* =========================================================
-   EMPLEADOS
-========================================================= */
-
-function hireEmployee(index){
-
-    const type=employeeTypes[index];
-
-    if(game.money<type.salary){
-
-        notify("No alcanza","Necesitás dinero para contratar a esta persona.");
-
-        return;
-
-    }
-
-    game.money-=type.salary;
-
-    game.employees.push(index);
-
-    activity("👤","Contrataste a un nuevo " + type.name + ".");
-
-    game.xp+=10;
-
-    notify("Contratación","Ahora tenés un " + type.name + " en tu equipo.");
-
-    levelCheck();
-
-    render();
-
-}
-
-
-/* =========================================================
-   PRÉSTAMOS
-========================================================= */
-
-function takeLoan(amount,payment){
-
-    if(game.debt>0){
-
-        notify("Préstamo pendiente","Primero tenés que pagar tu deuda actual.");
-
-        return;
-
-    }
-
-    game.money+=amount;
-
-    game.debt=payment;
-
-    game.debtPayment=payment;
-
-    activity("🏦","Pediste un préstamo de " + money(amount) + ".");
-
-    notify("Dinero recibido","El banco depositó " + money(amount) + ".");
-
-    render();
-
-}
-
-
-function payDebt(){
-
-    if(game.debt<=0){
-
-        notify("Sin deuda","No tenés préstamos pendientes.");
-
-        return;
-
-    }
-
-    if(game.money<game.debt){
-
-        notify("No alcanza","No tenés suficiente dinero para pagar la deuda.");
-
-        return;
-
-    }
-
-    game.money-=game.debt;
-
-    activity("🏦","Pagaste tu deuda de " + money(game.debt) + ".");
-
-    game.debt=0;
-
-    game.debtPayment=0;
-
-    game.reputation+=2;
-
-    notify("Deuda pagada","Ya no tenés obligaciones con el banco.");
-
-    render();
-
-}
-
-
-/* =========================================================
-   NIVEL
-========================================================= */
-
-function levelCheck(){
-
-    const needed=game.level*100;
-
-    if(game.xp>=needed){
-
-        game.xp-=needed;
+        game.xp-=game.level*100;
 
         game.level++;
 
-        game.reputation=Math.min(100,game.reputation+3);
-
-        activity("⬆️","Subiste al nivel " + game.level + ".");
-
-        notify("Nuevo nivel","Tu empresa ahora es nivel " + game.level + ".");
-
-    }
-
-}
-
-
-/* =========================================================
-   CAMBIO DE MERCADO
-========================================================= */
-
-function marketChange(){
-
-    game.products.forEach(p=>{
-
-        let change=(Math.random()-0.5)*0.25;
-
-        p.baseCost=Math.max(
-            50,
-            Math.round(p.baseCost*(1+change))
+        log(
+            ">> NIVEL AUMENTADO: "+game.level,
+            "success"
         );
 
-        let demandChange=(Math.random()-0.5)*20;
-
-        p.demand=Math.max(
-            10,
-            Math.min(95,p.demand+demandChange)
-        );
-
-        const margin=1.5+Math.random()*0.45;
-
-        p.price=Math.round(p.baseCost*margin);
-
-    });
-
-}
-
-
-/* =========================================================
-   EVENTOS ALEATORIOS
-========================================================= */
-
-function randomEvent(){
-
-    const events=[
-
-        {
-            chance:20,
-            title:"Proveedor con descuento",
-            text:"Un proveedor quiere liquidar stock.",
-            action:()=>{
-
-                game.products.forEach(p=>{
-
-                    p.baseCost=Math.round(p.baseCost*.9);
-
-                });
-
-                addNews(
-                    "Descuentos mayoristas",
-                    "Algunos proveedores redujeron sus precios."
-                );
-
-            }
-        },
-
-        {
-            chance:15,
-            title:"Producto de moda",
-            text:"Uno de tus productos empezó a llamar la atención.",
-            action:()=>{
-
-                const p=game.products[
-                    Math.floor(Math.random()*game.products.length)
-                ];
-
-                p.demand=Math.min(95,p.demand+25);
-
-                addNews(
-                    "Producto de moda",
-                    p.name+" está teniendo mucha demanda."
-                );
-
-            }
-        },
-
-        {
-            chance:12,
-            title:"Competencia nueva",
-            text:"Una nueva empresa apareció en la zona.",
-            action:()=>{
-
-                game.reputation=Math.max(0,game.reputation-3);
-
-                addNews(
-                    "Nuevo competidor",
-                    "Una nueva empresa empezó a vender en tu zona."
-                );
-
-            }
-        },
-
-        {
-            chance:10,
-            title:"Aumento del transporte",
-            text:"Los costos de distribución aumentaron.",
-            action:()=>{
-
-                game.money-=300;
-
-                game.costs+=300;
-
-                addNews(
-                    "Transporte más caro",
-                    "Los costos logísticos aumentaron."
-                );
-
-            }
-        },
-
-        {
-            chance:8,
-            title:"Cliente importante",
-            text:"Una empresa quiere hacer una compra grande.",
-            action:()=>{
-
-                game.money+=1200;
-
-                game.sales+=1200;
-
-                game.profit+=700;
-
-                game.customers++;
-
-                game.reputation+=2;
-
-                addNews(
-                    "Cliente importante",
-                    "Conseguiste una venta especial."
-                );
-
-            }
-        }
-
-    ];
-
-    const roll=Math.random()*100;
-
-    let total=0;
-
-    for(const event of events){
-
-        total+=event.chance;
-
-        if(roll<total){
-
-            event.action();
-
-            activity("📰",event.title);
-
-            notify(event.title,event.text);
-
-            return;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   FINALIZAR DÍA
-========================================================= */
-
-function nextDay(){
-
-    game.day++;
-
-    document.getElementById("sideDay").textContent=game.day;
-
-    let salaries=0;
-
-    game.employees.forEach(index=>{
-
-        salaries+=employeeTypes[index].salary;
-
-    });
-
-    if(salaries>0){
-
-        game.money-=salaries;
-
-        game.costs+=salaries;
-
-        game.profit-=salaries;
-
-        activity("💼","Pagaste " + money(salaries) + " en salarios.");
-
-    }
-
-    /* alquiler */
-
-    if(game.day%7===0){
-
-        game.money-=750;
-
-        game.costs+=750;
-
-        game.profit-=750;
-
-        activity("🏠","Pagaste $750 de gastos semanales.");
-
-    }
-
-    marketChange();
-
-    randomEvent();
-
-    /* ventas automáticas */
-
-    let automaticSales=0;
-
-    game.products.forEach(p=>{
-
-        let workerBonus=0;
-
-        game.employees.forEach(index=>{
-
-            if(employeeTypes[index].name==="Vendedor"){
-
-                workerBonus+=7;
-
-            }
-
-        });
-
-        const chance=p.demand+workerBonus;
-
-        if(p.stock>0 && Math.random()*100<chance){
-
-            p.stock--;
-
-            automaticSales+=p.price;
-
-            game.sales+=p.price;
-
-            game.costs+=p.baseCost;
-
-            game.profit+=p.price-p.baseCost;
-
-            game.customers++;
-
-        }
-
-    });
-
-    if(automaticSales>0){
-
-        activity(
-            "🤝",
-            "Ventas automáticas: " + money(automaticSales) + "."
+        notify(
+            "Nuevo nivel",
+            "Ahora sos nivel "+game.level+"."
         );
 
     }
 
-    game.xp+=5;
-
-    game.history.push(game.profit);
-
-    if(game.history.length>30){
-
-        game.history.shift();
-
-    }
-
-    levelCheck();
-
-    notify(
-        "Día " + game.day,
-        "El mercado cambió. Revisá tus precios y tu inventario."
-    );
+    checkAchievements();
 
     render();
 
 }
 
 
-/* =========================================================
-   GUARDAR / CARGAR
-========================================================= */
+/* =====================================================
+   TERMINAL
+===================================================== */
+
+const input=document.getElementById("commandInput");
+
+input.addEventListener("keydown",function(e){
+
+    if(e.key!=="Enter") return;
+
+    const command=input.value.trim();
+
+    if(!command) return;
+
+    log("operator@node:~$ "+command);
+
+    input.value="";
+
+    executeCommand(command.toLowerCase());
+
+});
+
+
+function executeCommand(command){
+
+    const parts=command.split(" ");
+
+    const cmd=parts[0];
+
+    switch(cmd){
+
+        case "help":
+
+            log(
+`Comandos disponibles:
+
+help       — muestra esta ayuda
+status     — muestra tus estadísticas
+clear      — limpia la terminal
+missions   — muestra las misiones
+files      — muestra los archivos
+network    — muestra la red ficticia
+scan       — realiza un escaneo SIMULADO
+open       — abre un archivo virtual
+connect    — conecta con un nodo ficticio
+solve      — intenta resolver una misión
+hint       — muestra una pista
+whoami     — muestra tu operador`
+            ,"info");
+
+        break;
+
+
+        case "status":
+
+            log(
+                "Nivel: "+game.level+
+                " | XP: "+game.xp+
+                " | Créditos: "+game.credits+
+                " | Misiones: "+game.completed
+            );
+
+        break;
+
+
+        case "whoami":
+
+            log(
+                "operator_01 // trainee"
+            ,"success");
+
+        break;
+
+
+        case "clear":
+
+            document.getElementById("terminalOutput").innerHTML="";
+
+        break;
+
+
+        case "missions":
+
+            log(
+                "Misiones disponibles: "+missions.length
+            ,"info");
+
+            missions.forEach(m=>{
+
+                log(
+                    "#"+m.id+
+                    " "+m.name+
+                    " [LV "+m.minLevel+"]"
+                );
+
+            });
+
+        break;
+
+
+        case "files":
+
+            log(
+                "Archivos virtuales encontrados:"
+            ,"info");
+
+            files.forEach(f=>{
+                log("- "+f.name);
+            });
+
+        break;
+
+
+        case "network":
+
+            log(
+                "Red virtual:"
+            ,"info");
+
+            nodes.forEach(n=>{
+                log(
+                    n.id+
+                    " // "+
+                    n.name+
+                    " // LV "+n.required
+                );
+            });
+
+        break;
+
+
+        case "scan":
+
+            log(
+                "Iniciando escaneo de SIMULACIÓN..."
+            ,"info");
+
+            setTimeout(()=>{
+
+                log(
+                    "4 nodos ficticios detectados.",
+                    "success"
+                );
+
+                log(
+                    "No se realizó ninguna conexión real.",
+                    "system"
+                );
+
+            },600);
+
+        break;
+
+
+        case "open":
+
+            if(!parts[1]){
+
+                log(
+                    "Uso: open nombre_archivo"
+                    ,"error"
+                );
+
+                return;
+
+            }
+
+            const file=files.find(
+                f=>f.name.toLowerCase()===parts[1]
+            );
+
+            if(!file){
+
+                log(
+                    "Archivo no encontrado.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            log(
+                "Contenido de "+file.name+":",
+                "info"
+            );
+
+            log(file.text);
+
+        break;
+
+
+        case "connect":
+
+            if(!parts[1]){
+
+                log(
+                    "Uso: connect NODE-A"
+                    ,"error"
+                );
+
+                return;
+
+            }
+
+            connectNode(parts[1].toUpperCase());
+
+        break;
+
+
+        case "solve":
+
+            if(!parts[1]){
+
+                log(
+                    "Uso: solve 1",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            solveMission(Number(parts[1]));
+
+        break;
+
+
+        case "hint":
+
+            giveHint();
+
+        break;
+
+
+        default:
+
+            log(
+                "Comando desconocido. Escribí 'help'.",
+                "error"
+            );
+
+    }
+
+}
+
+
+/* =====================================================
+   MISIONES
+===================================================== */
+
+function solveMission(id){
+
+    const mission=missions.find(m=>m.id===id);
+
+    if(!mission){
+
+        log("Misión inexistente.","error");
+
+        return;
+
+    }
+
+    if(game.level<mission.minLevel){
+
+        log(
+            "Nivel insuficiente. Necesitás LV "+mission.minLevel+".",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(game.completed>=id){
+
+        log(
+            "Esta misión ya fue completada.",
+            "system"
+        );
+
+        return;
+
+    }
+
+    const answer=prompt(
+        "SIMULACIÓN\n\n"+
+        mission.description+
+        "\n\nIntroducí la palabra/código:"
+    );
+
+    if(answer===null) return;
+
+    if(answer.trim().toUpperCase()===mission.password){
+
+        game.completed++;
+
+        game.credits+=mission.reward;
+
+        log(
+            ">> MISIÓN COMPLETADA: "+mission.name,
+            "success"
+        );
+
+        log(
+            "Recompensa: +"+mission.reward+
+            " créditos | +"+mission.xp+" XP",
+            "success"
+        );
+
+        addXP(mission.xp);
+
+        checkAchievements();
+
+        render();
+
+        notify(
+            "Misión completada",
+            "+"+mission.reward+" créditos"
+        );
+
+    }else{
+
+        log(
+            "Respuesta incorrecta.",
+            "error"
+        );
+
+        notify(
+            "Incorrecto",
+            "Revisá las pistas."
+        );
+
+    }
+
+}
+
+
+function giveHint(){
+
+    const next=missions[game.completed];
+
+    if(!next){
+
+        log(
+            "No quedan misiones.",
+            "success"
+        );
+
+        return;
+
+    }
+
+    const hints={
+
+        1:"Pista: está relacionada con una estrella que explota.",
+        2:"Pista: el código tiene cuatro números.",
+        3:"Pista: algo gira alrededor de un planeta.",
+        4:"Pista: el nombre del proyecto contiene la respuesta."
+
+    };
+
+    log(
+        "PISTA: "+hints[next.id],
+        "info"
+    );
+
+}
+
+
+/* =====================================================
+   NODOS
+===================================================== */
+
+function connectNode(id){
+
+    const node=nodes.find(n=>n.id===id);
+
+    if(!node){
+
+        log(
+            "Nodo inexistente.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(game.level<node.required){
+
+        log(
+            "Acceso bloqueado. Nivel requerido: "+node.required,
+            "error"
+        );
+
+        return;
+
+    }
+
+    if(!game.discovered.includes(node.id)){
+
+        game.discovered.push(node.id);
+
+        game.credits+=50;
+
+        addXP(20);
+
+        log(
+            "Conectado a "+node.name+".",
+            "success"
+        );
+
+        log(
+            "Nodo descubierto. +50 créditos.",
+            "success"
+        );
+
+        checkAchievements();
+
+        render();
+
+    }else{
+
+        log(
+            "Nodo ya explorado.",
+            "system"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGROS
+===================================================== */
+
+function checkAchievements(){
+
+    achievementData.forEach(a=>{
+
+        if(
+            a.check() &&
+            !game.achievements.includes(a.id)
+        ){
+
+            game.achievements.push(a.id);
+
+            notify(
+                "LOGRO DESBLOQUEADO",
+                a.name
+            );
+
+            log(
+                "★ LOGRO: "+a.name,
+                "success"
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
+function page(id,button){
+
+    document.querySelectorAll(".screen")
+        .forEach(s=>s.style.display="none");
+
+    document.getElementById(id)
+        .style.display="block";
+
+    document.querySelectorAll("nav button")
+        .forEach(b=>b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    render();
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render(){
+
+    document.getElementById("level").textContent=
+        game.level;
+
+    document.getElementById("xp").textContent=
+        game.xp;
+
+    document.getElementById("credits").textContent=
+        game.credits.toLocaleString("es-AR");
+
+    document.getElementById("missionsDone").textContent=
+        game.completed;
+
+    document.getElementById("sideLevel").textContent=
+        "OPERADOR · LV "+game.level;
+
+    const percent=
+        Math.min(
+            100,
+            game.xp/(game.level*100)*100
+        );
+
+    document.getElementById("sideXP").style.width=
+        percent+"%";
+
+
+    renderActivity();
+    renderMissions();
+    renderFiles();
+    renderNetwork();
+    renderAchievements();
+
+}
+
+
+/* =====================================================
+   ACTIVIDAD
+===================================================== */
+
+function renderActivity(){
+
+    document.getElementById("activity").innerHTML=
+        game.activities.slice(0,8).map(
+            x=>`
+            <div style="
+                padding:8px 0;
+                border-bottom:1px solid var(--border);
+                color:#829097;
+                font-size:11px;
+            ">${escapeHTML(x)}</div>
+            `
+        ).join("");
+
+}
+
+
+/* =====================================================
+   MISIONES
+===================================================== */
+
+function renderMissions(){
+
+    document.getElementById("missionList").innerHTML=
+        missions.map(m=>{
+
+            const locked=game.level<m.minLevel;
+
+            const completed=game.completed>=m.id;
+
+            return `
+
+            <div class="mission ${locked?"locked":""}">
+
+                <h3>
+                    ${completed?"✓ ":""}${m.name}
+                </h3>
+
+                <p>${m.description}</p>
+
+                <small style="color:var(--muted)">
+                    RECOMPENSA:
+                    ${m.reward} créditos ·
+                    ${m.xp} XP
+                </small>
+
+                <br><br>
+
+                <button
+                    onclick="solveMission(${m.id})"
+                    ${locked||completed?"disabled":""}
+                >
+                    ${
+                        completed
+                        ?"COMPLETADA"
+                        :locked
+                        ?"NIVEL "+m.minLevel
+                        :"INICIAR"
+                    }
+                </button>
+
+            </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   ARCHIVOS
+===================================================== */
+
+function renderFiles(){
+
+    document.getElementById("fileList").innerHTML=
+        files.map(f=>`
+
+        <div class="file">
+
+            <div class="file-icon">
+                [${f.icon}]
+            </div>
+
+            <div>
+
+                <strong>${f.name}</strong>
+
+                <small>
+                    Archivo virtual ·
+                    usá "open ${f.name}"
+                </small>
+
+            </div>
+
+        </div>
+
+        `).join("");
+
+}
+
+
+/* =====================================================
+   RED
+===================================================== */
+
+function renderNetwork(){
+
+    document.getElementById("networkList").innerHTML=
+        nodes.map(n=>{
+
+            const found=
+                game.discovered.includes(n.id);
+
+            const locked=
+                game.level<n.required;
+
+            return `
+
+            <div class="node">
+
+                <strong>
+                    ${n.id} // ${n.name}
+                </strong>
+
+                <small>
+                    ${n.description}
+                    · Nivel ${n.required}
+                </small>
+
+                <button
+                    onclick="connectNode('${n.id}')"
+                    ${locked?"disabled":""}
+                >
+                    ${
+                        found
+                        ?"EXPLORADO"
+                        :locked
+                        ?"BLOQUEADO"
+                        :"EXPLORAR"
+                    }
+                </button>
+
+            </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   LOGROS
+===================================================== */
+
+function renderAchievements(){
+
+    document.getElementById("achievementList").innerHTML=
+        achievementData.map(a=>{
+
+            const unlocked=
+                game.achievements.includes(a.id);
+
+            return `
+
+            <div class="achievement ${
+                unlocked?"":"locked"
+            }">
+
+                <div class="badge">
+                    ${unlocked?"★":"?"}
+                </div>
+
+                <div>
+
+                    <strong>${a.name}</strong>
+
+                    <div style="
+                        color:var(--muted);
+                        font-size:10px;
+                        margin-top:4px;
+                    ">
+                        ${a.description}
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =====================================================
+   GUARDAR
+===================================================== */
 
 function saveGame(){
 
     localStorage.setItem(
-        "negocioSave",
+        "nodeZeroSave",
         JSON.stringify(game)
     );
 
     notify(
         "Partida guardada",
-        "Tu progreso quedó guardado en este navegador."
+        "Tu progreso fue guardado."
     );
 
 }
@@ -1985,18 +1740,14 @@ function saveGame(){
 
 function loadGame(){
 
-    const saved=localStorage.getItem("negocioSave");
+    const saved=
+        localStorage.getItem("nodeZeroSave");
 
     if(!saved) return;
 
     try{
 
         game=JSON.parse(saved);
-
-        notify(
-            "Partida cargada",
-            "Continuaste tu negocio."
-        );
 
     }catch(e){
 
@@ -2007,504 +1758,41 @@ function loadGame(){
 }
 
 
-/* =========================================================
-   RENDER GENERAL
-========================================================= */
+/* =====================================================
+   SEGURIDAD DEL TEXTO
+===================================================== */
 
-function render(){
+function escapeHTML(text){
 
-    document.getElementById("money").textContent=money(game.money);
-
-    document.getElementById("sales").textContent=money(game.sales);
-
-    document.getElementById("profit").textContent=money(game.profit);
-
-    document.getElementById("customers").textContent=
-        game.customers.toLocaleString("es-AR");
-
-    document.getElementById("sideDay").textContent=game.day;
-
-    document.getElementById("reputationText").textContent=
-        Math.round(game.reputation)+"/100";
-
-    document.getElementById("reputationBar").style.width=
-        game.reputation+"%";
-
-    const xpNeeded=game.level*100;
-
-    const xpPercent=Math.min(
-        100,
-        game.xp/xpNeeded*100
-    );
-
-    document.getElementById("xpText").textContent=
-        Math.round(xpPercent)+"%";
-
-    document.getElementById("xpBar").style.width=
-        xpPercent+"%";
-
-    renderActivity();
-
-    renderQuickProducts();
-
-    renderMarket();
-
-    renderInventory();
-
-    renderEmployees();
-
-    renderNews();
-
-    renderGoals();
-
-    renderFinance();
-
-    renderCompany();
+    return text
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;");
 
 }
 
 
-/* =========================================================
-   ACTIVIDAD
-========================================================= */
+/* =====================================================
+   RELOJ
+===================================================== */
 
-function renderActivity(){
+function updateClock(){
 
-    const box=document.getElementById("activity");
+    const now=new Date();
 
-    if(game.activities.length===0){
-
-        box.innerHTML='<div class="empty">Todavía no hay movimientos.</div>';
-
-        return;
-
-    }
-
-    box.innerHTML=game.activities.slice(0,15).map(a=>`
-
-        <div class="activity-item">
-
-            <div class="activity-icon">${a.icon}</div>
-
-            <div class="activity-text">
-
-                ${a.text}
-
-                <small>Día ${a.day}</small>
-
-            </div>
-
-        </div>
-
-    `).join("");
+    document.getElementById("clock").textContent=
+        now.toLocaleTimeString("es-AR");
 
 }
 
+setInterval(updateClock,1000);
 
-/* =========================================================
-   PRODUCTOS RÁPIDOS
-========================================================= */
+updateClock();
 
-function renderQuickProducts(){
 
-    const box=document.getElementById("quickProducts");
-
-    box.innerHTML=game.products.slice(0,6).map(p=>`
-
-        <div class="product">
-
-            <div class="product-top">
-
-                <div class="product-name">
-                    ${p.name}
-                </div>
-
-                <div class="product-icon">
-                    ${p.icon}
-                </div>
-
-            </div>
-
-            <div class="product-info">
-
-                Precio:
-                <b>${money(p.price)}</b><br>
-
-                Stock:
-                <b>${p.stock}</b><br>
-
-                Demanda:
-                <b>${Math.round(p.demand)}%</b>
-
-            </div>
-
-            <button
-                class="sell-btn"
-                onclick="sellProduct('${p.id}')"
-            >
-                Vender unidad
-            </button>
-
-        </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   MERCADO
-========================================================= */
-
-function renderMarket(){
-
-    const box=document.getElementById("market");
-
-    box.innerHTML=game.products.map(p=>{
-
-        const trend=p.demand>=60;
-
-        return `
-
-        <div class="market-card">
-
-            <div class="market-left">
-
-                <div class="market-icon">
-                    ${p.icon}
-                </div>
-
-                <div class="market-name">
-
-                    <strong>${p.name}</strong>
-
-                    <small>
-                        Demanda ${Math.round(p.demand)}%
-                    </small>
-
-                </div>
-
-            </div>
-
-            <div class="price">
-
-                <strong>${money(p.price)}</strong>
-
-                <small class="${trend?"up":"down"}">
-                    ${trend?"▲ demanda":"▼ demanda"}
-                </small>
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   INVENTARIO
-========================================================= */
-
-function renderInventory(){
-
-    const box=document.getElementById("inventoryTable");
-
-    box.innerHTML=game.products.map(p=>`
-
-        <tr>
-
-            <td>
-                ${p.icon} ${p.name}
-            </td>
-
-            <td>
-                ${p.stock}
-            </td>
-
-            <td>
-                ${money(p.baseCost)}
-            </td>
-
-            <td>
-                ${money(p.price)}
-            </td>
-
-            <td>
-                ${Math.round(p.demand)}%
-            </td>
-
-            <td>
-
-                <button
-                    class="buy-btn"
-                    onclick="buyProduct('${p.id}')"
-                >
-                    Comprar
-                </button>
-
-            </td>
-
-        </tr>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   EMPLEADOS
-========================================================= */
-
-function renderEmployees(){
-
-    const box=document.getElementById("employeeList");
-
-    box.innerHTML=employeeTypes.map((e,i)=>`
-
-        <div class="employee">
-
-            <div class="employee-info">
-
-                <strong>${e.name}</strong>
-
-                <small>
-                    Salario diario: ${money(e.salary)}
-                    · Bonus: +${e.bonus}%
-                </small>
-
-            </div>
-
-            <button
-                class="hire"
-                onclick="hireEmployee(${i})"
-            >
-                Contratar
-            </button>
-
-        </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   NOTICIAS
-========================================================= */
-
-function renderNews(){
-
-    const mini=document.getElementById("miniNews");
-
-    mini.innerHTML=game.news.slice(0,3).map(n=>`
-
-        <div class="news">
-
-            <small>Día ${n.day}</small>
-
-            <strong>${n.title}</strong>
-
-            <span style="color:#999;font-size:12px">
-                ${n.text}
-            </span>
-
-        </div>
-
-    `).join("");
-
-
-    const full=document.getElementById("newsPage");
-
-    full.innerHTML=game.news.map(n=>`
-
-        <div class="news">
-
-            <small>Día ${n.day}</small>
-
-            <strong>${n.title}</strong>
-
-            <span style="color:#999;font-size:12px">
-                ${n.text}
-            </span>
-
-        </div>
-
-    `).join("");
-
-}
-
-
-/* =========================================================
-   OBJETIVOS
-========================================================= */
-
-function renderGoals(){
-
-    const box=document.getElementById("goals");
-
-    const goals=[
-
-        {
-            name:"Llegar a $25.000",
-            value:game.money,
-            max:25000
-        },
-
-        {
-            name:"Conseguir 50 clientes",
-            value:game.customers,
-            max:50
-        },
-
-        {
-            name:"Llegar a reputación 75",
-            value:game.reputation,
-            max:75
-        },
-
-        {
-            name:"Alcanzar nivel 3",
-            value:game.level,
-            max:3
-        }
-
-    ];
-
-    box.innerHTML=goals.map(g=>{
-
-        const percent=Math.min(
-            100,
-            g.value/g.max*100
-        );
-
-        return `
-
-        <div class="goal">
-
-            <div class="goal-head">
-
-                <span>${g.name}</span>
-
-                <span>
-                    ${Math.floor(g.value)} / ${g.max}
-                </span>
-
-            </div>
-
-            <div class="goal-progress">
-
-                <div style="width:${percent}%"></div>
-
-            </div>
-
-        </div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   FINANZAS
-========================================================= */
-
-function renderFinance(){
-
-    document.getElementById("financeSales").textContent=
-        money(game.sales);
-
-    document.getElementById("financeCosts").textContent=
-        money(game.costs);
-
-    document.getElementById("financeProfit").textContent=
-        money(game.profit);
-
-    document.getElementById("debt").textContent=
-        money(game.debt);
-
-
-    const chart=document.getElementById("chart");
-
-    if(game.history.length===0){
-
-        chart.innerHTML=
-            '<div class="empty">Todavía no hay datos.</div>';
-
-        return;
-
-    }
-
-    const max=Math.max(
-        ...game.history.map(x=>Math.abs(x)),
-        1
-    );
-
-    chart.innerHTML=game.history.map(value=>{
-
-        const height=Math.max(
-            4,
-            Math.abs(value)/max*100
-        );
-
-        return `
-
-        <div
-            class="bar"
-            style="height:${height}%"
-            title="${money(value)}"
-        ></div>
-
-        `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   EMPRESA
-========================================================= */
-
-function renderCompany(){
-
-    document.getElementById("companyLevel").textContent=
-        game.level;
-
-    document.getElementById("employeeCount").textContent=
-        game.employees.length;
-
-    document.getElementById("companyDays").textContent=
-        game.day;
-
-    document.getElementById("companyRep").textContent=
-        Math.round(game.reputation);
-
-    document.getElementById("companyXP").style.width=
-        Math.min(
-            100,
-            game.xp/(game.level*100)*100
-        )+"%";
-
-    const value=
-        game.money+
-        game.sales*.35+
-        game.employees.length*1500;
-
-    document.getElementById("companyValue").textContent=
-        money(value);
-
-}
-
-
-/* =========================================================
+/* =====================================================
    INICIO
-========================================================= */
+===================================================== */
 
 loadGame();
 

@@ -2,493 +2,544 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>NODE//ZERO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Quién Está Mintiendo?</title>
 
 <style>
 *{
     box-sizing:border-box;
-}
-
-:root{
-    --bg:#080a0c;
-    --panel:#0d1114;
-    --panel2:#11171b;
-    --border:#20292e;
-    --text:#d9e1e5;
-    --muted:#68757d;
-    --green:#7dff91;
-    --blue:#6bb7ff;
-    --red:#ff6262;
-    --yellow:#ffd166;
+    margin:0;
+    padding:0;
 }
 
 body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:Consolas,"Courier New",monospace;
-    overflow-x:hidden;
-}
-
-button,input{
-    font:inherit;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0b0e13;
+    color:#e9edf2;
+    min-height:100vh;
 }
 
 button{
-    cursor:pointer;
+    font-family:inherit;
 }
 
 .app{
+    display:flex;
     min-height:100vh;
-    display:grid;
-    grid-template-columns:230px 1fr;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-    background:#090b0d;
-    border-right:1px solid var(--border);
-    padding:18px;
+    width:250px;
+    background:#10141b;
+    border-right:1px solid #252b35;
+    padding:22px 16px;
     position:fixed;
-    width:230px;
     top:0;
+    left:0;
     bottom:0;
 }
 
-.brand{
-    font-size:19px;
-    font-weight:bold;
-    color:var(--green);
-    letter-spacing:2px;
-    margin-bottom:25px;
+.logo{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:.5px;
+    margin-bottom:6px;
 }
 
-.brand small{
-    display:block;
-    color:var(--muted);
-    font-size:9px;
+.logo span{
+    color:#7c9cff;
+}
+
+.subtitle{
+    color:#707987;
+    font-size:12px;
+    margin-bottom:30px;
+}
+
+.nav-title{
+    color:#555e6d;
+    font-size:11px;
+    text-transform:uppercase;
+    margin:20px 8px 8px;
     letter-spacing:1px;
-    margin-top:5px;
+}
+
+.nav button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#89919d;
+    text-align:left;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-bottom:4px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#1b222d;
+    color:white;
 }
 
 .profile{
-    border:1px solid var(--border);
-    background:var(--panel);
-    padding:13px;
-    margin-bottom:20px;
-}
-
-.profile small{
-    color:var(--muted);
-}
-
-.profile strong{
-    display:block;
-    margin:5px 0 10px;
-}
-
-.xp{
-    height:4px;
-    background:#1c2428;
-}
-
-.xp div{
-    height:100%;
-    width:0%;
-    background:var(--green);
-    transition:.3s;
-}
-
-nav button{
-    width:100%;
-    text-align:left;
-    color:#7e898f;
-    border:0;
-    background:none;
-    padding:10px;
-    margin-bottom:3px;
-    border-left:2px solid transparent;
-}
-
-nav button:hover,
-nav button.active{
-    background:#10161a;
-    color:var(--green);
-    border-left-color:var(--green);
-}
-
-.side-bottom{
     position:absolute;
-    bottom:20px;
-    left:18px;
-    right:18px;
+    left:16px;
+    right:16px;
+    bottom:18px;
+    background:#171c24;
+    border:1px solid #272e39;
+    padding:12px;
+    border-radius:9px;
 }
 
-.save{
-    width:100%;
-    background:#10171a;
-    color:#9ba6ab;
-    border:1px solid var(--border);
-    padding:9px;
+.profile-name{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.profile-level{
+    color:#7c9cff;
+    font-size:12px;
+    margin-top:4px;
 }
 
 /* MAIN */
 
-main{
-    margin-left:230px;
-    padding:25px;
-    max-width:1500px;
-    width:calc(100% - 230px);
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    padding:28px;
 }
 
-.top{
+.topbar{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    border-bottom:1px solid var(--border);
-    padding-bottom:18px;
-    margin-bottom:18px;
+    margin-bottom:25px;
 }
 
-.title h1{
-    font-size:22px;
-    margin:0;
-    color:#f0f4f5;
+.page-title{
+    font-size:28px;
+    font-weight:800;
 }
 
-.title p{
-    color:var(--muted);
-    margin:5px 0 0;
-    font-size:11px;
+.page-description{
+    color:#737d8c;
+    margin-top:5px;
+    font-size:14px;
 }
 
-.clock{
-    color:var(--green);
-    font-size:12px;
+.case-number{
+    color:#727c8b;
+    font-size:13px;
 }
 
-/* CARDS */
+/* STATS */
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:10px;
-    margin-bottom:12px;
+    gap:14px;
+    margin-bottom:20px;
 }
 
 .stat{
-    background:var(--panel);
-    border:1px solid var(--border);
-    padding:15px;
+    background:#11161e;
+    border:1px solid #252c37;
+    padding:18px;
+    border-radius:10px;
 }
 
-.stat small{
-    color:var(--muted);
-    display:block;
-    margin-bottom:8px;
+.stat-label{
+    color:#707987;
+    font-size:12px;
 }
 
-.stat strong{
-    font-size:20px;
+.stat-value{
+    font-size:24px;
+    font-weight:800;
+    margin-top:7px;
 }
 
-.green{
-    color:var(--green);
+/* CASE */
+
+.case-card{
+    background:#11161e;
+    border:1px solid #252c37;
+    border-radius:12px;
+    padding:25px;
+    margin-bottom:18px;
 }
 
-.blue{
-    color:var(--blue);
-}
-
-.yellow{
-    color:var(--yellow);
-}
-
-/* GRID */
-
-.grid{
-    display:grid;
-    grid-template-columns:1.5fr 1fr;
-    gap:12px;
-}
-
-.panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    padding:16px;
-    margin-bottom:12px;
-}
-
-.panel-title{
+.case-header{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    margin-bottom:13px;
+    align-items:flex-start;
+    gap:20px;
 }
 
-.panel-title h2{
-    font-size:14px;
-    margin:0;
+.case-title{
+    font-size:22px;
+    font-weight:800;
 }
 
-.panel-title span{
-    color:var(--muted);
-    font-size:10px;
-}
-
-/* TERMINAL */
-
-.terminal{
-    height:420px;
-    background:#050708;
-    border:1px solid #182025;
-    padding:15px;
-    overflow:auto;
-    font-size:13px;
-    line-height:1.65;
-}
-
-.line{
-    white-space:pre-wrap;
-    word-break:break-word;
-}
-
-.line.system{
-    color:var(--muted);
-}
-
-.line.success{
-    color:var(--green);
-}
-
-.line.error{
-    color:var(--red);
-}
-
-.line.info{
-    color:var(--blue);
-}
-
-.input-row{
-    display:flex;
-    gap:8px;
-    border-top:1px solid #151c20;
-    padding-top:10px;
+.case-text{
+    color:#9ca5b1;
+    line-height:1.7;
     margin-top:10px;
+    max-width:900px;
 }
 
-.prompt{
-    color:var(--green);
-}
-
-#commandInput{
-    flex:1;
-    background:none;
-    border:0;
-    outline:0;
-    color:#e7edef;
-}
-
-/* MISSIONS */
-
-.mission{
-    border:1px solid var(--border);
-    padding:13px;
-    margin-bottom:8px;
-    background:#0b0f11;
-}
-
-.mission h3{
-    margin:0 0 5px;
-    font-size:13px;
-}
-
-.mission p{
-    margin:0 0 9px;
-    color:var(--muted);
+.difficulty{
+    background:#202833;
+    color:#b9c6ff;
+    padding:6px 10px;
+    border-radius:6px;
     font-size:11px;
-    line-height:1.5;
+    white-space:nowrap;
 }
 
-.mission button{
-    border:1px solid #283237;
-    background:#12191d;
-    color:#aab5ba;
-    padding:7px 10px;
+/* CHARACTERS */
+
+.characters{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
 }
 
-.mission button:hover{
-    color:var(--green);
-    border-color:#3c5143;
+.person{
+    background:#121821;
+    border:1px solid #272f3b;
+    border-radius:10px;
+    padding:18px;
+    transition:.2s;
 }
 
-.mission.locked{
-    opacity:.45;
+.person:hover{
+    border-color:#45516a;
+    transform:translateY(-2px);
 }
 
-/* FILES */
-
-.file{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    border-bottom:1px solid var(--border);
-    padding:10px 0;
-}
-
-.file:last-child{
-    border:0;
-}
-
-.file-icon{
-    color:var(--blue);
-}
-
-.file small{
-    display:block;
-    color:var(--muted);
-    margin-top:3px;
-}
-
-/* ACHIEVEMENTS */
-
-.achievement{
+.person-top{
     display:flex;
     gap:12px;
     align-items:center;
-    padding:10px;
-    border:1px solid var(--border);
-    margin-bottom:7px;
 }
 
-.achievement.locked{
-    opacity:.35;
-}
-
-.badge{
-    width:35px;
-    height:35px;
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#252d39;
     display:flex;
     align-items:center;
     justify-content:center;
-    border:1px solid var(--border);
+    font-weight:bold;
+    color:#aeb8c8;
 }
 
-/* NETWORK */
+.person-name{
+    font-weight:bold;
+}
 
-.node{
-    border:1px solid var(--border);
+.person-role{
+    color:#687382;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.statement{
+    margin-top:15px;
+    color:#aeb6c1;
+    font-size:14px;
+    line-height:1.6;
+    min-height:68px;
+}
+
+.person-actions{
+    display:flex;
+    gap:8px;
+    margin-top:15px;
+}
+
+.btn{
+    border:1px solid #303947;
+    background:#181f29;
+    color:#dce1e8;
+    padding:9px 12px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.btn:hover{
+    background:#222b38;
+}
+
+.btn.primary{
+    background:#526fd7;
+    border-color:#526fd7;
+    color:white;
+}
+
+.btn.primary:hover{
+    background:#607ce0;
+}
+
+.btn.danger{
+    background:#351d24;
+    border-color:#69333e;
+    color:#ffb6c0;
+}
+
+/* INVESTIGATION */
+
+.investigation{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
+}
+
+.panel{
+    background:#11161e;
+    border:1px solid #252c37;
+    border-radius:12px;
+    padding:20px;
+}
+
+.panel-title{
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:14px;
+}
+
+.clue{
+    border-left:3px solid #526fd7;
+    background:#161c25;
     padding:13px;
+    margin-bottom:9px;
+    color:#aeb7c4;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.clue.locked{
+    border-left-color:#414854;
+    color:#59616e;
+}
+
+/* LOG */
+
+.log{
+    height:250px;
+    overflow:auto;
+    background:#090c10;
+    border:1px solid #202631;
+    border-radius:8px;
+    padding:12px;
+    font-family:monospace;
+    font-size:12px;
+}
+
+.log-line{
     margin-bottom:8px;
-    background:#0b0f11;
+    color:#8490a0;
 }
 
-.node strong{
-    color:var(--green);
+.log-line.good{
+    color:#72d69b;
 }
 
-.node small{
-    display:block;
-    color:var(--muted);
-    margin:4px 0 9px;
+.log-line.bad{
+    color:#ff7e8e;
 }
 
-.node button{
-    background:#11181c;
-    color:#9da8ad;
-    border:1px solid var(--border);
-    padding:6px 9px;
+.log-line.info{
+    color:#8ea6ff;
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:20;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(550px,100%);
+    background:#131921;
+    border:1px solid #303846;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 20px 70px rgba(0,0,0,.5);
+}
+
+.modal-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.modal-text{
+    color:#929ca9;
+    line-height:1.6;
+    font-size:14px;
+    white-space:pre-line;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+    margin-top:20px;
+}
+
+/* CASES */
+
+.case-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.case-item{
+    background:#121821;
+    border:1px solid #282f3b;
+    border-radius:10px;
+    padding:18px;
+}
+
+.case-item.locked{
+    opacity:.45;
+}
+
+.case-item h3{
+    margin-bottom:7px;
+}
+
+.case-item p{
+    color:#747e8c;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.case-item button{
+    margin-top:15px;
 }
 
 /* NOTIFICATION */
 
-.notice{
+.notification{
     position:fixed;
-    right:20px;
-    bottom:20px;
-    width:290px;
-    background:#10171a;
-    border:1px solid #2d393e;
-    padding:13px;
-    transform:translateY(140%);
-    transition:.3s;
-    z-index:20;
+    right:25px;
+    bottom:25px;
+    background:#171e28;
+    border:1px solid #343d4b;
+    padding:14px 18px;
+    border-radius:9px;
+    display:none;
+    z-index:30;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
-.notice.show{
-    transform:translateY(0);
-}
-
-.notice strong{
+.notification.show{
     display:block;
-    color:var(--green);
-    margin-bottom:5px;
-}
-
-.notice p{
-    margin:0;
-    color:#89959b;
-    font-size:11px;
 }
 
 /* RESPONSIVE */
 
-@media(max-width:950px){
+@media(max-width:1000px){
+
+    .sidebar{
+        width:70px;
+        padding:15px 8px;
+    }
+
+    .logo{
+        font-size:0;
+        text-align:center;
+    }
+
+    .logo span{
+        font-size:20px;
+    }
+
+    .subtitle,
+    .nav-title,
+    .nav button span,
+    .profile{
+        display:none;
+    }
+
+    .nav button{
+        text-align:center;
+        font-size:18px;
+    }
+
+    .main{
+        margin-left:70px;
+        width:calc(100% - 70px);
+    }
 
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .grid{
-        grid-template-columns:1fr;
+    .characters{
+        grid-template-columns:1fr 1fr;
     }
 }
 
 @media(max-width:700px){
 
-    .sidebar{
-        width:62px;
-        padding:12px 7px;
+    .main{
+        padding:15px;
     }
 
-    .brand{
-        font-size:0;
-        text-align:center;
+    .topbar{
+        display:block;
     }
 
-    .brand:first-letter{
-        font-size:20px;
+    .case-number{
+        margin-top:8px;
     }
 
-    .brand small,
-    .profile{
-        display:none;
+    .stats{
+        grid-template-columns:1fr 1fr;
     }
 
-    nav button{
-        font-size:0;
-        text-align:center;
-        border-left:0;
+    .characters{
+        grid-template-columns:1fr;
     }
 
-    nav button::first-letter{
-        font-size:18px;
+    .investigation{
+        grid-template-columns:1fr;
     }
 
-    .side-bottom{
-        display:none;
+    .case-list{
+        grid-template-columns:1fr;
     }
 
-    main{
-        margin-left:62px;
-        width:calc(100% - 62px);
-        padding:12px;
+    .case-header{
+        display:block;
     }
 
-    .terminal{
-        height:350px;
+    .difficulty{
+        display:inline-block;
+        margin-top:12px;
     }
 }
 </style>
@@ -498,217 +549,201 @@ main{
 
 <div class="app">
 
+<!-- SIDEBAR -->
+
 <aside class="sidebar">
 
-    <div class="brand">
-        NODE//ZERO
-        <small>OFFLINE SIMULATION</small>
+    <div class="logo">
+        WHO<span>LIED?</span>
+    </div>
+
+    <div class="subtitle">
+        Centro de investigación
+    </div>
+
+    <div class="nav">
+
+        <div class="nav-title">Investigación</div>
+
+        <button class="active" onclick="showSection('investigation')">
+            🔎 <span>Investigar</span>
+        </button>
+
+        <button onclick="showSection('cases')">
+            📁 <span>Casos</span>
+        </button>
+
+        <div class="nav-title">Perfil</div>
+
+        <button onclick="showSection('achievements')">
+            🏆 <span>Logros</span>
+        </button>
+
+        <button onclick="resetGame()">
+            ⚙️ <span>Reiniciar</span>
+        </button>
+
     </div>
 
     <div class="profile">
-        <small>OPERADOR</small>
-        <strong id="sideLevel">NOVATO · LV 1</strong>
-
-        <div class="xp">
-            <div id="sideXP"></div>
+        <div class="profile-name">Detective</div>
+        <div class="profile-level">
+            Nivel <span id="sideLevel">1</span>
         </div>
-    </div>
-
-    <nav>
-        <button class="active" onclick="page('terminal',this)">▣ Terminal</button>
-        <button onclick="page('missions',this)">◆ Misiones</button>
-        <button onclick="page('files',this)">▤ Archivos</button>
-        <button onclick="page('network',this)">◉ Red ficticia</button>
-        <button onclick="page('achievements',this)">★ Logros</button>
-    </nav>
-
-    <div class="side-bottom">
-        <button class="save" onclick="saveGame()">[ GUARDAR ]</button>
     </div>
 
 </aside>
 
 
-<main>
+<!-- MAIN -->
 
-<!-- TERMINAL -->
+<main class="main">
 
-<section id="terminal" class="screen">
+<section id="investigationSection">
 
-    <div class="top">
+<div class="topbar">
 
-        <div class="title">
-            <h1>Terminal</h1>
-            <p>Entorno virtual de entrenamiento</p>
-        </div>
-
-        <div class="clock" id="clock"></div>
-
+<div>
+    <div class="page-title">Investigación</div>
+    <div class="page-description">
+        Analizá las declaraciones y encontrá al mentiroso.
     </div>
+</div>
+
+<div class="case-number" id="caseNumber">
+    CASO #001
+</div>
+
+</div>
 
 
-    <div class="stats">
+<!-- STATS -->
 
-        <div class="stat">
-            <small>Nivel</small>
-            <strong class="green" id="level">1</strong>
-        </div>
+<div class="stats">
 
-        <div class="stat">
-            <small>Experiencia</small>
-            <strong id="xp">0</strong>
-        </div>
+<div class="stat">
+    <div class="stat-label">Puntos</div>
+    <div class="stat-value" id="score">0</div>
+</div>
 
-        <div class="stat">
-            <small>Créditos</small>
-            <strong class="yellow" id="credits">500</strong>
-        </div>
+<div class="stat">
+    <div class="stat-label">Racha</div>
+    <div class="stat-value" id="streak">0</div>
+</div>
 
-        <div class="stat">
-            <small>Misiones</small>
-            <strong class="blue" id="missionsDone">0</strong>
-        </div>
+<div class="stat">
+    <div class="stat-label">Nivel</div>
+    <div class="stat-value" id="level">1</div>
+</div>
 
-    </div>
+<div class="stat">
+    <div class="stat-label">Casos resueltos</div>
+    <div class="stat-value" id="solved">0</div>
+</div>
 
-
-    <div class="panel">
-
-        <div class="panel-title">
-            <h2>CONSOLE://LOCAL</h2>
-            <span>SIMULATION MODE</span>
-        </div>
-
-        <div class="terminal" id="terminalOutput">
-
-            <div class="line system">
-                NODE//ZERO v2.4.1
-            </div>
-
-            <div class="line system">
-                -----------------------------------------
-            </div>
-
-            <div class="line success">
-                Sistema iniciado correctamente.
-            </div>
-
-            <div class="line">
-                Este entorno es completamente ficticio.
-            </div>
-
-            <div class="line">
-                Escribí "help" para ver los comandos disponibles.
-            </div>
-
-        </div>
-
-        <div class="input-row">
-
-            <span class="prompt">operator@node:~$</span>
-
-            <input
-                id="commandInput"
-                autocomplete="off"
-                spellcheck="false"
-                autofocus
-            >
-
-        </div>
-
-    </div>
+</div>
 
 
-    <div class="panel">
+<!-- CASE -->
 
-        <div class="panel-title">
-            <h2>Actividad</h2>
-            <span>LOG</span>
-        </div>
+<div class="case-card">
 
-        <div id="activity"></div>
+<div class="case-header">
 
-    </div>
+<div>
+
+<div class="case-title" id="caseTitle">
+    El trofeo desaparecido
+</div>
+
+<div class="case-text" id="caseDescription">
+    Durante el recreo desapareció el trofeo principal
+    del colegio. Cuatro personas estuvieron cerca de
+    la sala donde estaba guardado.
+</div>
+
+</div>
+
+<div class="difficulty" id="difficulty">
+    NORMAL
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CHARACTERS -->
+
+<div class="characters" id="characters"></div>
+
+
+<!-- INVESTIGATION -->
+
+<div class="investigation">
+
+<div class="panel">
+
+<div class="panel-title">
+    🔎 Evidencias encontradas
+</div>
+
+<div id="clues"></div>
+
+</div>
+
+
+<div class="panel">
+
+<div class="panel-title">
+    Registro de investigación
+</div>
+
+<div class="log" id="log"></div>
+
+</div>
+
+</div>
 
 </section>
 
 
-<!-- MISIONES -->
+<!-- CASES SECTION -->
 
-<section id="missions" class="screen" style="display:none">
+<section id="casesSection" style="display:none">
 
-    <div class="top">
-        <div class="title">
-            <h1>Misiones</h1>
-            <p>Resolvé escenarios de seguridad completamente ficticios.</p>
-        </div>
+<div class="topbar">
+
+<div>
+    <div class="page-title">Casos</div>
+    <div class="page-description">
+        Elegí un caso para comenzar una investigación.
     </div>
+</div>
 
-    <div class="panel">
+</div>
 
-        <div id="missionList"></div>
-
-    </div>
+<div class="case-list" id="caseList"></div>
 
 </section>
 
 
-<!-- ARCHIVOS -->
+<!-- ACHIEVEMENTS -->
 
-<section id="files" class="screen" style="display:none">
+<section id="achievementsSection" style="display:none">
 
-    <div class="top">
-        <div class="title">
-            <h1>Archivos</h1>
-            <p>Documentos encontrados durante las simulaciones.</p>
-        </div>
+<div class="topbar">
+
+<div>
+    <div class="page-title">Logros</div>
+    <div class="page-description">
+        Tus logros como detective.
     </div>
+</div>
 
-    <div class="panel">
+</div>
 
-        <div id="fileList"></div>
-
-    </div>
-
-</section>
-
-
-<!-- RED -->
-
-<section id="network" class="screen" style="display:none">
-
-    <div class="top">
-        <div class="title">
-            <h1>Red ficticia</h1>
-            <p>Explorá nodos virtuales sin conexión a Internet.</p>
-        </div>
-    </div>
-
-    <div class="panel">
-
-        <div id="networkList"></div>
-
-    </div>
-
-</section>
-
-
-<!-- LOGROS -->
-
-<section id="achievements" class="screen" style="display:none">
-
-    <div class="top">
-        <div class="title">
-            <h1>Logros</h1>
-            <p>Desbloqueá desafíos del simulador.</p>
-        </div>
-    </div>
-
-    <div class="panel">
-
-        <div id="achievementList"></div>
-
-    </div>
+<div class="case-list" id="achievementList"></div>
 
 </section>
 
@@ -717,609 +752,618 @@ main{
 </div>
 
 
-<div class="notice" id="notice">
-    <strong id="noticeTitle"></strong>
-    <p id="noticeText"></p>
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modal-box">
+
+<div class="modal-title" id="modalTitle"></div>
+
+<div class="modal-text" id="modalText"></div>
+
+<div class="modal-buttons" id="modalButtons"></div>
+
 </div>
+
+</div>
+
+
+<div class="notification" id="notification"></div>
 
 
 <script>
 
-/* =====================================================
-   ESTADO
-===================================================== */
+/* =========================================
+   DATOS DEL JUEGO
+========================================= */
 
-let game = {
-
-    level:1,
-    xp:0,
-    credits:500,
-
-    completed:0,
-
-    files:[],
-
-    activities:[
-        "Sistema de simulación iniciado."
-    ],
-
-    achievements:[],
-
-    discovered:[]
-
-};
-
-
-/* =====================================================
-   DATOS
-===================================================== */
-
-const missions = [
+const cases = [
 
 {
     id:1,
-    name:"PRIMER ACCESO",
+    title:"El trofeo desaparecido",
     description:
-    "Un sistema ficticio dejó una terminal abierta. Descubrí la contraseña usando las pistas proporcionadas.",
-    reward:150,
-    xp:50,
-    password:"NOVA",
-    minLevel:1
+    "Durante el recreo desapareció el trofeo principal del colegio. Cuatro personas estuvieron cerca de la sala donde estaba guardado.",
+    difficulty:"NORMAL",
+
+    clues:[
+        "La cámara del pasillo dejó de grabar durante exactamente 4 minutos.",
+        "Una persona afirma haber estado en la biblioteca, pero el registro de entrada dice otra cosa.",
+        "Se encontraron huellas de barro cerca de la ventana.",
+        "El trofeo pesaba demasiado para ser transportado fácilmente por una sola persona."
+    ],
+
+    people:[
+        {
+            name:"Lucas",
+            role:"Estudiante",
+            statement:"Yo estaba en la biblioteca leyendo. No fui a la sala del trofeo.",
+            truth:false,
+            interrogation:"Cuando le preguntás qué libro estaba leyendo, cambia de tema rápidamente."
+        },
+
+        {
+            name:"Sofía",
+            role:"Delegada",
+            statement:"Estuve en el patio durante todo el recreo. Varias personas me vieron.",
+            truth:true,
+            interrogation:"Dos estudiantes confirman que Sofía estuvo en el patio."
+        },
+
+        {
+            name:"Mateo",
+            role:"Encargado del salón",
+            statement:"Pasé por el pasillo, pero nunca entré a la sala.",
+            truth:true,
+            interrogation:"La cámara muestra a Mateo caminando por el pasillo."
+        },
+
+        {
+            name:"Valentina",
+            role:"Estudiante",
+            statement:"Yo estaba con Sofía en el patio todo el tiempo.",
+            truth:true,
+            interrogation:"Su historia coincide con la de Sofía."
+        }
+    ]
 },
 
 {
     id:2,
-    name:"ARCHIVO PERDIDO",
+    title:"El laboratorio cerrado",
     description:
-    "Encontrá el código escondido en los archivos virtuales del sistema.",
-    reward:250,
-    xp:80,
-    password:"4172",
-    minLevel:2
+    "Un experimento escolar desapareció del laboratorio. Solo tres estudiantes tenían autorización para entrar.",
+    difficulty:"NORMAL",
+
+    clues:[
+        "La puerta fue abierta con una tarjeta de acceso.",
+        "El registro indica que una tarjeta fue utilizada dos veces.",
+        "Había una mochila abandonada junto al laboratorio.",
+        "El experimento estaba dentro de un armario cerrado."
+    ],
+
+    people:[
+        {
+            name:"Nicolás",
+            role:"Alumno",
+            statement:"Mi tarjeta estuvo conmigo todo el día.",
+            truth:true,
+            interrogation:"Muestra la tarjeta y coincide con el registro."
+        },
+
+        {
+            name:"Emma",
+            role:"Alumna",
+            statement:"Yo entré al laboratorio antes de que desapareciera el experimento.",
+            truth:true,
+            interrogation:"Su entrada está registrada correctamente."
+        },
+
+        {
+            name:"Bruno",
+            role:"Alumno",
+            statement:"Nunca tuve una tarjeta de acceso.",
+            truth:false,
+            interrogation:"El profesor confirma que Bruno recibió una tarjeta esa mañana."
+        },
+
+        {
+            name:"Agustín",
+            role:"Ayudante",
+            statement:"Yo estaba ordenando el depósito.",
+            truth:true,
+            interrogation:"El inventario confirma que estuvo allí."
+        }
+    ]
 },
 
 {
     id:3,
-    name:"NODO OSCURO",
+    title:"El celular perdido",
     description:
-    "Explorá el nodo ficticio y encontrá la palabra clave.",
-    reward:400,
-    xp:120,
-    password:"ORBIT",
-    minLevel:3
+    "Durante una excursión desapareció un celular de una mochila. Todos dicen no haberlo tocado.",
+    difficulty:"DIFÍCIL",
+
+    clues:[
+        "El celular fue visto por última vez a las 14:20.",
+        "A las 14:27 alguien desbloqueó el dispositivo.",
+        "La mochila estaba en una mesa común.",
+        "Uno de los estudiantes afirmó no saber el código."
+    ],
+
+    people:[
+        {
+            name:"Tomás",
+            role:"Estudiante",
+            statement:"Yo no sabía el código del celular.",
+            truth:false,
+            interrogation:"Durante una conversación anterior había mencionado el código."
+        },
+
+        {
+            name:"Martina",
+            role:"Estudiante",
+            statement:"Estuve sacando fotos durante ese momento.",
+            truth:true,
+            interrogation:"Las fotos tienen metadatos compatibles con el horario."
+        },
+
+        {
+            name:"Julián",
+            role:"Estudiante",
+            statement:"Yo estaba sentado lejos de la mochila.",
+            truth:true,
+            interrogation:"Otro estudiante confirma su ubicación."
+        },
+
+        {
+            name:"Camila",
+            role:"Estudiante",
+            statement:"Vi el celular sobre la mesa a las 14:25.",
+            truth:true,
+            interrogation:"Su relato coincide con el último avistamiento."
+        }
+    ]
 },
 
 {
     id:4,
-    name:"PROTOCOLO CERO",
+    title:"El examen cambiado",
     description:
-    "La simulación final requiere combinar varias pistas.",
-    reward:700,
-    xp:200,
-    password:"ZERO",
-    minLevel:4
+    "El examen de matemática apareció modificado antes de comenzar la clase.",
+    difficulty:"DIFÍCIL",
+
+    clues:[
+        "El archivo fue modificado a las 07:42.",
+        "Solo dos computadoras tenían acceso.",
+        "El profesor llegó a las 07:50.",
+        "Una persona dijo que todavía estaba viajando."
+    ],
+
+    people:[
+        {
+            name:"Franco",
+            role:"Alumno",
+            statement:"A las 07:42 todavía estaba viajando.",
+            truth:false,
+            interrogation:"El registro de entrada al colegio muestra que llegó antes."
+        },
+
+        {
+            name:"Micaela",
+            role:"Alumna",
+            statement:"Llegué después de las 8.",
+            truth:true,
+            interrogation:"Su horario coincide con el registro."
+        },
+
+        {
+            name:"Santiago",
+            role:"Alumno",
+            statement:"Yo no tengo acceso a esa computadora.",
+            truth:true,
+            interrogation:"El profesor confirma que su cuenta no tenía permisos."
+        },
+
+        {
+            name:"Abril",
+            role:"Alumna",
+            statement:"Estaba esperando afuera del aula.",
+            truth:true,
+            interrogation:"Otra estudiante confirma haber hablado con ella."
+        }
+    ]
+},
+
+{
+    id:5,
+    title:"La pintura desaparecida",
+    description:
+    "Una pintura de la exposición escolar desapareció durante el cambio de turno.",
+    difficulty:"EXPERTO",
+
+    clues:[
+        "La alarma de la sala nunca fue activada.",
+        "La pintura salió por una puerta lateral.",
+        "Una persona conocía la ubicación de esa puerta.",
+        "El guardia vio una sombra llevando algo grande."
+    ],
+
+    people:[
+        {
+            name:"Renata",
+            role:"Artista",
+            statement:"No sabía que existía una puerta lateral.",
+            truth:false,
+            interrogation:"Había dibujado un plano de la sala anteriormente."
+        },
+
+        {
+            name:"Pedro",
+            role:"Visitante",
+            statement:"Yo estuve mirando las otras pinturas.",
+            truth:true,
+            interrogation:"El registro de visitantes coincide."
+        },
+
+        {
+            name:"Malena",
+            role:"Organizadora",
+            statement:"Estaba controlando las entradas.",
+            truth:true,
+            interrogation:"El registro de cámaras la muestra allí."
+        },
+
+        {
+            name:"Damián",
+            role:"Ayudante",
+            statement:"Estaba en el depósito.",
+            truth:true,
+            interrogation:"El inventario confirma su presencia."
+        }
+    ]
 }
 
 ];
 
 
-const files = [
+/* =========================================
+   ESTADO
+========================================= */
 
-{
-    name:"readme.txt",
-    icon:"TXT",
-    text:
-    "NODE//ZERO es un entorno de entrenamiento ficticio."
-},
+let game = JSON.parse(localStorage.getItem("whoLiedGame")) || {
 
-{
-    name:"memo_07.log",
-    icon:"LOG",
-    text:
-    "Pista: la palabra NOVA aparece relacionada con el primer escenario."
-},
+    score:0,
+    streak:0,
+    level:1,
+    solved:0,
+    unlocked:1,
+    achievements:[],
 
-{
-    name:"archive_4172.dat",
-    icon:"DAT",
-    text:
-    "Código detectado: 4172"
-},
+    currentCase:1,
+    interrogated:[],
+    cluesFound:[]
 
-{
-    name:"orbit_note.txt",
-    icon:"TXT",
-    text:
-    "El tercer escenario menciona constantemente una órbita."
-},
-
-{
-    name:"zero_protocol.cfg",
-    icon:"CFG",
-    text:
-    "PROTOCOLO FINAL: ZERO"
-}
-
-];
+};
 
 
-const nodes = [
+/* =========================================
+   GUARDAR
+========================================= */
 
-{
-    id:"NODE-A",
-    name:"Atlas",
-    description:"Nodo de entrenamiento básico.",
-    required:1
-},
+function saveGame(){
 
-{
-    id:"NODE-B",
-    name:"Helix",
-    description:"Nodo intermedio con datos ocultos.",
-    required:2
-},
-
-{
-    id:"NODE-C",
-    name:"Orion",
-    description:"Nodo avanzado.",
-    required:3
-},
-
-{
-    id:"NODE-X",
-    name:"Zero",
-    description:"Nodo final de la simulación.",
-    required:4
-}
-
-];
-
-
-const achievementData = [
-
-{
-    id:"first",
-    name:"Primer paso",
-    description:"Completá tu primera misión.",
-    check:()=>game.completed>=1
-},
-
-{
-    id:"five",
-    name:"Operador",
-    description:"Llegá al nivel 3.",
-    check:()=>game.level>=3
-},
-
-{
-    id:"rich",
-    name:"Financiado",
-    description:"Conseguí 1.000 créditos.",
-    check:()=>game.credits>=1000
-},
-
-{
-    id:"explorer",
-    name:"Explorador",
-    description:"Descubrí todos los nodos.",
-    check:()=>game.discovered.length>=4
-},
-
-{
-    id:"master",
-    name:"NODE//ZERO",
-    description:"Completá todas las misiones.",
-    check:()=>game.completed>=4
-}
-
-];
-
-
-/* =====================================================
-   UTILIDADES
-===================================================== */
-
-function notify(title,text){
-
-    const n=document.getElementById("notice");
-
-    document.getElementById("noticeTitle").textContent=title;
-
-    document.getElementById("noticeText").textContent=text;
-
-    n.classList.add("show");
-
-    setTimeout(()=>{
-        n.classList.remove("show");
-    },3500);
+    localStorage.setItem(
+        "whoLiedGame",
+        JSON.stringify(game)
+    );
 
 }
 
 
-function log(text,type=""){
+/* =========================================
+   OBTENER CASO
+========================================= */
 
-    game.activities.unshift(text);
+function getCurrentCase(){
 
-    if(game.activities.length>12){
-        game.activities.pop();
-    }
-
-    const output=document.getElementById("terminalOutput");
-
-    const div=document.createElement("div");
-
-    div.className="line "+type;
-
-    div.textContent=text;
-
-    output.appendChild(div);
-
-    output.scrollTop=output.scrollHeight;
+    return cases.find(c => c.id === game.currentCase);
 
 }
 
 
-function addXP(amount){
+/* =========================================
+   RENDER PRINCIPAL
+========================================= */
 
-    game.xp+=amount;
+function render(){
 
-    while(game.xp>=game.level*100){
+    const c = getCurrentCase();
 
-        game.xp-=game.level*100;
+    document.getElementById("caseNumber").textContent =
+        "CASO #" + String(c.id).padStart(3,"0");
 
-        game.level++;
+    document.getElementById("caseTitle").textContent =
+        c.title;
 
-        log(
-            ">> NIVEL AUMENTADO: "+game.level,
-            "success"
+    document.getElementById("caseDescription").textContent =
+        c.description;
+
+    document.getElementById("difficulty").textContent =
+        c.difficulty;
+
+    document.getElementById("score").textContent =
+        game.score;
+
+    document.getElementById("streak").textContent =
+        game.streak;
+
+    document.getElementById("level").textContent =
+        game.level;
+
+    document.getElementById("solved").textContent =
+        game.solved;
+
+    document.getElementById("sideLevel").textContent =
+        game.level;
+
+
+    renderCharacters(c);
+
+    renderClues(c);
+
+    renderLog();
+
+}
+
+
+/* =========================================
+   PERSONAJES
+========================================= */
+
+function renderCharacters(c){
+
+    const container =
+        document.getElementById("characters");
+
+    container.innerHTML="";
+
+    c.people.forEach((person,index)=>{
+
+        const div=document.createElement("div");
+
+        div.className="person";
+
+        const interrogated =
+            game.interrogated.includes(person.name);
+
+        div.innerHTML=`
+
+            <div class="person-top">
+
+                <div class="avatar">
+                    ${person.name.charAt(0)}
+                </div>
+
+                <div>
+                    <div class="person-name">
+                        ${person.name}
+                    </div>
+
+                    <div class="person-role">
+                        ${person.role}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="statement">
+                “${person.statement}”
+            </div>
+
+            <div class="person-actions">
+
+                <button class="btn"
+                    onclick="interrogate('${person.name}')">
+
+                    ${interrogated ? "✓ Interrogado" : "Interrogar"}
+
+                </button>
+
+                <button class="btn danger"
+                    onclick="accuse('${person.name}')">
+
+                    Acusar
+                </button>
+
+            </div>
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================
+   INTERROGAR
+========================================= */
+
+function interrogate(name){
+
+    const c=getCurrentCase();
+
+    const person=c.people.find(
+        p=>p.name===name
+    );
+
+    if(!game.interrogated.includes(name)){
+
+        game.interrogated.push(name);
+
+        saveGame();
+
+        addLog(
+            `Interrogaste a ${name}.`,
+            "info"
         );
 
-        notify(
-            "Nuevo nivel",
-            "Ahora sos nivel "+game.level+"."
-        );
-
     }
 
-    checkAchievements();
+    showModal(
+        "Interrogatorio: " + name,
+        person.interrogation,
+        [
+            {
+                text:"Cerrar",
+                action:closeModal
+            }
+        ]
+    );
 
     render();
 
 }
 
 
-/* =====================================================
-   TERMINAL
-===================================================== */
+/* =========================================
+   ACUSAR
+========================================= */
 
-const input=document.getElementById("commandInput");
+function accuse(name){
 
-input.addEventListener("keydown",function(e){
+    const c=getCurrentCase();
 
-    if(e.key!=="Enter") return;
-
-    const command=input.value.trim();
-
-    if(!command) return;
-
-    log("operator@node:~$ "+command);
-
-    input.value="";
-
-    executeCommand(command.toLowerCase());
-
-});
-
-
-function executeCommand(command){
-
-    const parts=command.split(" ");
-
-    const cmd=parts[0];
-
-    switch(cmd){
-
-        case "help":
-
-            log(
-`Comandos disponibles:
-
-help       — muestra esta ayuda
-status     — muestra tus estadísticas
-clear      — limpia la terminal
-missions   — muestra las misiones
-files      — muestra los archivos
-network    — muestra la red ficticia
-scan       — realiza un escaneo SIMULADO
-open       — abre un archivo virtual
-connect    — conecta con un nodo ficticio
-solve      — intenta resolver una misión
-hint       — muestra una pista
-whoami     — muestra tu operador`
-            ,"info");
-
-        break;
-
-
-        case "status":
-
-            log(
-                "Nivel: "+game.level+
-                " | XP: "+game.xp+
-                " | Créditos: "+game.credits+
-                " | Misiones: "+game.completed
-            );
-
-        break;
-
-
-        case "whoami":
-
-            log(
-                "operator_01 // trainee"
-            ,"success");
-
-        break;
-
-
-        case "clear":
-
-            document.getElementById("terminalOutput").innerHTML="";
-
-        break;
-
-
-        case "missions":
-
-            log(
-                "Misiones disponibles: "+missions.length
-            ,"info");
-
-            missions.forEach(m=>{
-
-                log(
-                    "#"+m.id+
-                    " "+m.name+
-                    " [LV "+m.minLevel+"]"
-                );
-
-            });
-
-        break;
-
-
-        case "files":
-
-            log(
-                "Archivos virtuales encontrados:"
-            ,"info");
-
-            files.forEach(f=>{
-                log("- "+f.name);
-            });
-
-        break;
-
-
-        case "network":
-
-            log(
-                "Red virtual:"
-            ,"info");
-
-            nodes.forEach(n=>{
-                log(
-                    n.id+
-                    " // "+
-                    n.name+
-                    " // LV "+n.required
-                );
-            });
-
-        break;
-
-
-        case "scan":
-
-            log(
-                "Iniciando escaneo de SIMULACIÓN..."
-            ,"info");
-
-            setTimeout(()=>{
-
-                log(
-                    "4 nodos ficticios detectados.",
-                    "success"
-                );
-
-                log(
-                    "No se realizó ninguna conexión real.",
-                    "system"
-                );
-
-            },600);
-
-        break;
-
-
-        case "open":
-
-            if(!parts[1]){
-
-                log(
-                    "Uso: open nombre_archivo"
-                    ,"error"
-                );
-
-                return;
-
-            }
-
-            const file=files.find(
-                f=>f.name.toLowerCase()===parts[1]
-            );
-
-            if(!file){
-
-                log(
-                    "Archivo no encontrado.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-            log(
-                "Contenido de "+file.name+":",
-                "info"
-            );
-
-            log(file.text);
-
-        break;
-
-
-        case "connect":
-
-            if(!parts[1]){
-
-                log(
-                    "Uso: connect NODE-A"
-                    ,"error"
-                );
-
-                return;
-
-            }
-
-            connectNode(parts[1].toUpperCase());
-
-        break;
-
-
-        case "solve":
-
-            if(!parts[1]){
-
-                log(
-                    "Uso: solve 1",
-                    "error"
-                );
-
-                return;
-
-            }
-
-            solveMission(Number(parts[1]));
-
-        break;
-
-
-        case "hint":
-
-            giveHint();
-
-        break;
-
-
-        default:
-
-            log(
-                "Comando desconocido. Escribí 'help'.",
-                "error"
-            );
-
-    }
-
-}
-
-
-/* =====================================================
-   MISIONES
-===================================================== */
-
-function solveMission(id){
-
-    const mission=missions.find(m=>m.id===id);
-
-    if(!mission){
-
-        log("Misión inexistente.","error");
-
-        return;
-
-    }
-
-    if(game.level<mission.minLevel){
-
-        log(
-            "Nivel insuficiente. Necesitás LV "+mission.minLevel+".",
-            "error"
-        );
-
-        return;
-
-    }
-
-    if(game.completed>=id){
-
-        log(
-            "Esta misión ya fue completada.",
-            "system"
-        );
-
-        return;
-
-    }
-
-    const answer=prompt(
-        "SIMULACIÓN\n\n"+
-        mission.description+
-        "\n\nIntroducí la palabra/código:"
+    const person=c.people.find(
+        p=>p.name===name
     );
 
-    if(answer===null) return;
+    if(person.truth){
 
-    if(answer.trim().toUpperCase()===mission.password){
+        game.streak=0;
 
-        game.completed++;
-
-        game.credits+=mission.reward;
-
-        log(
-            ">> MISIÓN COMPLETADA: "+mission.name,
-            "success"
+        addLog(
+            `Acusación incorrecta: ${name} decía la verdad.`,
+            "bad"
         );
 
-        log(
-            "Recompensa: +"+mission.reward+
-            " créditos | +"+mission.xp+" XP",
-            "success"
-        );
-
-        addXP(mission.xp);
-
-        checkAchievements();
-
-        render();
-
-        notify(
-            "Misión completada",
-            "+"+mission.reward+" créditos"
+        showModal(
+            "❌ Acusación incorrecta",
+            `${name} estaba diciendo la verdad.\n\nLa investigación continúa, pero perdiste la racha.`,
+            [
+                {
+                    text:"Seguir investigando",
+                    action:closeModal
+                }
+            ]
         );
 
     }else{
 
-        log(
-            "Respuesta incorrecta.",
-            "error"
+        const bonus =
+            100 +
+            game.interrogated.length * 25 +
+            c.id * 30;
+
+        game.score += bonus;
+        game.solved++;
+        game.streak++;
+
+        if(c.id >= game.unlocked){
+
+            game.unlocked =
+                Math.min(
+                    cases.length,
+                    game.unlocked + 1
+                );
+
+        }
+
+        checkLevel();
+        checkAchievements();
+
+        addLog(
+            `¡Caso resuelto! ${name} estaba mintiendo.`,
+            "good"
         );
 
+        saveGame();
+
+        showModal(
+            "✅ Caso resuelto",
+            `Excelente trabajo.\n\n${name} era quien estaba mintiendo.\n\nPuntos obtenidos: +${bonus}\nRacha actual: ${game.streak}`,
+            [
+                {
+                    text:"Siguiente caso",
+                    action:nextCase
+                },
+                {
+                    text:"Cerrar",
+                    action:closeModal
+                }
+            ]
+        );
+
+    }
+
+    saveGame();
+    render();
+
+}
+
+
+/* =========================================
+   SIGUIENTE CASO
+========================================= */
+
+function nextCase(){
+
+    closeModal();
+
+    let next=game.currentCase+1;
+
+    if(next>cases.length){
+
+        next=1;
+
+    }
+
+    if(next>game.unlocked){
+
+        next=game.unlocked;
+
+    }
+
+    game.currentCase=next;
+
+    game.interrogated=[];
+    game.cluesFound=[];
+
+    saveGame();
+
+    render();
+
+}
+
+
+/* =========================================
+   NIVEL
+========================================= */
+
+function checkLevel(){
+
+    const newLevel =
+        Math.floor(game.score / 500) + 1;
+
+    if(newLevel>game.level){
+
+        game.level=newLevel;
+
         notify(
-            "Incorrecto",
-            "Revisá las pistas."
+            "🎉 Subiste al nivel " + newLevel
         );
 
     }
@@ -1327,125 +1371,359 @@ function solveMission(id){
 }
 
 
-function giveHint(){
+/* =========================================
+   PISTAS
+========================================= */
 
-    const next=missions[game.completed];
+function renderClues(c){
 
-    if(!next){
+    const container =
+        document.getElementById("clues");
 
-        log(
-            "No quedan misiones.",
-            "success"
-        );
+    container.innerHTML="";
 
+    c.clues.forEach((clue,index)=>{
+
+        const found =
+            game.cluesFound.includes(index);
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            found ? "clue" : "clue locked";
+
+        if(found){
+
+            div.textContent =
+                "✓ " + clue;
+
+        }else{
+
+            div.innerHTML =
+                `🔒 Pista bloqueada 
+                <button class="btn"
+                onclick="unlockClue(${index})">
+                Investigar
+                </button>`;
+
+        }
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================
+   DESBLOQUEAR PISTA
+========================================= */
+
+function unlockClue(index){
+
+    if(game.cluesFound.includes(index))
         return;
 
-    }
+    game.cluesFound.push(index);
 
-    const hints={
-
-        1:"Pista: está relacionada con una estrella que explota.",
-        2:"Pista: el código tiene cuatro números.",
-        3:"Pista: algo gira alrededor de un planeta.",
-        4:"Pista: el nombre del proyecto contiene la respuesta."
-
-    };
-
-    log(
-        "PISTA: "+hints[next.id],
+    addLog(
+        "Encontraste una nueva evidencia.",
         "info"
     );
 
-}
+    saveGame();
 
-
-/* =====================================================
-   NODOS
-===================================================== */
-
-function connectNode(id){
-
-    const node=nodes.find(n=>n.id===id);
-
-    if(!node){
-
-        log(
-            "Nodo inexistente.",
-            "error"
-        );
-
-        return;
-
-    }
-
-    if(game.level<node.required){
-
-        log(
-            "Acceso bloqueado. Nivel requerido: "+node.required,
-            "error"
-        );
-
-        return;
-
-    }
-
-    if(!game.discovered.includes(node.id)){
-
-        game.discovered.push(node.id);
-
-        game.credits+=50;
-
-        addXP(20);
-
-        log(
-            "Conectado a "+node.name+".",
-            "success"
-        );
-
-        log(
-            "Nodo descubierto. +50 créditos.",
-            "success"
-        );
-
-        checkAchievements();
-
-        render();
-
-    }else{
-
-        log(
-            "Nodo ya explorado.",
-            "system"
-        );
-
-    }
+    render();
 
 }
 
 
-/* =====================================================
+/* =========================================
+   LOG
+========================================= */
+
+function addLog(text,type=""){
+
+    const log =
+        document.getElementById("log");
+
+    const line =
+        document.createElement("div");
+
+    line.className =
+        "log-line " + type;
+
+    const time =
+        new Date().toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit"
+            }
+        );
+
+    line.textContent =
+        `[${time}] ${text}`;
+
+    log.prepend(line);
+
+}
+
+
+/* =========================================
+   RENDER LOG
+========================================= */
+
+function renderLog(){
+
+    const log =
+        document.getElementById("log");
+
+    if(!log.innerHTML){
+
+        addLog(
+            "Sistema de investigación iniciado.",
+            "info"
+        );
+
+        addLog(
+            "Analizá las declaraciones antes de acusar.",
+            ""
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+function showModal(title,text,buttons=[]){
+
+    document.getElementById("modalTitle")
+        .textContent=title;
+
+    document.getElementById("modalText")
+        .textContent=text;
+
+    const container =
+        document.getElementById("modalButtons");
+
+    container.innerHTML="";
+
+    buttons.forEach(button=>{
+
+        const b=
+            document.createElement("button");
+
+        b.className="btn primary";
+
+        b.textContent=button.text;
+
+        b.onclick=button.action;
+
+        container.appendChild(b);
+
+    });
+
+    document
+        .getElementById("modal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(){
+
+    document
+        .getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================
+   SECCIONES
+========================================= */
+
+function showSection(section){
+
+    document.getElementById(
+        "investigationSection"
+    ).style.display =
+        section==="investigation"
+        ? "block"
+        : "none";
+
+    document.getElementById(
+        "casesSection"
+    ).style.display =
+        section==="cases"
+        ? "block"
+        : "none";
+
+    document.getElementById(
+        "achievementsSection"
+    ).style.display =
+        section==="achievements"
+        ? "block"
+        : "none";
+
+    document
+        .querySelectorAll(".nav button")
+        .forEach(btn=>btn.classList.remove("active"));
+
+    if(section==="cases")
+        renderCases();
+
+    if(section==="achievements")
+        renderAchievements();
+
+}
+
+
+/* =========================================
+   LISTA DE CASOS
+========================================= */
+
+function renderCases(){
+
+    const container =
+        document.getElementById("caseList");
+
+    container.innerHTML="";
+
+    cases.forEach(c=>{
+
+        const unlocked =
+            c.id<=game.unlocked;
+
+        const div=
+            document.createElement("div");
+
+        div.className =
+            "case-item " +
+            (!unlocked ? "locked" : "");
+
+        div.innerHTML=`
+
+            <h3>
+                ${unlocked ? "📁" : "🔒"}
+                Caso #${String(c.id).padStart(3,"0")}
+            </h3>
+
+            <h3>${c.title}</h3>
+
+            <p>
+                ${unlocked
+                ? c.description
+                : "Resolvé el caso anterior para desbloquearlo."}
+            </p>
+
+            ${
+                unlocked
+                ?
+                `<button class="btn primary"
+                onclick="selectCase(${c.id})">
+                Investigar
+                </button>`
+                :
+                ""
+            }
+
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================
+   SELECCIONAR CASO
+========================================= */
+
+function selectCase(id){
+
+    if(id>game.unlocked)
+        return;
+
+    game.currentCase=id;
+
+    game.interrogated=[];
+    game.cluesFound=[];
+
+    saveGame();
+
+    showSection("investigation");
+
+    render();
+
+}
+
+
+/* =========================================
    LOGROS
-===================================================== */
+========================================= */
+
+const achievementsData=[
+
+{
+    id:"first",
+    title:"Primer caso",
+    text:"Resolvé tu primer caso.",
+    condition:()=>game.solved>=1
+},
+
+{
+    id:"five",
+    title:"Detective habitual",
+    text:"Resolvé 5 casos.",
+    condition:()=>game.solved>=5
+},
+
+{
+    id:"streak3",
+    title:"En racha",
+    text:"Conseguí una racha de 3.",
+    condition:()=>game.streak>=3
+},
+
+{
+    id:"level5",
+    title:"Detective experto",
+    text:"Llegá al nivel 5.",
+    condition:()=>game.level>=5
+},
+
+{
+    id:"points1000",
+    title:"Mil puntos",
+    text:"Conseguí 1000 puntos.",
+    condition:()=>game.score>=1000
+}
+
+];
+
 
 function checkAchievements(){
 
-    achievementData.forEach(a=>{
+    achievementsData.forEach(a=>{
 
         if(
-            a.check() &&
+            a.condition() &&
             !game.achievements.includes(a.id)
         ){
 
             game.achievements.push(a.id);
 
             notify(
-                "LOGRO DESBLOQUEADO",
-                a.name
-            );
-
-            log(
-                "★ LOGRO: "+a.name,
-                "success"
+                "🏆 Logro desbloqueado: " +
+                a.title
             );
 
         }
@@ -1455,346 +1733,106 @@ function checkAchievements(){
 }
 
 
-/* =====================================================
-   NAVEGACIÓN
-===================================================== */
-
-function page(id,button){
-
-    document.querySelectorAll(".screen")
-        .forEach(s=>s.style.display="none");
-
-    document.getElementById(id)
-        .style.display="block";
-
-    document.querySelectorAll("nav button")
-        .forEach(b=>b.classList.remove("active"));
-
-    button.classList.add("active");
-
-    render();
-
-}
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function render(){
-
-    document.getElementById("level").textContent=
-        game.level;
-
-    document.getElementById("xp").textContent=
-        game.xp;
-
-    document.getElementById("credits").textContent=
-        game.credits.toLocaleString("es-AR");
-
-    document.getElementById("missionsDone").textContent=
-        game.completed;
-
-    document.getElementById("sideLevel").textContent=
-        "OPERADOR · LV "+game.level;
-
-    const percent=
-        Math.min(
-            100,
-            game.xp/(game.level*100)*100
-        );
-
-    document.getElementById("sideXP").style.width=
-        percent+"%";
-
-
-    renderActivity();
-    renderMissions();
-    renderFiles();
-    renderNetwork();
-    renderAchievements();
-
-}
-
-
-/* =====================================================
-   ACTIVIDAD
-===================================================== */
-
-function renderActivity(){
-
-    document.getElementById("activity").innerHTML=
-        game.activities.slice(0,8).map(
-            x=>`
-            <div style="
-                padding:8px 0;
-                border-bottom:1px solid var(--border);
-                color:#829097;
-                font-size:11px;
-            ">${escapeHTML(x)}</div>
-            `
-        ).join("");
-
-}
-
-
-/* =====================================================
-   MISIONES
-===================================================== */
-
-function renderMissions(){
-
-    document.getElementById("missionList").innerHTML=
-        missions.map(m=>{
-
-            const locked=game.level<m.minLevel;
-
-            const completed=game.completed>=m.id;
-
-            return `
-
-            <div class="mission ${locked?"locked":""}">
-
-                <h3>
-                    ${completed?"✓ ":""}${m.name}
-                </h3>
-
-                <p>${m.description}</p>
-
-                <small style="color:var(--muted)">
-                    RECOMPENSA:
-                    ${m.reward} créditos ·
-                    ${m.xp} XP
-                </small>
-
-                <br><br>
-
-                <button
-                    onclick="solveMission(${m.id})"
-                    ${locked||completed?"disabled":""}
-                >
-                    ${
-                        completed
-                        ?"COMPLETADA"
-                        :locked
-                        ?"NIVEL "+m.minLevel
-                        :"INICIAR"
-                    }
-                </button>
-
-            </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   ARCHIVOS
-===================================================== */
-
-function renderFiles(){
-
-    document.getElementById("fileList").innerHTML=
-        files.map(f=>`
-
-        <div class="file">
-
-            <div class="file-icon">
-                [${f.icon}]
-            </div>
-
-            <div>
-
-                <strong>${f.name}</strong>
-
-                <small>
-                    Archivo virtual ·
-                    usá "open ${f.name}"
-                </small>
-
-            </div>
-
-        </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   RED
-===================================================== */
-
-function renderNetwork(){
-
-    document.getElementById("networkList").innerHTML=
-        nodes.map(n=>{
-
-            const found=
-                game.discovered.includes(n.id);
-
-            const locked=
-                game.level<n.required;
-
-            return `
-
-            <div class="node">
-
-                <strong>
-                    ${n.id} // ${n.name}
-                </strong>
-
-                <small>
-                    ${n.description}
-                    · Nivel ${n.required}
-                </small>
-
-                <button
-                    onclick="connectNode('${n.id}')"
-                    ${locked?"disabled":""}
-                >
-                    ${
-                        found
-                        ?"EXPLORADO"
-                        :locked
-                        ?"BLOQUEADO"
-                        :"EXPLORAR"
-                    }
-                </button>
-
-            </div>
-
-            `;
-
-        }).join("");
-
-}
-
-
-/* =====================================================
-   LOGROS
-===================================================== */
-
 function renderAchievements(){
 
-    document.getElementById("achievementList").innerHTML=
-        achievementData.map(a=>{
+    const container =
+        document.getElementById(
+            "achievementList"
+        );
 
-            const unlocked=
-                game.achievements.includes(a.id);
+    container.innerHTML="";
 
-            return `
+    achievementsData.forEach(a=>{
 
-            <div class="achievement ${
-                unlocked?"":"locked"
-            }">
+        const unlocked =
+            game.achievements.includes(a.id);
 
-                <div class="badge">
-                    ${unlocked?"★":"?"}
-                </div>
+        const div=
+            document.createElement("div");
 
-                <div>
+        div.className =
+            "case-item " +
+            (!unlocked ? "locked" : "");
 
-                    <strong>${a.name}</strong>
+        div.innerHTML=`
 
-                    <div style="
-                        color:var(--muted);
-                        font-size:10px;
-                        margin-top:4px;
-                    ">
-                        ${a.description}
-                    </div>
+            <h3>
+                ${unlocked ? "🏆" : "🔒"}
+                ${a.title}
+            </h3>
 
-                </div>
+            <p>
+                ${a.text}
+            </p>
 
-            </div>
+        `;
 
-            `;
+        container.appendChild(div);
 
-        }).join("");
+    });
 
 }
 
 
-/* =====================================================
-   GUARDAR
-===================================================== */
+/* =========================================
+   NOTIFICACIÓN
+========================================= */
 
-function saveGame(){
+function notify(text){
 
-    localStorage.setItem(
-        "nodeZeroSave",
-        JSON.stringify(game)
+    const n=
+        document.getElementById(
+            "notification"
+        );
+
+    n.textContent=text;
+
+    n.classList.add("show");
+
+    setTimeout(()=>{
+
+        n.classList.remove("show");
+
+    },3000);
+
+}
+
+
+/* =========================================
+   REINICIAR
+========================================= */
+
+function resetGame(){
+
+    showModal(
+        "Reiniciar partida",
+        "¿Seguro que querés borrar todo tu progreso?",
+        [
+            {
+                text:"Cancelar",
+                action:closeModal
+            },
+            {
+                text:"Borrar progreso",
+                action:()=>{
+
+                    localStorage.removeItem(
+                        "whoLiedGame"
+                    );
+
+                    location.reload();
+
+                }
+            }
+        ]
     );
 
-    notify(
-        "Partida guardada",
-        "Tu progreso fue guardado."
-    );
-
 }
 
 
-function loadGame(){
-
-    const saved=
-        localStorage.getItem("nodeZeroSave");
-
-    if(!saved) return;
-
-    try{
-
-        game=JSON.parse(saved);
-
-    }catch(e){
-
-        console.log(e);
-
-    }
-
-}
-
-
-/* =====================================================
-   SEGURIDAD DEL TEXTO
-===================================================== */
-
-function escapeHTML(text){
-
-    return text
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;");
-
-}
-
-
-/* =====================================================
-   RELOJ
-===================================================== */
-
-function updateClock(){
-
-    const now=new Date();
-
-    document.getElementById("clock").textContent=
-        now.toLocaleTimeString("es-AR");
-
-}
-
-setInterval(updateClock,1000);
-
-updateClock();
-
-
-/* =====================================================
-   INICIO
-===================================================== */
-
-loadGame();
+/* =========================================
+   INICIAR
+========================================= */
 
 render();
 

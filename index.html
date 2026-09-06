@@ -1,1150 +1,1382 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>02:13 — Cortometraje</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negocio — Simulador</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 *{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    font-family:Inter,Arial,sans-serif;
+:root{
+    --bg:#111315;
+    --panel:#191c1f;
+    --panel2:#202428;
+    --border:#30353a;
+    --text:#e8e9ea;
+    --muted:#92989e;
+    --accent:#d9ff62;
+    --danger:#ff6b6b;
+    --warning:#ffc857;
 }
 
 body{
-    cursor:none;
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,Arial,sans-serif;
 }
 
-/* =========================================================
-   PELÍCULA
-========================================================= */
-
-#film{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-    background:#000;
+button,input{
+    font:inherit;
 }
 
-/* =========================================================
-   ESCENARIO
-========================================================= */
-
-.scene{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    background:#050505;
+button{
+    cursor:pointer;
 }
 
-.scene-image{
-    position:absolute;
-    inset:-4%;
-    width:108%;
-    height:108%;
-    object-fit:cover;
-    opacity:0;
-    transition:
-        opacity 1.5s ease,
-        transform 12s ease;
-    filter:
-        brightness(.52)
-        contrast(1.18)
-        saturate(.65);
+.app{
+    min-height:100vh;
+    display:flex;
 }
 
-.scene-image.active{
-    opacity:1;
-    transform:scale(1.035);
-}
+/* SIDEBAR */
 
-/* =========================================================
-   ESCENAS DE PRUEBA
-   Si no colocás imágenes, se generan ambientes mediante CSS.
-========================================================= */
-
-#sceneBackground{
-    position:absolute;
-    inset:0;
-
-    background:
-        radial-gradient(
-            ellipse at 50% 45%,
-            rgba(70,78,80,.32),
-            rgba(10,10,10,.92) 65%,
-            #000 100%
-        );
-
-    transition:
-        background 2s ease,
-        filter 2s ease;
-}
-
-.wall{
-    position:absolute;
-    width:100%;
-    height:75%;
+.sidebar{
+    width:230px;
+    min-height:100vh;
+    border-right:1px solid var(--border);
+    background:#151719;
+    padding:24px 15px;
+    position:fixed;
+    left:0;
     top:0;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.9),
-            rgba(45,45,45,.45),
-            rgba(0,0,0,.95)
-        );
-}
-
-.floor{
-    position:absolute;
     bottom:0;
+}
+
+.logo{
+    padding:0 12px 25px;
+    font-size:21px;
+    font-weight:700;
+    letter-spacing:-1px;
+}
+
+.logo span{
+    color:var(--accent);
+}
+
+.day-box{
+    margin:0 5px 22px;
+    padding:13px;
+    background:#1e2225;
+    border:1px solid var(--border);
+    border-radius:9px;
+}
+
+.day-box small{
+    display:block;
+    color:var(--muted);
+    margin-bottom:5px;
+}
+
+.day-box strong{
+    font-size:17px;
+}
+
+nav button{
     width:100%;
-    height:28%;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #111,
-            #030303
-        );
-
-    transform:perspective(600px) rotateX(15deg);
-    transform-origin:bottom;
+    border:0;
+    background:transparent;
+    color:#aeb3b7;
+    text-align:left;
+    padding:11px 12px;
+    margin-bottom:3px;
+    border-radius:7px;
 }
 
-/* =========================================================
-   VENTANA
-========================================================= */
-
-.window{
-    position:absolute;
-    width:260px;
-    height:390px;
-    right:13%;
-    top:12%;
-
-    background:
-        linear-gradient(
-            rgba(20,35,42,.35),
-            rgba(0,0,0,.75)
-        );
-
-    border:10px solid #0b0b0b;
-
-    box-shadow:
-        0 0 50px rgba(0,0,0,.9),
-        inset 0 0 40px rgba(0,0,0,.9);
+nav button:hover,
+nav button.active{
+    background:#252a2e;
+    color:white;
 }
 
-.window::before{
-    content:"";
-    position:absolute;
-    width:5px;
-    height:100%;
-    background:#080808;
-    left:50%;
+nav button.active{
+    box-shadow:inset 3px 0 0 var(--accent);
 }
 
-.window::after{
-    content:"";
+.bottom-side{
     position:absolute;
+    bottom:20px;
+    left:20px;
+    right:20px;
+}
+
+.save-btn{
     width:100%;
-    height:5px;
-    background:#080808;
-    top:50%;
+    background:#252a2e;
+    border:1px solid var(--border);
+    color:white;
+    padding:10px;
+    border-radius:7px;
 }
 
-/* =========================================================
-   LUZ DE CALLE
-========================================================= */
+/* MAIN */
 
-.streetLight{
-    position:absolute;
-    width:500px;
-    height:500px;
-    right:0;
-    top:4%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(180,185,170,.13),
-            transparent 65%
-        );
-
-    filter:blur(15px);
-
-    animation:streetFlicker 7s infinite;
+main{
+    margin-left:230px;
+    width:calc(100% - 230px);
+    padding:28px;
+    max-width:1500px;
 }
 
-@keyframes streetFlicker{
-
-    0%,91%,94%,100%{
-        opacity:.8;
-    }
-
-    92%{
-        opacity:.25;
-    }
-
-    93%{
-        opacity:.65;
-    }
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:25px;
 }
 
-/* =========================================================
-   MUEBLES
-========================================================= */
-
-.table{
-    position:absolute;
-    width:48%;
-    height:8%;
-    left:26%;
-    bottom:19%;
-
-    background:
-        linear-gradient(
-            #222,
-            #0a0a0a
-        );
-
-    box-shadow:
-        0 20px 30px rgba(0,0,0,.9);
+.title h1{
+    margin:0;
+    font-size:26px;
+    letter-spacing:-1px;
 }
 
-.table::before,
-.table::after{
-    content:"";
-    position:absolute;
-    width:5%;
-    height:150%;
-    top:75%;
-    background:#080808;
-}
-
-.table::before{
-    left:8%;
-}
-
-.table::after{
-    right:8%;
-}
-
-/* =========================================================
-   MONITOR
-========================================================= */
-
-.monitor{
-    position:absolute;
-    width:350px;
-    height:210px;
-    left:calc(50% - 175px);
-    bottom:27%;
-
-    background:#020202;
-
-    border:12px solid #090909;
-
-    box-shadow:
-        0 0 50px rgba(80,100,110,.08);
-}
-
-.monitorScreen{
-    position:absolute;
-    inset:8px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(80,100,110,.17),
-            #000 70%
-        );
-
-    animation:monitorNoise .2s infinite;
-}
-
-@keyframes monitorNoise{
-
-    0%{
-        filter:brightness(1);
-    }
-
-    50%{
-        filter:brightness(.92);
-    }
-
-    100%{
-        filter:brightness(1.05);
-    }
-}
-
-/* =========================================================
-   FIGURA
-========================================================= */
-
-.entity{
-    position:absolute;
-
-    width:75px;
-    height:235px;
-
-    right:23%;
-    top:20%;
-
-    opacity:0;
-
-    filter:
-        blur(1.3px)
-        brightness(.25);
-
-    transform:
-        translateY(15px)
-        scale(.98);
-
-    transition:
-        opacity .15s,
-        transform .3s;
-}
-
-.entity.visible{
-    opacity:1;
-
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-.entityHead{
-    position:absolute;
-
-    width:65px;
-    height:75px;
-
-    left:5px;
-
-    border-radius:50%;
-
-    background:#030303;
-
-    box-shadow:
-        0 0 30px #000;
-}
-
-.entityBody{
-    position:absolute;
-
-    width:75px;
-    height:170px;
-
-    top:60px;
-
-    border-radius:
-        35px 35px 5px 5px;
-
-    background:
-        linear-gradient(
-            #020202,
-            #080808
-        );
-}
-
-.entityEyes{
-    position:absolute;
-
-    z-index:3;
-
-    width:8px;
-    height:8px;
-
-    top:31px;
-    left:16px;
-
-    border-radius:50%;
-
-    background:#bbb;
-
-    box-shadow:
-        29px 0 #bbb;
-
-    opacity:.65;
-}
-
-/* =========================================================
-   LLUVIA
-========================================================= */
-
-.rain{
-    position:absolute;
-    inset:-20%;
-
-    opacity:.22;
-
-    background:
-        repeating-linear-gradient(
-            105deg,
-            transparent 0,
-            transparent 11px,
-            rgba(210,220,220,.12) 12px,
-            transparent 13px
-        );
-
-    animation:
-        rain 0.28s linear infinite;
-}
-
-@keyframes rain{
-
-    from{
-        transform:translate(0,0);
-    }
-
-    to{
-        transform:translate(-25px,90px);
-    }
-}
-
-/* =========================================================
-   NIEBLA
-========================================================= */
-
-.fog{
-    position:absolute;
-    inset:0;
-
-    background:
-        radial-gradient(
-            ellipse at 50% 70%,
-            rgba(150,155,155,.05),
-            transparent 60%
-        );
-
-    filter:blur(25px);
-
-    animation:fogMove 12s ease-in-out infinite alternate;
-}
-
-@keyframes fogMove{
-
-    from{
-        transform:translateX(-3%);
-    }
-
-    to{
-        transform:translateX(3%);
-    }
-}
-
-/* =========================================================
-   LINTERNA
-========================================================= */
-
-.flashlight{
-    position:absolute;
-
-    width:65vw;
-    height:65vw;
-
-    border-radius:50%;
-
-    pointer-events:none;
-
-    transform:
-        translate(-50%,-50%);
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,250,215,.15) 0,
-            rgba(255,250,215,.07) 15%,
-            transparent 57%
-        );
-
-    transition:
-        left .18s ease,
-        top .18s ease;
-}
-
-/* =========================================================
-   VIGNETTE
-========================================================= */
-
-.vignette{
-    position:absolute;
-    inset:0;
-
-    pointer-events:none;
-
-    background:
-        radial-gradient(
-            ellipse,
-            transparent 38%,
-            rgba(0,0,0,.25) 68%,
-            rgba(0,0,0,.92) 100%
-        );
-
-    z-index:30;
-}
-
-/* =========================================================
-   GRANO
-========================================================= */
-
-.grain{
-    position:absolute;
-    inset:-50%;
-
-    z-index:31;
-
-    pointer-events:none;
-
-    opacity:.075;
-
-    background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-
-    animation:grain .15s steps(2) infinite;
-}
-
-@keyframes grain{
-
-    0%{
-        transform:translate(0,0);
-    }
-
-    25%{
-        transform:translate(-2%,1%);
-    }
-
-    50%{
-        transform:translate(1%,-2%);
-    }
-
-    75%{
-        transform:translate(2%,2%);
-    }
-
-    100%{
-        transform:translate(-1%,-1%);
-    }
-}
-
-/* =========================================================
-   SCANLINES
-========================================================= */
-
-.scanlines{
-    position:absolute;
-    inset:0;
-
-    z-index:32;
-
-    pointer-events:none;
-
-    background:
-        repeating-linear-gradient(
-            0deg,
-            rgba(255,255,255,.018) 0,
-            rgba(255,255,255,.018) 1px,
-            transparent 1px,
-            transparent 4px
-        );
-}
-
-/* =========================================================
-   CÁMARA
-========================================================= */
-
-.camera{
-    position:absolute;
-    inset:0;
-
-    transition:
-        transform .15s ease;
-}
-
-.camera.shaking{
-    animation:
-        cameraShake .12s infinite;
-}
-
-@keyframes cameraShake{
-
-    0%{
-        transform:translate(0,0) rotate(0);
-    }
-
-    25%{
-        transform:translate(-2px,1px) rotate(-.08deg);
-    }
-
-    50%{
-        transform:translate(2px,-2px) rotate(.08deg);
-    }
-
-    75%{
-        transform:translate(-1px,-1px) rotate(-.05deg);
-    }
-
-    100%{
-        transform:translate(1px,2px) rotate(.04deg);
-    }
-}
-
-/* =========================================================
-   HUD
-========================================================= */
-
-.hud{
-    position:absolute;
-    inset:0;
-
-    z-index:40;
-
-    pointer-events:none;
-
-    color:rgba(235,235,235,.7);
-
-    font-family:monospace;
-
+.title p{
+    color:var(--muted);
+    margin:6px 0 0;
     font-size:13px;
 }
 
-.rec{
-    position:absolute;
-    top:25px;
-    left:28px;
+.next-day{
+    background:var(--accent);
+    color:#111;
+    border:0;
+    padding:11px 17px;
+    border-radius:7px;
+    font-weight:700;
 }
 
-.recDot{
-    display:inline-block;
-
-    width:9px;
-    height:9px;
-
-    margin-right:7px;
-
-    border-radius:50%;
-
-    background:#d33;
-
-    animation:
-        recBlink 1s infinite;
+.next-day:hover{
+    filter:brightness(.92);
 }
 
-@keyframes recBlink{
+/* DASHBOARD */
 
-    50%{
-        opacity:.2;
-    }
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:15px;
 }
 
-.time{
-    position:absolute;
-    top:25px;
-    right:28px;
+.stat{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:18px;
 }
 
-.battery{
-    position:absolute;
-    bottom:28px;
-    right:28px;
+.stat small{
+    color:var(--muted);
+    display:block;
+    margin-bottom:9px;
 }
 
-.location{
-    position:absolute;
-    bottom:28px;
-    left:28px;
+.stat strong{
+    font-size:24px;
+    letter-spacing:-1px;
 }
 
-/* =========================================================
-   SUBTÍTULOS
-========================================================= */
-
-.subtitle{
-    position:absolute;
-
-    z-index:50;
-
-    bottom:10%;
-
-    width:100%;
-
-    text-align:center;
-
-    color:#ddd;
-
-    font-size:18px;
-
-    letter-spacing:1px;
-
-    text-shadow:
-        0 2px 8px #000;
-
-    opacity:0;
-
-    transition:
-        opacity .7s ease;
+.stat .green{
+    color:var(--accent);
 }
 
-/* =========================================================
-   TITULOS
-========================================================= */
+.content-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:15px;
+}
 
-.titleScreen{
-    position:absolute;
-    inset:0;
+.panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:18px;
+    margin-bottom:15px;
+}
 
-    z-index:100;
-
+.panel-head{
     display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
+    justify-content:space-between;
     align-items:center;
-
-    background:#000;
-
-    transition:
-        opacity 2s;
+    margin-bottom:15px;
 }
 
-.titleScreen h1{
-    font-size:
-        clamp(42px,8vw,100px);
+.panel h2{
+    margin:0;
+    font-size:16px;
+}
 
-    font-weight:300;
+.panel-head span{
+    color:var(--muted);
+    font-size:12px;
+}
 
-    letter-spacing:
-        clamp(8px,2vw,25px);
+/* ACTIVITY */
 
+.activity{
+    max-height:340px;
+    overflow:auto;
+}
+
+.activity-item{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid #292d31;
+    font-size:13px;
+}
+
+.activity-item:last-child{
+    border-bottom:0;
+}
+
+.activity-icon{
+    width:30px;
+    height:30px;
+    border-radius:7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#252a2e;
+}
+
+.activity-text{
+    flex:1;
+}
+
+.activity-text small{
+    display:block;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+/* PRODUCTS */
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.product{
+    background:#1e2225;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:15px;
+}
+
+.product-top{
+    display:flex;
+    justify-content:space-between;
+}
+
+.product-name{
+    font-weight:600;
+}
+
+.product-icon{
+    font-size:21px;
+}
+
+.product-info{
+    margin:12px 0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+
+.product-info b{
     color:#ddd;
 }
 
-.titleScreen p{
-    margin-top:20px;
-
-    font-size:12px;
-
-    letter-spacing:6px;
-
-    color:#555;
+.sell-btn,
+.buy-btn{
+    border:1px solid var(--border);
+    background:#292e32;
+    color:white;
+    width:100%;
+    padding:9px;
+    border-radius:6px;
 }
 
-.startButton{
-    margin-top:55px;
-
-    padding:15px 42px;
-
-    border:
-        1px solid #444;
-
-    background:
-        rgba(255,255,255,.02);
-
-    color:#aaa;
-
-    letter-spacing:4px;
-
-    cursor:pointer;
-
-    transition:.3s;
+.sell-btn:hover,
+.buy-btn:hover{
+    background:#33393e;
 }
 
-.startButton:hover{
-    color:#fff;
-    background:#111;
+.sell-btn{
+    background:#252a2d;
 }
 
-/* =========================================================
-   TRANSICIONES
-========================================================= */
+/* TABLE */
 
-#fade{
-    position:absolute;
-    inset:0;
-
-    z-index:80;
-
-    pointer-events:none;
-
-    background:#000;
-
-    opacity:0;
-
-    transition:
-        opacity 1s ease;
+.table{
+    width:100%;
+    border-collapse:collapse;
 }
 
-.flashEffect{
-    animation:
-        flash .15s;
+.table th{
+    text-align:left;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:500;
+    padding:10px;
+    border-bottom:1px solid var(--border);
 }
 
-@keyframes flash{
-
-    0%{
-        filter:brightness(1);
-    }
-
-    35%{
-        filter:brightness(4);
-    }
-
-    100%{
-        filter:brightness(1);
-    }
+.table td{
+    padding:13px 10px;
+    border-bottom:1px solid #292d31;
+    font-size:13px;
 }
 
-/* =========================================================
-   PANTALLA FINAL
-========================================================= */
+.table tr:last-child td{
+    border-bottom:0;
+}
 
-.end{
-    position:absolute;
-    inset:0;
+/* MARKET */
 
-    z-index:200;
+.market-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--border);
+    padding:14px 0;
+}
 
-    display:none;
+.market-card:last-child{
+    border-bottom:0;
+}
 
+.market-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.market-icon{
+    width:42px;
+    height:42px;
+    background:#252a2e;
+    display:flex;
     justify-content:center;
     align-items:center;
-
-    flex-direction:column;
-
-    background:#000;
-
-    color:#777;
-
-    text-align:center;
+    border-radius:8px;
+    font-size:21px;
 }
 
-.end h2{
-    font-weight:300;
-
-    letter-spacing:8px;
-
-    color:#aaa;
+.market-name strong{
+    display:block;
+    margin-bottom:4px;
 }
 
-.end p{
-    margin-top:25px;
+.market-name small{
+    color:var(--muted);
+}
 
+.price{
+    text-align:right;
+}
+
+.price strong{
+    display:block;
+}
+
+.up{
+    color:#8fd36b;
+}
+
+.down{
+    color:var(--danger);
+}
+
+/* EMPLOYEES */
+
+.employee{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px;
+    background:#1e2225;
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.employee-info strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.employee-info small{
+    color:var(--muted);
+}
+
+.hire{
+    border:0;
+    background:#2b3034;
+    color:white;
+    padding:8px 11px;
+    border-radius:6px;
+}
+
+/* ADVERTISING */
+
+.ad-box{
+    border:1px solid var(--border);
+    background:#1e2225;
+    padding:17px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.ad-box h3{
+    margin:0 0 6px;
+    font-size:14px;
+}
+
+.ad-box p{
+    color:var(--muted);
     font-size:12px;
+}
 
-    letter-spacing:3px;
+.ad-box button{
+    background:#292e32;
+    color:white;
+    border:1px solid var(--border);
+    padding:8px 12px;
+    border-radius:6px;
+}
+
+/* COMPANY */
+
+.company-header{
+    background:#1c2023;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:25px;
+    margin-bottom:15px;
+}
+
+.company-name{
+    font-size:29px;
+    font-weight:700;
+}
+
+.company-name span{
+    color:var(--accent);
+}
+
+.progress{
+    height:7px;
+    background:#292e32;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress div{
+    height:100%;
+    background:var(--accent);
+    width:0;
+    transition:.4s;
+}
+
+/* NEWS */
+
+.news{
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.news:last-child{
+    border-bottom:0;
+}
+
+.news small{
+    color:var(--muted);
+}
+
+.news strong{
+    display:block;
+    margin:6px 0;
+}
+
+/* GOALS */
+
+.goal{
+    margin-bottom:17px;
+}
+
+.goal-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+}
+
+.goal-head span{
+    color:var(--muted);
+}
+
+.goal-progress{
+    height:5px;
+    background:#292e32;
+    border-radius:10px;
+    margin-top:8px;
+    overflow:hidden;
+}
+
+.goal-progress div{
+    background:var(--accent);
+    height:100%;
+}
+
+/* LOAN */
+
+.loan{
+    padding:15px;
+    background:#1e2225;
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.loan button{
+    width:100%;
+    margin-top:10px;
+    padding:9px;
+    background:#292e32;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:6px;
+}
+
+/* CHART */
+
+.chart{
+    height:180px;
+    display:flex;
+    align-items:flex-end;
+    gap:5px;
+    padding-top:15px;
+}
+
+.bar{
+    flex:1;
+    min-height:4px;
+    background:#687078;
+    border-radius:3px 3px 0 0;
+    position:relative;
+}
+
+.bar:hover{
+    background:var(--accent);
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+/* NOTIFICATION */
+
+.notification{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#22272b;
+    border:1px solid #3b4248;
+    padding:14px 17px;
+    border-radius:8px;
+    width:290px;
+    transform:translateY(130%);
+    transition:.35s;
+    z-index:100;
+    box-shadow:0 15px 40px #0008;
+}
+
+.notification.show{
+    transform:translateY(0);
+}
+
+.notification strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.notification p{
+    margin:0;
+    font-size:12px;
+    color:#aeb3b7;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+    .sidebar{
+        width:65px;
+        padding:18px 8px;
+    }
+
+    .logo{
+        text-align:center;
+        padding:5px 0 20px;
+        font-size:16px;
+    }
+
+    .logo span{
+        display:none;
+    }
+
+    .day-box{
+        display:none;
+    }
+
+    nav button{
+        font-size:0;
+        text-align:center;
+    }
+
+    nav button::first-letter{
+        font-size:18px;
+    }
+
+    .bottom-side{
+        display:none;
+    }
+
+    main{
+        margin-left:65px;
+        width:calc(100% - 65px);
+        padding:15px;
+    }
+
+    .topbar{
+        gap:10px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .product-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stat strong{
+        font-size:18px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div id="film">
+<div class="app">
 
-    <div class="camera" id="camera">
+<aside class="sidebar">
 
-        <div id="sceneBackground">
+    <div class="logo">NEGO<span>CIO</span></div>
 
-            <div class="wall"></div>
-            <div class="floor"></div>
+    <div class="day-box">
+        <small>Jornada</small>
+        <strong>Día <span id="sideDay">1</span></strong>
+    </div>
 
-            <div class="window"></div>
-            <div class="streetLight"></div>
+    <nav>
+        <button class="active" onclick="showPage('inicio',this)">⌂ Inicio</button>
+        <button onclick="showPage('mercado',this)">◈ Mercado</button>
+        <button onclick="showPage('inventario',this)">▣ Inventario</button>
+        <button onclick="showPage('empleados',this)">♙ Empleados</button>
+        <button onclick="showPage('publicidad',this)">◉ Publicidad</button>
+        <button onclick="showPage('finanzas',this)">▤ Finanzas</button>
+        <button onclick="showPage('empresa',this)">◆ Empresa</button>
+        <button onclick="showPage('noticias',this)">▤ Noticias</button>
+    </nav>
 
-            <div class="table"></div>
+    <div class="bottom-side">
+        <button class="save-btn" onclick="saveGame()">Guardar partida</button>
+    </div>
 
-            <div class="monitor">
-                <div class="monitorScreen"></div>
-            </div>
+</aside>
 
-            <div class="entity" id="entity">
-                <div class="entityHead"></div>
-                <div class="entityEyes"></div>
-                <div class="entityBody"></div>
-            </div>
 
+<main>
+
+<!-- ================= INICIO ================= -->
+
+<section id="inicio" class="page">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Resumen</h1>
+        <p>Controlá tu negocio antes de que el mercado cambie.</p>
+    </div>
+
+    <button class="next-day" onclick="nextDay()">Terminar día →</button>
+</div>
+
+<div class="stats">
+
+    <div class="stat">
+        <small>Dinero disponible</small>
+        <strong class="green" id="money">$10.000</strong>
+    </div>
+
+    <div class="stat">
+        <small>Ventas acumuladas</small>
+        <strong id="sales">$0</strong>
+    </div>
+
+    <div class="stat">
+        <small>Ganancia</small>
+        <strong id="profit">$0</strong>
+    </div>
+
+    <div class="stat">
+        <small>Clientes</small>
+        <strong id="customers">0</strong>
+    </div>
+
+</div>
+
+
+<div class="content-grid">
+
+<div>
+
+<div class="panel">
+    <div class="panel-head">
+        <h2>Actividad reciente</h2>
+        <span>últimos movimientos</span>
+    </div>
+
+    <div id="activity" class="activity"></div>
+</div>
+
+
+<div class="panel">
+    <div class="panel-head">
+        <h2>Productos</h2>
+        <span>venta rápida</span>
+    </div>
+
+    <div id="quickProducts" class="product-grid"></div>
+</div>
+
+</div>
+
+
+<div>
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>Situación</h2>
+    </div>
+
+    <div class="goal">
+
+        <div class="goal-head">
+            <span>Reputación</span>
+            <b id="reputationText">50/100</b>
+        </div>
+
+        <div class="progress">
+            <div id="reputationBar"></div>
         </div>
 
     </div>
 
-    <!-- EFECTOS -->
+    <div class="goal">
 
-    <div class="rain"></div>
-    <div class="fog"></div>
-
-    <div class="flashlight" id="flashlight"></div>
-
-    <div class="vignette"></div>
-    <div class="grain"></div>
-    <div class="scanlines"></div>
-
-    <!-- HUD -->
-
-    <div class="hud">
-
-        <div class="rec">
-            <span class="recDot"></span>
-            REC
+        <div class="goal-head">
+            <span>Experiencia empresarial</span>
+            <b id="xpText">0%</b>
         </div>
 
-        <div class="time" id="clock">
-            02:13:00
+        <div class="progress">
+            <div id="xpBar"></div>
         </div>
-
-        <div class="battery">
-            BAT 87%
-        </div>
-
-        <div class="location">
-            CASA / HABITACIÓN
-        </div>
-
-    </div>
-
-    <!-- SUBTÍTULOS -->
-
-    <div class="subtitle" id="subtitle"></div>
-
-    <!-- TRANSICIÓN -->
-
-    <div id="fade"></div>
-
-    <!-- INICIO -->
-
-    <div class="titleScreen" id="startScreen">
-
-        <h1>02:13</h1>
-
-        <p>
-            ARCHIVO RECUPERADO
-        </p>
-
-        <button
-            class="startButton"
-            onclick="startFilm()">
-            INICIAR GRABACIÓN
-        </button>
-
-    </div>
-
-    <!-- FINAL -->
-
-    <div class="end" id="end">
-
-        <h2>FIN DE LA GRABACIÓN</h2>
-
-        <p>
-            ARCHIVO CORRUPTO — 02:47:19
-        </p>
 
     </div>
 
 </div>
 
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>Noticias</h2>
+    </div>
+
+    <div id="miniNews"></div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>Objetivos</h2>
+    </div>
+
+    <div id="goals"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= MERCADO ================= -->
+
+<section id="mercado" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Mercado</h1>
+        <p>Los precios cambian todos los días.</p>
+    </div>
+</div>
+
+<div class="panel">
+
+<div id="market"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= INVENTARIO ================= -->
+
+<section id="inventario" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Inventario</h1>
+        <p>Comprá mercadería y mantené el stock.</p>
+    </div>
+</div>
+
+<div class="panel">
+
+<table class="table">
+
+<thead>
+<tr>
+<th>Producto</th>
+<th>Stock</th>
+<th>Costo</th>
+<th>Precio</th>
+<th>Demanda</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="inventoryTable"></tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- ================= EMPLEADOS ================= -->
+
+<section id="empleados" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Empleados</h1>
+        <p>Contratar gente mejora el negocio, pero cuesta dinero.</p>
+    </div>
+</div>
+
+<div class="panel">
+
+<h2 style="margin-top:0">Personal disponible</h2>
+
+<div id="employeeList"></div>
+
+</div>
+
+</section>
+
+
+<!-- ================= PUBLICIDAD ================= -->
+
+<section id="publicidad" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Publicidad</h1>
+        <p>Invertí para conseguir nuevos clientes.</p>
+    </div>
+</div>
+
+<div class="panel">
+
+<div class="ad-box">
+<h3>Redes sociales</h3>
+<p>Una campaña pequeña para aumentar la cantidad de clientes.</p>
+<strong>$500</strong>
+<br><br>
+<button onclick="advertise(500,5)">Lanzar campaña</button>
+</div>
+
+<div class="ad-box">
+<h3>Publicidad local</h3>
+<p>Carteles y anuncios cerca de tu zona.</p>
+<strong>$1.500</strong>
+<br><br>
+<button onclick="advertise(1500,12)">Lanzar campaña</button>
+</div>
+
+<div class="ad-box">
+<h3>Campaña grande</h3>
+<p>Una campaña fuerte que puede cambiar la situación del negocio.</p>
+<strong>$4.000</strong>
+<br><br>
+<button onclick="advertise(4000,30)">Lanzar campaña</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= FINANZAS ================= -->
+
+<section id="finanzas" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Finanzas</h1>
+        <p>Revisá tus ingresos, gastos y préstamos.</p>
+    </div>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<small>Ingresos</small>
+<strong id="financeSales">$0</strong>
+</div>
+
+<div class="stat">
+<small>Costos</small>
+<strong id="financeCosts">$0</strong>
+</div>
+
+<div class="stat">
+<small>Ganancia total</small>
+<strong id="financeProfit">$0</strong>
+</div>
+
+<div class="stat">
+<small>Deuda</small>
+<strong id="debt">$0</strong>
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h2>Historial de ganancias</h2>
+</div>
+
+<div id="chart" class="chart"></div>
+
+</div>
+
+<div class="panel">
+
+<h2 style="margin-top:0">Banco</h2>
+
+<div class="loan">
+<strong>Préstamo pequeño</strong>
+<p style="color:#999;font-size:12px">
+Recibís $5.000. Devolvés $5.750.
+</p>
+<button onclick="takeLoan(5000,5750)">Pedir préstamo</button>
+</div>
+
+<div class="loan">
+<strong>Préstamo empresarial</strong>
+<p style="color:#999;font-size:12px">
+Recibís $20.000. Devolvés $24.000.
+</p>
+<button onclick="takeLoan(20000,24000)">Pedir préstamo</button>
+</div>
+
+<button class="save-btn" style="margin-top:10px" onclick="payDebt()">
+Pagar deuda
+</button>
+
+</div>
+
+</section>
+
+
+<!-- ================= EMPRESA ================= -->
+
+<section id="empresa" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Empresa</h1>
+        <p>Tu negocio crece con cada decisión.</p>
+    </div>
+</div>
+
+<div class="company-header">
+
+<div class="company-name">
+<span id="companyName">Tu Negocio</span>
+</div>
+
+<p style="color:#999">
+Nivel <b id="companyLevel">1</b> · Experiencia empresarial
+</p>
+
+<div class="progress">
+<div id="companyXP"></div>
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<small>Reputación</small>
+<strong id="companyRep">50</strong>
+</div>
+
+<div class="stat">
+<small>Empleados</small>
+<strong id="employeeCount">0</strong>
+</div>
+
+<div class="stat">
+<small>Días activos</small>
+<strong id="companyDays">1</strong>
+</div>
+
+<div class="stat">
+<small>Valor estimado</small>
+<strong id="companyValue">$10.000</strong>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>Información</h2>
+
+<p style="color:#999;font-size:13px;line-height:1.7">
+No existe una única forma de ganar. Podés vender barato y moverte rápido,
+apostar por productos caros, invertir en publicidad o ahorrar hasta poder
+abrir un local.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- ================= NOTICIAS ================= -->
+
+<section id="noticias" class="page" style="display:none">
+
+<div class="topbar">
+    <div class="title">
+        <h1>Noticias</h1>
+        <p>Lo que ocurre en el mercado puede afectar tus decisiones.</p>
+    </div>
+</div>
+
+<div class="panel">
+
+<div id="newsPage"></div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div id="notification" class="notification">
+<strong id="notificationTitle"></strong>
+<p id="notificationText"></p>
+</div>
+
+
 <script>
 
 /* =========================================================
-   CONFIGURACIÓN
+   DATOS DEL JUEGO
 ========================================================= */
 
-const film =
-    document.getElementById("film");
+const initialProducts = [
 
-const camera =
-    document.getElementById("camera");
+{
+    id:"agua",
+    name:"Agua mineral",
+    icon:"💧",
+    baseCost:250,
+    price:450,
+    stock:8,
+    demand:65
+},
 
-const entity =
-    document.getElementById("entity");
+{
+    id:"snacks",
+    name:"Snacks",
+    icon:"🥨",
+    baseCost:400,
+    price:700,
+    stock:6,
+    demand:72
+},
 
-const subtitle =
-    document.getElementById("subtitle");
+{
+    id:"auriculares",
+    name:"Auriculares",
+    icon:"🎧",
+    baseCost:1800,
+    price:2900,
+    stock:2,
+    demand:38
+},
 
-const fade =
-    document.getElementById("fade");
+{
+    id:"zapatillas",
+    name:"Zapatillas",
+    icon:"👟",
+    baseCost:5000,
+    price:7500,
+    stock:1,
+    demand:25
+},
 
-const flashlight =
-    document.getElementById("flashlight");
+{
+    id:"mochila",
+    name:"Mochila",
+    icon:"🎒",
+    baseCost:2200,
+    price:3600,
+    stock:2,
+    demand:42
+},
 
-const clock =
-    document.getElementById("clock");
+{
+    id:"cargador",
+    name:"Cargador",
+    icon:"🔌",
+    baseCost:1000,
+    price:1700,
+    stock:3,
+    demand:52
+}
 
-const startScreen =
-    document.getElementById("startScreen");
+];
 
-const end =
-    document.getElementById("end");
 
-let started = false;
+const employeeTypes = [
 
-let seconds = 0;
+{
+    name:"Vendedor",
+    salary:500,
+    bonus:10
+},
+
+{
+    name:"Repartidor",
+    salary:700,
+    bonus:12
+},
+
+{
+    name:"Publicista",
+    salary:900,
+    bonus:18
+},
+
+{
+    name:"Contador",
+    salary:1200,
+    bonus:8
+},
+
+{
+    name:"Encargado",
+    salary:1800,
+    bonus:22
+}
+
+];
 
 
 /* =========================================================
-   ESPERA
+   ESTADO
 ========================================================= */
 
-function wait(ms){
+let game = {
 
-    return new Promise(
-        resolve => setTimeout(resolve,ms)
-    );
+    money:10000,
+
+    sales:0,
+
+    costs:0,
+
+    profit:0,
+
+    customers:0,
+
+    day:1,
+
+    reputation:50,
+
+    xp:0,
+
+    level:1,
+
+    debt:0,
+
+    debtPayment:0,
+
+    employees:[],
+
+    products:JSON.parse(JSON.stringify(initialProducts)),
+
+    history:[],
+
+    news:[
+
+        {
+            day:1,
+            title:"El mercado abre tranquilo",
+            text:"Los precios se mantienen relativamente estables durante los primeros días."
+        }
+
+    ],
+
+    activities:[
+
+        {
+            icon:"🏁",
+            text:"Comenzaste tu negocio con $10.000.",
+            day:1
+        }
+
+    ]
+
+};
+
+
+/* =========================================================
+   UTILIDADES
+========================================================= */
+
+function money(n){
+
+    return "$" + Math.round(n).toLocaleString("es-AR");
 
 }
 
 
-/* =========================================================
-   SUBTÍTULOS
-========================================================= */
+function notify(title,text){
 
-async function showText(
-    text,
-    duration = 3000
-){
+    const box=document.getElementById("notification");
 
-    subtitle.textContent = text;
+    document.getElementById("notificationTitle").textContent=title;
 
-    subtitle.style.opacity = "1";
+    document.getElementById("notificationText").textContent=text;
 
-    await wait(duration);
+    box.classList.add("show");
 
-    subtitle.style.opacity = "0";
+    setTimeout(()=>{
 
-}
+        box.classList.remove("show");
 
-
-/* =========================================================
-   RELOJ
-========================================================= */
-
-function updateClock(){
-
-    seconds++;
-
-    let total =
-        2 * 60 * 60 +
-        13 * 60 +
-        seconds;
-
-    let hours =
-        Math.floor(total / 3600);
-
-    let minutes =
-        Math.floor(
-            (total % 3600) / 60
-        );
-
-    let secs =
-        total % 60;
-
-    clock.textContent =
-        String(hours).padStart(2,"0")
-        + ":" +
-        String(minutes).padStart(2,"0")
-        + ":" +
-        String(secs).padStart(2,"0");
+    },3500);
 
 }
 
 
-/* =========================================================
-   MOVIMIENTO DE LINTERNA
-========================================================= */
+function activity(icon,text){
 
-document.addEventListener(
-    "mousemove",
-    e => {
+    game.activities.unshift({
 
-        if(!started) return;
+        icon,
+        text,
+        day:game.day
 
-        flashlight.style.left =
-            e.clientX + "px";
+    });
 
-        flashlight.style.top =
-            e.clientY + "px";
+    if(game.activities.length>30){
+
+        game.activities.pop();
 
     }
-);
-
-
-/* =========================================================
-   MICRO MOVIMIENTO DE CÁMARA
-========================================================= */
-
-setInterval(()=>{
-
-    if(!started) return;
-
-    const x =
-        (Math.random() - .5) * 3;
-
-    const y =
-        (Math.random() - .5) * 3;
-
-    camera.style.transform =
-        `translate(${x}px,${y}px)`;
-
-},300);
-
-
-/* =========================================================
-   APARICIÓN
-========================================================= */
-
-async function apparition(){
-
-    await wait(500);
-
-    entity.classList.add("visible");
-
-    await wait(350);
-
-    entity.classList.remove("visible");
 
 }
 
 
-/* =========================================================
-   PARPADEO DE LUZ
-========================================================= */
+function addNews(title,text){
 
-async function flicker(){
+    game.news.unshift({
 
-    const bg =
-        document.getElementById(
-            "sceneBackground"
-        );
+        day:game.day,
+        title,
+        text
 
-    for(let i=0;i<5;i++){
+    });
 
-        bg.style.filter =
-            "brightness(.25)";
+    if(game.news.length>15){
 
-        await wait(
-            80 + Math.random()*180
-        );
-
-        bg.style.filter =
-            "brightness(1)";
-
-        await wait(
-            100 + Math.random()*250
-        );
+        game.news.pop();
 
     }
 
@@ -1152,221 +1384,1133 @@ async function flicker(){
 
 
 /* =========================================================
-   TRANSICIÓN
+   NAVEGACIÓN
 ========================================================= */
 
-async function transition(){
+function showPage(page,button){
 
-    fade.style.opacity = "1";
+    document.querySelectorAll(".page").forEach(p=>{
 
-    await wait(1000);
+        p.style.display="none";
 
-    fade.style.opacity = "0";
+    });
+
+    document.getElementById(page).style.display="block";
+
+    document.querySelectorAll("nav button").forEach(b=>{
+
+        b.classList.remove("active");
+
+    });
+
+    if(button){
+
+        button.classList.add("active");
+
+    }
+
+    render();
 
 }
 
 
 /* =========================================================
-   PELÍCULA
+   VENDER
 ========================================================= */
 
-async function startFilm(){
+function sellProduct(id){
 
-    if(started) return;
+    const p=game.products.find(x=>x.id===id);
 
-    started = true;
+    if(!p) return;
 
-    startScreen.style.opacity = "0";
+    if(p.stock<=0){
 
-    await wait(1800);
+        notify("Sin stock","Necesitás comprar más unidades.");
 
-    startScreen.style.display = "none";
+        return;
 
-    setInterval(
-        updateClock,
-        1000
-    );
+    }
 
-    /*
-       ESCENA 1
-       INTRODUCCIÓN
-    */
+    let chance=p.demand + game.reputation/5;
 
-    await showText(
-        "02:13 AM",
-        3000
-    );
+    let sellerBonus=0;
 
-    await wait(2500);
+    game.employees.forEach(e=>{
 
-    /*
-       ESCENA 2
-       RUIDO
-    */
+        const type=employeeTypes[e];
 
-    await showText(
-        "Escuché algo abajo.",
-        3500
-    );
+        if(type.name==="Vendedor") sellerBonus+=10;
 
-    await wait(3000);
+    });
 
-    /*
-       ESCENA 3
-       EXPLORACIÓN
-    */
+    chance+=sellerBonus;
 
-    flashlight.style.width =
-        "45vw";
+    if(Math.random()*100 > chance){
 
-    await wait(2500);
+        notify("No hubo venta","Hoy nadie quiso comprar " + p.name + ".");
 
-    flashlight.style.width =
-        "70vw";
+        return;
 
-    await wait(2500);
+    }
 
-    /*
-       ESCENA 4
-       PRIMERA APARICIÓN
-    */
+    const sale=p.price;
 
-    camera.classList.add(
-        "shaking"
-    );
+    const cost=p.baseCost;
 
-    await apparition();
+    p.stock--;
 
-    await wait(2500);
+    game.money+=sale;
 
-    camera.classList.remove(
-        "shaking"
-    );
+    game.sales+=sale;
 
-    /*
-       ESCENA 5
-       TODO NORMAL
-    */
+    game.costs+=cost;
 
-    await showText(
-        "No hay nadie.",
-        2500
-    );
+    game.profit+=sale-cost;
 
-    await wait(3500);
+    game.customers++;
 
-    /*
-       ESCENA 6
-       RUIDO MÁS FUERTE
-    */
+    game.xp+=3;
 
-    await flicker();
+    game.reputation=Math.min(100,game.reputation+0.1);
 
-    camera.classList.add(
-        "shaking"
-    );
+    activity("🛒","Vendiste " + p.name + " por " + money(sale) + ".");
 
-    await showText(
-        "¿Quién está ahí?",
-        2500
-    );
+    notify("Venta realizada","Ganaste " + money(sale-cost) + " con esta venta.");
 
-    await wait(2500);
+    levelCheck();
 
-    /*
-       ESCENA 7
-       SEGUNDA APARICIÓN
-    */
-
-    entity.style.right = "38%";
-
-    entity.style.top = "30%";
-
-    entity.classList.add(
-        "visible"
-    );
-
-    await wait(900);
-
-    entity.classList.remove(
-        "visible"
-    );
-
-    await wait(1500);
-
-    /*
-       ESCENA 8
-       CÁMARA EN PÁNICO
-    */
-
-    camera.classList.add(
-        "shaking"
-    );
-
-    flashlight.style.width =
-        "40vw";
-
-    await wait(1500);
-
-    flashlight.style.width =
-        "90vw";
-
-    await wait(1200);
-
-    /*
-       FLASH
-    */
-
-    film.classList.add(
-        "flashEffect"
-    );
-
-    await wait(200);
-
-    film.classList.remove(
-        "flashEffect"
-    );
-
-    /*
-       OSCURIDAD
-    */
-
-    fade.style.transition =
-        "opacity .2s";
-
-    fade.style.opacity =
-        "1";
-
-    await wait(2200);
-
-    /*
-       ÚLTIMO MENSAJE
-    */
-
-    subtitle.textContent =
-        "NO MIRES DETRÁS DE TI";
-
-    subtitle.style.opacity =
-        "1";
-
-    await wait(3500);
-
-    subtitle.style.opacity =
-        "0";
-
-    /*
-       FINAL
-    */
-
-    await wait(1500);
-
-    end.style.display =
-        "flex";
+    render();
 
 }
+
+
+/* =========================================================
+   COMPRAR STOCK
+========================================================= */
+
+function buyProduct(id){
+
+    const p=game.products.find(x=>x.id===id);
+
+    if(!p) return;
+
+    const price=Math.round(p.baseCost * (1 + (Math.random()*0.15)));
+
+    if(game.money<price){
+
+        notify("Dinero insuficiente","No podés comprar esta unidad.");
+
+        return;
+
+    }
+
+    game.money-=price;
+
+    game.costs+=price;
+
+    p.stock++;
+
+    activity("📦","Compraste " + p.name + " por " + money(price) + ".");
+
+    render();
+
+}
+
+
+/* =========================================================
+   PUBLICIDAD
+========================================================= */
+
+function advertise(cost,bonus){
+
+    if(game.money<cost){
+
+        notify("No alcanza","No tenés suficiente dinero para esta campaña.");
+
+        return;
+
+    }
+
+    game.money-=cost;
+
+    game.costs+=cost;
+
+    const result=bonus + Math.floor(Math.random()*bonus);
+
+    game.reputation=Math.min(100,game.reputation+result/5);
+
+    game.xp+=Math.round(result/2);
+
+    activity("📣","Invertiste " + money(cost) + " en publicidad.");
+
+    addNews(
+        "Nueva campaña publicitaria",
+        "Tu empresa aumentó su presencia y ganó visibilidad."
+    );
+
+    notify(
+        "Campaña lanzada",
+        "La campaña consiguió aproximadamente " + result + " puntos de alcance."
+    );
+
+    levelCheck();
+
+    render();
+
+}
+
+
+/* =========================================================
+   EMPLEADOS
+========================================================= */
+
+function hireEmployee(index){
+
+    const type=employeeTypes[index];
+
+    if(game.money<type.salary){
+
+        notify("No alcanza","Necesitás dinero para contratar a esta persona.");
+
+        return;
+
+    }
+
+    game.money-=type.salary;
+
+    game.employees.push(index);
+
+    activity("👤","Contrataste a un nuevo " + type.name + ".");
+
+    game.xp+=10;
+
+    notify("Contratación","Ahora tenés un " + type.name + " en tu equipo.");
+
+    levelCheck();
+
+    render();
+
+}
+
+
+/* =========================================================
+   PRÉSTAMOS
+========================================================= */
+
+function takeLoan(amount,payment){
+
+    if(game.debt>0){
+
+        notify("Préstamo pendiente","Primero tenés que pagar tu deuda actual.");
+
+        return;
+
+    }
+
+    game.money+=amount;
+
+    game.debt=payment;
+
+    game.debtPayment=payment;
+
+    activity("🏦","Pediste un préstamo de " + money(amount) + ".");
+
+    notify("Dinero recibido","El banco depositó " + money(amount) + ".");
+
+    render();
+
+}
+
+
+function payDebt(){
+
+    if(game.debt<=0){
+
+        notify("Sin deuda","No tenés préstamos pendientes.");
+
+        return;
+
+    }
+
+    if(game.money<game.debt){
+
+        notify("No alcanza","No tenés suficiente dinero para pagar la deuda.");
+
+        return;
+
+    }
+
+    game.money-=game.debt;
+
+    activity("🏦","Pagaste tu deuda de " + money(game.debt) + ".");
+
+    game.debt=0;
+
+    game.debtPayment=0;
+
+    game.reputation+=2;
+
+    notify("Deuda pagada","Ya no tenés obligaciones con el banco.");
+
+    render();
+
+}
+
+
+/* =========================================================
+   NIVEL
+========================================================= */
+
+function levelCheck(){
+
+    const needed=game.level*100;
+
+    if(game.xp>=needed){
+
+        game.xp-=needed;
+
+        game.level++;
+
+        game.reputation=Math.min(100,game.reputation+3);
+
+        activity("⬆️","Subiste al nivel " + game.level + ".");
+
+        notify("Nuevo nivel","Tu empresa ahora es nivel " + game.level + ".");
+
+    }
+
+}
+
+
+/* =========================================================
+   CAMBIO DE MERCADO
+========================================================= */
+
+function marketChange(){
+
+    game.products.forEach(p=>{
+
+        let change=(Math.random()-0.5)*0.25;
+
+        p.baseCost=Math.max(
+            50,
+            Math.round(p.baseCost*(1+change))
+        );
+
+        let demandChange=(Math.random()-0.5)*20;
+
+        p.demand=Math.max(
+            10,
+            Math.min(95,p.demand+demandChange)
+        );
+
+        const margin=1.5+Math.random()*0.45;
+
+        p.price=Math.round(p.baseCost*margin);
+
+    });
+
+}
+
+
+/* =========================================================
+   EVENTOS ALEATORIOS
+========================================================= */
+
+function randomEvent(){
+
+    const events=[
+
+        {
+            chance:20,
+            title:"Proveedor con descuento",
+            text:"Un proveedor quiere liquidar stock.",
+            action:()=>{
+
+                game.products.forEach(p=>{
+
+                    p.baseCost=Math.round(p.baseCost*.9);
+
+                });
+
+                addNews(
+                    "Descuentos mayoristas",
+                    "Algunos proveedores redujeron sus precios."
+                );
+
+            }
+        },
+
+        {
+            chance:15,
+            title:"Producto de moda",
+            text:"Uno de tus productos empezó a llamar la atención.",
+            action:()=>{
+
+                const p=game.products[
+                    Math.floor(Math.random()*game.products.length)
+                ];
+
+                p.demand=Math.min(95,p.demand+25);
+
+                addNews(
+                    "Producto de moda",
+                    p.name+" está teniendo mucha demanda."
+                );
+
+            }
+        },
+
+        {
+            chance:12,
+            title:"Competencia nueva",
+            text:"Una nueva empresa apareció en la zona.",
+            action:()=>{
+
+                game.reputation=Math.max(0,game.reputation-3);
+
+                addNews(
+                    "Nuevo competidor",
+                    "Una nueva empresa empezó a vender en tu zona."
+                );
+
+            }
+        },
+
+        {
+            chance:10,
+            title:"Aumento del transporte",
+            text:"Los costos de distribución aumentaron.",
+            action:()=>{
+
+                game.money-=300;
+
+                game.costs+=300;
+
+                addNews(
+                    "Transporte más caro",
+                    "Los costos logísticos aumentaron."
+                );
+
+            }
+        },
+
+        {
+            chance:8,
+            title:"Cliente importante",
+            text:"Una empresa quiere hacer una compra grande.",
+            action:()=>{
+
+                game.money+=1200;
+
+                game.sales+=1200;
+
+                game.profit+=700;
+
+                game.customers++;
+
+                game.reputation+=2;
+
+                addNews(
+                    "Cliente importante",
+                    "Conseguiste una venta especial."
+                );
+
+            }
+        }
+
+    ];
+
+    const roll=Math.random()*100;
+
+    let total=0;
+
+    for(const event of events){
+
+        total+=event.chance;
+
+        if(roll<total){
+
+            event.action();
+
+            activity("📰",event.title);
+
+            notify(event.title,event.text);
+
+            return;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   FINALIZAR DÍA
+========================================================= */
+
+function nextDay(){
+
+    game.day++;
+
+    document.getElementById("sideDay").textContent=game.day;
+
+    let salaries=0;
+
+    game.employees.forEach(index=>{
+
+        salaries+=employeeTypes[index].salary;
+
+    });
+
+    if(salaries>0){
+
+        game.money-=salaries;
+
+        game.costs+=salaries;
+
+        game.profit-=salaries;
+
+        activity("💼","Pagaste " + money(salaries) + " en salarios.");
+
+    }
+
+    /* alquiler */
+
+    if(game.day%7===0){
+
+        game.money-=750;
+
+        game.costs+=750;
+
+        game.profit-=750;
+
+        activity("🏠","Pagaste $750 de gastos semanales.");
+
+    }
+
+    marketChange();
+
+    randomEvent();
+
+    /* ventas automáticas */
+
+    let automaticSales=0;
+
+    game.products.forEach(p=>{
+
+        let workerBonus=0;
+
+        game.employees.forEach(index=>{
+
+            if(employeeTypes[index].name==="Vendedor"){
+
+                workerBonus+=7;
+
+            }
+
+        });
+
+        const chance=p.demand+workerBonus;
+
+        if(p.stock>0 && Math.random()*100<chance){
+
+            p.stock--;
+
+            automaticSales+=p.price;
+
+            game.sales+=p.price;
+
+            game.costs+=p.baseCost;
+
+            game.profit+=p.price-p.baseCost;
+
+            game.customers++;
+
+        }
+
+    });
+
+    if(automaticSales>0){
+
+        activity(
+            "🤝",
+            "Ventas automáticas: " + money(automaticSales) + "."
+        );
+
+    }
+
+    game.xp+=5;
+
+    game.history.push(game.profit);
+
+    if(game.history.length>30){
+
+        game.history.shift();
+
+    }
+
+    levelCheck();
+
+    notify(
+        "Día " + game.day,
+        "El mercado cambió. Revisá tus precios y tu inventario."
+    );
+
+    render();
+
+}
+
+
+/* =========================================================
+   GUARDAR / CARGAR
+========================================================= */
+
+function saveGame(){
+
+    localStorage.setItem(
+        "negocioSave",
+        JSON.stringify(game)
+    );
+
+    notify(
+        "Partida guardada",
+        "Tu progreso quedó guardado en este navegador."
+    );
+
+}
+
+
+function loadGame(){
+
+    const saved=localStorage.getItem("negocioSave");
+
+    if(!saved) return;
+
+    try{
+
+        game=JSON.parse(saved);
+
+        notify(
+            "Partida cargada",
+            "Continuaste tu negocio."
+        );
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER GENERAL
+========================================================= */
+
+function render(){
+
+    document.getElementById("money").textContent=money(game.money);
+
+    document.getElementById("sales").textContent=money(game.sales);
+
+    document.getElementById("profit").textContent=money(game.profit);
+
+    document.getElementById("customers").textContent=
+        game.customers.toLocaleString("es-AR");
+
+    document.getElementById("sideDay").textContent=game.day;
+
+    document.getElementById("reputationText").textContent=
+        Math.round(game.reputation)+"/100";
+
+    document.getElementById("reputationBar").style.width=
+        game.reputation+"%";
+
+    const xpNeeded=game.level*100;
+
+    const xpPercent=Math.min(
+        100,
+        game.xp/xpNeeded*100
+    );
+
+    document.getElementById("xpText").textContent=
+        Math.round(xpPercent)+"%";
+
+    document.getElementById("xpBar").style.width=
+        xpPercent+"%";
+
+    renderActivity();
+
+    renderQuickProducts();
+
+    renderMarket();
+
+    renderInventory();
+
+    renderEmployees();
+
+    renderNews();
+
+    renderGoals();
+
+    renderFinance();
+
+    renderCompany();
+
+}
+
+
+/* =========================================================
+   ACTIVIDAD
+========================================================= */
+
+function renderActivity(){
+
+    const box=document.getElementById("activity");
+
+    if(game.activities.length===0){
+
+        box.innerHTML='<div class="empty">Todavía no hay movimientos.</div>';
+
+        return;
+
+    }
+
+    box.innerHTML=game.activities.slice(0,15).map(a=>`
+
+        <div class="activity-item">
+
+            <div class="activity-icon">${a.icon}</div>
+
+            <div class="activity-text">
+
+                ${a.text}
+
+                <small>Día ${a.day}</small>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   PRODUCTOS RÁPIDOS
+========================================================= */
+
+function renderQuickProducts(){
+
+    const box=document.getElementById("quickProducts");
+
+    box.innerHTML=game.products.slice(0,6).map(p=>`
+
+        <div class="product">
+
+            <div class="product-top">
+
+                <div class="product-name">
+                    ${p.name}
+                </div>
+
+                <div class="product-icon">
+                    ${p.icon}
+                </div>
+
+            </div>
+
+            <div class="product-info">
+
+                Precio:
+                <b>${money(p.price)}</b><br>
+
+                Stock:
+                <b>${p.stock}</b><br>
+
+                Demanda:
+                <b>${Math.round(p.demand)}%</b>
+
+            </div>
+
+            <button
+                class="sell-btn"
+                onclick="sellProduct('${p.id}')"
+            >
+                Vender unidad
+            </button>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   MERCADO
+========================================================= */
+
+function renderMarket(){
+
+    const box=document.getElementById("market");
+
+    box.innerHTML=game.products.map(p=>{
+
+        const trend=p.demand>=60;
+
+        return `
+
+        <div class="market-card">
+
+            <div class="market-left">
+
+                <div class="market-icon">
+                    ${p.icon}
+                </div>
+
+                <div class="market-name">
+
+                    <strong>${p.name}</strong>
+
+                    <small>
+                        Demanda ${Math.round(p.demand)}%
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="price">
+
+                <strong>${money(p.price)}</strong>
+
+                <small class="${trend?"up":"down"}">
+                    ${trend?"▲ demanda":"▼ demanda"}
+                </small>
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   INVENTARIO
+========================================================= */
+
+function renderInventory(){
+
+    const box=document.getElementById("inventoryTable");
+
+    box.innerHTML=game.products.map(p=>`
+
+        <tr>
+
+            <td>
+                ${p.icon} ${p.name}
+            </td>
+
+            <td>
+                ${p.stock}
+            </td>
+
+            <td>
+                ${money(p.baseCost)}
+            </td>
+
+            <td>
+                ${money(p.price)}
+            </td>
+
+            <td>
+                ${Math.round(p.demand)}%
+            </td>
+
+            <td>
+
+                <button
+                    class="buy-btn"
+                    onclick="buyProduct('${p.id}')"
+                >
+                    Comprar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   EMPLEADOS
+========================================================= */
+
+function renderEmployees(){
+
+    const box=document.getElementById("employeeList");
+
+    box.innerHTML=employeeTypes.map((e,i)=>`
+
+        <div class="employee">
+
+            <div class="employee-info">
+
+                <strong>${e.name}</strong>
+
+                <small>
+                    Salario diario: ${money(e.salary)}
+                    · Bonus: +${e.bonus}%
+                </small>
+
+            </div>
+
+            <button
+                class="hire"
+                onclick="hireEmployee(${i})"
+            >
+                Contratar
+            </button>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   NOTICIAS
+========================================================= */
+
+function renderNews(){
+
+    const mini=document.getElementById("miniNews");
+
+    mini.innerHTML=game.news.slice(0,3).map(n=>`
+
+        <div class="news">
+
+            <small>Día ${n.day}</small>
+
+            <strong>${n.title}</strong>
+
+            <span style="color:#999;font-size:12px">
+                ${n.text}
+            </span>
+
+        </div>
+
+    `).join("");
+
+
+    const full=document.getElementById("newsPage");
+
+    full.innerHTML=game.news.map(n=>`
+
+        <div class="news">
+
+            <small>Día ${n.day}</small>
+
+            <strong>${n.title}</strong>
+
+            <span style="color:#999;font-size:12px">
+                ${n.text}
+            </span>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   OBJETIVOS
+========================================================= */
+
+function renderGoals(){
+
+    const box=document.getElementById("goals");
+
+    const goals=[
+
+        {
+            name:"Llegar a $25.000",
+            value:game.money,
+            max:25000
+        },
+
+        {
+            name:"Conseguir 50 clientes",
+            value:game.customers,
+            max:50
+        },
+
+        {
+            name:"Llegar a reputación 75",
+            value:game.reputation,
+            max:75
+        },
+
+        {
+            name:"Alcanzar nivel 3",
+            value:game.level,
+            max:3
+        }
+
+    ];
+
+    box.innerHTML=goals.map(g=>{
+
+        const percent=Math.min(
+            100,
+            g.value/g.max*100
+        );
+
+        return `
+
+        <div class="goal">
+
+            <div class="goal-head">
+
+                <span>${g.name}</span>
+
+                <span>
+                    ${Math.floor(g.value)} / ${g.max}
+                </span>
+
+            </div>
+
+            <div class="goal-progress">
+
+                <div style="width:${percent}%"></div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   FINANZAS
+========================================================= */
+
+function renderFinance(){
+
+    document.getElementById("financeSales").textContent=
+        money(game.sales);
+
+    document.getElementById("financeCosts").textContent=
+        money(game.costs);
+
+    document.getElementById("financeProfit").textContent=
+        money(game.profit);
+
+    document.getElementById("debt").textContent=
+        money(game.debt);
+
+
+    const chart=document.getElementById("chart");
+
+    if(game.history.length===0){
+
+        chart.innerHTML=
+            '<div class="empty">Todavía no hay datos.</div>';
+
+        return;
+
+    }
+
+    const max=Math.max(
+        ...game.history.map(x=>Math.abs(x)),
+        1
+    );
+
+    chart.innerHTML=game.history.map(value=>{
+
+        const height=Math.max(
+            4,
+            Math.abs(value)/max*100
+        );
+
+        return `
+
+        <div
+            class="bar"
+            style="height:${height}%"
+            title="${money(value)}"
+        ></div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   EMPRESA
+========================================================= */
+
+function renderCompany(){
+
+    document.getElementById("companyLevel").textContent=
+        game.level;
+
+    document.getElementById("employeeCount").textContent=
+        game.employees.length;
+
+    document.getElementById("companyDays").textContent=
+        game.day;
+
+    document.getElementById("companyRep").textContent=
+        Math.round(game.reputation);
+
+    document.getElementById("companyXP").style.width=
+        Math.min(
+            100,
+            game.xp/(game.level*100)*100
+        )+"%";
+
+    const value=
+        game.money+
+        game.sales*.35+
+        game.employees.length*1500;
+
+    document.getElementById("companyValue").textContent=
+        money(value);
+
+}
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+loadGame();
+
+render();
 
 </script>
 
 </body>
 </html>
-```

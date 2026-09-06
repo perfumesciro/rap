@@ -3,14 +3,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LA CASA — Cortometraje</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>02:13 — Cortometraje</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
 *{
+    box-sizing:border-box;
     margin:0;
     padding:0;
-    box-sizing:border-box;
 }
 
 html,body{
@@ -18,601 +20,1350 @@ html,body{
     height:100%;
     overflow:hidden;
     background:#000;
-    font-family:Arial, sans-serif;
+    font-family:Inter,Arial,sans-serif;
 }
 
-#movie{
+body{
+    cursor:none;
+}
+
+/* =========================================================
+   PELÍCULA
+========================================================= */
+
+#film{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
+    background:#000;
+}
+
+/* =========================================================
+   ESCENARIO
+========================================================= */
+
+.scene{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
     background:#050505;
 }
 
-/* =========================
-   HABITACIÓN
-========================= */
+.scene-image{
+    position:absolute;
+    inset:-4%;
+    width:108%;
+    height:108%;
+    object-fit:cover;
+    opacity:0;
+    transition:
+        opacity 1.5s ease,
+        transform 12s ease;
+    filter:
+        brightness(.52)
+        contrast(1.18)
+        saturate(.65);
+}
 
-.room{
+.scene-image.active{
+    opacity:1;
+    transform:scale(1.035);
+}
+
+/* =========================================================
+   ESCENAS DE PRUEBA
+   Si no colocás imágenes, se generan ambientes mediante CSS.
+========================================================= */
+
+#sceneBackground{
     position:absolute;
     inset:0;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(70,78,80,.32),
+            rgba(10,10,10,.92) 65%,
+            #000 100%
+        );
+
+    transition:
+        background 2s ease,
+        filter 2s ease;
+}
+
+.wall{
+    position:absolute;
+    width:100%;
+    height:75%;
+    top:0;
+
     background:
         linear-gradient(
             90deg,
-            rgba(0,0,0,.95) 0%,
-            rgba(20,20,20,.5) 45%,
-            rgba(0,0,0,.95) 100%
-        ),
-        radial-gradient(
-            circle at 50% 40%,
-            #343434 0%,
-            #151515 45%,
-            #020202 100%
+            rgba(0,0,0,.9),
+            rgba(45,45,45,.45),
+            rgba(0,0,0,.95)
         );
 }
 
-/* Ventana */
+.floor{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:28%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #111,
+            #030303
+        );
+
+    transform:perspective(600px) rotateX(15deg);
+    transform-origin:bottom;
+}
+
+/* =========================================================
+   VENTANA
+========================================================= */
 
 .window{
     position:absolute;
-    width:23vw;
-    height:36vh;
-    min-width:180px;
-    min-height:220px;
-    right:14%;
-    top:16%;
+    width:260px;
+    height:390px;
+    right:13%;
+    top:12%;
+
     background:
         linear-gradient(
-            rgba(40,60,70,.3),
-            rgba(0,0,0,.7)
+            rgba(20,35,42,.35),
+            rgba(0,0,0,.75)
         );
-    border:7px solid #111;
-    box-shadow:0 0 30px #000;
+
+    border:10px solid #0b0b0b;
+
+    box-shadow:
+        0 0 50px rgba(0,0,0,.9),
+        inset 0 0 40px rgba(0,0,0,.9);
 }
 
-.window:before{
+.window::before{
     content:"";
     position:absolute;
-    width:4px;
+    width:5px;
     height:100%;
-    background:#111;
+    background:#080808;
     left:50%;
 }
 
-.window:after{
+.window::after{
     content:"";
     position:absolute;
     width:100%;
-    height:4px;
-    background:#111;
+    height:5px;
+    background:#080808;
     top:50%;
 }
 
-/* Escritorio */
+/* =========================================================
+   LUZ DE CALLE
+========================================================= */
 
-.desk{
+.streetLight{
     position:absolute;
-    width:48vw;
-    height:10vh;
-    bottom:13%;
-    left:25%;
+    width:500px;
+    height:500px;
+    right:0;
+    top:4%;
+
     background:
-        linear-gradient(#262626,#111);
-    box-shadow:0 20px 30px rgba(0,0,0,.8);
+        radial-gradient(
+            circle,
+            rgba(180,185,170,.13),
+            transparent 65%
+        );
+
+    filter:blur(15px);
+
+    animation:streetFlicker 7s infinite;
 }
 
-.desk:before,
-.desk:after{
+@keyframes streetFlicker{
+
+    0%,91%,94%,100%{
+        opacity:.8;
+    }
+
+    92%{
+        opacity:.25;
+    }
+
+    93%{
+        opacity:.65;
+    }
+}
+
+/* =========================================================
+   MUEBLES
+========================================================= */
+
+.table{
+    position:absolute;
+    width:48%;
+    height:8%;
+    left:26%;
+    bottom:19%;
+
+    background:
+        linear-gradient(
+            #222,
+            #0a0a0a
+        );
+
+    box-shadow:
+        0 20px 30px rgba(0,0,0,.9);
+}
+
+.table::before,
+.table::after{
     content:"";
     position:absolute;
     width:5%;
-    height:180%;
-    background:#111;
-    top:70%;
+    height:150%;
+    top:75%;
+    background:#080808;
 }
 
-.desk:before{
+.table::before{
     left:8%;
 }
 
-.desk:after{
+.table::after{
     right:8%;
 }
 
-/* Monitor */
+/* =========================================================
+   MONITOR
+========================================================= */
 
 .monitor{
     position:absolute;
-    width:24vw;
-    height:20vh;
-    min-width:200px;
-    min-height:130px;
-    bottom:23%;
-    left:37%;
-    background:#030303;
-    border:8px solid #111;
+    width:350px;
+    height:210px;
+    left:calc(50% - 175px);
+    bottom:27%;
+
+    background:#020202;
+
+    border:12px solid #090909;
+
     box-shadow:
-        0 0 20px rgba(100,120,140,.15),
-        inset 0 0 40px #000;
+        0 0 50px rgba(80,100,110,.08);
 }
 
-.monitor-screen{
+.monitorScreen{
     position:absolute;
     inset:8px;
+
     background:
         radial-gradient(
             circle,
-            rgba(70,90,100,.25),
-            #020202 70%
+            rgba(80,100,110,.17),
+            #000 70%
+        );
+
+    animation:monitorNoise .2s infinite;
+}
+
+@keyframes monitorNoise{
+
+    0%{
+        filter:brightness(1);
+    }
+
+    50%{
+        filter:brightness(.92);
+    }
+
+    100%{
+        filter:brightness(1.05);
+    }
+}
+
+/* =========================================================
+   FIGURA
+========================================================= */
+
+.entity{
+    position:absolute;
+
+    width:75px;
+    height:235px;
+
+    right:23%;
+    top:20%;
+
+    opacity:0;
+
+    filter:
+        blur(1.3px)
+        brightness(.25);
+
+    transform:
+        translateY(15px)
+        scale(.98);
+
+    transition:
+        opacity .15s,
+        transform .3s;
+}
+
+.entity.visible{
+    opacity:1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.entityHead{
+    position:absolute;
+
+    width:65px;
+    height:75px;
+
+    left:5px;
+
+    border-radius:50%;
+
+    background:#030303;
+
+    box-shadow:
+        0 0 30px #000;
+}
+
+.entityBody{
+    position:absolute;
+
+    width:75px;
+    height:170px;
+
+    top:60px;
+
+    border-radius:
+        35px 35px 5px 5px;
+
+    background:
+        linear-gradient(
+            #020202,
+            #080808
         );
 }
 
-/* =========================
-   FIGURA
-========================= */
-
-.figure{
+.entityEyes{
     position:absolute;
-    width:65px;
-    height:190px;
-    right:24%;
-    top:25%;
-    opacity:0;
-    transition:opacity .1s;
-    filter:blur(1px);
-}
 
-.figure .head{
-    position:absolute;
-    width:55px;
-    height:65px;
-    border-radius:50%;
-    background:#050505;
-    left:5px;
-    top:0;
-    box-shadow:0 0 25px rgba(0,0,0,.9);
-}
+    z-index:3;
 
-.figure .body{
-    position:absolute;
-    width:65px;
-    height:130px;
-    background:#030303;
-    top:55px;
-    border-radius:25px 25px 5px 5px;
-}
-
-.figure .eyes{
-    position:absolute;
-    z-index:2;
-    top:28px;
-    left:15px;
     width:8px;
     height:8px;
+
+    top:31px;
+    left:16px;
+
     border-radius:50%;
-    background:#ddd;
-    box-shadow:27px 0 0 #ddd;
-    opacity:.7;
+
+    background:#bbb;
+
+    box-shadow:
+        29px 0 #bbb;
+
+    opacity:.65;
 }
 
-/* =========================
-   LINTERNA
-========================= */
-
-.flashlight{
-    position:absolute;
-    width:65vw;
-    height:65vw;
-    max-width:850px;
-    max-height:850px;
-    border-radius:50%;
-    pointer-events:none;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,220,.17) 0%,
-            rgba(255,255,220,.08) 15%,
-            rgba(0,0,0,0) 55%
-        );
-
-    transform:translate(-50%,-50%);
-    left:50%;
-    top:50%;
-}
-
-/* =========================
+/* =========================================================
    LLUVIA
-========================= */
+========================================================= */
 
 .rain{
     position:absolute;
-    inset:0;
-    pointer-events:none;
-    opacity:.35;
-    background-image:
+    inset:-20%;
+
+    opacity:.22;
+
+    background:
         repeating-linear-gradient(
             105deg,
-            transparent 0px,
-            transparent 8px,
-            rgba(255,255,255,.08) 9px,
-            transparent 10px
+            transparent 0,
+            transparent 11px,
+            rgba(210,220,220,.12) 12px,
+            transparent 13px
         );
-    animation:rainMove .25s linear infinite;
+
+    animation:
+        rain 0.28s linear infinite;
 }
 
-@keyframes rainMove{
+@keyframes rain{
+
     from{
-        background-position:0 0;
+        transform:translate(0,0);
     }
+
     to{
-        background-position:-30px 80px;
+        transform:translate(-25px,90px);
     }
 }
 
-/* =========================
-   RUIDO DE CÁMARA
-========================= */
+/* =========================================================
+   NIEBLA
+========================================================= */
 
-.noise{
+.fog{
     position:absolute;
     inset:0;
-    pointer-events:none;
-    opacity:.08;
-    background-image:
-        repeating-radial-gradient(
-            circle at 0 0,
-            #fff 0,
-            #fff 1px,
-            transparent 1px,
-            transparent 3px
+
+    background:
+        radial-gradient(
+            ellipse at 50% 70%,
+            rgba(150,155,155,.05),
+            transparent 60%
         );
-    background-size:5px 5px;
-    mix-blend-mode:screen;
+
+    filter:blur(25px);
+
+    animation:fogMove 12s ease-in-out infinite alternate;
 }
 
-/* Líneas de cámara */
+@keyframes fogMove{
+
+    from{
+        transform:translateX(-3%);
+    }
+
+    to{
+        transform:translateX(3%);
+    }
+}
+
+/* =========================================================
+   LINTERNA
+========================================================= */
+
+.flashlight{
+    position:absolute;
+
+    width:65vw;
+    height:65vw;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    transform:
+        translate(-50%,-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,250,215,.15) 0,
+            rgba(255,250,215,.07) 15%,
+            transparent 57%
+        );
+
+    transition:
+        left .18s ease,
+        top .18s ease;
+}
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.vignette{
+    position:absolute;
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        radial-gradient(
+            ellipse,
+            transparent 38%,
+            rgba(0,0,0,.25) 68%,
+            rgba(0,0,0,.92) 100%
+        );
+
+    z-index:30;
+}
+
+/* =========================================================
+   GRANO
+========================================================= */
+
+.grain{
+    position:absolute;
+    inset:-50%;
+
+    z-index:31;
+
+    pointer-events:none;
+
+    opacity:.075;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+
+    animation:grain .15s steps(2) infinite;
+}
+
+@keyframes grain{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    25%{
+        transform:translate(-2%,1%);
+    }
+
+    50%{
+        transform:translate(1%,-2%);
+    }
+
+    75%{
+        transform:translate(2%,2%);
+    }
+
+    100%{
+        transform:translate(-1%,-1%);
+    }
+}
+
+/* =========================================================
+   SCANLINES
+========================================================= */
 
 .scanlines{
     position:absolute;
     inset:0;
+
+    z-index:32;
+
     pointer-events:none;
+
     background:
         repeating-linear-gradient(
             0deg,
-            rgba(255,255,255,.025) 0px,
-            rgba(255,255,255,.025) 1px,
+            rgba(255,255,255,.018) 0,
+            rgba(255,255,255,.018) 1px,
             transparent 1px,
             transparent 4px
         );
 }
 
-/* Viñeta */
+/* =========================================================
+   CÁMARA
+========================================================= */
 
-.vignette{
+.camera{
     position:absolute;
     inset:0;
+
+    transition:
+        transform .15s ease;
+}
+
+.camera.shaking{
+    animation:
+        cameraShake .12s infinite;
+}
+
+@keyframes cameraShake{
+
+    0%{
+        transform:translate(0,0) rotate(0);
+    }
+
+    25%{
+        transform:translate(-2px,1px) rotate(-.08deg);
+    }
+
+    50%{
+        transform:translate(2px,-2px) rotate(.08deg);
+    }
+
+    75%{
+        transform:translate(-1px,-1px) rotate(-.05deg);
+    }
+
+    100%{
+        transform:translate(1px,2px) rotate(.04deg);
+    }
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+.hud{
+    position:absolute;
+    inset:0;
+
+    z-index:40;
+
     pointer-events:none;
-    background:
-        radial-gradient(
-            ellipse,
-            transparent 45%,
-            rgba(0,0,0,.85) 100%
-        );
+
+    color:rgba(235,235,235,.7);
+
+    font-family:monospace;
+
+    font-size:13px;
 }
 
-/* =========================
-   TEXTO
-========================= */
-
-#subtitle{
-    position:absolute;
-    bottom:8%;
-    width:100%;
-    text-align:center;
-    color:#ddd;
-    font-size:18px;
-    letter-spacing:2px;
-    text-shadow:0 2px 5px #000;
-    opacity:0;
-    transition:opacity .5s;
-}
-
-#time{
+.rec{
     position:absolute;
     top:25px;
-    right:30px;
-    color:#bbb;
-    font-family:monospace;
-    font-size:14px;
-    opacity:.6;
+    left:28px;
 }
 
-/* REC */
-
-#rec{
-    position:absolute;
-    top:25px;
-    left:30px;
-    color:#eee;
-    font-family:monospace;
-    font-size:14px;
-}
-
-#dot{
+.recDot{
     display:inline-block;
+
     width:9px;
     height:9px;
-    background:#d22;
-    border-radius:50%;
+
     margin-right:7px;
-    animation:blink 1s infinite;
+
+    border-radius:50%;
+
+    background:#d33;
+
+    animation:
+        recBlink 1s infinite;
 }
 
-@keyframes blink{
+@keyframes recBlink{
+
     50%{
         opacity:.2;
     }
 }
 
-/* =========================
-   PANTALLA INICIAL
-========================= */
+.time{
+    position:absolute;
+    top:25px;
+    right:28px;
+}
 
-#start{
+.battery{
+    position:absolute;
+    bottom:28px;
+    right:28px;
+}
+
+.location{
+    position:absolute;
+    bottom:28px;
+    left:28px;
+}
+
+/* =========================================================
+   SUBTÍTULOS
+========================================================= */
+
+.subtitle{
+    position:absolute;
+
+    z-index:50;
+
+    bottom:10%;
+
+    width:100%;
+
+    text-align:center;
+
+    color:#ddd;
+
+    font-size:18px;
+
+    letter-spacing:1px;
+
+    text-shadow:
+        0 2px 8px #000;
+
+    opacity:0;
+
+    transition:
+        opacity .7s ease;
+}
+
+/* =========================================================
+   TITULOS
+========================================================= */
+
+.titleScreen{
     position:absolute;
     inset:0;
+
     z-index:100;
-    background:#000;
+
     display:flex;
-    justify-content:center;
-    align-items:center;
+
     flex-direction:column;
-    color:#ddd;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#000;
+
+    transition:
+        opacity 2s;
 }
 
-#start h1{
-    font-size:clamp(35px,7vw,90px);
-    letter-spacing:15px;
+.titleScreen h1{
+    font-size:
+        clamp(42px,8vw,100px);
+
     font-weight:300;
-}
 
-#start p{
-    margin-top:20px;
-    color:#777;
-    letter-spacing:4px;
-}
+    letter-spacing:
+        clamp(8px,2vw,25px);
 
-#start button{
-    margin-top:50px;
-    padding:15px 40px;
-    background:transparent;
-    border:1px solid #555;
     color:#ddd;
-    cursor:pointer;
-    letter-spacing:4px;
 }
 
-#start button:hover{
+.titleScreen p{
+    margin-top:20px;
+
+    font-size:12px;
+
+    letter-spacing:6px;
+
+    color:#555;
+}
+
+.startButton{
+    margin-top:55px;
+
+    padding:15px 42px;
+
+    border:
+        1px solid #444;
+
+    background:
+        rgba(255,255,255,.02);
+
+    color:#aaa;
+
+    letter-spacing:4px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.startButton:hover{
+    color:#fff;
     background:#111;
 }
 
-/* =========================
-   TEMBLOR
-========================= */
+/* =========================================================
+   TRANSICIONES
+========================================================= */
 
-.shake{
-    animation:cameraShake .12s infinite;
+#fade{
+    position:absolute;
+    inset:0;
+
+    z-index:80;
+
+    pointer-events:none;
+
+    background:#000;
+
+    opacity:0;
+
+    transition:
+        opacity 1s ease;
 }
 
-@keyframes cameraShake{
-    0%{transform:translate(0,0);}
-    25%{transform:translate(-2px,1px);}
-    50%{transform:translate(2px,-1px);}
-    75%{transform:translate(-1px,-2px);}
-    100%{transform:translate(1px,2px);}
-}
-
-/* Flash */
-
-.flash{
-    animation:flash .15s;
+.flashEffect{
+    animation:
+        flash .15s;
 }
 
 @keyframes flash{
-    0%{filter:brightness(1);}
-    30%{filter:brightness(4);}
-    100%{filter:brightness(1);}
+
+    0%{
+        filter:brightness(1);
+    }
+
+    35%{
+        filter:brightness(4);
+    }
+
+    100%{
+        filter:brightness(1);
+    }
 }
 
-/* Pantalla negra */
+/* =========================================================
+   PANTALLA FINAL
+========================================================= */
 
-#black{
+.end{
     position:absolute;
     inset:0;
+
+    z-index:200;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    flex-direction:column;
+
     background:#000;
-    z-index:50;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity 1s;
+
+    color:#777;
+
+    text-align:center;
+}
+
+.end h2{
+    font-weight:300;
+
+    letter-spacing:8px;
+
+    color:#aaa;
+}
+
+.end p{
+    margin-top:25px;
+
+    font-size:12px;
+
+    letter-spacing:3px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="movie">
+<div id="film">
 
-    <div class="room" id="room">
+    <div class="camera" id="camera">
 
-        <div class="window"></div>
+        <div id="sceneBackground">
 
-        <div class="desk"></div>
+            <div class="wall"></div>
+            <div class="floor"></div>
 
-        <div class="monitor">
-            <div class="monitor-screen"></div>
-        </div>
+            <div class="window"></div>
+            <div class="streetLight"></div>
 
-        <div class="figure" id="figure">
-            <div class="head"></div>
-            <div class="eyes"></div>
-            <div class="body"></div>
+            <div class="table"></div>
+
+            <div class="monitor">
+                <div class="monitorScreen"></div>
+            </div>
+
+            <div class="entity" id="entity">
+                <div class="entityHead"></div>
+                <div class="entityEyes"></div>
+                <div class="entityBody"></div>
+            </div>
+
         </div>
 
     </div>
+
+    <!-- EFECTOS -->
+
+    <div class="rain"></div>
+    <div class="fog"></div>
 
     <div class="flashlight" id="flashlight"></div>
 
-    <div class="rain"></div>
-
-    <div class="noise"></div>
-
+    <div class="vignette"></div>
+    <div class="grain"></div>
     <div class="scanlines"></div>
 
-    <div class="vignette"></div>
+    <!-- HUD -->
 
-    <div id="rec">
-        <span id="dot"></span>REC
+    <div class="hud">
+
+        <div class="rec">
+            <span class="recDot"></span>
+            REC
+        </div>
+
+        <div class="time" id="clock">
+            02:13:00
+        </div>
+
+        <div class="battery">
+            BAT 87%
+        </div>
+
+        <div class="location">
+            CASA / HABITACIÓN
+        </div>
+
     </div>
 
-    <div id="time">
-        02:13:47
+    <!-- SUBTÍTULOS -->
+
+    <div class="subtitle" id="subtitle"></div>
+
+    <!-- TRANSICIÓN -->
+
+    <div id="fade"></div>
+
+    <!-- INICIO -->
+
+    <div class="titleScreen" id="startScreen">
+
+        <h1>02:13</h1>
+
+        <p>
+            ARCHIVO RECUPERADO
+        </p>
+
+        <button
+            class="startButton"
+            onclick="startFilm()">
+            INICIAR GRABACIÓN
+        </button>
+
     </div>
 
-    <div id="subtitle"></div>
+    <!-- FINAL -->
 
-    <div id="black"></div>
+    <div class="end" id="end">
 
-    <div id="start">
-        <h1>LA CASA</h1>
-        <p>UNA GRABACIÓN ENCONTRADA</p>
-        <button onclick="startMovie()">COMENZAR</button>
+        <h2>FIN DE LA GRABACIÓN</h2>
+
+        <p>
+            ARCHIVO CORRUPTO — 02:47:19
+        </p>
+
     </div>
 
 </div>
 
 <script>
 
-let movieStarted = false;
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
 
-const figure = document.getElementById("figure");
-const subtitle = document.getElementById("subtitle");
-const black = document.getElementById("black");
-const room = document.getElementById("room");
-const flashlight = document.getElementById("flashlight");
+const film =
+    document.getElementById("film");
 
-function sleep(ms){
-    return new Promise(resolve => setTimeout(resolve,ms));
+const camera =
+    document.getElementById("camera");
+
+const entity =
+    document.getElementById("entity");
+
+const subtitle =
+    document.getElementById("subtitle");
+
+const fade =
+    document.getElementById("fade");
+
+const flashlight =
+    document.getElementById("flashlight");
+
+const clock =
+    document.getElementById("clock");
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const end =
+    document.getElementById("end");
+
+let started = false;
+
+let seconds = 0;
+
+
+/* =========================================================
+   ESPERA
+========================================================= */
+
+function wait(ms){
+
+    return new Promise(
+        resolve => setTimeout(resolve,ms)
+    );
+
 }
 
-function text(message,time=2500){
 
-    subtitle.innerText = message;
+/* =========================================================
+   SUBTÍTULOS
+========================================================= */
+
+async function showText(
+    text,
+    duration = 3000
+){
+
+    subtitle.textContent = text;
+
     subtitle.style.opacity = "1";
 
-    setTimeout(()=>{
-        subtitle.style.opacity = "0";
-    },time);
-}
+    await wait(duration);
 
-async function startMovie(){
-
-    if(movieStarted) return;
-
-    movieStarted=true;
-
-    document.getElementById("start").style.display="none";
-
-    // Movimiento de cámara
-    movie.classList.add("shake");
-
-    text("02:13 AM",2500);
-
-    await sleep(4000);
-
-    // Primer ruido
-    text("¿Qué fue eso?",2200);
-
-    await sleep(3500);
-
-    // La cámara se mueve
-    flashlight.style.left="35%";
-    flashlight.style.top="48%";
-
-    await sleep(2500);
-
-    // Todo se oscurece
-    black.style.opacity=".75";
-
-    await sleep(1000);
-
-    black.style.opacity="0";
-
-    await sleep(2500);
-
-    // Figura aparece muy brevemente
-    figure.style.opacity="1";
-
-    await sleep(500);
-
-    figure.style.opacity="0";
-
-    await sleep(2500);
-
-    text("No estoy solo.",2500);
-
-    await sleep(3500);
-
-    // Cámara comienza a temblar más
-    movie.classList.remove("shake");
-
-    room.classList.add("shake");
-
-    flashlight.style.left="70%";
-    flashlight.style.top="40%";
-
-    await sleep(1500);
-
-    // La figura aparece nuevamente
-    figure.style.opacity="1";
-
-    await sleep(900);
-
-    // Flash de cámara
-    movie.classList.add("flash");
-
-    await sleep(200);
-
-    movie.classList.remove("flash");
-
-    await sleep(500);
-
-    // Oscuridad
-    black.style.transition="opacity .2s";
-    black.style.opacity="1";
-
-    await sleep(2500);
-
-    subtitle.style.opacity="1";
-    subtitle.innerText="FIN DE LA GRABACIÓN";
-
-    await sleep(4000);
-
-    subtitle.innerText="";
+    subtitle.style.opacity = "0";
 
 }
 
-document.addEventListener("mousemove",(e)=>{
 
-    if(!movieStarted) return;
+/* =========================================================
+   RELOJ
+========================================================= */
 
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
+function updateClock(){
 
-    flashlight.style.left=x+"%";
-    flashlight.style.top=y+"%";
+    seconds++;
 
-});
+    let total =
+        2 * 60 * 60 +
+        13 * 60 +
+        seconds;
+
+    let hours =
+        Math.floor(total / 3600);
+
+    let minutes =
+        Math.floor(
+            (total % 3600) / 60
+        );
+
+    let secs =
+        total % 60;
+
+    clock.textContent =
+        String(hours).padStart(2,"0")
+        + ":" +
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(secs).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   MOVIMIENTO DE LINTERNA
+========================================================= */
+
+document.addEventListener(
+    "mousemove",
+    e => {
+
+        if(!started) return;
+
+        flashlight.style.left =
+            e.clientX + "px";
+
+        flashlight.style.top =
+            e.clientY + "px";
+
+    }
+);
+
+
+/* =========================================================
+   MICRO MOVIMIENTO DE CÁMARA
+========================================================= */
+
+setInterval(()=>{
+
+    if(!started) return;
+
+    const x =
+        (Math.random() - .5) * 3;
+
+    const y =
+        (Math.random() - .5) * 3;
+
+    camera.style.transform =
+        `translate(${x}px,${y}px)`;
+
+},300);
+
+
+/* =========================================================
+   APARICIÓN
+========================================================= */
+
+async function apparition(){
+
+    await wait(500);
+
+    entity.classList.add("visible");
+
+    await wait(350);
+
+    entity.classList.remove("visible");
+
+}
+
+
+/* =========================================================
+   PARPADEO DE LUZ
+========================================================= */
+
+async function flicker(){
+
+    const bg =
+        document.getElementById(
+            "sceneBackground"
+        );
+
+    for(let i=0;i<5;i++){
+
+        bg.style.filter =
+            "brightness(.25)";
+
+        await wait(
+            80 + Math.random()*180
+        );
+
+        bg.style.filter =
+            "brightness(1)";
+
+        await wait(
+            100 + Math.random()*250
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TRANSICIÓN
+========================================================= */
+
+async function transition(){
+
+    fade.style.opacity = "1";
+
+    await wait(1000);
+
+    fade.style.opacity = "0";
+
+}
+
+
+/* =========================================================
+   PELÍCULA
+========================================================= */
+
+async function startFilm(){
+
+    if(started) return;
+
+    started = true;
+
+    startScreen.style.opacity = "0";
+
+    await wait(1800);
+
+    startScreen.style.display = "none";
+
+    setInterval(
+        updateClock,
+        1000
+    );
+
+    /*
+       ESCENA 1
+       INTRODUCCIÓN
+    */
+
+    await showText(
+        "02:13 AM",
+        3000
+    );
+
+    await wait(2500);
+
+    /*
+       ESCENA 2
+       RUIDO
+    */
+
+    await showText(
+        "Escuché algo abajo.",
+        3500
+    );
+
+    await wait(3000);
+
+    /*
+       ESCENA 3
+       EXPLORACIÓN
+    */
+
+    flashlight.style.width =
+        "45vw";
+
+    await wait(2500);
+
+    flashlight.style.width =
+        "70vw";
+
+    await wait(2500);
+
+    /*
+       ESCENA 4
+       PRIMERA APARICIÓN
+    */
+
+    camera.classList.add(
+        "shaking"
+    );
+
+    await apparition();
+
+    await wait(2500);
+
+    camera.classList.remove(
+        "shaking"
+    );
+
+    /*
+       ESCENA 5
+       TODO NORMAL
+    */
+
+    await showText(
+        "No hay nadie.",
+        2500
+    );
+
+    await wait(3500);
+
+    /*
+       ESCENA 6
+       RUIDO MÁS FUERTE
+    */
+
+    await flicker();
+
+    camera.classList.add(
+        "shaking"
+    );
+
+    await showText(
+        "¿Quién está ahí?",
+        2500
+    );
+
+    await wait(2500);
+
+    /*
+       ESCENA 7
+       SEGUNDA APARICIÓN
+    */
+
+    entity.style.right = "38%";
+
+    entity.style.top = "30%";
+
+    entity.classList.add(
+        "visible"
+    );
+
+    await wait(900);
+
+    entity.classList.remove(
+        "visible"
+    );
+
+    await wait(1500);
+
+    /*
+       ESCENA 8
+       CÁMARA EN PÁNICO
+    */
+
+    camera.classList.add(
+        "shaking"
+    );
+
+    flashlight.style.width =
+        "40vw";
+
+    await wait(1500);
+
+    flashlight.style.width =
+        "90vw";
+
+    await wait(1200);
+
+    /*
+       FLASH
+    */
+
+    film.classList.add(
+        "flashEffect"
+    );
+
+    await wait(200);
+
+    film.classList.remove(
+        "flashEffect"
+    );
+
+    /*
+       OSCURIDAD
+    */
+
+    fade.style.transition =
+        "opacity .2s";
+
+    fade.style.opacity =
+        "1";
+
+    await wait(2200);
+
+    /*
+       ÚLTIMO MENSAJE
+    */
+
+    subtitle.textContent =
+        "NO MIRES DETRÁS DE TI";
+
+    subtitle.style.opacity =
+        "1";
+
+    await wait(3500);
+
+    subtitle.style.opacity =
+        "0";
+
+    /*
+       FINAL
+    */
+
+    await wait(1500);
+
+    end.style.display =
+        "flex";
+
+}
 
 </script>
 

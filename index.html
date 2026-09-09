@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,7 +26,9 @@
 
 <main>
 
-    <!-- BUSCADOR -->
+    <!-- =====================================================
+         BUSCADOR
+         ===================================================== -->
 
     <section class="hero">
 
@@ -45,10 +48,7 @@
                 autocomplete="off"
             >
 
-            <button
-                id="botonAnalizar"
-                onclick="analizar()"
-            >
+            <button id="botonAnalizar">
                 ANALIZAR
             </button>
 
@@ -79,37 +79,25 @@
     </section>
 
 
+    <!-- =====================================================
+         RESULTADOS
+         ===================================================== -->
 
-    <!-- RESULTADO -->
-
-    <section
-        id="resultado"
-        class="resultado"
-    >
+    <section id="resultado" class="resultado">
 
         <!-- JUGADOR -->
 
         <div class="player-card">
 
-            <div
-                id="nombreJugador"
-                class="player-name"
-            >
+            <div id="nombreJugador" class="player-name">
                 Jugador
             </div>
 
-            <div
-                id="datosJugador"
-                class="player-data"
-            ></div>
+            <div id="datosJugador" class="player-data"></div>
 
-            <div
-                id="ratingJugador"
-                class="player-data"
-            ></div>
+            <div id="ratingJugador" class="player-data"></div>
 
         </div>
-
 
 
         <!-- ESTADÍSTICAS -->
@@ -117,61 +105,31 @@
         <div class="stats">
 
             <div class="stat">
-
                 <span>Partidas</span>
-
-                <strong id="total">
-                    0
-                </strong>
-
+                <strong id="total">0</strong>
             </div>
-
 
             <div class="stat win">
-
                 <span>Victorias</span>
-
-                <strong id="victorias">
-                    0
-                </strong>
-
+                <strong id="victorias">0</strong>
             </div>
-
 
             <div class="stat draw">
-
                 <span>Tablas</span>
-
-                <strong id="tablas">
-                    0
-                </strong>
-
+                <strong id="tablas">0</strong>
             </div>
-
 
             <div class="stat loss">
-
                 <span>Derrotas</span>
-
-                <strong id="derrotas">
-                    0
-                </strong>
-
+                <strong id="derrotas">0</strong>
             </div>
 
-
             <div class="stat">
-
                 <span>Score</span>
-
-                <strong id="porcentaje">
-                    0%
-                </strong>
-
+                <strong id="porcentaje">0%</strong>
             </div>
 
         </div>
-
 
 
         <!-- INFORMACIÓN -->
@@ -182,13 +140,9 @@
                 📌 Sobre los datos
             </h2>
 
-            <div
-                id="calidadDatos"
-                class="info"
-            ></div>
+            <div id="calidadDatos" class="info"></div>
 
         </section>
-
 
 
         <!-- APERTURAS -->
@@ -207,11 +161,9 @@
 
         </section>
 
-
     </section>
 
 </main>
-
 
 
 <script>
@@ -221,12 +173,16 @@
 CHESS SCOUT
 =========================================================
 
-Esta versión funciona directamente desde el navegador.
+Los datos vienen de partidas públicas reales de Lichess.
 
-Fuente de partidas:
-Lichess API
-
-No se inventan estadísticas.
+Esta versión intenta ser resistente a:
+- PGN incompletos
+- comentarios
+- variantes entre paréntesis
+- movimientos raros
+- partidas sin headers completos
+- nombres con caracteres especiales
+- resultados desconocidos
 
 =========================================================
 */
@@ -266,10 +222,18 @@ const resultado =
     document.getElementById("resultado");
 
 
+/*
+=========================================================
+CONTROL
+=========================================================
+*/
+
+let analizando = false;
+
 
 /*
 =========================================================
-ESTADO DE CARGA
+CARGA
 =========================================================
 */
 
@@ -281,26 +245,50 @@ function mostrarCarga(
 
     loading.style.display = "block";
 
-    loadingTitulo.textContent =
-        titulo;
+    loadingTitulo.textContent = titulo;
 
-    loadingTexto.textContent =
-        texto;
+    loadingTexto.textContent = texto;
 
     loadingProgreso.style.width =
-        progreso + "%";
-}
+        Math.max(
+            0,
+            Math.min(
+                100,
+                progreso
+            )
+        ) + "%";
 
+}
 
 
 function ocultarCarga() {
 
     loading.style.display = "none";
 
-    loadingProgreso.style.width =
-        "0%";
+    loadingProgreso.style.width = "0%";
+
 }
 
+
+/*
+=========================================================
+ESPERAR
+=========================================================
+*/
+
+function esperar(
+    tiempo = 20
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                tiempo
+            )
+    );
+
+}
 
 
 /*
@@ -310,6 +298,10 @@ ANALIZAR
 */
 
 async function analizar() {
+
+    if (analizando) {
+        return;
+    }
 
     const usuario =
         usuarioInput.value.trim();
@@ -326,13 +318,11 @@ async function analizar() {
             "Escribí un usuario de Lichess.";
 
         return;
+
     }
 
 
-    /*
-    Evita hacer dos análisis
-    al mismo tiempo.
-    */
+    analizando = true;
 
     botonAnalizar.disabled = true;
 
@@ -344,7 +334,7 @@ async function analizar() {
 
         /*
         =============================================
-        PASO 1
+        JUGADOR
         =============================================
         */
 
@@ -361,36 +351,40 @@ async function analizar() {
 
         /*
         =============================================
-        PASO 2
+        PARTIDAS
         =============================================
         */
 
         mostrarCarga(
             "📥 Cargando partidas...",
-            "Esto puede tomar unos segundos.",
+            "Descargando partidas públicas.",
             30
         );
 
 
         const partidasTexto =
-            await descargarPartidas(usuario);
+            await descargarPartidas(
+                jugador.username
+            );
 
 
         /*
         =============================================
-        PASO 3
+        SEPARAR PGN
         =============================================
         */
 
         mostrarCarga(
             "📚 Preparando partidas...",
             "Organizando las partidas reales.",
-            55
+            50
         );
 
 
         const partidas =
-            separarPGN(partidasTexto);
+            separarPGN(
+                partidasTexto
+            );
 
 
         if (!partidas.length) {
@@ -404,22 +398,16 @@ async function analizar() {
 
         /*
         =============================================
-        PASO 4
+        ANALIZAR
         =============================================
         */
 
         mostrarCarga(
             "🧠 Analizando aperturas...",
-            "Calculando resultados y variantes.",
-            75
+            "Reconstruyendo las líneas de juego.",
+            70
         );
 
-
-        /*
-        Permite que el navegador
-        actualice la pantalla antes
-        de hacer el procesamiento.
-        */
 
         await esperar();
 
@@ -427,13 +415,13 @@ async function analizar() {
         const datos =
             construirAnalisis(
                 partidas,
-                usuario
+                jugador.username
             );
 
 
         /*
         =============================================
-        PASO 5
+        MOSTRAR
         =============================================
         */
 
@@ -453,12 +441,6 @@ async function analizar() {
         );
 
 
-        /*
-        =============================================
-        TERMINADO
-        =============================================
-        */
-
         mostrarCarga(
             "✅ Análisis terminado",
             datos.total +
@@ -469,12 +451,14 @@ async function analizar() {
 
         await esperar(350);
 
-
     }
 
     catch (e) {
 
-        console.error(e);
+        console.error(
+            "Chess Scout:",
+            e
+        );
 
         error.textContent =
             e.message ||
@@ -491,36 +475,11 @@ async function analizar() {
         botonAnalizar.textContent =
             "ANALIZAR";
 
+        analizando = false;
+
     }
 
 }
-
-
-
-/*
-=========================================================
-PEQUEÑA PAUSA
-=========================================================
-
-Sirve para que el navegador pueda actualizar
-el mensaje de carga antes de continuar.
-=========================================================
-*/
-
-function esperar(
-    tiempo = 20
-) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                tiempo
-            )
-    );
-
-}
-
 
 
 /*
@@ -533,11 +492,25 @@ async function obtenerJugador(
     usuario
 ) {
 
-    const respuesta =
-        await fetch(
-            "https://lichess.org/api/user/" +
-            encodeURIComponent(usuario)
+    let respuesta;
+
+    try {
+
+        respuesta =
+            await fetch(
+                "https://lichess.org/api/user/" +
+                encodeURIComponent(usuario)
+            );
+
+    }
+
+    catch (e) {
+
+        throw new Error(
+            "No se pudo conectar con Lichess."
         );
+
+    }
 
 
     if (respuesta.status === 404) {
@@ -545,6 +518,15 @@ async function obtenerJugador(
         throw new Error(
             "No se encontró el usuario de Lichess: " +
             usuario
+        );
+
+    }
+
+
+    if (respuesta.status === 429) {
+
+        throw new Error(
+            "Lichess está limitando las solicitudes. Esperá unos segundos e intentá nuevamente."
         );
 
     }
@@ -559,10 +541,21 @@ async function obtenerJugador(
     }
 
 
-    return await respuesta.json();
+    try {
+
+        return await respuesta.json();
+
+    }
+
+    catch (e) {
+
+        throw new Error(
+            "Lichess devolvió una respuesta inesperada."
+        );
+
+    }
 
 }
-
 
 
 /*
@@ -587,31 +580,66 @@ async function descargarPartidas(
         "&opening=true";
 
 
-    const respuesta =
-        await fetch(
-            url,
-            {
-                headers: {
-                    "Accept":
-                        "application/x-chess-pgn"
+    let respuesta;
+
+    try {
+
+        respuesta =
+            await fetch(
+                url,
+                {
+                    headers: {
+                        "Accept":
+                            "application/x-chess-pgn"
+                    }
                 }
-            }
-        );
+            );
 
+    }
 
-    if (!respuesta.ok) {
+    catch (e) {
 
         throw new Error(
-            "Lichess no permitió descargar las partidas. Intentá nuevamente en unos segundos."
+            "No se pudo descargar las partidas desde Lichess."
         );
 
     }
 
 
-    return await respuesta.text();
+    if (respuesta.status === 429) {
+
+        throw new Error(
+            "Lichess está limitando las solicitudes. Esperá unos segundos."
+        );
+
+    }
+
+
+    if (!respuesta.ok) {
+
+        throw new Error(
+            "Lichess no permitió descargar las partidas."
+        );
+
+    }
+
+
+    const texto =
+        await respuesta.text();
+
+
+    if (!texto.trim()) {
+
+        throw new Error(
+            "El jugador no tiene partidas públicas disponibles."
+        );
+
+    }
+
+
+    return texto;
 
 }
-
 
 
 /*
@@ -624,6 +652,15 @@ function separarPGN(
     texto
 ) {
 
+    if (
+        typeof texto !== "string"
+    ) {
+
+        return [];
+
+    }
+
+
     texto =
         texto.replace(
             /\r\n/g,
@@ -632,25 +669,33 @@ function separarPGN(
 
 
     /*
-    Cada partida normalmente
-    comienza con [Event
+    Lichess normalmente separa
+    las partidas mediante [Event.
     */
 
-    return texto
-        .split(/\n(?=\[Event )/g)
-        .map(
-            partida =>
-                partida.trim()
-        )
-        .filter(Boolean);
+    const partidas =
+        texto
+            .split(
+                /\n(?=\[Event\s)/g
+            )
+            .map(
+                partida =>
+                    partida.trim()
+            )
+            .filter(
+                partida =>
+                    partida.includes("[")
+            );
+
+
+    return partidas;
 
 }
 
 
-
 /*
 =========================================================
-OBTENER HEADER PGN
+HEADER PGN
 =========================================================
 */
 
@@ -659,10 +704,20 @@ function obtenerHeader(
     nombre
 ) {
 
+    if (
+        !pgn ||
+        !nombre
+    ) {
+
+        return "";
+
+    }
+
+
     const regex =
         new RegExp(
             "^\\[" +
-            nombre +
+            escaparRegex(nombre) +
             "\\s+\"([^\"]*)\"\\]",
             "mi"
         );
@@ -673,11 +728,29 @@ function obtenerHeader(
 
 
     return encontrado
-        ? encontrado[1]
+        ? encontrado[1].trim()
         : "";
 
 }
 
+
+/*
+=========================================================
+ESCAPAR REGEX
+=========================================================
+*/
+
+function escaparRegex(
+    texto
+) {
+
+    return String(texto)
+        .replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+}
 
 
 /*
@@ -698,251 +771,170 @@ function construirAnalisis(
     let derrotas = 0;
 
 
-    /*
-    Aperturas
-
-    Cada apertura guarda
-    sus partidas.
-    */
-
     const aperturas = {};
 
 
-    /*
-    Variantes
-    */
-
     const variantes = {};
 
-
-    /*
-    =============================================
-    RECORRER PARTIDAS
-    =============================================
-    */
 
     for (
         const partida of partidas
     ) {
 
-        const white =
-            obtenerHeader(
-                partida,
-                "White"
-            );
+        try {
 
-        const black =
-            obtenerHeader(
-                partida,
-                "Black"
-            );
+            const white =
+                obtenerHeader(
+                    partida,
+                    "White"
+                );
 
-        const resultado =
-            obtenerHeader(
-                partida,
-                "Result"
-            );
+            const black =
+                obtenerHeader(
+                    partida,
+                    "Black"
+                );
 
-
-        /*
-        Resultado del jugador
-        */
-
-        let resultadoJugador =
-            "desconocido";
+            const resultado =
+                obtenerHeader(
+                    partida,
+                    "Result"
+                );
 
 
-        if (
-            white.toLowerCase() ===
-            usuario.toLowerCase()
-        ) {
+            let resultadoJugador =
+                "desconocido";
 
-            if (resultado === "1-0") {
 
-                resultadoJugador =
-                    "victoria";
+            /*
+            =========================================
+            RESULTADO
+            =========================================
+            */
 
-            }
+            if (
+                white.toLowerCase() ===
+                usuario.toLowerCase()
+            ) {
 
-            else if (resultado === "0-1") {
+                if (
+                    resultado === "1-0"
+                ) {
 
-                resultadoJugador =
-                    "derrota";
+                    resultadoJugador =
+                        "victoria";
+
+                }
+
+                else if (
+                    resultado === "0-1"
+                ) {
+
+                    resultadoJugador =
+                        "derrota";
+
+                }
+
+                else if (
+                    resultado === "1/2-1/2"
+                ) {
+
+                    resultadoJugador =
+                        "tablas";
+
+                }
 
             }
 
             else if (
-                resultado === "1/2-1/2"
+                black.toLowerCase() ===
+                usuario.toLowerCase()
             ) {
 
-                resultadoJugador =
-                    "tablas";
+                if (
+                    resultado === "0-1"
+                ) {
+
+                    resultadoJugador =
+                        "victoria";
+
+                }
+
+                else if (
+                    resultado === "1-0"
+                ) {
+
+                    resultadoJugador =
+                        "derrota";
+
+                }
+
+                else if (
+                    resultado === "1/2-1/2"
+                ) {
+
+                    resultadoJugador =
+                        "tablas";
+
+                }
 
             }
 
-        }
 
+            /*
+            =========================================
+            ESTADÍSTICAS
+            =========================================
+            */
 
-        else if (
-            black.toLowerCase() ===
-            usuario.toLowerCase()
-        ) {
+            if (
+                resultadoJugador ===
+                "victoria"
+            ) {
 
-            if (resultado === "0-1") {
-
-                resultadoJugador =
-                    "victoria";
-
-            }
-
-            else if (resultado === "1-0") {
-
-                resultadoJugador =
-                    "derrota";
+                victorias++;
 
             }
 
             else if (
-                resultado === "1/2-1/2"
+                resultadoJugador ===
+                "tablas"
             ) {
 
-                resultadoJugador =
-                    "tablas";
+                tablas++;
 
             }
 
-        }
+            else if (
+                resultadoJugador ===
+                "derrota"
+            ) {
+
+                derrotas++;
+
+            }
 
 
-        /*
-        =============================================
-        ESTADÍSTICAS GENERALES
-        =============================================
-        */
+            /*
+            =========================================
+            APERTURA
+            =========================================
+            */
 
-        if (
-            resultadoJugador ===
-            "victoria"
-        ) {
-
-            victorias++;
-
-        }
-
-        else if (
-            resultadoJugador ===
-            "tablas"
-        ) {
-
-            tablas++;
-
-        }
-
-        else if (
-            resultadoJugador ===
-            "derrota"
-        ) {
-
-            derrotas++;
-
-        }
-
-
-        /*
-        =============================================
-        APERTURA
-        =============================================
-        */
-
-        const apertura =
-            obtenerApertura(
-                partida
-            );
-
-
-        if (!aperturas[apertura]) {
-
-            aperturas[apertura] = {
-
-                nombre:
-                    apertura,
-
-                partidas: 0,
-
-                victorias: 0,
-
-                tablas: 0,
-
-                derrotas: 0,
-
-                juegos: [],
-
-                variantes: {}
-
-            };
-
-        }
-
-
-        const datosApertura =
-            aperturas[apertura];
-
-
-        agregarResultado(
-            datosApertura,
-            resultadoJugador
-        );
-
-
-        /*
-        Guardamos información mínima
-        de la partida.
-        */
-
-        const datosPartida =
-            crearDatosPartida(
-                partida,
-                usuario,
-                resultadoJugador
-            );
-
-
-        datosApertura.juegos.push(
-            datosPartida
-        );
-
-
-        /*
-        =============================================
-        VARIANTE
-        =============================================
-        */
-
-        const linea =
-            obtenerLinea(
-                partida
-            );
-
-
-        if (linea) {
-
-            const clave =
-                apertura +
-                "|||" +
-                linea;
+            const apertura =
+                obtenerApertura(
+                    partida
+                );
 
 
             if (
-                !variantes[clave]
+                !aperturas[apertura]
             ) {
 
-                variantes[clave] = {
+                aperturas[apertura] = {
 
-                    apertura:
+                    nombre:
                         apertura,
-
-                    linea:
-                        linea,
 
                     partidas: 0,
 
@@ -952,52 +944,130 @@ function construirAnalisis(
 
                     derrotas: 0,
 
-                    juegos: []
+                    juegos: [],
+
+                    variantes: {}
 
                 };
 
             }
 
 
-            const variante =
-                variantes[clave];
+            const datosApertura =
+                aperturas[apertura];
 
 
             agregarResultado(
-                variante,
+                datosApertura,
                 resultadoJugador
             );
 
 
-            variante.juegos.push(
+            const datosPartida =
+                crearDatosPartida(
+                    partida,
+                    usuario,
+                    resultadoJugador
+                );
+
+
+            datosApertura.juegos.push(
                 datosPartida
             );
 
 
             /*
-            También la guardamos
-            dentro de su apertura.
+            =========================================
+            VARIANTE
+            =========================================
             */
 
-            if (
-                !datosApertura.variantes[linea]
-            ) {
+            const linea =
+                obtenerLinea(
+                    partida
+                );
 
-                datosApertura.variantes[linea] =
-                    variante;
+
+            if (linea) {
+
+                const clave =
+                    apertura +
+                    "|||" +
+                    linea;
+
+
+                if (
+                    !variantes[clave]
+                ) {
+
+                    variantes[clave] = {
+
+                        apertura:
+                            apertura,
+
+                        linea:
+                            linea,
+
+                        partidas: 0,
+
+                        victorias: 0,
+
+                        tablas: 0,
+
+                        derrotas: 0,
+
+                        juegos: []
+
+                    };
+
+                }
+
+
+                const variante =
+                    variantes[clave];
+
+
+                agregarResultado(
+                    variante,
+                    resultadoJugador
+                );
+
+
+                variante.juegos.push(
+                    datosPartida
+                );
+
+
+                if (
+                    !datosApertura.variantes[linea]
+                ) {
+
+                    datosApertura.variantes[linea] =
+                        variante;
+
+                }
 
             }
 
         }
 
+        catch (e) {
+
+            /*
+            Si una partida individual
+            tiene un PGN extraño,
+            no rompe todo el análisis.
+            */
+
+            console.warn(
+                "Partida ignorada:",
+                e
+            );
+
+        }
+
     }
 
-
-    /*
-    =============================================
-    TOTALES
-    =============================================
-    */
 
     const total =
         victorias +
@@ -1057,7 +1127,6 @@ function construirAnalisis(
 }
 
 
-
 /*
 =========================================================
 AGREGAR RESULTADO
@@ -1110,10 +1179,9 @@ function agregarResultado(
 }
 
 
-
 /*
 =========================================================
-DATOS DE UNA PARTIDA
+DATOS DE PARTIDA
 =========================================================
 */
 
@@ -1154,7 +1222,8 @@ function crearDatosPartida(
         );
 
 
-    let rival = "Desconocido";
+    let rival =
+        "Desconocido";
 
 
     if (
@@ -1162,13 +1231,17 @@ function crearDatosPartida(
         usuario.toLowerCase()
     ) {
 
-        rival = black;
+        rival =
+            black ||
+            "Desconocido";
 
     }
 
     else {
 
-        rival = white;
+        rival =
+            white ||
+            "Desconocido";
 
     }
 
@@ -1192,7 +1265,6 @@ function crearDatosPartida(
     };
 
 }
-
 
 
 /*
@@ -1238,67 +1310,51 @@ function obtenerApertura(
 }
 
 
-
 /*
 =========================================================
-LÍNEA INICIAL
+LÍNEA DE MOVIMIENTOS
+=========================================================
+
+Esta función NO intenta inventar movimientos.
+
+Elimina:
+- comentarios
+- variantes PGN
+- números
+- resultados
+
+y conserva solamente la línea principal.
+
 =========================================================
 */
 
-function obtenerLinea(pgn) {
+function obtenerLinea(
+    pgn
+) {
 
-    const separacion = pgn.search(/\n\s*\n/);
+    if (
+        !pgn ||
+        typeof pgn !== "string"
+    ) {
 
-    if (separacion === -1) {
         return "";
+
     }
 
-    let movimientos = pgn.substring(separacion);
 
-    movimientos = movimientos.replace(/\{[\s\S]*?\}/g, " ");
+    const separacion =
+        pgn.search(
+            /\n\s*\n/
+        );
 
-    let anterior;
 
-    do {
-        anterior = movimientos;
-        movimientos = movimientos.replace(/\([^()]*\)/g, " ");
-    } while (movimientos !== anterior);
+    if (
+        separacion === -1
+    ) {
 
-    movimientos = movimientos.replace(/\d+\.(?:\.\.)?/g, " ");
-
-    movimientos = movimientos.replace(
-        /\b(?:1-0|0-1|1\/2-1\/2|\*)\b/g,
-        " "
-    );
-
-    movimientos = movimientos
-        .replace(/\s+/g, " ")
-        .trim();
-
-    if (!movimientos) {
         return "";
+
     }
-
-    const tokens = movimientos
-        .split(" ")
-        .filter(Boolean);
-
-    const movimientosSAN = tokens.filter(
-        movimiento => {
-
-            return /^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?$/
-                .test(movimiento)
-
-                ||
-
-                /^O-O(?:-O)?[+#]?$/.test(movimiento);
-        }
-    );
-
-    return movimientosSAN
-        .slice(0, 12)
-        .join(" ");
-}
 
 
     let movimientos =
@@ -1308,67 +1364,154 @@ function obtenerLinea(pgn) {
 
 
     /*
-    Eliminar comentarios
+    =========================================
+    COMENTARIOS
+    =========================================
     */
 
     movimientos =
         movimientos.replace(
-            /\{[^}]*\}/g,
-            ""
+            /\{[\s\S]*?\}/g,
+            " "
         );
 
 
     /*
-    Eliminar variantes
+    =========================================
+    VARIANTES
+    =========================================
+
+    Eliminamos variantes entre paréntesis.
+    */
+
+    let anterior;
+
+    do {
+
+        anterior =
+            movimientos;
+
+        movimientos =
+            movimientos.replace(
+                /\([^()]*\)/g,
+                " "
+            );
+
+    }
+
+    while (
+        movimientos !== anterior
+    );
+
+
+    /*
+    =========================================
+    NÚMEROS
+    =========================================
     */
 
     movimientos =
         movimientos.replace(
-            /\([^()]*\)/g,
-            ""
+            /\d+\.(?:\.\.)?/g,
+            " "
         );
 
 
     /*
-    Eliminar números
+    =========================================
+    RESULTADOS
+    =========================================
     */
 
     movimientos =
         movimientos.replace(
-            /\d+\.(\.\.)?/g,
-            ""
+            /\b(?:1-0|0-1|1\/2-1\/2|\*)\b/g,
+            " "
         );
 
 
     /*
-    Eliminar resultado
+    =========================================
+    LIMPIEZA
+    =========================================
     */
 
     movimientos =
-        movimientos.replace(
-            /\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/,
-            ""
-        );
+        movimientos
+            .replace(
+                /\s+/g,
+                " "
+            )
+            .trim();
+
+
+    if (!movimientos) {
+
+        return "";
+
+    }
 
 
     const tokens =
         movimientos
-            .split(/\s+/)
+            .split(" ")
             .filter(Boolean);
 
 
     /*
-    Solo necesitamos
-    los primeros movimientos
-    para identificar patrones.
+    =========================================
+    SAN
+    =========================================
+
+    Aceptamos:
+
+    e4
+    Nf3
+    Bb4
+    Ne7
+    Bxc6
+    Qxd5+
+    O-O
+    O-O-O
+    e8=Q
+    =========================================
     */
 
-    return tokens
-        .slice(0, 12)
+    const movimientosSAN =
+        tokens.filter(
+            movimiento => {
+
+                const pieza =
+                    /^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?$/
+                        .test(
+                            movimiento
+                        );
+
+                const enroque =
+                    /^O-O(?:-O)?[+#]?$/
+                        .test(
+                            movimiento
+                        );
+
+                return pieza ||
+                    enroque;
+
+            }
+        );
+
+
+    /*
+    Primeros 12 plies.
+    */
+
+    return movimientosSAN
+        .slice(
+            0,
+            12
+        )
         .join(" ");
 
 }
-
 
 
 /*
@@ -1388,7 +1531,6 @@ function round(
 }
 
 
-
 /*
 =========================================================
 MOSTRAR RESULTADOS
@@ -1405,7 +1547,9 @@ function mostrarResultados(
 
 
     /*
-    Jugador
+    =========================================
+    JUGADOR
+    =========================================
     */
 
     document.getElementById(
@@ -1415,7 +1559,9 @@ function mostrarResultados(
 
 
     /*
-    Información
+    =========================================
+    INFORMACIÓN
+    =========================================
     */
 
     document.getElementById(
@@ -1432,7 +1578,9 @@ function mostrarResultados(
 
 
     /*
-    Rating
+    =========================================
+    RATING
+    =========================================
     */
 
     const rating =
@@ -1452,7 +1600,9 @@ function mostrarResultados(
 
 
     /*
-    Estadísticas
+    =========================================
+    ESTADÍSTICAS
+    =========================================
     */
 
     document.getElementById(
@@ -1485,27 +1635,15 @@ function mostrarResultados(
         data.score + "%";
 
 
-    /*
-    Información de calidad
-    */
-
     mostrarCalidad(
         data
     );
 
 
-    /*
-    Aperturas
-    */
-
     mostrarAperturas(
         data.aperturas
     );
 
-
-    /*
-    Ir hacia resultados
-    */
 
     resultado.scrollIntoView({
         behavior: "smooth",
@@ -1513,7 +1651,6 @@ function mostrarResultados(
     });
 
 }
-
 
 
 /*
@@ -1543,7 +1680,9 @@ function obtenerRating(
         const rating of ratings
     ) {
 
-        if (rating) {
+        if (
+            Number.isFinite(rating)
+        ) {
 
             return rating;
 
@@ -1555,7 +1694,6 @@ function obtenerRating(
     return null;
 
 }
-
 
 
 /*
@@ -1608,7 +1746,6 @@ function mostrarCalidad(
 }
 
 
-
 /*
 =========================================================
 MOSTRAR APERTURAS
@@ -1640,11 +1777,6 @@ function mostrarAperturas(
 
     }
 
-
-    /*
-    Fragment mejora el rendimiento
-    al insertar muchas aperturas.
-    */
 
     const fragment =
         document.createDocumentFragment();
@@ -1685,19 +1817,33 @@ function mostrarAperturas(
                 "opening-title";
 
 
-            titulo.innerHTML = `
+            const nombre =
+                document.createElement(
+                    "strong"
+                );
 
-                <strong>
-                    ${escapeHTML(
-                        apertura.nombre
-                    )}
-                </strong>
 
-                <strong>
-                    ${porcentaje}%
-                </strong>
+            nombre.textContent =
+                apertura.nombre;
 
-            `;
+
+            const porcentajeTexto =
+                document.createElement(
+                    "strong"
+                );
+
+
+            porcentajeTexto.textContent =
+                porcentaje + "%";
+
+
+            titulo.appendChild(
+                nombre
+            );
+
+            titulo.appendChild(
+                porcentajeTexto
+            );
 
 
             /*
@@ -1716,23 +1862,15 @@ function mostrarAperturas(
                 "opening-data";
 
 
-            info.innerHTML = `
-
-                ${apertura.partidas} partidas
-
-                ·
-
-                ${apertura.victorias} victorias
-
-                ·
-
-                ${apertura.tablas} tablas
-
-                ·
-
-                ${apertura.derrotas} derrotas
-
-            `;
+            info.textContent =
+                apertura.partidas +
+                " partidas · " +
+                apertura.victorias +
+                " victorias · " +
+                apertura.tablas +
+                " tablas · " +
+                apertura.derrotas +
+                " derrotas";
 
 
             /*
@@ -1751,23 +1889,27 @@ function mostrarAperturas(
                 "bar";
 
 
-            barra.innerHTML = `
+            const barraInterna =
+                document.createElement(
+                    "div"
+                );
 
-                <div
-                    style="
-                        width:${Math.min(
-                            porcentaje,
-                            100
-                        )}%
-                    "
-                ></div>
 
-            `;
+            barraInterna.style.width =
+                Math.min(
+                    porcentaje,
+                    100
+                ) + "%";
+
+
+            barra.appendChild(
+                barraInterna
+            );
 
 
             /*
             =========================================
-            CONTENIDO OCULTO
+            CONTENIDO
             =========================================
             */
 
@@ -1794,51 +1936,35 @@ function mostrarAperturas(
             const variantes =
                 Object.values(
                     apertura.variantes
+                )
+                .sort(
+                    (a, b) =>
+                        b.partidas -
+                        a.partidas
                 );
 
 
-            if (
-                variantes.length
-            ) {
+            variantes.forEach(
+                variante => {
 
-                variantes
-                    .sort(
-                        (a, b) =>
-                            b.partidas -
-                            a.partidas
-                    )
-                    .forEach(
-                        variante => {
-
-                            contenido.appendChild(
-                                crearVariante(
-                                    variante
-                                )
-                            );
-
-                        }
+                    contenido.appendChild(
+                        crearVariante(
+                            variante
+                        )
                     );
 
-            }
+                }
+            );
 
 
             /*
             =========================================
-            PARTIDAS SIN VARIANTE
+            PARTIDAS
             =========================================
-            */
-
-            const juegosSinVariante =
-                apertura.juegos;
-
-
-            /*
-            Mostramos las partidas
-            debajo de las variantes.
             */
 
             if (
-                juegosSinVariante.length
+                apertura.juegos.length
             ) {
 
                 const tituloPartidas =
@@ -1855,21 +1981,25 @@ function mostrarAperturas(
                     "18px";
 
 
-                tituloPartidas.innerHTML =
-                    "<strong>♟ Partidas de esta apertura</strong>";
+                const strong =
+                    document.createElement(
+                        "strong"
+                    );
+
+
+                strong.textContent =
+                    "♟ Partidas de esta apertura";
+
+
+                tituloPartidas.appendChild(
+                    strong
+                );
 
 
                 contenido.appendChild(
                     tituloPartidas
                 );
 
-
-                /*
-                Lazy rendering:
-                las partidas se crean
-                solamente cuando se abre
-                la apertura.
-                */
 
                 let partidasCreadas =
                     false;
@@ -1977,7 +2107,7 @@ function mostrarAperturas(
 
             /*
             =========================================
-            CLICK EN APERTURA
+            CLICK APERTURA
             =========================================
             */
 
@@ -2006,12 +2136,6 @@ function mostrarAperturas(
                 }
             );
 
-
-            /*
-            =========================================
-            INSERTAR
-            =========================================
-            */
 
             elemento.appendChild(
                 titulo
@@ -2043,7 +2167,6 @@ function mostrarAperturas(
     );
 
 }
-
 
 
 /*
@@ -2080,23 +2203,41 @@ function crearVariante(
         "variant-top";
 
 
-    cabecera.innerHTML = `
+    const titulo =
+        document.createElement(
+            "strong"
+        );
 
-        <strong>
-            ▸ Variante
-        </strong>
 
-        <strong>
-            ${calcularPorcentaje(
-                variante
-            )}%
-        </strong>
+    titulo.textContent =
+        "▸ Variante";
 
-    `;
+
+    const porcentaje =
+        document.createElement(
+            "strong"
+        );
+
+
+    porcentaje.textContent =
+        calcularPorcentaje(
+            variante
+        ) + "%";
+
+
+    cabecera.appendChild(
+        titulo
+    );
+
+    cabecera.appendChild(
+        porcentaje
+    );
 
 
     /*
+    =========================================
     MOVIMIENTOS
+    =========================================
     */
 
     const movimientos =
@@ -2114,7 +2255,9 @@ function crearVariante(
 
 
     /*
+    =========================================
     DATOS
+    =========================================
     */
 
     const datos =
@@ -2127,27 +2270,21 @@ function crearVariante(
         "variant-data";
 
 
-    datos.innerHTML = `
-
-        ${variante.partidas} partidas
-
-        ·
-
-        ${variante.victorias} victorias
-
-        ·
-
-        ${variante.tablas} tablas
-
-        ·
-
-        ${variante.derrotas} derrotas
-
-    `;
+    datos.textContent =
+        variante.partidas +
+        " partidas · " +
+        variante.victorias +
+        " victorias · " +
+        variante.tablas +
+        " tablas · " +
+        variante.derrotas +
+        " derrotas";
 
 
     /*
-    PARTIDAS DE LA VARIANTE
+    =========================================
+    PARTIDAS
+    =========================================
     */
 
     const contenido =
@@ -2163,11 +2300,6 @@ function crearVariante(
     contenido.className =
         "variant-games";
 
-
-    /*
-    Las partidas no se crean
-    hasta que se abre la variante.
-    */
 
     let creadas =
         false;
@@ -2223,13 +2355,7 @@ function crearVariante(
                     "block";
 
 
-            const strong =
-                cabecera.querySelector(
-                    "strong"
-                );
-
-
-            strong.textContent =
+            titulo.textContent =
                 abierta
                     ?
                     "▸ Variante"
@@ -2260,7 +2386,6 @@ function crearVariante(
     return elemento;
 
 }
-
 
 
 /*
@@ -2318,59 +2443,97 @@ function crearPartida(
     }
 
 
-    let enlace =
-        "";
+    const nombreRival =
+        escapeHTML(
+            partida.rival ||
+            "Rival desconocido"
+        );
 
+
+    const fecha =
+        escapeHTML(
+            partida.fecha ||
+            "Fecha desconocida"
+        );
+
+
+    const gameData =
+        document.createElement(
+            "div"
+        );
+
+
+    gameData.className =
+        "game-data";
+
+
+    gameData.textContent =
+        resultadoTexto +
+        " · " +
+        fecha;
+
+
+    const nombre =
+        document.createElement(
+            "strong"
+        );
+
+
+    nombre.textContent =
+        partida.rival ||
+        "Rival desconocido";
+
+
+    elemento.appendChild(
+        nombre
+    );
+
+
+    elemento.appendChild(
+        gameData
+    );
+
+
+    /*
+    =========================================
+    ENLACE LICHESS
+    =========================================
+    */
 
     if (
         partida.site &&
-        partida.site.startsWith(
-            "https://lichess.org/"
+        /^https:\/\/lichess\.org\/[A-Za-z0-9]+/.test(
+            partida.site
         )
     ) {
 
-        enlace = `
+        const enlace =
+            document.createElement(
+                "a"
+            );
 
-            <a
-                href="${escapeHTML(
-                    partida.site
-                )}"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Ver partida en Lichess →
-            </a>
 
-        `;
+        enlace.href =
+            partida.site;
+
+
+        enlace.target =
+            "_blank";
+
+
+        enlace.rel =
+            "noopener noreferrer";
+
+
+        enlace.textContent =
+            "Ver partida en Lichess →";
+
+
+        elemento.appendChild(
+            enlace
+        );
 
     }
-
-
-    elemento.innerHTML = `
-
-        <strong>
-            ${escapeHTML(
-                partida.rival ||
-                "Rival desconocido"
-            )}
-        </strong>
-
-        <div class="game-data">
-
-            ${resultadoTexto}
-
-            ·
-
-            ${escapeHTML(
-                partida.fecha ||
-                "Fecha desconocida"
-            )}
-
-        </div>
-
-        ${enlace}
-
-    `;
 
 
     return elemento;
@@ -2378,10 +2541,9 @@ function crearPartida(
 }
 
 
-
 /*
 =========================================================
-CALCULAR PORCENTAJE
+PORCENTAJE
 =========================================================
 */
 
@@ -2390,6 +2552,7 @@ function calcularPorcentaje(
 ) {
 
     if (
+        !datos ||
         !datos.partidas
     ) {
 
@@ -2410,7 +2573,6 @@ function calcularPorcentaje(
     );
 
 }
-
 
 
 /*
@@ -2455,7 +2617,6 @@ function escapeHTML(
 }
 
 
-
 /*
 =========================================================
 ENTER
@@ -2477,8 +2638,21 @@ usuarioInput.addEventListener(
     }
 );
 
+
+/*
+=========================================================
+BOTÓN
+=========================================================
+*/
+
+botonAnalizar.addEventListener(
+    "click",
+    analizar
+);
+
 </script>
 
 </body>
 
 </html>
+```

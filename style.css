@@ -1,76 +1,95 @@
+/* =========================================================
+   CHESS SCOUT — ESTILO AJEDREZ MODERNO
+   ========================================================= */
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background: #080c11;
-    color: #f2f5f8;
+    background: #151513;
+    color: #eee9df;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* HEADER */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 header {
     height: 70px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     padding: 0 6%;
 
-    background: #10161e;
-    border-bottom: 1px solid #222c37;
+    background: #1d1c19;
+
+    border-bottom: 1px solid #36332d;
 }
 
 .logo {
     font-size: 25px;
     font-weight: bold;
+    letter-spacing: -0.5px;
 }
 
 .logo span {
-    color: #6da7ff;
+    color: #c7a76c;
 }
 
 .subtitle {
-    color: #7f8b99;
+    color: #aaa397;
+    font-size: 14px;
 }
 
 
-/* CONTENIDO */
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
 
 main {
     width: 90%;
-    max-width: 1200px;
+    max-width: 1150px;
     margin: auto;
 }
 
 
-/* BUSCADOR */
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
 
 .hero {
     margin-top: 40px;
 
     padding: 35px;
 
-    background: #111821;
+    background: #211f1b;
 
-    border: 1px solid #25303c;
-    border-radius: 18px;
+    border: 1px solid #3a3730;
+    border-radius: 16px;
 }
 
 .hero h1 {
     margin: 0;
 
-    font-size: 38px;
+    font-size: 36px;
+    letter-spacing: -0.5px;
 }
 
 .hero p {
-    color: #8e9aa8;
+    color: #aaa398;
+
+    line-height: 1.6;
 }
 
 
-/* BARRA DE BÚSQUEDA */
+/* =========================================================
+   BARRA DE BÚSQUEDA
+   ========================================================= */
 
 .search {
     display: flex;
@@ -89,19 +108,26 @@ main {
 
     border-radius: 10px;
 
-    border: 1px solid #344150;
+    border: 1px solid #49443a;
 
-    background: #080c11;
+    background: #151513;
 
-    color: white;
+    color: #eee9df;
 
     font-size: 16px;
 
     outline: none;
+
+    transition: 0.2s;
+}
+
+.search input::placeholder {
+    color: #817b70;
 }
 
 .search input:focus {
-    border-color: #6da7ff;
+    border-color: #b9985c;
+    box-shadow: 0 0 0 2px rgba(185, 152, 92, 0.08);
 }
 
 .search button {
@@ -111,9 +137,9 @@ main {
 
     border-radius: 10px;
 
-    background: #6da7ff;
+    background: #b9985c;
 
-    color: #07101a;
+    color: #191713;
 
     font-weight: bold;
 
@@ -123,31 +149,38 @@ main {
 }
 
 .search button:hover {
-    transform: translateY(-2px);
+    background: #c7a76c;
+    transform: translateY(-1px);
 }
 
 
-/* CARGANDO */
+/* =========================================================
+   CARGANDO
+   ========================================================= */
 
-.loading {
+#loading {
     display: none;
 
     margin-top: 20px;
 
-    color: #8491a0;
+    color: #aaa398;
 }
 
 
-/* ERROR */
+/* =========================================================
+   ERROR
+   ========================================================= */
 
 #error {
-    color: #ff7070;
+    color: #e4776f;
 
     margin-top: 15px;
 }
 
 
-/* RESULTADOS */
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
 
 .resultado {
     display: none;
@@ -156,34 +189,40 @@ main {
 }
 
 
-/* JUGADOR */
+/* =========================================================
+   JUGADOR
+   ========================================================= */
 
 .player-card {
     margin-top: 20px;
 
-    background: #111821;
+    background: #211f1b;
 
-    border: 1px solid #25303c;
+    border: 1px solid #3a3730;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
-    padding: 25px;
+    padding: 24px;
 }
 
 .player-name {
-    font-size: 30px;
+    font-size: 29px;
 
     font-weight: bold;
 }
 
 .player-data {
-    color: #7f8b99;
+    color: #aaa398;
 
     margin-top: 8px;
+
+    font-size: 14px;
 }
 
 
-/* ESTADÍSTICAS */
+/* =========================================================
+   ESTADÍSTICAS
+   ========================================================= */
 
 .stats {
     display: grid;
@@ -196,94 +235,164 @@ main {
 }
 
 .stat {
-    background: #111821;
+    background: #211f1b;
 
-    border: 1px solid #25303c;
+    border: 1px solid #3a3730;
 
-    padding: 20px;
+    padding: 19px;
 
-    border-radius: 14px;
+    border-radius: 13px;
 }
 
 .stat span {
-    color: #84909d;
+    color: #9d978c;
 
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .stat strong {
     display: block;
 
-    font-size: 28px;
+    font-size: 27px;
 
     margin-top: 8px;
 }
 
 
-/* COLORES */
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
 
 .win strong {
-    color: #62d48a;
+    color: #7fc58d;
 }
 
 .draw strong {
-    color: #e5c65c;
+    color: #d1b76a;
 }
 
 .loss strong {
-    color: #ff6f6f;
+    color: #d87870;
 }
 
 
-/* PANELES */
+/* =========================================================
+   PANELES
+   ========================================================= */
 
 .panel {
     margin-top: 20px;
 
-    background: #111821;
+    background: #211f1b;
 
-    border: 1px solid #25303c;
+    border: 1px solid #3a3730;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
-    padding: 25px;
+    padding: 24px;
 }
 
 .panel h2 {
     margin-top: 0;
+
+    color: #eee9df;
 }
 
 .info {
-    color: #7f8b99;
+    color: #aaa398;
+
+    line-height: 1.6;
 }
 
 
-/* APERTURAS */
+/* =========================================================
+   APERTURAS
+   ========================================================= */
 
 .opening {
-    padding: 16px 0;
+    padding: 0;
 
-    border-bottom: 1px solid #27313c;
+    margin-top: 9px;
+
+    background: #191814;
+
+    border: 1px solid #38352e;
+
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    transition: border-color 0.2s;
 }
 
-.opening:last-child {
-    border-bottom: 0;
+.opening:hover {
+    border-color: #5a5141;
 }
+
+
+/* CABECERA DE APERTURA */
 
 .opening-title {
     display: flex;
 
+    align-items: center;
     justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 17px 18px;
+
+    cursor: pointer;
+
+    user-select: none;
 }
 
-.bar {
-    height: 8px;
+.opening-title:hover {
+    background: #1d1b17;
+}
 
-    background: #222b35;
+.opening-title strong:first-child {
+    color: #eee9df;
+}
+
+.opening-title strong:last-child {
+    color: #c7a76c;
+}
+
+
+/* FLECHA */
+
+.opening-title::before {
+    content: "▸";
+
+    color: #b9985c;
+
+    font-size: 17px;
+
+    margin-right: 2px;
+}
+
+
+/*
+   Cuando posteriormente el JavaScript agregue
+   la clase "open", la flecha queda hacia abajo.
+*/
+
+.opening.open > .opening-title::before {
+    content: "▾";
+}
+
+
+/* BARRA */
+
+.bar {
+    height: 5px;
+
+    background: #302d27;
 
     border-radius: 10px;
 
-    margin-top: 9px;
+    margin: 0 18px 12px;
 
     overflow: hidden;
 }
@@ -291,40 +400,43 @@ main {
 .bar div {
     height: 100%;
 
-    background: #6da7ff;
+    background: #b9985c;
 
     border-radius: 10px;
 }
 
+
+/* INFORMACIÓN DE APERTURA */
+
 .opening-data {
-    color: #7f8b99;
+    color: #979186;
 
     font-size: 13px;
 
-    margin-top: 8px;
+    padding: 0 18px 16px;
 }
 
 
-/* VARIANTES */
+/* =========================================================
+   VARIANTES
+   ========================================================= */
 
 .variant {
-    background: #0c1218;
+    background: #171612;
 
-    border: 1px solid #27313c;
+    border: 1px solid #35322b;
 
-    padding: 18px;
+    padding: 16px;
 
-    border-radius: 12px;
+    border-radius: 10px;
 
-    margin-top: 12px;
+    margin: 10px 12px;
 
     transition: 0.2s;
 }
 
 .variant:hover {
-    border-color: #435365;
-
-    transform: translateY(-2px);
+    border-color: #51493c;
 }
 
 .variant-top {
@@ -335,18 +447,22 @@ main {
     gap: 10px;
 }
 
+.variant-top strong:last-child {
+    color: #c7a76c;
+}
+
 .moves {
-    margin-top: 12px;
+    margin-top: 11px;
 
-    padding: 12px;
+    padding: 11px;
 
-    background: #080c11;
+    background: #11110f;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
     font-family: monospace;
 
-    color: #dbe5ef;
+    color: #d8d1c4;
 
     line-height: 1.7;
 
@@ -354,42 +470,50 @@ main {
 }
 
 .variant-data {
-    color: #7f8b99;
+    color: #898379;
 
-    margin-top: 10px;
+    margin-top: 9px;
 
     font-size: 13px;
 }
 
 
-/* PARTIDAS */
+/* =========================================================
+   PARTIDAS
+   ========================================================= */
 
 .game {
-    padding: 15px;
+    padding: 14px 16px;
 
-    background: #0c1218;
+    background: #191814;
 
-    border: 1px solid #27313c;
+    border: 1px solid #35322b;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
-    margin-top: 10px;
+    margin-top: 8px;
 
     transition: 0.2s;
 }
 
 .game:hover {
-    border-color: #435365;
+    border-color: #544b3d;
+
+    background: #1c1a16;
+}
+
+.game strong {
+    color: #e9e3d8;
 }
 
 .game span {
-    color: #697582;
+    color: #777167;
 
     margin: 0 7px;
 }
 
 .game-data {
-    color: #7f8b99;
+    color: #918b80;
 
     margin-top: 7px;
 
@@ -397,20 +521,68 @@ main {
 }
 
 
-/* PREPARACIÓN */
+/* =========================================================
+   ENLACES DE PARTIDAS
+   ========================================================= */
 
-#preparacion {
-    background: #0c1218;
+.game a {
+    display: inline-block;
 
-    border: 1px solid #27313c;
+    margin-top: 9px;
 
-    border-radius: 12px;
+    color: #c7a76c;
 
-    padding: 20px;
+    text-decoration: none;
+
+    font-size: 13px;
+}
+
+.game a:hover {
+    text-decoration: underline;
 }
 
 
-/* RESPONSIVE */
+/* =========================================================
+   PREPARACIÓN
+   ========================================================= */
+
+#preparacion {
+    background: #191814;
+
+    border: 1px solid #35322b;
+
+    border-radius: 10px;
+
+    padding: 19px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #151513;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #403c34;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5a5141;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 900px) {
 
@@ -465,7 +637,11 @@ main {
     }
 
     .panel {
-        padding: 18px;
+        padding: 17px;
+    }
+
+    .opening-title {
+        padding: 15px;
     }
 
 }

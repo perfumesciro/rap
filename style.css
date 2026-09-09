@@ -1,0 +1,471 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #080c11;
+    color: #f2f5f8;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+
+header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+
+    background: #10161e;
+    border-bottom: 1px solid #222c37;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #6da7ff;
+}
+
+.subtitle {
+    color: #7f8b99;
+}
+
+
+/* CONTENIDO */
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+/* BUSCADOR */
+
+.hero {
+    margin-top: 40px;
+
+    padding: 35px;
+
+    background: #111821;
+
+    border: 1px solid #25303c;
+    border-radius: 18px;
+}
+
+.hero h1 {
+    margin: 0;
+
+    font-size: 38px;
+}
+
+.hero p {
+    color: #8e9aa8;
+}
+
+
+/* BARRA DE BÚSQUEDA */
+
+.search {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.search input {
+    flex: 1;
+
+    height: 55px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    border: 1px solid #344150;
+
+    background: #080c11;
+
+    color: white;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+.search input:focus {
+    border-color: #6da7ff;
+}
+
+.search button {
+    border: 0;
+
+    padding: 0 28px;
+
+    border-radius: 10px;
+
+    background: #6da7ff;
+
+    color: #07101a;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.search button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* CARGANDO */
+
+.loading {
+    display: none;
+
+    margin-top: 20px;
+
+    color: #8491a0;
+}
+
+
+/* ERROR */
+
+#error {
+    color: #ff7070;
+
+    margin-top: 15px;
+}
+
+
+/* RESULTADOS */
+
+.resultado {
+    display: none;
+
+    margin-bottom: 60px;
+}
+
+
+/* JUGADOR */
+
+.player-card {
+    margin-top: 20px;
+
+    background: #111821;
+
+    border: 1px solid #25303c;
+
+    border-radius: 15px;
+
+    padding: 25px;
+}
+
+.player-name {
+    font-size: 30px;
+
+    font-weight: bold;
+}
+
+.player-data {
+    color: #7f8b99;
+
+    margin-top: 8px;
+}
+
+
+/* ESTADÍSTICAS */
+
+.stats {
+    display: grid;
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-top: 15px;
+}
+
+.stat {
+    background: #111821;
+
+    border: 1px solid #25303c;
+
+    padding: 20px;
+
+    border-radius: 14px;
+}
+
+.stat span {
+    color: #84909d;
+
+    font-size: 14px;
+}
+
+.stat strong {
+    display: block;
+
+    font-size: 28px;
+
+    margin-top: 8px;
+}
+
+
+/* COLORES */
+
+.win strong {
+    color: #62d48a;
+}
+
+.draw strong {
+    color: #e5c65c;
+}
+
+.loss strong {
+    color: #ff6f6f;
+}
+
+
+/* PANELES */
+
+.panel {
+    margin-top: 20px;
+
+    background: #111821;
+
+    border: 1px solid #25303c;
+
+    border-radius: 15px;
+
+    padding: 25px;
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.info {
+    color: #7f8b99;
+}
+
+
+/* APERTURAS */
+
+.opening {
+    padding: 16px 0;
+
+    border-bottom: 1px solid #27313c;
+}
+
+.opening:last-child {
+    border-bottom: 0;
+}
+
+.opening-title {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.bar {
+    height: 8px;
+
+    background: #222b35;
+
+    border-radius: 10px;
+
+    margin-top: 9px;
+
+    overflow: hidden;
+}
+
+.bar div {
+    height: 100%;
+
+    background: #6da7ff;
+
+    border-radius: 10px;
+}
+
+.opening-data {
+    color: #7f8b99;
+
+    font-size: 13px;
+
+    margin-top: 8px;
+}
+
+
+/* VARIANTES */
+
+.variant {
+    background: #0c1218;
+
+    border: 1px solid #27313c;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    margin-top: 12px;
+
+    transition: 0.2s;
+}
+
+.variant:hover {
+    border-color: #435365;
+
+    transform: translateY(-2px);
+}
+
+.variant-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+.moves {
+    margin-top: 12px;
+
+    padding: 12px;
+
+    background: #080c11;
+
+    border-radius: 8px;
+
+    font-family: monospace;
+
+    color: #dbe5ef;
+
+    line-height: 1.7;
+
+    overflow-x: auto;
+}
+
+.variant-data {
+    color: #7f8b99;
+
+    margin-top: 10px;
+
+    font-size: 13px;
+}
+
+
+/* PARTIDAS */
+
+.game {
+    padding: 15px;
+
+    background: #0c1218;
+
+    border: 1px solid #27313c;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+
+    transition: 0.2s;
+}
+
+.game:hover {
+    border-color: #435365;
+}
+
+.game span {
+    color: #697582;
+
+    margin: 0 7px;
+}
+
+.game-data {
+    color: #7f8b99;
+
+    margin-top: 7px;
+
+    font-size: 13px;
+}
+
+
+/* PREPARACIÓN */
+
+#preparacion {
+    background: #0c1218;
+
+    border: 1px solid #27313c;
+
+    border-radius: 12px;
+
+    padding: 20px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 0 5%;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .search {
+        flex-direction: column;
+    }
+
+    .search button {
+        height: 50px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    main {
+        width: 94%;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .player-name {
+        font-size: 25px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+
+}

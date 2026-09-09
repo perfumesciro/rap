@@ -6,49 +6,376 @@
 
     <title>Chess Scout</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    <!-- Chess.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0f1117;
+            color: #f1f1f1;
+        }
+
+        header {
+            padding: 25px 20px;
+            border-bottom: 1px solid #272b35;
+            background: #141720;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #5d9cff;
+        }
+
+        .subtitle {
+            margin-top: 7px;
+            color: #8d93a1;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .card {
+            background: #171a22;
+            border: 1px solid #292e39;
+            border-radius: 15px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        .search {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #343a47;
+            background: #0f1117;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #5d9cff;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 18px;
+            background: #5d9cff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .error {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #3a1d23;
+            color: #ff9ba9;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-name {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .profile-info {
+            color: #9298a5;
+            margin-top: 5px;
+        }
+
+        .rating {
+            font-size: 25px;
+            font-weight: bold;
+            color: #5d9cff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .stat {
+            background: #11141b;
+            border: 1px solid #282d38;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat span {
+            display: block;
+            color: #8e95a3;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .stat strong {
+            font-size: 23px;
+        }
+
+        .battle-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .color-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-button {
+            background: #252a34;
+            border: 1px solid #353b48;
+        }
+
+        .color-button.selected {
+            background: #5d9cff;
+            border-color: #5d9cff;
+        }
+
+        .battle-layout {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .board {
+            width: min(90vw, 600px);
+            aspect-ratio: 1;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,.35);
+        }
+
+        .square {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .light {
+            background: #e8edf5;
+        }
+
+        .dark {
+            background: #7293b8;
+        }
+
+        .piece {
+            font-size: clamp(30px, 7vw, 65px);
+            line-height: 1;
+            text-shadow: 0 2px 2px rgba(0,0,0,.25);
+        }
+
+        .selected-square {
+            box-shadow: inset 0 0 0 5px #ffd84d;
+        }
+
+        .possible {
+            box-shadow: inset 0 0 0 5px rgba(255,255,255,.35);
+        }
+
+        .battle-panel {
+            width: 280px;
+            background: #11141b;
+            border: 1px solid #292e39;
+            border-radius: 13px;
+            padding: 18px;
+        }
+
+        .battle-stat {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #282d37;
+        }
+
+        .battle-stat:last-child {
+            border-bottom: none;
+        }
+
+        .battle-stat span {
+            color: #8f96a4;
+        }
+
+        .battle-status {
+            margin-top: 15px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #191e28;
+            color: #cdd3df;
+            text-align: center;
+        }
+
+        .repertoire {
+            margin-top: 15px;
+        }
+
+        .move-line {
+            padding: 10px 12px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            background: #11141b;
+            border: 1px solid #282d38;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .move-number {
+            color: #7f8795;
+        }
+
+        .loading {
+            text-align: center;
+            color: #9da4b2;
+        }
+
+        .spinner {
+            width: 35px;
+            height: 35px;
+            border: 4px solid #292e39;
+            border-top-color: #5d9cff;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: auto auto 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .small {
+            color: #858c9a;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search {
+                flex-direction: column;
+            }
+
+            .search button {
+                width: 100%;
+            }
+
+            .profile {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .battle-panel {
+                width: min(90vw, 600px);
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header class="header">
-    <div class="logo">
-        ♞ Chess<span>Scout</span>
-    </div>
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            ♞ Chess<span>Scout</span>
+        </div>
 
-    <p class="subtitulo">
-        Analizá jugadores de Lichess y enfrentate a su estilo
-    </p>
+        <div class="subtitle">
+            Analizá jugadores de Lichess y jugá contra su estilo
+        </div>
+    </div>
 </header>
 
 
-<main class="contenedor">
+<main>
 
-    <!-- ================================================= -->
     <!-- BUSCADOR -->
-    <!-- ================================================= -->
 
-    <section class="buscador">
+    <section class="card">
 
         <h1>Analizar jugador</h1>
 
-        <p>
-            Escribí un usuario de Lichess para analizar sus partidas.
+        <p class="small">
+            Introducí un usuario de Lichess para analizar sus partidas públicas.
         </p>
 
-        <div class="busqueda">
+        <div class="search">
 
             <input
-                id="usuario"
+                id="username"
                 type="text"
-                placeholder="Ej: DrNykterstein"
-                autocomplete="off"
+                placeholder="Usuario de Lichess"
             >
 
-            <button id="botonAnalizar" onclick="analizar()">
+            <button id="searchButton">
                 Analizar
             </button>
 
@@ -59,234 +386,227 @@
     </section>
 
 
-    <!-- ================================================= -->
     <!-- LOADING -->
-    <!-- ================================================= -->
 
-    <section id="loading" class="loading oculto">
+    <section id="loading" class="card loading hidden">
 
         <div class="spinner"></div>
 
-        <h2 id="loadingTitulo">
-            Analizando jugador...
-        </h2>
-
-        <p id="loadingTexto">
-            Descargando partidas reales de Lichess...
-        </p>
-
-        <div class="barra">
-            <div id="loadingProgreso"></div>
+        <div id="loadingText">
+            Descargando partidas...
         </div>
 
     </section>
 
 
-    <!-- ================================================= -->
     <!-- RESULTADOS -->
-    <!-- ================================================= -->
 
-    <section id="resultados" class="oculto">
+    <section id="results" class="hidden">
 
-        <!-- PERFIL -->
+        <div class="card">
 
-        <div class="jugador-card">
+            <div class="profile">
 
-            <div>
+                <div>
 
-                <span class="etiqueta">
-                    JUGADOR ANALIZADO
-                </span>
+                    <div class="profile-name" id="playerName">
+                        -
+                    </div>
 
-                <h2 id="nombreJugador">
+                    <div class="profile-info" id="playerInfo">
+                        -
+                    </div>
+
+                </div>
+
+                <div class="rating" id="playerRating">
                     -
-                </h2>
+                </div>
 
-                <p id="datosJugador">
-                    -
-                </p>
-
-            </div>
-
-            <div id="ratingJugador" class="rating">
-                -
             </div>
 
         </div>
 
 
-        <!-- ESTADÍSTICAS -->
-
-        <div class="estadisticas">
+        <div class="stats">
 
             <div class="stat">
                 <span>Partidas</span>
-                <strong id="total">0</strong>
+                <strong id="games">0</strong>
             </div>
 
             <div class="stat">
                 <span>Victorias</span>
-                <strong id="victorias">0</strong>
+                <strong id="wins">0</strong>
             </div>
 
             <div class="stat">
                 <span>Tablas</span>
-                <strong id="tablas">0</strong>
+                <strong id="draws">0</strong>
             </div>
 
             <div class="stat">
                 <span>Derrotas</span>
-                <strong id="derrotas">0</strong>
+                <strong id="losses">0</strong>
             </div>
 
             <div class="stat">
                 <span>Puntuación</span>
-                <strong id="porcentaje">0%</strong>
+                <strong id="score">0%</strong>
             </div>
 
         </div>
 
 
-        <!-- CALIDAD -->
+        <!-- REPERTORIO -->
 
-        <div class="panel">
+        <div class="card" style="margin-top:20px;">
 
-            <h2>Calidad de los datos</h2>
+            <h2>♟ Primeras 7 jugadas</h2>
 
-            <p id="calidadDatos">
-                -
+            <p class="small">
+                Estas jugadas se obtienen de las partidas reales
+                del jugador analizado.
             </p>
 
-        </div>
-
-
-        <!-- APERTURAS -->
-
-        <div class="panel">
-
-            <h2>Aperturas</h2>
-
-            <div id="aperturas">
-                -
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================================================= -->
-    <!-- BATALLA -->
-    <!-- ================================================= -->
-
-    <section id="battleSection" class="battle-section oculto">
-
-        <div class="battle-header">
-
-            <div>
-
-                <span class="etiqueta">
-                    CHESS SCOUT BATTLE
-                </span>
-
-                <h2>
-                    Jugá contra el jugador
-                </h2>
-
-                <p id="battlePlayer">
-                    -
-                </p>
-
+            <div id="repertoire" class="repertoire">
+                Cargando...
             </div>
 
         </div>
 
 
-        <!-- CONFIGURACIÓN -->
+        <!-- BATALLA -->
 
-        <div id="battleConfig" class="battle-config">
+        <div class="card">
+
+            <div class="battle-top">
+
+                <div>
+                    <h2>⚔️ Batalla</h2>
+
+                    <p class="small">
+                        Enfrentate a una IA que intenta jugar
+                        como el jugador analizado.
+                    </p>
+                </div>
+
+            </div>
+
 
             <h3>Elegí tu color</h3>
 
-            <div class="color-options">
+            <div class="color-buttons">
 
                 <button
-                    class="color-btn activo"
-                    data-color="white"
-                    onclick="seleccionarColor('white')"
+                    id="whiteButton"
+                    class="color-button selected"
                 >
                     ♙ Blancas
                 </button>
 
                 <button
-                    class="color-btn"
-                    data-color="black"
-                    onclick="seleccionarColor('black')"
+                    id="blackButton"
+                    class="color-button"
                 >
                     ♟ Negras
                 </button>
 
             </div>
 
-            <button
-                id="startBattle"
-                onclick="iniciarBatalla()"
-            >
-                ⚔️ Comenzar batalla
+            <br>
+
+            <button id="startButton">
+                Comenzar batalla
             </button>
 
-        </div>
+
+            <div
+                id="battle"
+                class="hidden"
+            >
+
+                <div class="battle-layout">
+
+                    <div>
+
+                        <div
+                            id="board"
+                            class="board"
+                        ></div>
+
+                        <div
+                            id="battleStatus"
+                            class="battle-status"
+                        >
+                            Preparando partida...
+                        </div>
+
+                    </div>
 
 
-        <!-- TABLERO -->
+                    <div class="battle-panel">
 
-        <div id="battleGame" class="battle-game oculto">
+                        <h3>
+                            Rival
+                        </h3>
 
-            <div class="battle-info">
+                        <div
+                            class="battle-stat"
+                        >
+                            <span>Jugador</span>
 
-                <div>
-                    <span>Rival</span>
-                    <strong id="rivalNombre">-</strong>
-                </div>
+                            <strong
+                                id="opponentName"
+                            >
+                                -
+                            </strong>
+                        </div>
 
-                <div>
-                    <span>Repertorio</span>
-                    <strong id="movimientosRepertorio">
-                        0 / 7
-                    </strong>
-                </div>
 
-                <div>
-                    <span>Motor</span>
-                    <strong id="motorActual">
-                        Repertorio
-                    </strong>
+                        <div
+                            class="battle-stat"
+                        >
+                            <span>Repertorio</span>
+
+                            <strong
+                                id="repertoireCount"
+                            >
+                                0 / 7
+                            </strong>
+                        </div>
+
+
+                        <div
+                            class="battle-stat"
+                        >
+                            <span>Motor</span>
+
+                            <strong
+                                id="engineStatus"
+                            >
+                                Repertorio
+                            </strong>
+                        </div>
+
+
+                        <div
+                            class="battle-stat"
+                        >
+                            <span>Tu color</span>
+
+                            <strong
+                                id="yourColor"
+                            >
+                                Blancas
+                            </strong>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
-
-
-            <!-- TABLERO -->
-
-            <div id="tablero" class="tablero"></div>
-
-
-            <!-- ESTADO -->
-
-            <div id="battleStatus" class="battle-status">
-                Tu turno
-            </div>
-
-
-            <div id="battleError" class="battle-error"></div>
-
-
-            <button
-                class="btn-reiniciar"
-                onclick="reiniciarBatalla()"
-            >
-                Reiniciar batalla
-            </button>
 
         </div>
 
@@ -295,53 +615,48 @@
 </main>
 
 
+<!-- =====================================================
+     CHESS.JS
+===================================================== -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+
 <script>
 
 /* =========================================================
-   CONFIGURACIÓN
-   =========================================================
-
-   IMPORTANTE:
-
-   Si tu index.html está en GitHub Pages y tu server.py
-   está en Render:
-
-   API_BASE = "https://TU-SERVICIO.onrender.com"
-
-   SIN / al final.
-
-   Ejemplo:
-
-   const API_BASE = "https://chess-scout.onrender.com";
-
-   ========================================================= */
-
-const API_BASE = "https://TU-SERVICIO.onrender.com";
-
-
-/* =========================================================
    VARIABLES
-   ========================================================= */
+========================================================= */
 
-let jugadorActual = "";
+let usuarioActual = "";
+
+let partidasJugador = [];
+
+let repertorio = {
+    white: [],
+    black: []
+};
 
 let colorUsuario = "white";
 
-let batallaId = null;
+let juego = null;
 
-let chess = null;
+let selectedSquare = null;
 
-let seleccion = null;
+let pensando = false;
 
-let bloqueado = false;
+let movimientosIA = 0;
 
 
 /* =========================================================
    ELEMENTOS
-   ========================================================= */
+========================================================= */
 
-const usuarioInput =
-    document.getElementById("usuario");
+const username =
+    document.getElementById("username");
+
+const searchButton =
+    document.getElementById("searchButton");
 
 const errorBox =
     document.getElementById("error");
@@ -349,35 +664,32 @@ const errorBox =
 const loading =
     document.getElementById("loading");
 
-const resultados =
-    document.getElementById("resultados");
+const loadingText =
+    document.getElementById("loadingText");
 
-const battleSection =
-    document.getElementById("battleSection");
+const results =
+    document.getElementById("results");
 
-const battleConfig =
-    document.getElementById("battleConfig");
+const repertoireBox =
+    document.getElementById("repertoire");
 
-const battleGame =
-    document.getElementById("battleGame");
+const board =
+    document.getElementById("board");
+
+const battle =
+    document.getElementById("battle");
 
 const battleStatus =
     document.getElementById("battleStatus");
 
-const battleError =
-    document.getElementById("battleError");
-
-const tablero =
-    document.getElementById("tablero");
-
 
 /* =========================================================
-   UTILIDADES
-   ========================================================= */
+   MOSTRAR ERROR
+========================================================= */
 
-function mostrarError(mensaje) {
+function mostrarError(texto) {
 
-    errorBox.textContent = mensaje;
+    errorBox.textContent = texto;
 
     errorBox.style.display = "block";
 }
@@ -391,48 +703,14 @@ function ocultarError() {
 }
 
 
-function mostrarBattleError(mensaje) {
-
-    battleError.textContent = mensaje;
-
-    battleError.style.display = "block";
-}
-
-
-function ocultarBattleError() {
-
-    battleError.textContent = "";
-
-    battleError.style.display = "none";
-}
-
-
-function mostrarLoading(texto) {
-
-    loading.classList.remove("oculto");
-
-    document.getElementById(
-        "loadingTexto"
-    ).textContent = texto;
-
-}
-
-
-function ocultarLoading() {
-
-    loading.classList.add("oculto");
-
-}
-
-
 /* =========================================================
-   ANALIZAR JUGADOR
-   ========================================================= */
+   ANALIZAR LICHESS
+========================================================= */
 
-async function analizar() {
+async function analizarJugador() {
 
     const usuario =
-        usuarioInput.value.trim();
+        username.value.trim();
 
     if (!usuario) {
 
@@ -445,71 +723,109 @@ async function analizar() {
 
     ocultarError();
 
-    jugadorActual = usuario;
+    loading.classList.remove("hidden");
 
-    document.getElementById(
-        "botonAnalizar"
-    ).disabled = true;
+    results.classList.add("hidden");
 
-    mostrarLoading(
-        "Descargando partidas reales de Lichess..."
-    );
+    loadingText.textContent =
+        "Descargando partidas reales de Lichess...";
 
-    document.getElementById(
-        "loadingProgreso"
-    ).style.width = "30%";
+    searchButton.disabled = true;
 
 
     try {
 
-        document.getElementById(
-            "loadingTexto"
-        ).textContent =
-            "Analizando partidas...";
+        /*
+         * Primero comprobamos que exista.
+         */
+
+        const userResponse =
+            await fetch(
+                `https://lichess.org/api/user/${encodeURIComponent(usuario)}`
+            );
 
 
-        const respuesta = await fetch(
-            `${API_BASE}/api/analizar/${encodeURIComponent(usuario)}`
-        );
+        if (!userResponse.ok) {
 
+            throw new Error(
+                "No se encontró ese jugador en Lichess."
+            );
 
-        if (!respuesta.ok) {
-
-            let mensaje =
-                "No se pudo analizar el jugador.";
-
-            try {
-
-                const data =
-                    await respuesta.json();
-
-                if (data.detail) {
-                    mensaje = data.detail;
-                }
-
-            } catch {}
-
-            throw new Error(mensaje);
         }
 
 
-        document.getElementById(
-            "loadingProgreso"
-        ).style.width = "80%";
+        const userData =
+            await userResponse.json();
 
 
-        const datos =
-            await respuesta.json();
+        loadingText.textContent =
+            "Descargando hasta 500 partidas...";
 
 
-        document.getElementById(
-            "loadingProgreso"
-        ).style.width = "100%";
+        /*
+         * Lichess devuelve PGN.
+         */
+
+        const gamesResponse =
+            await fetch(
+                `https://lichess.org/api/games/user/${encodeURIComponent(usuario)}?max=500&moves=true&tags=true&clocks=false&evals=false&opening=true`
+            );
 
 
-        mostrarResultados(datos);
+        if (!gamesResponse.ok) {
 
-        prepararBatalla(datos);
+            throw new Error(
+                "Lichess no permitió descargar las partidas."
+            );
+
+        }
+
+
+        const pgn =
+            await gamesResponse.text();
+
+
+        loadingText.textContent =
+            "Analizando las partidas...";
+
+
+        partidasJugador =
+            analizarPGN(
+                pgn,
+                usuario
+            );
+
+
+        if (!partidasJugador.length) {
+
+            throw new Error(
+                "No se encontraron partidas públicas."
+            );
+
+        }
+
+
+        usuarioActual =
+            usuario;
+
+
+        construirRepertorio(
+            partidasJugador,
+            usuario
+        );
+
+
+        mostrarResultados(
+            userData,
+            partidasJugador,
+            usuario
+        );
+
+
+        results.classList.remove(
+            "hidden"
+        );
+
 
     }
 
@@ -519,173 +835,734 @@ async function analizar() {
 
         mostrarError(
             error.message ||
-            "Ocurrió un error al conectar con el servidor."
+            "Ocurrió un error."
         );
 
     }
 
     finally {
 
-        ocultarLoading();
+        loading.classList.add(
+            "hidden"
+        );
 
-        document.getElementById(
-            "botonAnalizar"
-        ).disabled = false;
+        searchButton.disabled = false;
 
     }
+
+}
+
+
+/* =========================================================
+   ANALIZAR PGN
+========================================================= */
+
+function analizarPGN(
+    texto,
+    usuario
+) {
+
+    const partidas = [];
+
+    /*
+     * Separar cada partida.
+     */
+
+    const bloques =
+        texto.split(/\n(?=\[Event )/g);
+
+
+    for (
+        const bloque of bloques
+    ) {
+
+        if (
+            !bloque.includes("[Event ")
+        ) {
+            continue;
+        }
+
+
+        const headers = {};
+
+
+        const regex =
+            /\[([A-Za-z0-9_]+)\s+"([^"]*)"\]/g;
+
+
+        let match;
+
+
+        while (
+            (match = regex.exec(bloque))
+        ) {
+
+            headers[
+                match[1]
+            ] = match[2];
+
+        }
+
+
+        const movimientosTexto =
+            bloque
+                .split(/\n\n/)
+                .slice(1)
+                .join(" ")
+                .replace(/\{[^}]*\}/g, "")
+                .replace(/\([^)]*\)/g, "")
+                .trim();
+
+
+        partidas.push({
+
+            headers,
+
+            moves: movimientosTexto
+
+        });
+
+    }
+
+
+    return partidas;
+
+}
+
+
+/* =========================================================
+   CONSTRUIR REPERTORIO
+========================================================= */
+
+function construirRepertorio(
+    partidas,
+    usuario
+) {
+
+    repertorio = {
+        white: [],
+        black: []
+    };
+
+
+    /*
+     * Para cada color guardamos:
+     *
+     * posición -> movimientos posibles
+     *
+     * Esto se utiliza para reproducir las
+     * primeras 7 jugadas.
+     */
+
+    const posiciones = {
+        white: new Map(),
+        black: new Map()
+    };
+
+
+    for (
+        const partida of partidas
+    ) {
+
+        const white =
+            (
+                partida.headers.White ||
+                ""
+            ).toLowerCase();
+
+
+        const black =
+            (
+                partida.headers.Black ||
+                ""
+            ).toLowerCase();
+
+
+        let color = null;
+
+
+        if (
+            white === usuario.toLowerCase()
+        ) {
+
+            color = "white";
+
+        }
+
+        else if (
+            black === usuario.toLowerCase()
+        ) {
+
+            color = "black";
+
+        }
+
+
+        if (!color) {
+            continue;
+        }
+
+
+        const partidaChess =
+            new Chess();
+
+
+        /*
+         * Extraemos las jugadas SAN.
+         */
+
+        const tokens =
+            partida.moves
+                .replace(/\d+\.(\.\.)?/g, " ")
+                .split(/\s+/)
+                .filter(Boolean);
+
+
+        let jugadasPropias = 0;
+
+
+        for (
+            const token of tokens
+        ) {
+
+            /*
+             * Ignorar resultado.
+             */
+
+            if (
+                ["1-0", "0-1", "1/2-1/2", "*"]
+                    .includes(token)
+            ) {
+                continue;
+            }
+
+
+            const turno =
+                partidaChess.turn();
+
+
+            const esMio =
+                (
+                    color === "white" &&
+                    turno === "w"
+                ) ||
+                (
+                    color === "black" &&
+                    turno === "b"
+                );
+
+
+            if (esMio) {
+
+                jugadasPropias++;
+
+
+                /*
+                 * Solo primeras 7.
+                 */
+
+                if (
+                    jugadasPropias <= 7
+                ) {
+
+                    const fen =
+                        partidaChess
+                            .fen()
+                            .split(" ")
+                            .slice(0, 4)
+                            .join(" ");
+
+
+                    try {
+
+                        const movimiento =
+                            partidaChess.move(
+                                token,
+                                {
+                                    sloppy: true
+                                }
+                            );
+
+
+                        if (!movimiento) {
+                            break;
+                        }
+
+
+                        const lista =
+                            posiciones[color]
+                                .get(fen) ||
+                            [];
+
+
+                        lista.push(
+                            movimiento.from +
+                            movimiento.to
+                        );
+
+
+                        posiciones[color].set(
+                            fen,
+                            lista
+                        );
+
+                    }
+
+                    catch {
+
+                        break;
+
+                    }
+
+                }
+
+                else {
+
+                    try {
+                        partidaChess.move(
+                            token,
+                            {
+                                sloppy: true
+                            }
+                        );
+                    }
+                    catch {
+                        break;
+                    }
+
+                }
+
+            }
+
+            else {
+
+                try {
+
+                    partidaChess.move(
+                        token,
+                        {
+                            sloppy: true
+                        }
+                    );
+
+                }
+
+                catch {
+
+                    break;
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Convertir Map a array.
+     */
+
+    for (
+        const color of ["white", "black"]
+    ) {
+
+        for (
+            const [
+                fen,
+                movimientos
+            ] of posiciones[color]
+        ) {
+
+            const contador = {};
+
+
+            movimientos.forEach(
+                movimiento => {
+
+                    contador[movimiento] =
+                        (
+                            contador[movimiento] ||
+                            0
+                        ) + 1;
+
+                }
+            );
+
+
+            const ordenados =
+                Object.entries(
+                    contador
+                )
+                .sort(
+                    (a, b) =>
+                        b[1] - a[1]
+                );
+
+
+            repertorio[color].push({
+
+                fen,
+
+                movimientos:
+                    ordenados
+
+            });
+
+        }
+
+    }
+
 }
 
 
 /* =========================================================
    MOSTRAR RESULTADOS
-   ========================================================= */
+========================================================= */
 
-function mostrarResultados(datos) {
-
-    resultados.classList.remove("oculto");
-
+function mostrarResultados(
+    user,
+    partidas,
+    usuario
+) {
 
     document.getElementById(
-        "nombreJugador"
+        "playerName"
     ).textContent =
-        datos.usuario || jugadorActual;
+        user.username ||
+        usuario;
 
 
     document.getElementById(
-        "datosJugador"
+        "playerInfo"
     ).textContent =
-        `${datos.partidas || 0} partidas analizadas`;
+        `${partidas.length} partidas públicas analizadas`;
 
 
     document.getElementById(
-        "ratingJugador"
+        "playerRating"
     ).textContent =
-        datos.partidas || 0;
+        user.perfs?.blitz?.rating ||
+        user.perfs?.rapid?.rating ||
+        "-";
 
 
     document.getElementById(
-        "total"
+        "games"
     ).textContent =
-        datos.partidas || 0;
+        partidas.length;
 
 
-    /*
-     * Esta versión del server devuelve solamente
-     * la cantidad de partidas para /api/analizar.
-     *
-     * Por eso dejamos estos datos preparados para
-     * cuando agreguemos el análisis completo.
-     */
+    let wins = 0;
+    let draws = 0;
+    let losses = 0;
+
+
+    for (
+        const partida of partidas
+    ) {
+
+        const white =
+            (
+                partida.headers.White ||
+                ""
+            ).toLowerCase();
+
+
+        const black =
+            (
+                partida.headers.Black ||
+                ""
+            ).toLowerCase();
+
+
+        const result =
+            partida.headers.Result;
+
+
+        if (
+            result === "1/2-1/2"
+        ) {
+
+            draws++;
+
+        }
+
+        else if (
+            (
+                result === "1-0" &&
+                white === usuario.toLowerCase()
+            )
+            ||
+            (
+                result === "0-1" &&
+                black === usuario.toLowerCase()
+            )
+        ) {
+
+            wins++;
+
+        }
+
+        else {
+
+            losses++;
+
+        }
+
+    }
+
 
     document.getElementById(
-        "victorias"
-    ).textContent = "-";
+        "wins"
+    ).textContent = wins;
 
 
     document.getElementById(
-        "tablas"
-    ).textContent = "-";
+        "draws"
+    ).textContent = draws;
 
 
     document.getElementById(
-        "derrotas"
-    ).textContent = "-";
+        "losses"
+    ).textContent = losses;
+
+
+    const score =
+        partidas.length
+            ? (
+                (
+                    wins +
+                    draws * 0.5
+                )
+                /
+                partidas.length
+                *
+                100
+            ).toFixed(1)
+            : 0;
 
 
     document.getElementById(
-        "porcentaje"
-    ).textContent = "-";
-
-
-    document.getElementById(
-        "calidadDatos"
+        "score"
     ).textContent =
-        `Se analizaron ${datos.partidas || 0} partidas públicas de Lichess. ` +
-        `El repertorio de batalla se construye a partir de las partidas reales del jugador.`;
+        `${score}%`;
 
 
-    document.getElementById(
-        "aperturas"
-    ).innerHTML = `
+    mostrarRepertorio();
 
-        <div class="apertura-item">
-
-            <strong>♟ Repertorio de batalla</strong>
-
-            <p>
-                Las primeras 7 jugadas del jugador
-                se obtienen de sus partidas reales.
-            </p>
-
-        </div>
-
-    `;
 }
 
 
 /* =========================================================
-   PREPARAR BATALLA
-   ========================================================= */
+   MOSTRAR PRIMERAS 7
+========================================================= */
 
-function prepararBatalla(datos) {
+function mostrarRepertorio() {
 
-    battleSection.classList.remove("oculto");
-
-    battlePlayer.textContent =
-        `Vas a jugar contra ${datos.usuario}.`;
-
-    document.getElementById(
-        "rivalNombre"
-    ).textContent =
-        datos.usuario;
-
-    battleConfig.classList.remove("oculto");
-
-    battleGame.classList.add("oculto");
-
-}
+    repertoireBox.innerHTML = "";
 
 
-/* =========================================================
-   SELECCIONAR COLOR
-   ========================================================= */
+    for (
+        const color of ["white", "black"]
+    ) {
 
-function seleccionarColor(color) {
-
-    colorUsuario = color;
-
-
-    document
-        .querySelectorAll(".color-btn")
-        .forEach(btn => {
-
-            btn.classList.remove("activo");
-
-        });
+        const titulo =
+            document.createElement("h3");
 
 
-    const boton =
-        document.querySelector(
-            `.color-btn[data-color="${color}"]`
+        titulo.textContent =
+            color === "white"
+                ? "♙ Cuando juega con blancas"
+                : "♟ Cuando juega con negras";
+
+
+        repertoireBox.appendChild(
+            titulo
         );
 
 
-    if (boton) {
-        boton.classList.add("activo");
+        /*
+         * Buscar posiciones donde haya
+         * información del repertorio.
+         */
+
+        const datos =
+            repertorio[color];
+
+
+        if (!datos.length) {
+
+            const texto =
+                document.createElement("p");
+
+
+            texto.className =
+                "small";
+
+
+            texto.textContent =
+                "No hay suficientes datos.";
+
+            repertoireBox.appendChild(
+                texto
+            );
+
+            continue;
+        }
+
+
+        /*
+         * Mostrar algunas posiciones.
+         */
+
+        datos
+            .slice(0, 7)
+            .forEach(
+                (dato, indice) => {
+
+                    const linea =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    linea.className =
+                        "move-line";
+
+
+                    const numero =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    numero.className =
+                        "move-number";
+
+
+                    numero.textContent =
+                        `Posición ${indice + 1}`;
+
+
+                    const jugada =
+                        document.createElement(
+                            "strong"
+                        );
+
+
+                    const mejor =
+                        dato.movimientos[0];
+
+
+                    jugada.textContent =
+                        mejor
+                            ? mejor[0]
+                            : "-";
+
+
+                    linea.appendChild(
+                        numero
+                    );
+
+
+                    linea.appendChild(
+                        jugada
+                    );
+
+
+                    repertoireBox.appendChild(
+                        linea
+                    );
+
+                }
+            );
+
     }
 
 }
 
 
 /* =========================================================
+   COLOR
+========================================================= */
+
+document
+    .getElementById("whiteButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            colorUsuario =
+                "white";
+
+            document
+                .getElementById(
+                    "whiteButton"
+                )
+                .classList.add(
+                    "selected"
+                );
+
+            document
+                .getElementById(
+                    "blackButton"
+                )
+                .classList.remove(
+                    "selected"
+                );
+
+        }
+    );
+
+
+document
+    .getElementById("blackButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            colorUsuario =
+                "black";
+
+            document
+                .getElementById(
+                    "blackButton"
+                )
+                .classList.add(
+                    "selected"
+                );
+
+            document
+                .getElementById(
+                    "whiteButton"
+                )
+                .classList.remove(
+                    "selected"
+                );
+
+        }
+    );
+
+
+/* =========================================================
    INICIAR BATALLA
-   ========================================================= */
+========================================================= */
 
-async function iniciarBatalla() {
+document
+    .getElementById("startButton")
+    .addEventListener(
+        "click",
+        iniciarBatalla
+    );
 
-    if (!jugadorActual) {
 
-        mostrarBattleError(
+function iniciarBatalla() {
+
+    if (!usuarioActual) {
+
+        mostrarError(
             "Primero analizá un jugador."
         );
 
@@ -693,176 +1570,100 @@ async function iniciarBatalla() {
     }
 
 
-    ocultarBattleError();
-
-    bloqueado = true;
-
-
-    try {
-
-        battleStatus.textContent =
-            "Preparando la partida...";
+    juego =
+        new Chess();
 
 
-        const respuesta = await fetch(
-            `${API_BASE}/api/batalla/iniciar`,
-            {
-                method: "POST",
+    selectedSquare = null;
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+    pensando = false;
 
-                body: JSON.stringify({
-
-                    usuario:
-                        jugadorActual,
-
-                    color:
-                        colorUsuario
-
-                })
-            }
-        );
-
-
-        const datos =
-            await respuesta.json();
-
-
-        if (!respuesta.ok) {
-
-            throw new Error(
-                datos.detail ||
-                "No se pudo iniciar la batalla."
-            );
-        }
-
-
-        batallaId =
-            datos.batalla_id;
-
-
-        chess =
-            new Chess();
-
-
-        seleccion = null;
-
-
-        battleConfig.classList.add("oculto");
-
-        battleGame.classList.remove("oculto");
-
-
-        actualizarInformacion(datos);
-
-
-        dibujarTablero(
-            datos.fen
-        );
-
-
-        /*
-         * Si la IA es blancas,
-         * el servidor ya hizo su primera jugada.
-         */
-
-        if (datos.jugada_ia) {
-
-            battleStatus.textContent =
-                `${jugadorActual} jugó: ${datos.san || datos.jugada_ia}`;
-
-        } else {
-
-            battleStatus.textContent =
-                "Tu turno";
-
-        }
-
-
-        bloqueado = false;
-
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        mostrarBattleError(
-            error.message ||
-            "No se pudo iniciar la batalla."
-        );
-
-        bloqueado = false;
-
-    }
-
-}
-
-
-/* =========================================================
-   ACTUALIZAR INFORMACIÓN
-   ========================================================= */
-
-function actualizarInformacion(datos) {
-
-    document.getElementById(
-        "movimientosRepertorio"
-    ).textContent =
-        `${datos.movimientos_ia || 0} / 7`;
-
-
-    const motor =
-        datos.modo_ia === "stockfish"
-            ? "Stockfish"
-            : "Repertorio";
+    movimientosIA = 0;
 
 
     document.getElementById(
-        "motorActual"
+        "opponentName"
     ).textContent =
-        motor;
-
-}
+        usuarioActual;
 
 
-/* =========================================================
-   CREAR TABLERO
-   ========================================================= */
-
-function dibujarTablero(fen) {
-
-    if (!chess) {
-        chess = new Chess();
-    }
+    document.getElementById(
+        "yourColor"
+    ).textContent =
+        colorUsuario === "white"
+            ? "Blancas"
+            : "Negras";
 
 
-    chess.load(fen);
+    actualizarMotor(
+        "Repertorio"
+    );
 
 
-    tablero.innerHTML = "";
+    document.getElementById(
+        "repertoireCount"
+    ).textContent =
+        "0 / 7";
 
 
-    const posicion =
-        chess.board();
+    battle.classList.remove(
+        "hidden"
+    );
+
+
+    dibujarTablero();
 
 
     /*
-     * Si el usuario juega blancas:
-     * a8 -> h1
-     *
-     * Si juega negras:
-     * h1 -> a8
+     * Si el usuario juega negras,
+     * la IA tiene que hacer la primera jugada.
      */
 
-    let filas = [...Array(8).keys()];
-    let columnas = [...Array(8).keys()];
+    if (
+        colorUsuario === "black"
+    ) {
+
+        setTimeout(
+            movimientoIA,
+            300
+        );
+
+    }
+
+    else {
+
+        battleStatus.textContent =
+            "Tu turno.";
+
+    }
+
+}
 
 
-    if (colorUsuario === "black") {
+/* =========================================================
+   DIBUJAR TABLERO
+========================================================= */
+
+function dibujarTablero() {
+
+    board.innerHTML = "";
+
+
+    const posicion =
+        juego.board();
+
+
+    let filas =
+        [...Array(8).keys()];
+
+
+    let columnas =
+        [...Array(8).keys()];
+
+
+    if (
+        colorUsuario === "black"
+    ) {
 
         filas.reverse();
         columnas.reverse();
@@ -870,27 +1671,43 @@ function dibujarTablero(fen) {
     }
 
 
-    for (const fila of filas) {
+    for (
+        const fila of filas
+    ) {
 
-        for (const columna of columnas) {
+        for (
+            const columna of columnas
+        ) {
 
-            const casilla =
-                document.createElement("div");
-
-
-            casilla.className =
-                "casilla";
+            const square =
+                document.createElement(
+                    "div"
+                );
 
 
             const colorCasilla =
-                (fila + columna) % 2 === 0
-                    ? "clara"
-                    : "oscura";
+                (
+                    fila + columna
+                ) % 2 === 0
+                    ? "light"
+                    : "dark";
 
 
-            casilla.classList.add(
-                colorCasilla
-            );
+            square.className =
+                `square ${colorCasilla}`;
+
+
+            const nombre =
+                String.fromCharCode(
+                    97 + columna
+                ) +
+                (
+                    8 - fila
+                );
+
+
+            square.dataset.square =
+                nombre;
 
 
             const pieza =
@@ -900,62 +1717,63 @@ function dibujarTablero(fen) {
             if (pieza) {
 
                 const piezaElemento =
-                    document.createElement("span");
+                    document.createElement(
+                        "span"
+                    );
 
 
                 piezaElemento.className =
-                    "pieza";
+                    "piece";
 
 
                 piezaElemento.textContent =
-                    simboloPieza(
+                    obtenerSimbolo(
                         pieza
                     );
 
 
-                casilla.appendChild(
+                square.appendChild(
                     piezaElemento
                 );
 
             }
 
 
-            const square =
-                String.fromCharCode(
-                    97 + columna
-                ) +
-                (8 - fila);
+            if (
+                nombre === selectedSquare
+            ) {
+
+                square.classList.add(
+                    "selected-square"
+                );
+
+            }
 
 
-            casilla.dataset.square =
-                square;
-
-
-            casilla.addEventListener(
+            square.addEventListener(
                 "click",
-                () => seleccionarCasilla(square)
+                () => clickCasilla(nombre)
             );
 
 
-            tablero.appendChild(
-                casilla
+            board.appendChild(
+                square
             );
 
         }
 
     }
 
-
-    marcarSeleccion();
-
 }
 
 
 /* =========================================================
-   SÍMBOLOS DE PIEZAS
-   ========================================================= */
+   PIEZAS
+========================================================= */
 
-function simboloPieza(pieza) {
+function obtenerSimbolo(
+    pieza
+) {
 
     const piezas = {
 
@@ -985,318 +1803,210 @@ function simboloPieza(pieza) {
 
 
 /* =========================================================
-   SELECCIONAR CASILLA
-   ========================================================= */
+   CLICK CASILLA
+========================================================= */
 
-function seleccionarCasilla(square) {
+function clickCasilla(
+    square
+) {
 
-    if (bloqueado) {
+    if (
+        pensando ||
+        !juego ||
+        juego.game_over()
+    ) {
         return;
     }
 
 
-    if (!chess) {
-        return;
-    }
-
-
-    /*
-     * Comprobar que sea realmente el turno
-     * del usuario.
-     */
-
-    const turnoUsuario =
+    const turno =
         colorUsuario === "white"
             ? "w"
             : "b";
 
 
-    if (chess.turn() !== turnoUsuario) {
-
-        battleStatus.textContent =
-            "Esperá el turno de la IA.";
+    if (
+        juego.turn() !== turno
+    ) {
 
         return;
+
     }
 
 
     const pieza =
-        chess.get(square);
+        juego.get(square);
 
 
     /*
-     * PRIMER CLICK
+     * Seleccionar pieza.
      */
 
-    if (!seleccion) {
-
-        if (!pieza) {
-            return;
-        }
-
+    if (!selectedSquare) {
 
         if (
-            pieza.color !== turnoUsuario
+            !pieza ||
+            pieza.color !== turno
         ) {
+
             return;
+
         }
 
 
-        seleccion = square;
+        selectedSquare =
+            square;
 
-        marcarSeleccion();
+
+        dibujarTablero();
 
         return;
+
     }
 
 
     /*
-     * SEGUNDO CLICK
-     */
-
-    const origen =
-        seleccion;
-
-
-    const destino =
-        square;
-
-
-    /*
-     * Si hizo click en otra pieza propia,
-     * cambiar selección.
+     * Cambiar pieza seleccionada.
      */
 
     if (
         pieza &&
-        pieza.color === turnoUsuario
+        pieza.color === turno
     ) {
 
-        seleccion = square;
+        selectedSquare =
+            square;
 
-        marcarSeleccion();
+
+        dibujarTablero();
 
         return;
+
     }
 
 
-    realizarMovimiento(
-        origen,
-        destino
+    /*
+     * Intentar movimiento.
+     */
+
+    const movimiento = {
+
+        from:
+            selectedSquare,
+
+        to:
+            square
+
+    };
+
+
+    const prueba =
+        juego.move(
+            movimiento
+        );
+
+
+    if (!prueba) {
+
+        selectedSquare = null;
+
+        dibujarTablero();
+
+        return;
+
+    }
+
+
+    /*
+     * Obtener UCI.
+     */
+
+    const uci =
+        prueba.from +
+        prueba.to +
+        (
+            prueba.promotion ||
+            ""
+        );
+
+
+    /*
+     * Deshacer porque primero
+     * necesitamos procesarlo.
+     */
+
+    juego.undo();
+
+    selectedSquare = null;
+
+    enviarMovimientoUsuario(
+        uci
     );
 
 }
 
 
 /* =========================================================
-   MARCAR SELECCIÓN
-   ========================================================= */
+   MOVIMIENTO DEL USUARIO
+========================================================= */
 
-function marcarSeleccion() {
-
-    document
-        .querySelectorAll(".casilla")
-        .forEach(casilla => {
-
-            casilla.classList.remove(
-                "seleccionada"
-            );
-
-        });
-
-
-    if (!seleccion) {
-        return;
-    }
-
-
-    const casilla =
-        document.querySelector(
-            `[data-square="${seleccion}"]`
-        );
-
-
-    if (casilla) {
-
-        casilla.classList.add(
-            "seleccionada"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   REALIZAR MOVIMIENTO
-   ========================================================= */
-
-async function realizarMovimiento(
-    origen,
-    destino
+function enviarMovimientoUsuario(
+    uci
 ) {
-
-    if (bloqueado) {
-        return;
-    }
-
-
-    /*
-     * Primero comprobar localmente
-     * si el movimiento es legal.
-     */
-
-    const movimientoPrueba = {
-
-        from: origen,
-
-        to: destino
-
-    };
-
-
-    const resultado =
-        chess.move(
-            movimientoPrueba
-        );
-
-
-    if (!resultado) {
-
-        seleccion = null;
-
-        marcarSeleccion();
-
-        return;
-    }
-
-
-    /*
-     * Guardamos el movimiento en UCI.
-     */
-
-    const uci =
-        origen +
-        destino;
-
-
-    /*
-     * Volvemos atrás porque todavía
-     * no lo mandamos al servidor.
-     */
-
-    chess.undo();
-
-
-    seleccion = null;
-
-    marcarSeleccion();
-
-
-    bloqueado = true;
-
 
     try {
 
-        battleStatus.textContent =
-            "Stockfish / jugador pensando...";
-
-
-        const respuesta =
-            await fetch(
-                `${API_BASE}/api/batalla/movimiento`,
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        batalla_id:
-                            batallaId,
-
-                        movimiento:
-                            uci
-
-                    })
-
-                }
+        const movimiento =
+            chessMoveFromUCI(
+                uci
             );
 
 
-        const datos =
-            await respuesta.json();
-
-
-        if (!respuesta.ok) {
-
-            throw new Error(
-                datos.detail ||
-                "Movimiento rechazado."
-            );
-        }
-
-
-        /*
-         * Cargar directamente la posición
-         * que devuelve el servidor.
-         */
-
-        chess.load(
-            datos.fen
-        );
-
-
-        dibujarTablero(
-            datos.fen
-        );
-
-
-        actualizarInformacion(
-            datos
-        );
-
-
-        /*
-         * Mostrar qué motor está utilizando.
-         */
-
-        if (
-            datos.modo_ia ===
-            "repertorio"
-        ) {
-
-            battleStatus.textContent =
-                `${jugadorActual} juega según su repertorio real: ${datos.san_ia}`;
-
-        } else {
-
-            battleStatus.textContent =
-                `Stockfish jugó: ${datos.san_ia}`;
-
-        }
-
-
-        /*
-         * PARTIDA TERMINADA
-         */
-
-        if (datos.terminada) {
-
-            battleStatus.textContent =
-                `Partida terminada — ${datos.resultado}`;
-
-            bloqueado = true;
+        if (!movimiento) {
 
             return;
+
         }
 
 
-        bloqueado = false;
+        const realizado =
+            juego.move(
+                movimiento
+            );
+
+
+        if (!realizado) {
+
+            return;
+
+        }
+
+
+        dibujarTablero();
+
+
+        if (
+            juego.game_over()
+        ) {
+
+            batallaTerminada();
+
+            return;
+
+        }
+
+
+        pensando = true;
+
+
+        battleStatus.textContent =
+            "La IA está pensando...";
+
+
+        setTimeout(
+            movimientoIA,
+            200
+        );
 
     }
 
@@ -1304,78 +2014,404 @@ async function realizarMovimiento(
 
         console.error(error);
 
-        /*
-         * Si ocurrió un error,
-         * volvemos a cargar el tablero actual.
-         */
-
-        dibujarTablero(
-            chess.fen()
-        );
-
-
-        mostrarBattleError(
-            error.message ||
-            "Error al realizar el movimiento."
-        );
-
-
-        bloqueado = false;
-
     }
 
 }
 
 
 /* =========================================================
-   REINICIAR BATALLA
-   ========================================================= */
+   CONVERTIR UCI
+========================================================= */
 
-function reiniciarBatalla() {
+function chessMoveFromUCI(
+    uci
+) {
 
-    batallaId = null;
+    return {
 
-    chess = null;
+        from:
+            uci.substring(
+                0,
+                2
+            ),
 
-    seleccion = null;
+        to:
+            uci.substring(
+                2,
+                4
+            ),
 
-    bloqueado = false;
+        promotion:
+            uci.length > 4
+                ? uci[4]
+                : undefined
 
-
-    battleGame.classList.add(
-        "oculto"
-    );
-
-
-    battleConfig.classList.remove(
-        "oculto"
-    );
-
-
-    ocultarBattleError();
-
-
-    battleStatus.textContent =
-        "Tu turno";
+    };
 
 }
 
 
 /* =========================================================
-   ENTER PARA ANALIZAR
-   ========================================================= */
+   MOVIMIENTO IA
+========================================================= */
 
-usuarioInput.addEventListener(
-    "keydown",
-    function(event) {
+function movimientoIA() {
 
-        if (event.key === "Enter") {
+    if (
+        !juego ||
+        juego.game_over()
+    ) {
 
-            analizar();
+        batallaTerminada();
+
+        return;
+
+    }
+
+
+    const colorIA =
+        colorUsuario === "white"
+            ? "black"
+            : "white";
+
+
+    const turnoIA =
+        colorIA === "white"
+            ? "w"
+            : "b";
+
+
+    if (
+        juego.turn() !== turnoIA
+    ) {
+
+        pensando = false;
+
+        return;
+
+    }
+
+
+    let movimiento = null;
+
+
+    /*
+     * PRIMERAS 7 JUGADAS
+     */
+
+    if (
+        movimientosIA < 7
+    ) {
+
+        movimiento =
+            buscarJugadaRepertorio(
+                colorIA
+            );
+
+
+        if (movimiento) {
+
+            actualizarMotor(
+                "Repertorio real"
+            );
+
+        }
+
+        else {
+
+            /*
+             * Si no encontramos una continuación
+             * exacta, usamos Stockfish.
+             *
+             * La partida sigue siendo legal.
+             */
+
+            movimiento =
+                movimientoStockfishLocal();
+
+            actualizarMotor(
+                "Stockfish"
+            );
 
         }
 
     }
+
+    else {
+
+        /*
+         * DESDE LA JUGADA 8:
+         * STOCKFISH
+         */
+
+        movimiento =
+            movimientoStockfishLocal();
+
+        actualizarMotor(
+            "Stockfish"
+        );
+
+    }
+
+
+    if (!movimiento) {
+
+        batallaTerminada();
+
+        return;
+
+    }
+
+
+    const realizado =
+        juego.move(
+            movimiento
+        );
+
+
+    if (!realizado) {
+
+        pensando = false;
+
+        return;
+
+    }
+
+
+    movimientosIA++;
+
+
+    document.getElementById(
+        "repertoireCount"
+    ).textContent =
+        `${Math.min(
+            movimientosIA,
+            7
+        )} / 7`;
+
+
+    dibujarTablero();
+
+
+    if (
+        juego.game_over()
+    ) {
+
+        batallaTerminada();
+
+        return;
+
+    }
+
+
+    pensando = false;
+
+
+    battleStatus.textContent =
+        "Tu turno.";
+
+}
+
+
+/* =========================================================
+   BUSCAR JUGADA REAL
+========================================================= */
+
+function buscarJugadaRepertorio(
+    colorIA
+) {
+
+    const fen =
+        juego
+            .fen()
+            .split(" ")
+            .slice(0, 4)
+            .join(" ");
+
+
+    const datos =
+        repertorio[colorIA]
+            .find(
+                x =>
+                    x.fen === fen
+            );
+
+
+    if (!datos) {
+
+        return null;
+
+    }
+
+
+    /*
+     * Probar las jugadas por frecuencia.
+     */
+
+    for (
+        const [
+            uci
+        ] of datos.movimientos
+    ) {
+
+        const movimiento =
+            chessMoveFromUCI(
+                uci
+            );
+
+
+        const legal =
+            juego
+                .moves({
+                    verbose: true
+                })
+                .some(
+                    m =>
+                        m.from ===
+                            movimiento.from &&
+                        m.to ===
+                            movimiento.to
+                );
+
+
+        if (legal) {
+
+            return movimiento;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   STOCKFISH
+========================================================= */
+
+/*
+ * Esta función queda preparada para Stockfish.
+ *
+ * En el siguiente paso vamos a cargar el motor
+ * Stockfish WASM dentro del navegador.
+ */
+
+function movimientoStockfishLocal() {
+
+    /*
+     * TEMPORALMENTE elegimos una jugada legal.
+     *
+     * Cuando agreguemos Stockfish WASM,
+     * esta función será reemplazada por el motor real.
+     */
+
+    const movimientos =
+        juego.moves({
+            verbose: true
+        });
+
+
+    if (!movimientos.length) {
+
+        return null;
+
+    }
+
+
+    /*
+     * Por ahora seleccionamos una jugada legal.
+     */
+
+    return movimientos[
+        Math.floor(
+            Math.random() *
+            movimientos.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   MOTOR
+========================================================= */
+
+function actualizarMotor(
+    texto
+) {
+
+    document.getElementById(
+        "engineStatus"
+    ).textContent =
+        texto;
+
+}
+
+
+/* =========================================================
+   FIN DE PARTIDA
+========================================================= */
+
+function batallaTerminada() {
+
+    pensando = false;
+
+
+    let texto =
+        "Partida terminada.";
+
+
+    if (
+        juego.is_checkmate()
+    ) {
+
+        texto =
+            "♚ Jaque mate.";
+
+    }
+
+    else if (
+        juego.is_draw()
+    ) {
+
+        texto =
+            "½ Tablas.";
+
+    }
+
+
+    battleStatus.textContent =
+        texto;
+
+}
+
+
+/* =========================================================
+   BUSCAR CON ENTER
+========================================================= */
+
+username.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            analizarJugador();
+
+        }
+
+    }
+);
+
+
+searchButton.addEventListener(
+    "click",
+    analizarJugador
 );
 
 </script>

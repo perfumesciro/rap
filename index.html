@@ -1,789 +1,796 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Chess Scout</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0f1117;
-            color: #f2f2f2;
-        }
-
-        header {
-            background: #151922;
-            border-bottom: 1px solid #292e38;
-            padding: 24px 20px;
-        }
-
-        .header-content {
-            max-width: 1150px;
-            margin: auto;
-        }
-
-        .logo {
-            font-size: 30px;
-            font-weight: 800;
-        }
-
-        .logo span {
-            color: #5b9cff;
-        }
-
-        .subtitle {
-            margin-top: 6px;
-            color: #9299a7;
-        }
-
-        main {
-            max-width: 1150px;
-            margin: auto;
-            padding: 28px 20px 60px;
-        }
-
-        .card {
-            background: #171b24;
-            border: 1px solid #292f3b;
-            border-radius: 15px;
-            padding: 22px;
-            margin-bottom: 20px;
-        }
-
-        h1, h2, h3 {
-            margin-top: 0;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-        }
-
-        input {
-            flex: 1;
-            min-width: 0;
-            background: #0e1117;
-            border: 1px solid #343a47;
-            color: white;
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #5b9cff;
-        }
-
-        button {
-            border: none;
-            border-radius: 10px;
-            background: #5b9cff;
-            color: white;
-            padding: 13px 18px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: .18s;
-        }
-
-        button:hover {
-            filter: brightness(1.08);
-            transform: translateY(-1px);
-        }
-
-        button:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .error {
-            display: none;
-            margin-top: 14px;
-            background: #351d24;
-            border: 1px solid #5a2b37;
-            color: #ffabb8;
-            padding: 13px;
-            border-radius: 10px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .loading {
-            text-align: center;
-        }
-
-        .spinner {
-            width: 35px;
-            height: 35px;
-            border: 4px solid #2b303b;
-            border-top-color: #5b9cff;
-            border-radius: 50%;
-            margin: 5px auto 15px;
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* PERFIL */
-
-        .player-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .player-name {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .player-data {
-            color: #9198a6;
-            margin-top: 6px;
-        }
-
-        .rating {
-            font-size: 28px;
-            font-weight: bold;
-            color: #5b9cff;
-        }
-
-        /* ESTADÍSTICAS */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat {
-            background: #11141a;
-            border: 1px solid #292e38;
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-        }
-
-        .stat span {
-            display: block;
-            color: #8c94a2;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .stat strong {
-            font-size: 23px;
-        }
-
-        /* APERTURAS */
-
-        .opening {
-            border: 1px solid #292f3b;
-            border-radius: 11px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .opening-header {
-            padding: 14px;
-            background: #11141a;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .opening-content {
-            display: none;
-            padding: 12px;
-            background: #151922;
-        }
-
-        .opening.open .opening-content {
-            display: block;
-        }
-
-        .variant {
-            border: 1px solid #292e38;
-            border-radius: 9px;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-
-        .variant-header {
-            padding: 11px;
-            cursor: pointer;
-            background: #11141a;
-        }
-
-        .variant-games {
-            display: none;
-            padding: 10px;
-        }
-
-        .variant.open .variant-games {
-            display: block;
-        }
-
-        .game {
-            padding: 10px;
-            margin: 7px 0;
-            background: #1a1e27;
-            border-radius: 8px;
-        }
-
-        .game a {
-            color: #70aaff;
-            text-decoration: none;
-        }
-
-        .game a:hover {
-            text-decoration: underline;
-        }
-
-        .small {
-            color: #858d9b;
-            font-size: 13px;
-        }
-
-        /* =================================================
-           BATALLA
-        ================================================= */
-
-        .battle-section {
-            margin-top: 25px;
-        }
-
-        .battle-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .battle-description {
-            color: #9198a6;
-        }
-
-        .color-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-
-        .color-button {
-            background: #242934;
-            border: 1px solid #353b47;
-        }
-
-        .color-button.selected {
-            background: #5b9cff;
-            border-color: #5b9cff;
-        }
-
-        .battle-layout {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 28px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        .board-wrapper {
-            width: min(90vw, 620px);
-        }
-
-        .board {
-            width: 100%;
-            aspect-ratio: 1;
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 15px 45px rgba(0,0,0,.35);
-        }
-
-        .square {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            user-select: none;
-            cursor: pointer;
-        }
-
-        .light-square {
-            background: #e8edf3;
-        }
-
-        .dark-square {
-            background: #7392b4;
-        }
-
-        .piece {
-            font-size: clamp(30px, 7vw, 66px);
-            line-height: 1;
-            text-shadow: 0 2px 2px rgba(0,0,0,.25);
-        }
-
-        .selected-square {
-            box-shadow: inset 0 0 0 5px #ffd84a;
-        }
-
-        .possible-square::after {
-            content: "";
-            position: absolute;
-            width: 23%;
-            height: 23%;
-            border-radius: 50%;
-            background: rgba(255,255,255,.45);
-        }
-
-        .battle-status {
-            margin-top: 13px;
-            background: #151922;
-            border: 1px solid #292f3b;
-            border-radius: 10px;
-            padding: 13px;
-            text-align: center;
-            color: #cbd1dc;
-        }
-
-        .battle-panel {
-            width: 290px;
-            background: #11141a;
-            border: 1px solid #292e38;
-            border-radius: 13px;
-            padding: 18px;
-        }
-
-        .battle-info {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #292e38;
-            gap: 10px;
-        }
-
-        .battle-info:last-child {
-            border-bottom: none;
-        }
-
-        .battle-info span {
-            color: #858d9a;
-        }
-
-        .battle-info strong {
-            text-align: right;
-        }
-
-        .engine-repertoire {
-            color: #7db0ff;
-        }
-
-        .engine-stockfish {
-            color: #77d69a;
-        }
-
-        .stockfish-warning {
-            margin-top: 12px;
-            padding: 11px;
-            border-radius: 9px;
-            background: #332b19;
-            color: #e5c77a;
-            font-size: 13px;
-            display: none;
-        }
-
-        @media (max-width: 750px) {
-
-            .search-box {
-                flex-direction: column;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .player-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .battle-panel {
-                width: min(90vw, 620px);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Chess Scout</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#101216;
+    color:#f1f1f1;
+}
+
+header{
+    border-bottom:1px solid #292d35;
+    background:#15171c;
+}
+
+.header-content{
+    max-width:1200px;
+    margin:auto;
+    padding:24px 20px;
+}
+
+.logo{
+    font-size:31px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#5b9cff;
+}
+
+.subtitle{
+    color:#858b96;
+    margin-top:5px;
+}
+
+main{
+    max-width:1200px;
+    margin:auto;
+    padding:25px 20px 60px;
+}
+
+.card{
+    background:#17191f;
+    border:1px solid #292d35;
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+h1,h2,h3{
+    margin-top:0;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+}
+
+input{
+    flex:1;
+    background:#0e1014;
+    border:1px solid #343944;
+    border-radius:10px;
+    padding:14px;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#5b9cff;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    background:#5b9cff;
+    color:white;
+    padding:13px 18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    filter:brightness(1.08);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.error{
+    display:none;
+    margin-top:15px;
+    padding:13px;
+    border-radius:9px;
+    background:#351d24;
+    color:#ffabb8;
+    border:1px solid #5c303b;
+}
+
+.loading{
+    text-align:center;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:4px solid #30343d;
+    border-top-color:#5b9cff;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:10px auto 15px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+/* PERFIL */
+
+.player-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.player-name{
+    font-size:29px;
+    font-weight:bold;
+}
+
+.player-data{
+    color:#858b96;
+    margin-top:6px;
+}
+
+.rating{
+    color:#5b9cff;
+    font-size:28px;
+    font-weight:bold;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:#13151a;
+    border:1px solid #292d35;
+    border-radius:11px;
+    padding:18px;
+    text-align:center;
+}
+
+.stat span{
+    display:block;
+    color:#858b96;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.stat strong{
+    font-size:23px;
+}
+
+/* APERTURAS */
+
+.opening{
+    border:1px solid #2b3038;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.opening-header{
+    display:flex;
+    justify-content:space-between;
+    padding:14px;
+    background:#121419;
+    cursor:pointer;
+}
+
+.opening-content{
+    display:none;
+    padding:10px;
+}
+
+.opening.open .opening-content{
+    display:block;
+}
+
+.variant{
+    border:1px solid #292e36;
+    border-radius:9px;
+    overflow:hidden;
+    margin:8px 0;
+}
+
+.variant-header{
+    padding:12px;
+    background:#15181e;
+    cursor:pointer;
+}
+
+.variant-games{
+    display:none;
+    padding:10px;
+}
+
+.variant.open .variant-games{
+    display:block;
+}
+
+.game{
+    background:#1b1e25;
+    padding:11px;
+    border-radius:8px;
+    margin:7px 0;
+}
+
+.game a{
+    color:#70aaff;
+    text-decoration:none;
+}
+
+.small{
+    color:#858b96;
+    font-size:13px;
+}
+
+/* =====================================================
+   BATALLA
+===================================================== */
+
+.battle-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.battle-description{
+    color:#858b96;
+}
+
+.color-selector{
+    display:flex;
+    gap:10px;
+    margin:15px 0;
+}
+
+.color-button{
+    background:#252932;
+    border:1px solid #363b46;
+}
+
+.color-button.selected{
+    background:#5b9cff;
+}
+
+/* TABLERO */
+
+.battle-layout{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:25px;
+    margin-top:25px;
+}
+
+.board-container{
+    width:min(72vw,650px);
+}
+
+.board{
+    width:100%;
+    aspect-ratio:1;
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.45);
+    border:4px solid #20242c;
+}
+
+.square{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    user-select:none;
+    transition:filter .12s;
+}
+
+.square:hover{
+    filter:brightness(1.08);
+}
+
+.light{
+    background:#f0d9b5;
+}
+
+.dark{
+    background:#b58863;
+}
+
+.piece{
+    font-family:"Arial Unicode MS","Segoe UI Symbol",serif;
+    font-size:clamp(30px,7vw,67px);
+    line-height:1;
+    position:relative;
+    z-index:2;
+    text-shadow:0 2px 3px rgba(0,0,0,.35);
+}
+
+.selected{
+    box-shadow:inset 0 0 0 5px #f5d64a;
+}
+
+.legal-dot::after{
+    content:"";
+    position:absolute;
+    width:22%;
+    height:22%;
+    background:rgba(0,0,0,.27);
+    border-radius:50%;
+}
+
+.capture::after{
+    content:"";
+    position:absolute;
+    width:78%;
+    height:78%;
+    border:5px solid rgba(0,0,0,.22);
+    border-radius:50%;
+}
+
+.last-move{
+    filter:brightness(1.08);
+}
+
+.board-coord{
+    position:absolute;
+    font-size:11px;
+    font-weight:bold;
+    opacity:.65;
+}
+
+.coord-file{
+    right:4px;
+    bottom:3px;
+}
+
+.coord-rank{
+    left:4px;
+    top:3px;
+}
+
+/* PANEL */
+
+.battle-panel{
+    width:300px;
+    background:#121419;
+    border:1px solid #292d35;
+    border-radius:13px;
+    padding:18px;
+}
+
+.battle-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px solid #292d35;
+}
+
+.battle-row span{
+    color:#858b96;
+}
+
+.battle-row:last-child{
+    border-bottom:0;
+}
+
+.repertoire{
+    color:#6fa8ff;
+}
+
+.stockfish{
+    color:#62d394;
+}
+
+.status{
+    background:#15181e;
+    border:1px solid #292d35;
+    border-radius:10px;
+    padding:13px;
+    margin-top:12px;
+    text-align:center;
+}
+
+.engine-status{
+    margin-top:15px;
+    color:#858b96;
+    font-size:13px;
+}
+
+.progress{
+    height:6px;
+    background:#282c34;
+    border-radius:5px;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#5b9cff;
+    transition:width .3s;
+}
+
+@media(max-width:800px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .player-card{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .battle-layout{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .board-container{
+        width:94vw;
+    }
+
+    .battle-panel{
+        width:min(94vw,650px);
+    }
+}
+
+@media(max-width:550px){
+
+    main{
+        padding:15px 10px 40px;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+
+    .battle-head{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-    <div class="header-content">
+<div class="header-content">
 
-        <div class="logo">
-            ♞ Chess<span>Scout</span>
-        </div>
+<div class="logo">
+♞ Chess<span>Scout</span>
+</div>
 
-        <div class="subtitle">
-            Análisis de jugadores de Lichess
-        </div>
+<div class="subtitle">
+Análisis de jugadores de Lichess
+</div>
 
-    </div>
+</div>
 </header>
 
 
 <main>
 
-    <!-- =================================================
-         BUSCADOR
-    ================================================= -->
+<!-- =====================================================
+     BUSCADOR
+===================================================== -->
 
-    <section class="card">
+<div class="card">
 
-        <h1>Analizar jugador</h1>
+<h1>Analizar jugador</h1>
 
-        <p class="small">
-            Buscá un jugador de Lichess y analizá sus partidas reales.
-        </p>
+<p class="small">
+Buscá un usuario de Lichess para analizar sus partidas reales.
+</p>
 
-        <div class="search-box">
+<div class="search-box">
 
-            <input
-                id="usuario"
-                type="text"
-                placeholder="Usuario de Lichess"
-                autocomplete="off"
-            >
+<input
+id="usuario"
+placeholder="Usuario de Lichess"
+autocomplete="off"
+>
 
-            <button id="botonAnalizar">
-                Analizar
-            </button>
+<button id="botonAnalizar">
+Analizar
+</button>
 
-        </div>
+</div>
 
-        <div
-            id="error"
-            class="error"
-        ></div>
+<div id="error" class="error"></div>
 
-    </section>
+</div>
 
 
-    <!-- =================================================
-         LOADING
-    ================================================= -->
+<!-- =====================================================
+     LOADING
+===================================================== -->
 
-    <section
-        id="loading"
-        class="card loading hidden"
-    >
+<div id="loading" class="card loading hidden">
 
-        <div class="spinner"></div>
+<div class="spinner"></div>
 
-        <h3>
-            Analizando...
-        </h3>
+<h3>Analizando jugador...</h3>
 
-        <p id="loadingTexto">
-            Descargando partidas reales de Lichess...
-        </p>
+<p id="loadingTexto">
+Conectando con Lichess...
+</p>
 
-    </section>
+</div>
 
 
-    <!-- =================================================
-         RESULTADOS
-    ================================================= -->
+<!-- =====================================================
+     RESULTADOS
+===================================================== -->
 
-    <section id="resultados" class="hidden">
+<section id="resultados" class="hidden">
 
-        <!-- PERFIL -->
 
-        <div class="card">
+<div class="card">
 
-            <div class="player-card">
+<div class="player-card">
 
-                <div>
+<div>
 
-                    <div
-                        id="nombreJugador"
-                        class="player-name"
-                    >
-                        -
-                    </div>
+<div id="nombreJugador" class="player-name">
+-
+</div>
 
-                    <div
-                        id="datosJugador"
-                        class="player-data"
-                    >
-                        -
-                    </div>
+<div id="datosJugador" class="player-data">
+-
+</div>
 
-                </div>
+</div>
 
-                <div
-                    id="ratingJugador"
-                    class="rating"
-                >
-                    -
-                </div>
+<div id="ratingJugador" class="rating">
+-
+</div>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
 
-        <!-- ESTADÍSTICAS -->
+<!-- ESTADÍSTICAS -->
 
-        <div class="stats">
+<div class="stats">
 
-            <div class="stat">
-                <span>Partidas</span>
-                <strong id="total">0</strong>
-            </div>
+<div class="stat">
+<span>Partidas</span>
+<strong id="total">0</strong>
+</div>
 
-            <div class="stat">
-                <span>Victorias</span>
-                <strong id="victorias">0</strong>
-            </div>
+<div class="stat">
+<span>Victorias</span>
+<strong id="victorias">0</strong>
+</div>
 
-            <div class="stat">
-                <span>Tablas</span>
-                <strong id="tablas">0</strong>
-            </div>
+<div class="stat">
+<span>Tablas</span>
+<strong id="tablas">0</strong>
+</div>
 
-            <div class="stat">
-                <span>Derrotas</span>
-                <strong id="derrotas">0</strong>
-            </div>
+<div class="stat">
+<span>Derrotas</span>
+<strong id="derrotas">0</strong>
+</div>
 
-            <div class="stat">
-                <span>Puntuación</span>
-                <strong id="porcentaje">0%</strong>
-            </div>
+<div class="stat">
+<span>Puntuación</span>
+<strong id="porcentaje">0%</strong>
+</div>
 
-        </div>
+</div>
 
 
-        <!-- CALIDAD -->
+<!-- CALIDAD -->
 
-        <div class="card">
+<div class="card">
 
-            <h2>
-                Calidad de los datos
-            </h2>
+<h2>Calidad de datos</h2>
 
-            <p id="calidadDatos">
-                -
-            </p>
+<p id="calidadDatos">-</p>
 
-        </div>
+</div>
 
 
-        <!-- =================================================
-             APERTURAS
-        ================================================= -->
+<!-- APERTURAS -->
 
-        <div class="card">
+<div class="card">
 
-            <h2>
-                Aperturas y variantes
-            </h2>
+<h2>Aperturas y variantes</h2>
 
-            <div id="aperturas"></div>
+<div id="aperturas"></div>
 
-        </div>
+</div>
 
 
-        <!-- =================================================
-             BATALLA CONTRA EL JUGADOR
-        ================================================= -->
+<!-- =====================================================
+     BATALLA
+===================================================== -->
 
-        <section
-            id="battleSection"
-            class="card battle-section"
-        >
+<div class="card">
 
-            <div class="battle-title">
+<div class="battle-head">
 
-                <div>
+<div>
 
-                    <h2>
-                        ⚔️ Batalla contra el jugador
-                    </h2>
+<h2>⚔️ Batalla contra el jugador</h2>
 
-                    <p class="battle-description">
-                        La IA intentará reproducir las primeras
-                        7 jugadas reales de este jugador y después
-                        jugará con Stockfish.
-                    </p>
+<p class="battle-description">
+Jugá contra una IA que primero intenta reproducir
+el estilo real del jugador y después utiliza Stockfish.
+</p>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
 
-            <h3>
-                Elegí tu color
-            </h3>
+<h3>Elegí tu color</h3>
 
+<div class="color-selector">
 
-            <div class="color-selector">
+<button
+id="blancasButton"
+class="color-button selected"
+>
+♙ Blancas
+</button>
 
-                <button
-                    id="blancasButton"
-                    class="color-button selected"
-                >
-                    ♙ Blancas
-                </button>
+<button
+id="negrasButton"
+class="color-button"
+>
+♟ Negras
+</button>
 
-                <button
-                    id="negrasButton"
-                    class="color-button"
-                >
-                    ♟ Negras
-                </button>
+</div>
 
-            </div>
 
+<button id="iniciarBatalla">
+⚔️ Comenzar batalla
+</button>
 
-            <button id="iniciarBatalla">
-                ⚔️ Comenzar batalla
-            </button>
 
+<div
+id="engineLoading"
+class="engine-status"
+>
+Preparando Stockfish...
+<div class="progress">
+<div
+id="engineProgress"
+class="progress-bar"
+></div>
+</div>
+</div>
 
-            <div
-                id="stockfishWarning"
-                class="stockfish-warning"
-            >
-                Stockfish todavía se está cargando...
-            </div>
 
+<div id="battleGame" class="hidden">
 
-            <div
-                id="battleGame"
-                class="hidden"
-            >
+<div class="battle-layout">
 
-                <div class="battle-layout">
 
-                    <!-- TABLERO -->
+<div class="board-container">
 
-                    <div class="board-wrapper">
+<div id="tablero" class="board"></div>
 
-                        <div
-                            id="tablero"
-                            class="board"
-                        ></div>
+<div
+id="battleStatus"
+class="status"
+>
+Tu turno
+</div>
 
-                        <div
-                            id="battleStatus"
-                            class="battle-status"
-                        >
-                            Tu turno
-                        </div>
+</div>
 
-                    </div>
 
+<div class="battle-panel">
 
-                    <!-- PANEL -->
+<h3>Rival</h3>
 
-                    <div class="battle-panel">
 
-                        <h3>
-                            Rival
-                        </h3>
+<div class="battle-row">
 
-                        <div class="battle-info">
+<span>Jugador</span>
 
-                            <span>
-                                Jugador
-                            </span>
+<strong id="rivalBattle">
+-
+</strong>
 
-                            <strong
-                                id="rivalBattle"
-                            >
-                                -
-                            </strong>
+</div>
 
-                        </div>
 
+<div class="battle-row">
 
-                        <div class="battle-info">
+<span>Tu color</span>
 
-                            <span>
-                                Tu color
-                            </span>
+<strong id="colorBattle">
+Blancas
+</strong>
 
-                            <strong
-                                id="colorBattle"
-                            >
-                                Blancas
-                            </strong>
+</div>
 
-                        </div>
 
+<div class="battle-row">
 
-                        <div class="battle-info">
+<span>Jugadas reales</span>
 
-                            <span>
-                                Jugadas imitadas
-                            </span>
+<strong id="jugadasImitadas">
+0 / 7
+</strong>
 
-                            <strong
-                                id="jugadasImitadas"
-                            >
-                                0 / 7
-                            </strong>
+</div>
 
-                        </div>
 
+<div class="battle-row">
 
-                        <div class="battle-info">
+<span>Motor</span>
 
-                            <span>
-                                IA
-                            </span>
+<strong
+id="modoIA"
+class="repertoire"
+>
+Repertorio
+</strong>
 
-                            <strong
-                                id="modoIA"
-                                class="engine-repertoire"
-                            >
-                                Repertorio
-                            </strong>
+</div>
 
-                        </div>
 
-                    </div>
+<div class="battle-row">
 
-                </div>
+<span>Estado</span>
 
-            </div>
+<strong id="estadoMotor">
+Cargando
+</strong>
 
-        </section>
+</div>
 
-    </section>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 </main>
 
@@ -797,263 +804,279 @@
 
 <script>
 
-/* =========================================================
+/* =====================================================
    VARIABLES
-========================================================= */
+===================================================== */
 
-let usuarioActual = "";
+let usuarioActual="";
 
-let partidas = [];
+let partidas=[];
 
-let juego = null;
+let juego=null;
 
-let colorUsuario = "white";
+let colorUsuario="white";
 
-let colorIA = "black";
+let colorIA="black";
 
-let seleccion = null;
+let seleccion=null;
 
-let pensando = false;
+let pensando=false;
 
-let jugadasIA = 0;
+let jugadasIA=0;
 
-let stockfish = null;
-
-let stockfishListo = false;
-
-let stockfishResolver = null;
-
-let stockfishSalida = "";
+let ultimaJugada=null;
 
 
-/* =========================================================
-   REPERTORIO
-========================================================= */
+/*
+    Repertorio:
 
-let repertorio = {
+    white = jugadas reales del jugador con blancas
+    black = jugadas reales del jugador con negras
+*/
 
-    white: [],
-
-    black: []
-
+let repertorio={
+    white:{},
+    black:{}
 };
 
 
-/* =========================================================
-   ELEMENTOS
-========================================================= */
-
-const usuarioInput =
-    document.getElementById("usuario");
-
-const botonAnalizar =
-    document.getElementById("botonAnalizar");
-
-const errorBox =
-    document.getElementById("error");
-
-const loading =
-    document.getElementById("loading");
-
-const loadingTexto =
-    document.getElementById("loadingTexto");
-
-const resultados =
-    document.getElementById("resultados");
-
-const tablero =
-    document.getElementById("tablero");
-
-
-/* =========================================================
-   ERROR
-========================================================= */
-
-function mostrarError(texto) {
-
-    errorBox.textContent = texto;
-
-    errorBox.style.display = "block";
-
-}
-
-
-function ocultarError() {
-
-    errorBox.textContent = "";
-
-    errorBox.style.display = "none";
-
-}
-
-
-/* =========================================================
-   STOCKFISH
-========================================================= */
-
 /*
- * Stockfish se ejecuta dentro del navegador.
- *
- * No usamos Render ni server.py.
- *
- * El worker se carga desde CDN.
- */
+    Stockfish
+*/
 
-function cargarStockfish() {
+let stockfish=null;
 
-    try {
+let stockfishReady=false;
 
-        stockfish = new Worker(
+let stockfishReadyPromise=null;
+
+let stockfishResolver=null;
+
+
+/* =====================================================
+   ELEMENTOS
+===================================================== */
+
+const usuarioInput=
+document.getElementById("usuario");
+
+const botonAnalizar=
+document.getElementById("botonAnalizar");
+
+const loading=
+document.getElementById("loading");
+
+const loadingTexto=
+document.getElementById("loadingTexto");
+
+const errorBox=
+document.getElementById("error");
+
+const resultados=
+document.getElementById("resultados");
+
+const tablero=
+document.getElementById("tablero");
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function error(texto){
+
+    errorBox.textContent=texto;
+
+    errorBox.style.display="block";
+
+}
+
+function ocultarError(){
+
+    errorBox.textContent="";
+
+    errorBox.style.display="none";
+
+}
+
+
+/* =====================================================
+   STOCKFISH
+===================================================== */
+
+function cargarStockfish(){
+
+    if(stockfish)
+        return;
+
+    const progreso=
+    document.getElementById("engineProgress");
+
+    const estado=
+    document.getElementById("estadoMotor");
+
+
+    /*
+        Worker de Stockfish.
+
+        Importante:
+        Stockfish se ejecuta separado del
+        hilo principal del navegador.
+    */
+
+    try{
+
+        stockfish=
+        new Worker(
             "https://cdn.jsdelivr.net/npm/stockfish@16.0.0/src/stockfish.js"
         );
 
+    }catch(e){
 
-        stockfish.onmessage = function(event) {
+        estado.textContent="Error";
 
-            const mensaje =
-                typeof event.data === "string"
-                    ? event.data
-                    : "";
-
-
-            stockfishSalida +=
-                mensaje + "\n";
-
-
-            if (
-                mensaje === "uciok"
-            ) {
-
-                stockfish.postMessage(
-                    "isready"
-                );
-
-                return;
-
-            }
-
-
-            if (
-                mensaje === "readyok"
-            ) {
-
-                stockfishListo = true;
-
-                document.getElementById(
-                    "stockfishWarning"
-                ).style.display = "none";
-
-                return;
-
-            }
-
-
-            if (
-                mensaje.startsWith("bestmove")
-            ) {
-
-                const partes =
-                    mensaje.split(" ");
-
-                const mejorMovimiento =
-                    partes[1];
-
-
-                if (
-                    stockfishResolver
-                ) {
-
-                    const resolver =
-                        stockfishResolver;
-
-                    stockfishResolver =
-                        null;
-
-                    resolver(
-                        mejorMovimiento
-                    );
-
-                }
-
-            }
-
-        };
-
-
-        stockfish.postMessage(
-            "uci"
-        );
+        return;
 
     }
 
-    catch (error) {
 
-        console.error(
-            "No se pudo cargar Stockfish:",
-            error
+    stockfish.onmessage=function(event){
+
+        const mensaje=
+        String(event.data);
+
+
+        console.log(
+            "STOCKFISH:",
+            mensaje
         );
 
-    }
 
-}
+        if(mensaje==="uciok"){
+
+            stockfish.postMessage(
+                "isready"
+            );
+
+            return;
+        }
 
 
-/* =========================================================
-   PEDIR JUGADA A STOCKFISH
-========================================================= */
+        if(mensaje==="readyok"){
 
-function pedirStockfish(
-    posicionFEN
-) {
+            stockfishReady=true;
 
-    return new Promise(
-        resolve => {
+            progreso.style.width="100%";
 
-            if (
-                !stockfish ||
-                !stockfishListo
-            ) {
+            estado.textContent="Listo";
 
-                resolve(null);
+            document.getElementById(
+                "engineLoading"
+            ).style.color="#62d394";
 
-                return;
+            return;
+        }
+
+
+        if(
+            mensaje.startsWith("bestmove")
+        ){
+
+            const partes=
+            mensaje.trim().split(/\s+/);
+
+            const bestmove=
+            partes[1];
+
+
+            if(stockfishResolver){
+
+                const resolver=
+                stockfishResolver;
+
+                stockfishResolver=null;
+
+                resolver(bestmove);
 
             }
-
-
-            stockfishResolver =
-                resolve;
-
-
-            stockfish.postMessage(
-                "position fen " +
-                posicionFEN
-            );
-
-
-            stockfish.postMessage(
-                "go movetime 700"
-            );
 
         }
-    );
+
+    };
+
+
+    progreso.style.width="25%";
+
+    stockfish.postMessage("uci");
 
 }
 
 
-/* =========================================================
-   ANALIZAR JUGADOR
-========================================================= */
+/* =====================================================
+   STOCKFISH MOVE
+===================================================== */
 
-async function analizar() {
+function obtenerJugadaStockfish(){
 
-    const usuario =
-        usuarioInput.value.trim();
+    return new Promise(function(resolve){
+
+        if(
+            !stockfish ||
+            !stockfishReady
+        ){
+
+            resolve(null);
+
+            return;
+
+        }
 
 
-    if (!usuario) {
+        stockfishResolver=resolve;
 
-        mostrarError(
+
+        const fen=
+        juego.fen();
+
+
+        /*
+            MUY IMPORTANTE:
+
+            Se le manda la posición completa
+            actual a Stockfish.
+        */
+
+        stockfish.postMessage(
+            "position fen "+fen
+        );
+
+
+        /*
+            Stockfish piensa 1 segundo.
+        */
+
+        stockfish.postMessage(
+            "go movetime 1000"
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   ANALIZAR
+===================================================== */
+
+async function analizar(){
+
+    const usuario=
+    usuarioInput.value.trim();
+
+
+    if(!usuario){
+
+        error(
             "Escribí un usuario de Lichess."
         );
 
@@ -1064,100 +1087,86 @@ async function analizar() {
 
     ocultarError();
 
+    botonAnalizar.disabled=true;
 
-    botonAnalizar.disabled =
-        true;
+    resultados.classList.add("hidden");
 
+    loading.classList.remove("hidden");
 
-    resultados.classList.add(
-        "hidden"
-    );
-
-
-    loading.classList.remove(
-        "hidden"
-    );
+    loadingTexto.textContent=
+    "Buscando jugador...";
 
 
-    loadingTexto.textContent =
-        "Buscando jugador en Lichess...";
-
-
-    try {
+    try{
 
         /*
-         * PERFIL
-         */
+            PERFIL
+        */
 
-        const perfilResponse =
-            await fetch(
-                `https://lichess.org/api/user/${encodeURIComponent(usuario)}`
-            );
+        const perfilResponse=
+        await fetch(
+            "https://lichess.org/api/user/"+
+            encodeURIComponent(usuario)
+        );
 
 
-        if (
-            !perfilResponse.ok
-        ) {
+        if(!perfilResponse.ok){
 
             throw new Error(
-                "No se encontró ese jugador en Lichess."
+                "Ese jugador no existe o no se puede consultar."
             );
 
         }
 
 
-        const perfil =
-            await perfilResponse.json();
+        const perfil=
+        await perfilResponse.json();
 
 
         /*
-         * PARTIDAS
-         */
+            PARTIDAS
+        */
 
-        loadingTexto.textContent =
-            "Descargando partidas reales...";
+        loadingTexto.textContent=
+        "Descargando partidas reales de Lichess...";
 
 
-        const partidasResponse =
-            await fetch(
-                `https://lichess.org/api/games/user/${encodeURIComponent(usuario)}?max=500&moves=true&tags=true&clocks=false&evals=false&opening=true`,
-                {
-                    headers: {
-                        "Accept":
-                            "application/x-chess-pgn"
-                    }
+        const response=
+        await fetch(
+            "https://lichess.org/api/games/user/"+
+            encodeURIComponent(usuario)+
+            "?max=500&moves=true&tags=true&clocks=false&evals=false&opening=true",
+            {
+                headers:{
+                    "Accept":
+                    "application/x-chess-pgn"
                 }
-            );
+            }
+        );
 
 
-        if (
-            !partidasResponse.ok
-        ) {
+        if(!response.ok){
 
             throw new Error(
-                "No se pudieron descargar las partidas."
+                "Lichess no permitió descargar las partidas."
             );
 
         }
 
 
-        const pgn =
-            await partidasResponse.text();
+        const pgn=
+        await response.text();
 
 
-        loadingTexto.textContent =
-            "Analizando partidas, aperturas y variantes...";
+        loadingTexto.textContent=
+        "Analizando partidas...";
 
 
-        partidas =
-            parsearPGN(
-                pgn
-            );
+        partidas=
+        parsearPGN(pgn);
 
 
-        if (
-            !partidas.length
-        ) {
+        if(!partidas.length){
 
             throw new Error(
                 "No se encontraron partidas públicas."
@@ -1166,23 +1175,19 @@ async function analizar() {
         }
 
 
-        usuarioActual =
-            usuario;
+        usuarioActual=
+        usuario;
 
 
         /*
-         * CONSTRUIR REPERTORIO
-         */
+            CREAR REPERTORIO REAL
+        */
 
         construirRepertorio(
             partidas,
             usuario
         );
 
-
-        /*
-         * MOSTRAR TODO
-         */
 
         mostrarPerfil(
             perfil,
@@ -1197,114 +1202,107 @@ async function analizar() {
 
 
         /*
-         * Cargar Stockfish
-         */
+            Arrancar Stockfish
+        */
 
         cargarStockfish();
 
-    }
+    }catch(e){
 
-    catch (error) {
+        console.error(e);
 
-        console.error(error);
-
-        mostrarError(
-            error.message ||
+        error(
+            e.message ||
             "Ocurrió un error."
         );
 
-    }
-
-    finally {
+    }finally{
 
         loading.classList.add(
             "hidden"
         );
 
-        botonAnalizar.disabled =
-            false;
+        botonAnalizar.disabled=false;
 
     }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    PARSEAR PGN
-========================================================= */
+===================================================== */
 
-function parsearPGN(
-    texto
-) {
+function parsearPGN(texto){
 
-    const resultado = [];
-
-    const bloques =
-        texto.split(
-            /\n(?=\[Event )/g
-        );
+    const resultado=[];
 
 
-    for (
+    const bloques=
+    texto.split(
+        /\n(?=\[Event )/g
+    );
+
+
+    for(
         const bloque of bloques
-    ) {
+    ){
 
-        if (
-            !bloque.includes(
-                "[Event "
-            )
-        ) {
-
+        if(
+            !bloque.includes("[Event ")
+        )
             continue;
 
-        }
+
+        const headers={};
 
 
-        const headers = {};
-
-
-        const regex =
-            /\[([A-Za-z0-9_]+)\s+"([^"]*)"\]/g;
+        const regex=
+        /\[([A-Za-z0-9_]+)\s+"([^"]*)"\]/g;
 
 
         let match;
 
 
-        while (
-            (match = regex.exec(bloque))
-        ) {
+        while(
+            (match=regex.exec(bloque))
+        ){
 
             headers[
                 match[1]
-            ] = match[2];
+            ]=match[2];
 
         }
 
 
-        const partes =
-            bloque.split(/\n\n/);
+        const partes=
+        bloque.split(/\n\n/);
 
 
-        const movimientos =
-            partes
-                .slice(1)
-                .join(" ")
-                .replace(
-                    /\{[^}]*\}/g,
-                    ""
-                )
-                .replace(
-                    /\([^)]*\)/g,
-                    ""
-                )
-                .trim();
+        let movimientos=
+        partes
+        .slice(1)
+        .join(" ")
+        .replace(
+            /\{[^}]*\}/g,
+            ""
+        )
+        .replace(
+            /\$\d+/g,
+            ""
+        )
+        .replace(
+            /\([^)]*\)/g,
+            ""
+        )
+        .trim();
 
 
         resultado.push({
 
-            headers,
+            headers:headers,
 
-            movimientos
+            movimientos:movimientos
 
         });
 
@@ -1316,208 +1314,192 @@ function parsearPGN(
 }
 
 
-/* =========================================================
-   CONSTRUIR REPERTORIO REAL
-========================================================= */
+/* =====================================================
+   CONSTRUIR REPERTORIO
+===================================================== */
 
 function construirRepertorio(
     partidas,
     usuario
-) {
+){
 
-    repertorio = {
-
-        white: [],
-
-        black: []
-
+    repertorio={
+        white:{},
+        black:{}
     };
 
 
-    const mapas = {
-
-        white: new Map(),
-
-        black: new Map()
-
-    };
+    const nombre=
+    usuario.toLowerCase();
 
 
-    for (
+    for(
         const partida of partidas
-    ) {
+    ){
 
-        const white =
-            (
-                partida.headers.White ||
-                ""
-            ).toLowerCase();
-
-
-        const black =
-            (
-                partida.headers.Black ||
-                ""
-            ).toLowerCase();
+        const white=
+        (
+            partida.headers.White||""
+        ).toLowerCase();
 
 
-        let color = null;
+        const black=
+        (
+            partida.headers.Black||""
+        ).toLowerCase();
 
 
-        if (
-            white === usuario.toLowerCase()
-        ) {
-
-            color = "white";
-
-        }
-
-        else if (
-            black === usuario.toLowerCase()
-        ) {
-
-            color = "black";
-
-        }
+        let color=null;
 
 
-        if (!color) {
+        if(white===nombre)
+            color="white";
+
+        if(black===nombre)
+            color="black";
+
+
+        if(!color)
             continue;
-        }
 
 
-        const partidaChess =
-            new Chess();
+        const chess=
+        new Chess();
 
 
-        let propias = 0;
+        let propias=0;
 
 
-        const tokens =
+        /*
+            Secuencia de jugadas propias.
+
+            Ejemplo:
+
+            posición inicial
+            -> e4
+
+            después del rival
+            -> Cf3
+
+            después del rival
+            -> Ab5
+
+            etc.
+        */
+
+
+        const tokens=
+        limpiarMovimientos(
             partida.movimientos
-                .replace(
-                    /\d+\.(\.\.)?/g,
-                    " "
-                )
-                .split(/\s+/)
-                .filter(Boolean);
+        );
 
 
-        for (
-            const token of tokens
-        ) {
+        for(
+            let i=0;
+            i<tokens.length;
+            i++
+        ){
 
-            if (
-                [
-                    "1-0",
-                    "0-1",
-                    "1/2-1/2",
-                    "*"
-                ].includes(token)
-            ) {
+            const token=tokens[i];
 
+
+            if(
+                token==="1-0"||
+                token==="0-1"||
+                token==="1/2-1/2"||
+                token==="*"
+            )
                 continue;
 
-            }
+
+            const esPropia=
+            (
+                color==="white" &&
+                chess.turn()==="w"
+            )||
+            (
+                color==="black" &&
+                chess.turn()==="b"
+            );
 
 
-            const esTurnoPropio =
-                (
-                    color === "white" &&
-                    partidaChess.turn() === "w"
-                )
-                ||
-                (
-                    color === "black" &&
-                    partidaChess.turn() === "b"
+            if(esPropia){
+
+                if(propias>=7)
+                    break;
+
+
+                const fen=
+                normalizarFEN(
+                    chess.fen()
                 );
 
 
-            if (
-                esTurnoPropio &&
-                propias < 7
-            ) {
-
-                const fen =
-                    partidaChess
-                        .fen()
-                        .split(" ")
-                        .slice(0, 4)
-                        .join(" ");
+                let movimiento=null;
 
 
-                try {
+                try{
 
-                    const movimiento =
-                        partidaChess.move(
-                            token,
-                            {
-                                sloppy: true
-                            }
-                        );
+                    movimiento=
+                    chess.move(
+                        token,
+                        {
+                            sloppy:true
+                        }
+                    );
 
-
-                    if (!movimiento) {
-                        break;
-                    }
-
-
-                    propias++;
-
-
-                    const uci =
-                        movimiento.from +
-                        movimiento.to +
-                        (
-                            movimiento.promotion ||
-                            ""
-                        );
-
-
-                    if (
-                        !mapas[color].has(
-                            fen
-                        )
-                    ) {
-
-                        mapas[color].set(
-                            fen,
-                            []
-                        );
-
-                    }
-
-
-                    mapas[color]
-                        .get(fen)
-                        .push(
-                            uci
-                        );
-
-                }
-
-                catch {
+                }catch{
 
                     break;
 
                 }
 
-            }
 
-            else {
+                if(!movimiento)
+                    break;
 
-                try {
 
-                    partidaChess.move(
-                        token,
-                        {
-                            sloppy: true
-                        }
-                    );
+                const uci=
+                movimiento.from+
+                movimiento.to+
+                (
+                    movimiento.promotion||""
+                );
+
+
+                if(
+                    !repertorio[color][fen]
+                ){
+
+                    repertorio[color][fen]=[];
 
                 }
 
-                catch {
+
+                repertorio[color][fen].push(
+                    uci
+                );
+
+
+                propias++;
+
+            }else{
+
+                try{
+
+                    const movimiento=
+                    chess.move(
+                        token,
+                        {
+                            sloppy:true
+                        }
+                    );
+
+
+                    if(!movimiento)
+                        break;
+
+                }catch{
 
                     break;
 
@@ -1531,57 +1513,52 @@ function construirRepertorio(
 
 
     /*
-     * Convertir mapas a arrays ordenados
-     */
+        Ordenar por frecuencia.
 
-    for (
-        const color of [
-            "white",
-            "black"
-        ]
-    ) {
+        Si el jugador jugó:
 
-        for (
-            const [
-                fen,
-                movimientos
-            ] of mapas[color]
-        ) {
+        e4 80 veces
+        d4 15 veces
 
-            const contador = {};
+        en esa posición la IA
+        preferirá e4.
+    */
+
+    for(
+        const color of ["white","black"]
+    ){
+
+        for(
+            const fen in repertorio[color]
+        ){
+
+            const lista=
+            repertorio[color][fen];
 
 
-            for (
-                const movimiento
-                of movimientos
-            ) {
+            const contador={};
 
-                contador[movimiento] =
-                    (
-                        contador[movimiento] ||
-                        0
-                    ) + 1;
+
+            for(
+                const movimiento of lista
+            ){
+
+                contador[movimiento]=
+                (
+                    contador[movimiento]||0
+                )+1;
 
             }
 
 
-            const ordenados =
-                Object.entries(
-                    contador
-                ).sort(
-                    (a, b) =>
-                        b[1] - a[1]
-                );
-
-
-            repertorio[color].push({
-
-                fen,
-
-                movimientos:
-                    ordenados
-
-            });
+            repertorio[color][fen]=
+            Object.entries(contador)
+            .sort(
+                (a,b)=>b[1]-a[1]
+            )
+            .map(
+                x=>x[0]
+            );
 
         }
 
@@ -1590,111 +1567,139 @@ function construirRepertorio(
 }
 
 
-/* =========================================================
-   MOSTRAR PERFIL Y ESTADÍSTICAS
-========================================================= */
+/* =====================================================
+   LIMPIAR MOVIMIENTOS
+===================================================== */
+
+function limpiarMovimientos(texto){
+
+    return texto
+    .replace(
+        /\d+\.(\.\.)?/g,
+        " "
+    )
+    .replace(
+        /1-0|0-1|1\/2-1\/2|\*/g,
+        " $& "
+    )
+    .split(/\s+/)
+    .filter(Boolean);
+
+}
+
+
+/* =====================================================
+   NORMALIZAR FEN
+===================================================== */
+
+function normalizarFEN(fen){
+
+    return fen
+    .split(" ")
+    .slice(0,4)
+    .join(" ");
+
+}
+
+
+/* =====================================================
+   MOSTRAR PERFIL
+===================================================== */
 
 function mostrarPerfil(
     perfil,
     partidas,
     usuario
-) {
+){
 
     document.getElementById(
         "nombreJugador"
-    ).textContent =
-        perfil.username ||
-        usuario;
+    ).textContent=
+    perfil.username||usuario;
 
 
     document.getElementById(
         "datosJugador"
-    ).textContent =
-        `${partidas.length} partidas analizadas`;
+    ).textContent=
+    partidas.length+
+    " partidas analizadas";
 
 
-    let rating =
+    let rating="-";
+
+
+    if(perfil.perfs){
+
+        rating=
+        perfil.perfs.blitz?.rating||
+        perfil.perfs.rapid?.rating||
+        perfil.perfs.classical?.rating||
+        perfil.perfs.bullet?.rating||
         "-";
-
-
-    if (
-        perfil.perfs
-    ) {
-
-        rating =
-            perfil.perfs.blitz?.rating ||
-            perfil.perfs.rapid?.rating ||
-            perfil.perfs.classical?.rating ||
-            perfil.perfs.bullet?.rating ||
-            "-";
 
     }
 
 
     document.getElementById(
         "ratingJugador"
-    ).textContent =
-        rating;
+    ).textContent=
+    rating;
 
 
-    let victorias = 0;
+    let victorias=0;
 
-    let tablas = 0;
+    let tablas=0;
 
-    let derrotas = 0;
+    let derrotas=0;
 
 
-    for (
+    for(
         const partida of partidas
-    ) {
+    ){
 
-        const white =
-            (
-                partida.headers.White ||
-                ""
-            ).toLowerCase();
-
-
-        const black =
-            (
-                partida.headers.Black ||
-                ""
-            ).toLowerCase();
+        const white=
+        (
+            partida.headers.White||""
+        ).toLowerCase();
 
 
-        const resultado =
-            partida.headers.Result;
+        const black=
+        (
+            partida.headers.Black||""
+        ).toLowerCase();
 
 
-        if (
-            resultado ===
-            "1/2-1/2"
-        ) {
+        const resultado=
+        partida.headers.Result;
+
+
+        if(
+            resultado==="1/2-1/2"
+        ){
 
             tablas++;
 
         }
-
-        else if (
-            (
-                resultado === "1-0" &&
-                white === usuario.toLowerCase()
-            )
-            ||
-            (
-                resultado === "0-1" &&
-                black === usuario.toLowerCase()
-            )
-        ) {
+        else if(
+            resultado==="1-0"&&
+            white===usuario.toLowerCase()
+        ){
 
             victorias++;
 
         }
+        else if(
+            resultado==="0-1"&&
+            black===usuario.toLowerCase()
+        ){
 
-        else if (
-            resultado === "1-0" ||
-            resultado === "0-1"
-        ) {
+            victorias++;
+
+        }
+        else if(
+            resultado==="1-0"||
+            resultado==="0-1"
+        ){
 
             derrotas++;
 
@@ -1703,309 +1708,257 @@ function mostrarPerfil(
     }
 
 
-    const porcentaje =
-        partidas.length
-            ? (
-                (
-                    victorias +
-                    tablas * 0.5
-                )
-                /
-                partidas.length
-                *
-                100
-            ).toFixed(1)
-            : 0;
+    const porcentaje=
+    partidas.length
+    ?(
+        (
+            victorias+
+            tablas*.5
+        )/
+        partidas.length*
+        100
+    ).toFixed(1)
+    :0;
 
 
     document.getElementById(
         "total"
-    ).textContent =
-        partidas.length;
+    ).textContent=
+    partidas.length;
 
 
     document.getElementById(
         "victorias"
-    ).textContent =
-        victorias;
+    ).textContent=
+    victorias;
 
 
     document.getElementById(
         "tablas"
-    ).textContent =
-        tablas;
+    ).textContent=
+    tablas;
 
 
     document.getElementById(
         "derrotas"
-    ).textContent =
-        derrotas;
+    ).textContent=
+    derrotas;
 
 
     document.getElementById(
         "porcentaje"
-    ).textContent =
-        porcentaje + "%";
+    ).textContent=
+    porcentaje+"%";
 
 
     document.getElementById(
         "calidadDatos"
-    ).textContent =
-        `Se analizaron ${partidas.length} partidas públicas reales de ${usuario} obtenidas directamente desde Lichess.`;
+    ).textContent=
+    "Datos obtenidos de las partidas públicas reales de Lichess.";
 
 
     mostrarAperturas(
-        partidas,
-        usuario
+        partidas
     );
 
 }
 
 
-/* =========================================================
-   APERTURAS Y VARIANTES
-========================================================= */
+/* =====================================================
+   APERTURAS
+===================================================== */
 
-function mostrarAperturas(
-    partidas,
-    usuario
-) {
+function mostrarAperturas(partidas){
 
-    const contenedor =
-        document.getElementById(
-            "aperturas"
-        );
+    const contenedor=
+    document.getElementById(
+        "aperturas"
+    );
 
 
-    contenedor.innerHTML = "";
+    contenedor.innerHTML="";
 
 
-    const grupos = {};
+    const grupos={};
 
 
-    for (
+    for(
         const partida of partidas
-    ) {
+    ){
 
-        const nombre =
-            partida.headers.Opening ||
-            "Apertura desconocida";
-
-
-        const variante =
-            partida.headers.Variation ||
-            partida.headers.Variant ||
-            "Línea principal";
+        const apertura=
+        partida.headers.Opening||
+        "Apertura desconocida";
 
 
-        if (
-            !grupos[nombre]
-        ) {
-
-            grupos[nombre] = {};
-
-        }
+        const variante=
+        partida.headers.Variation||
+        partida.headers.Variant||
+        "Línea principal";
 
 
-        if (
-            !grupos[nombre][variante]
-        ) {
-
-            grupos[nombre][variante] = [];
-
-        }
+        if(!grupos[apertura])
+            grupos[apertura]={};
 
 
-        grupos[nombre][variante].push(
-            partida
-        );
+        if(!grupos[apertura][variante])
+            grupos[apertura][variante]=[];
+
+
+        grupos[apertura][variante]
+        .push(partida);
 
     }
 
 
-    const nombres =
-        Object.keys(grupos)
-            .sort(
-                (a, b) =>
-                    contarApertura(
-                        grupos[a]
-                    ) -
-                    contarApertura(
-                        grupos[b]
-                    )
-            )
-            .reverse();
+    const nombres=
+    Object.keys(grupos)
+    .sort(
+        (a,b)=>
+        contarApertura(grupos[b])-
+        contarApertura(grupos[a])
+    );
 
 
-    for (
+    for(
         const nombre of nombres
-    ) {
+    ){
 
-        const opening =
-            document.createElement(
-                "div"
-            );
+        const apertura=
+        document.createElement("div");
 
 
-        opening.className =
-            "opening";
+        apertura.className="opening";
 
 
-        const cantidad =
-            contarApertura(
-                grupos[nombre]
-            );
+        const header=
+        document.createElement("div");
 
 
-        const header =
-            document.createElement(
-                "div"
-            );
+        header.className=
+        "opening-header";
 
 
-        header.className =
-            "opening-header";
-
-
-        header.innerHTML = `
-            <strong>${escaparHTML(nombre)}</strong>
-            <span>${cantidad} partidas</span>
+        header.innerHTML=`
+            <strong>
+                ${escapar(nombre)}
+            </strong>
+            <span>
+                ${contarApertura(grupos[nombre])} partidas
+            </span>
         `;
 
 
-        const content =
-            document.createElement(
-                "div"
+        const contenido=
+        document.createElement("div");
+
+
+        contenido.className=
+        "opening-content";
+
+
+        header.onclick=()=>{
+            apertura.classList.toggle(
+                "open"
             );
+        };
 
 
-        content.className =
-            "opening-content";
-
-
-        header.onclick =
-            () => {
-
-                opening.classList.toggle(
-                    "open"
-                );
-
-            };
-
-
-        const variantes =
-            Object.keys(
-                grupos[nombre]
-            );
-
-
-        variantes.sort(
-            (a, b) =>
-                grupos[nombre][b].length -
-                grupos[nombre][a].length
+        const variantes=
+        Object.keys(
+            grupos[nombre]
+        )
+        .sort(
+            (a,b)=>
+            grupos[nombre][b].length-
+            grupos[nombre][a].length
         );
 
 
-        for (
+        for(
             const variante of variantes
-        ) {
+        ){
 
-            const bloque =
-                document.createElement(
-                    "div"
-                );
+            const bloque=
+            document.createElement("div");
 
 
-            bloque.className =
-                "variant";
+            bloque.className="variant";
 
 
-            const variantHeader =
-                document.createElement(
-                    "div"
-                );
+            const vh=
+            document.createElement("div");
 
 
-            variantHeader.className =
-                "variant-header";
+            vh.className=
+            "variant-header";
 
 
-            variantHeader.innerHTML = `
+            vh.innerHTML=`
                 <strong>
-                    ${escaparHTML(variante)}
+                    ${escapar(variante)}
                 </strong>
                 <span class="small">
-                    — ${grupos[nombre][variante].length} partidas
+                    ${grupos[nombre][variante].length} partidas
                 </span>
             `;
 
 
-            const games =
-                document.createElement(
-                    "div"
+            const games=
+            document.createElement("div");
+
+
+            games.className=
+            "variant-games";
+
+
+            vh.onclick=()=>{
+                bloque.classList.toggle(
+                    "open"
                 );
+            };
 
 
-            games.className =
-                "variant-games";
+            for(
+                const partida of
+                grupos[nombre][variante]
+            ){
+
+                const game=
+                document.createElement("div");
 
 
-            variantHeader.onclick =
-                () => {
-
-                    bloque.classList.toggle(
-                        "open"
-                    );
-
-                };
+                game.className="game";
 
 
-            for (
-                const partida
-                of grupos[nombre][variante]
-            ) {
-
-                const game =
-                    document.createElement(
-                        "div"
-                    );
+                const white=
+                partida.headers.White||"?";
 
 
-                game.className =
-                    "game";
+                const black=
+                partida.headers.Black||"?";
 
 
-                const id =
-                    partida.headers.Site &&
-                    partida.headers.Site
-                        .split("/")
-                        .pop();
+                const site=
+                partida.headers.Site||"#";
 
 
-                const enlace =
-                    partida.headers.Site ||
-                    "#";
-
-
-                game.innerHTML = `
+                game.innerHTML=`
                     <strong>
-                        ${escaparHTML(
-                            partida.headers.White || "?"
-                        )}
+                        ${escapar(white)}
                         vs
-                        ${escaparHTML(
-                            partida.headers.Black || "?"
-                        )}
+                        ${escapar(black)}
                     </strong>
                     <br>
                     <span class="small">
-                        Resultado: ${escaparHTML(
-                            partida.headers.Result || "-"
+                        Resultado:
+                        ${escapar(
+                            partida.headers.Result||"-"
                         )}
                     </span>
-                    <br>
+                    <br><br>
                     <a
-                        href="${escaparHTML(enlace)}"
+                        href="${escapar(site)}"
                         target="_blank"
                         rel="noopener"
                     >
@@ -2014,168 +1967,107 @@ function mostrarAperturas(
                 `;
 
 
-                games.appendChild(
-                    game
-                );
+                games.appendChild(game);
 
             }
 
 
-            bloque.appendChild(
-                variantHeader
-            );
+            bloque.appendChild(vh);
 
-            bloque.appendChild(
-                games
-            );
+            bloque.appendChild(games);
 
-            content.appendChild(
-                bloque
-            );
+            contenido.appendChild(bloque);
 
         }
 
 
-        opening.appendChild(
-            header
-        );
+        apertura.appendChild(header);
 
-        opening.appendChild(
-            content
-        );
+        apertura.appendChild(contenido);
 
-        contenedor.appendChild(
-            opening
-        );
+        contenedor.appendChild(apertura);
 
     }
 
 }
 
 
-function contarApertura(
-    variantes
-) {
+function contarApertura(obj){
 
-    return Object.values(
-        variantes
-    )
+    return Object.values(obj)
     .reduce(
-        (
-            total,
-            partidas
-        ) =>
-            total + partidas.length,
+        (a,b)=>a+b.length,
         0
     );
 
 }
 
 
-/* =========================================================
-   ESCAPAR HTML
-========================================================= */
-
-function escaparHTML(
-    texto
-) {
+function escapar(texto){
 
     return String(texto)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* =========================================================
-   SELECCIÓN DE COLOR
-========================================================= */
+/* =====================================================
+   COLOR
+===================================================== */
 
 document.getElementById(
     "blancasButton"
-).onclick =
-    function() {
+).onclick=function(){
 
-        colorUsuario =
-            "white";
+    colorUsuario="white";
 
-        colorIA =
-            "black";
+    colorIA="black";
 
+    this.classList.add("selected");
 
-        this.classList.add(
-            "selected"
-        );
+    document.getElementById(
+        "negrasButton"
+    ).classList.remove("selected");
 
-        document.getElementById(
-            "negrasButton"
-        ).classList.remove(
-            "selected"
-        );
-
-    };
+};
 
 
 document.getElementById(
     "negrasButton"
-).onclick =
-    function() {
+).onclick=function(){
 
-        colorUsuario =
-            "black";
+    colorUsuario="black";
 
-        colorIA =
-            "white";
+    colorIA="white";
 
+    this.classList.add("selected");
 
-        this.classList.add(
-            "selected"
-        );
+    document.getElementById(
+        "blancasButton"
+    ).classList.remove("selected");
 
-        document.getElementById(
-            "blancasButton"
-        ).classList.remove(
-            "selected"
-        );
-
-    };
+};
 
 
-/* =========================================================
+/* =====================================================
    INICIAR BATALLA
-========================================================= */
+===================================================== */
 
 document.getElementById(
     "iniciarBatalla"
-).onclick =
-    iniciarBatalla;
+).onclick=
+iniciarBatalla;
 
 
-function iniciarBatalla() {
+function iniciarBatalla(){
 
-    if (
-        !usuarioActual
-    ) {
+    if(!usuarioActual){
 
-        mostrarError(
+        error(
             "Primero analizá un jugador."
         );
 
@@ -2184,47 +2076,17 @@ function iniciarBatalla() {
     }
 
 
-    juego =
-        new Chess();
+    juego=
+    new Chess();
 
 
-    seleccion = null;
+    seleccion=null;
 
-    pensando = false;
+    pensando=false;
 
-    jugadasIA = 0;
+    jugadasIA=0;
 
-
-    document.getElementById(
-        "rivalBattle"
-    ).textContent =
-        usuarioActual;
-
-
-    document.getElementById(
-        "colorBattle"
-    ).textContent =
-        colorUsuario === "white"
-            ? "Blancas"
-            : "Negras";
-
-
-    document.getElementById(
-        "jugadasImitadas"
-    ).textContent =
-        "0 / 7";
-
-
-    document.getElementById(
-        "modoIA"
-    ).textContent =
-        "Repertorio";
-
-
-    document.getElementById(
-        "modoIA"
-    ).className =
-        "engine-repertoire";
+    ultimaJugada=null;
 
 
     document.getElementById(
@@ -2234,24 +2096,49 @@ function iniciarBatalla() {
     );
 
 
+    document.getElementById(
+        "rivalBattle"
+    ).textContent=
+    usuarioActual;
+
+
+    document.getElementById(
+        "colorBattle"
+    ).textContent=
+    colorUsuario==="white"
+    ?"Blancas"
+    :"Negras";
+
+
+    document.getElementById(
+        "jugadasImitadas"
+    ).textContent=
+    "0 / 7";
+
+
+    document.getElementById(
+        "modoIA"
+    ).textContent=
+    "Repertorio";
+
+
+    document.getElementById(
+        "modoIA"
+    ).className=
+    "repertoire";
+
+
     dibujarTablero();
 
 
-    /*
-     * Si nosotros somos negras,
-     * la IA empieza.
-     */
+    if(colorUsuario==="black"){
 
-    if (
-        colorUsuario === "black"
-    ) {
-
-        pensando = true;
+        pensando=true;
 
         document.getElementById(
             "battleStatus"
-        ).textContent =
-            "La IA está preparando su primera jugada...";
+        ).textContent=
+        "La IA está pensando...";
 
 
         setTimeout(
@@ -2259,44 +2146,40 @@ function iniciarBatalla() {
             400
         );
 
-    }
-
-    else {
+    }else{
 
         document.getElementById(
             "battleStatus"
-        ).textContent =
-            "Tu turno.";
+        ).textContent=
+        "Tu turno.";
 
     }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    DIBUJAR TABLERO
-========================================================= */
+===================================================== */
 
-function dibujarTablero() {
+function dibujarTablero(){
 
-    tablero.innerHTML = "";
-
-
-    const posicion =
-        juego.board();
+    tablero.innerHTML="";
 
 
-    let filas =
-        [0,1,2,3,4,5,6,7];
+    const board=
+    juego.board();
 
 
-    let columnas =
-        [0,1,2,3,4,5,6,7];
+    let filas=
+    [0,1,2,3,4,5,6,7];
 
 
-    if (
-        colorUsuario === "black"
-    ) {
+    let columnas=
+    [0,1,2,3,4,5,6,7];
+
+
+    if(colorUsuario==="black"){
 
         filas.reverse();
 
@@ -2305,90 +2188,192 @@ function dibujarTablero() {
     }
 
 
-    for (
+    for(
         const fila of filas
-    ) {
+    ){
 
-        for (
+        for(
             const columna of columnas
-        ) {
+        ){
 
-            const casilla =
-                document.createElement(
-                    "div"
-                );
+            const square=
+            document.createElement("div");
 
 
-            casilla.className =
-                (
-                    (fila + columna) % 2 === 0
+            const claro=
+            (fila+columna)%2===0;
+
+
+            square.className=
+            "square "+
+            (claro?"light":"dark");
+
+
+            const nombre=
+            String.fromCharCode(
+                97+columna
+            )+
+            (8-fila);
+
+
+            square.dataset.square=
+            nombre;
+
+
+            /*
+                Coordenadas
+            */
+
+            if(
+                columna===(
+                    colorUsuario==="white"
+                    ?7
+                    :0
                 )
-                    ? "square light-square"
-                    : "square dark-square";
+            ){
 
+                const file=
+                document.createElement("span");
 
-            const nombre =
+                file.className=
+                "board-coord coord-file";
+
+                file.textContent=
                 String.fromCharCode(
-                    97 + columna
-                ) +
+                    97+columna
+                );
+
+                square.appendChild(file);
+
+            }
+
+
+            if(
+                fila===(
+                    colorUsuario==="white"
+                    ?0
+                    :7
+                )
+            ){
+
+                const rank=
+                document.createElement("span");
+
+                rank.className=
+                "board-coord coord-rank";
+
+                rank.textContent=
+                8-fila;
+
+                square.appendChild(rank);
+
+            }
+
+
+            /*
+                Último movimiento
+            */
+
+            if(
+                ultimaJugada &&
                 (
-                    8 - fila
-                );
+                    nombre===ultimaJugada.from||
+                    nombre===ultimaJugada.to
+                )
+            ){
 
-
-            casilla.dataset.square =
-                nombre;
-
-
-            const pieza =
-                posicion[fila][columna];
-
-
-            if (pieza) {
-
-                const elemento =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                elemento.className =
-                    "piece";
-
-
-                elemento.textContent =
-                    simboloPieza(
-                        pieza
-                    );
-
-
-                casilla.appendChild(
-                    elemento
+                square.classList.add(
+                    "last-move"
                 );
 
             }
 
 
-            if (
-                nombre === seleccion
-            ) {
+            /*
+                Selección
+            */
 
-                casilla.classList.add(
-                    "selected-square"
+            if(
+                seleccion===nombre
+            ){
+
+                square.classList.add(
+                    "selected"
                 );
 
             }
 
 
-            casilla.onclick =
-                () => clickCasilla(
-                    nombre
+            /*
+                Movimientos legales
+            */
+
+            if(seleccion){
+
+                const posibles=
+                juego.moves({
+                    square:seleccion,
+                    verbose:true
+                });
+
+
+                const posible=
+                posibles.find(
+                    m=>m.to===nombre
                 );
 
 
-            tablero.appendChild(
-                casilla
-            );
+                if(posible){
+
+                    if(
+                        juego.get(nombre)
+                    ){
+
+                        square.classList.add(
+                            "capture"
+                        );
+
+                    }else{
+
+                        square.classList.add(
+                            "legal-dot"
+                        );
+
+                    }
+
+                }
+
+            }
+
+
+            const pieza=
+            board[fila][columna];
+
+
+            if(pieza){
+
+                const p=
+                document.createElement("span");
+
+
+                p.className="piece";
+
+
+                p.textContent=
+                simboloPieza(pieza);
+
+
+                square.appendChild(p);
+
+            }
+
+
+            square.onclick=()=>{
+                clickCasilla(nombre);
+            };
+
+
+            tablero.appendChild(square);
 
         }
 
@@ -2397,102 +2382,83 @@ function dibujarTablero() {
 }
 
 
-/* =========================================================
-   SÍMBOLOS
-========================================================= */
+/* =====================================================
+   PIEZAS
+===================================================== */
 
-function simboloPieza(
-    pieza
-) {
+function simboloPieza(pieza){
 
-    const piezas = {
+    const piezas={
 
-        wp: "♙",
-        wn: "♘",
-        wb: "♗",
-        wr: "♖",
-        wq: "♕",
-        wk: "♔",
+        wp:"♙",
+        wn:"♘",
+        wb:"♗",
+        wr:"♖",
+        wq:"♕",
+        wk:"♔",
 
-        bp: "♟",
-        bn: "♞",
-        bb: "♝",
-        br: "♜",
-        bq: "♛",
-        bk: "♚"
+        bp:"♟",
+        bn:"♞",
+        bb:"♝",
+        br:"♜",
+        bq:"♛",
+        bk:"♚"
 
     };
 
 
     return piezas[
-        pieza.color +
+        pieza.color+
         pieza.type
-    ] || "";
+    ];
 
 }
 
 
-/* =========================================================
-   CLICK EN TABLERO
-========================================================= */
+/* =====================================================
+   CLICK CASILLA
+===================================================== */
 
-function clickCasilla(
-    square
-) {
+function clickCasilla(square){
 
-    if (
-        pensando ||
-        !juego ||
+    if(
+        pensando||
+        !juego||
         juego.game_over()
-    ) {
-
+    )
         return;
 
-    }
+
+    const turnoUsuario=
+    colorUsuario==="white"
+    ?"w"
+    :"b";
 
 
-    const turnoUsuario =
-        colorUsuario === "white"
-            ? "w"
-            : "b";
-
-
-    if (
-        juego.turn() !==
-        turnoUsuario
-    ) {
-
+    if(
+        juego.turn()!==turnoUsuario
+    )
         return;
 
-    }
 
-
-    const pieza =
-        juego.get(
-            square
-        );
+    const pieza=
+    juego.get(square);
 
 
     /*
-     * Primera selección
-     */
+        Elegir pieza
+    */
 
-    if (!seleccion) {
+    if(!seleccion){
 
-        if (
-            !pieza ||
-            pieza.color !==
-            turnoUsuario
-        ) {
-
+        if(
+            !pieza||
+            pieza.color!==turnoUsuario
+        )
             return;
 
-        }
 
-
-        seleccion =
-            square;
-
+        seleccion=square;
 
         dibujarTablero();
 
@@ -2502,18 +2468,15 @@ function clickCasilla(
 
 
     /*
-     * Seleccionar otra pieza
-     */
+        Cambiar pieza seleccionada
+    */
 
-    if (
-        pieza &&
-        pieza.color ===
-        turnoUsuario
-    ) {
+    if(
+        pieza&&
+        pieza.color===turnoUsuario
+    ){
 
-        seleccion =
-            square;
-
+        seleccion=square;
 
         dibujarTablero();
 
@@ -2523,46 +2486,51 @@ function clickCasilla(
 
 
     /*
-     * Intentar mover
-     */
+        Intentar mover
+    */
 
-    const movimiento = {
+    let movimiento;
 
-        from:
-            seleccion,
 
-        to:
-            square
+    try{
 
+        movimiento=
+        juego.move({
+            from:seleccion,
+            to:square,
+            promotion:"q"
+        });
+
+    }catch{
+
+        movimiento=null;
+
+    }
+
+
+    if(!movimiento){
+
+        seleccion=null;
+
+        dibujarTablero();
+
+        return;
+
+    }
+
+
+    ultimaJugada={
+        from:movimiento.from,
+        to:movimiento.to
     };
 
 
-    const resultado =
-        juego.move(
-            movimiento
-        );
-
-
-    if (!resultado) {
-
-        seleccion = null;
-
-        dibujarTablero();
-
-        return;
-
-    }
-
-
-    seleccion = null;
-
+    seleccion=null;
 
     dibujarTablero();
 
 
-    if (
-        juego.game_over()
-    ) {
+    if(juego.game_over()){
 
         terminarBatalla();
 
@@ -2571,13 +2539,13 @@ function clickCasilla(
     }
 
 
-    pensando = true;
+    pensando=true;
 
 
     document.getElementById(
         "battleStatus"
-    ).textContent =
-        "La IA está pensando...";
+    ).textContent=
+    "La IA está pensando...";
 
 
     setTimeout(
@@ -2588,16 +2556,16 @@ function clickCasilla(
 }
 
 
-/* =========================================================
-   JUGADA IA
-========================================================= */
+/* =====================================================
+   IA
+===================================================== */
 
-async function hacerJugadaIA() {
+async function hacerJugadaIA(){
 
-    if (
-        !juego ||
+    if(
+        !juego||
         juego.game_over()
-    ) {
+    ){
 
         terminarBatalla();
 
@@ -2607,37 +2575,33 @@ async function hacerJugadaIA() {
 
 
     /*
-     * Durante las primeras 7 jugadas
-     * intentamos reproducir una jugada
-     * REAL del jugador.
-     */
+        1.
+        PRIMERO busca una jugada real
+        del jugador.
+    */
 
-    let movimiento =
-        null;
-
-
-    if (
-        jugadasIA < 7
-    ) {
-
-        movimiento =
-            buscarJugadaReal();
+    let movimiento=
+    null;
 
 
-        if (
-            movimiento
-        ) {
+    if(jugadasIA<7){
+
+        movimiento=
+        buscarJugadaReal();
+
+
+        if(movimiento){
 
             document.getElementById(
                 "modoIA"
-            ).textContent =
-                "Repertorio real";
+            ).textContent=
+            "Repertorio real";
 
 
             document.getElementById(
                 "modoIA"
-            ).className =
-                "engine-repertoire";
+            ).className=
+            "repertoire";
 
         }
 
@@ -2645,129 +2609,226 @@ async function hacerJugadaIA() {
 
 
     /*
-     * Desde la jugada 8:
-     * Stockfish.
-     *
-     * También usamos Stockfish si
-     * no encontramos una continuación
-     * real legal en el repertorio.
-     */
+        2.
+        SI NO HAY JUGADA DEL REPERTORIO,
+        Stockfish toma el control.
 
-    if (!movimiento) {
+        Y DESPUÉS DE 7 JUGADAS,
+        Stockfish es obligatorio.
+    */
 
-        const fen =
-            juego.fen();
+    if(
+        !movimiento &&
+        stockfishReady
+    ){
 
-
-        movimiento =
-            await pedirStockfish(
-                fen
-            );
-
-
-        if (
-            movimiento
-        ) {
-
-            document.getElementById(
-                "modoIA"
-            ).textContent =
-                "Stockfish";
-
-
-            document.getElementById(
-                "modoIA"
-            ).className =
-                "engine-stockfish";
-
-        }
-
-    }
-
-
-    /*
-     * Si Stockfish todavía no está listo,
-     * usar una jugada legal temporalmente.
-     */
-
-    if (!movimiento) {
-
-        const legales =
-            juego.moves({
-                verbose: true
-            });
-
-
-        if (
-            !legales.length
-        ) {
-
-            terminarBatalla();
-
-            return;
-
-        }
-
-
-        const elegido =
-            legales[0];
-
-
-        movimiento = {
-
-            from:
-                elegido.from,
-
-            to:
-                elegido.to,
-
-            promotion:
-                elegido.promotion
-
-        };
+        document.getElementById(
+            "modoIA"
+        ).textContent=
+        "Stockfish";
 
 
         document.getElementById(
             "modoIA"
-        ).textContent =
-            "Motor cargando...";
+        ).className=
+        "stockfish";
+
+
+        movimiento=
+        await obtenerJugadaStockfish();
 
     }
 
 
-    const realizado =
-        juego.move(
+    /*
+        Si Stockfish devuelve una jugada
+        UCI, convertirla.
+    */
+
+    if(
+        movimiento &&
+        typeof movimiento==="string"
+    ){
+
+        movimiento=
+        convertirUCI(
             movimiento
         );
 
+    }
 
-    if (!realizado) {
 
-        pensando = false;
+    /*
+        Si no hay Stockfish todavía
+        esperamos en lugar de inventar
+        una jugada aleatoria.
+    */
+
+    if(!movimiento){
+
+        pensando=false;
+
+
+        document.getElementById(
+            "battleStatus"
+        ).textContent=
+        "Esperando a Stockfish...";
+
+
+        setTimeout(
+            hacerJugadaIA,
+            500
+        );
+
 
         return;
 
     }
 
 
-    jugadasIA++;
+    let realizado;
+
+
+    try{
+
+        realizado=
+        juego.move(
+            movimiento
+        );
+
+    }catch{
+
+        realizado=null;
+
+    }
+
+
+    /*
+        Si la jugada de repertorio
+        resultara ilegal, Stockfish
+        toma el control.
+    */
+
+    if(!realizado){
+
+        if(stockfishReady){
+
+            document.getElementById(
+                "modoIA"
+            ).textContent=
+            "Stockfish";
+
+
+            document.getElementById(
+                "modoIA"
+            ).className=
+            "stockfish";
+
+
+            const sf=
+            await obtenerJugadaStockfish();
+
+
+            if(sf){
+
+                try{
+
+                    realizado=
+                    juego.move(
+                        convertirUCI(sf)
+                    );
+
+                }catch{
+
+                    realizado=null;
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    if(!realizado){
+
+        pensando=false;
+
+        return;
+
+    }
+
+
+    ultimaJugada={
+        from:realizado.from,
+        to:realizado.to
+    };
+
+
+    /*
+        Solo aumentamos el contador
+        cuando realmente utilizamos
+        una jugada del repertorio.
+    */
+
+    if(
+        jugadasIA<7 &&
+        buscarSiFueRepertorio(
+            realizado
+        )
+    ){
+
+        jugadasIA++;
+
+    }
+
+
+    /*
+        IMPORTANTE:
+
+        El contador nunca pasa de 7.
+    */
+
+    jugadasIA=
+    Math.min(
+        jugadasIA,
+        7
+    );
 
 
     document.getElementById(
         "jugadasImitadas"
-    ).textContent =
-        `${Math.min(
-            jugadasIA,
-            7
-        )} / 7`;
+    ).textContent=
+    jugadasIA+" / 7";
+
+
+    /*
+        Después de 7:
+
+        STOCKFISH
+    */
+
+    if(jugadasIA>=7){
+
+        document.getElementById(
+            "modoIA"
+        ).textContent=
+        "Stockfish";
+
+
+        document.getElementById(
+            "modoIA"
+        ).className=
+        "stockfish";
+
+    }
 
 
     dibujarTablero();
 
 
-    if (
-        juego.game_over()
-    ) {
+    if(juego.game_over()){
 
         terminarBatalla();
 
@@ -2776,86 +2837,78 @@ async function hacerJugadaIA() {
     }
 
 
-    pensando = false;
+    pensando=false;
 
 
     document.getElementById(
         "battleStatus"
-    ).textContent =
-        "Tu turno.";
+    ).textContent=
+    "Tu turno.";
 
 }
 
 
-/* =========================================================
+/* =====================================================
    BUSCAR JUGADA REAL
-========================================================= */
+===================================================== */
 
-function buscarJugadaReal() {
+function buscarJugadaReal(){
 
-    const fen =
-        juego
-            .fen()
-            .split(" ")
-            .slice(0, 4)
-            .join(" ");
+    const fen=
+    normalizarFEN(
+        juego.fen()
+    );
 
 
-    const datos =
-        repertorio[colorIA]
-            .find(
-                elemento =>
-                    elemento.fen === fen
-            );
+    const opciones=
+    repertorio[colorIA][fen];
 
 
-    if (!datos) {
-
+    if(
+        !opciones||
+        !opciones.length
+    )
         return null;
 
-    }
+
+    const legales=
+    juego.moves({
+        verbose:true
+    });
 
 
-    /*
-     * Las jugadas están ordenadas
-     * por cantidad de veces que
-     * apareció en las partidas.
-     */
+    for(
+        const uci of opciones
+    ){
 
-    for (
-        const [
-            uci
-        ] of datos.movimientos
-    ) {
-
-        const movimiento =
-            convertirUCI(
-                uci
-            );
+        const movimiento=
+        convertirUCI(uci);
 
 
-        const legal =
-            juego
-                .moves({
-                    verbose: true
-                })
-                .some(
-                    posible =>
-                        posible.from ===
-                            movimiento.from &&
-                        posible.to ===
-                            movimiento.to &&
-                        (
-                            !movimiento.promotion ||
-                            posible.promotion ===
-                                movimiento.promotion
-                        )
-                );
+        const legal=
+        legales.find(
+            m=>
+            m.from===movimiento.from&&
+            m.to===movimiento.to&&
+            (
+                !movimiento.promotion||
+                m.promotion===movimiento.promotion
+            )
+        );
 
 
-        if (legal) {
+        if(legal){
 
-            return movimiento;
+            return {
+
+                from:legal.from,
+
+                to:legal.to,
+
+                promotion:
+                legal.promotion
+
+            };
 
         }
 
@@ -2867,115 +2920,157 @@ function buscarJugadaReal() {
 }
 
 
-/* =========================================================
-   UCI -> MOVIMIENTO
-========================================================= */
+/* =====================================================
+   SABER SI LA JUGADA ESTABA EN REPERTORIO
+===================================================== */
 
-function convertirUCI(
-    uci
-) {
+function buscarSiFueRepertorio(
+    movimiento
+){
+
+    const fenAntes=
+    normalizarFEN(
+        obtenerFenAnterior()
+    );
+
+
+    const opciones=
+    repertorio[colorIA][fenAntes];
+
+
+    if(!opciones)
+        return false;
+
+
+    const uci=
+    movimiento.from+
+    movimiento.to+
+    (
+        movimiento.promotion||""
+    );
+
+
+    return opciones.includes(uci);
+
+}
+
+
+/*
+    Para mantener el contador correctamente
+    guardamos el FEN antes de la jugada.
+*/
+
+let fenAntesIA="";
+
+
+function obtenerFenAnterior(){
+
+    return fenAntesIA;
+
+}
+
+
+/*
+    Sobrescribimos hacerJugadaIA
+    parcialmente usando esta variable.
+*/
+
+const hacerJugadaIAOriginal=
+hacerJugadaIA;
+
+
+/* =====================================================
+   CONVERSIÓN UCI
+===================================================== */
+
+function convertirUCI(uci){
 
     return {
 
         from:
-            uci.substring(
-                0,
-                2
-            ),
+        uci.substring(0,2),
 
         to:
-            uci.substring(
-                2,
-                4
-            ),
+        uci.substring(2,4),
 
         promotion:
-            uci.length >= 5
-                ? uci.substring(
-                    4,
-                    5
-                )
-                : undefined
+        uci.length>=5
+        ?uci.substring(4,5)
+        :undefined
 
     };
 
 }
 
 
-/* =========================================================
-   FIN
-========================================================= */
+/* =====================================================
+   FIN DE PARTIDA
+===================================================== */
 
-function terminarBatalla() {
+function terminarBatalla(){
 
-    pensando = false;
+    pensando=false;
 
 
-    if (
-        juego.is_checkmate()
-    ) {
+    let mensaje=
+    "Partida terminada.";
 
-        document.getElementById(
-            "battleStatus"
-        ).textContent =
-            "♚ Jaque mate.";
+
+    if(juego.is_checkmate()){
+
+        const ganador=
+        juego.turn()==="w"
+        ?"Negras"
+        :"Blancas";
+
+
+        mensaje=
+        "♚ Jaque mate — ganan "+
+        ganador+".";
+
+    }
+    else if(juego.is_draw()){
+
+        mensaje=
+        "½ Tablas.";
 
     }
 
-    else if (
-        juego.is_draw()
-    ) {
 
-        document.getElementById(
-            "battleStatus"
-        ).textContent =
-            "½ Tablas.";
-
-    }
-
-    else {
-
-        document.getElementById(
-            "battleStatus"
-        ).textContent =
-            "Partida terminada.";
-
-    }
+    document.getElementById(
+        "battleStatus"
+    ).textContent=
+    mensaje;
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ENTER
-========================================================= */
+===================================================== */
 
 usuarioInput.addEventListener(
     "keydown",
-    function(event) {
+    function(e){
 
-        if (
-            event.key === "Enter"
-        ) {
-
+        if(e.key==="Enter")
             analizar();
-
-        }
 
     }
 );
 
 
-botonAnalizar.onclick =
-    analizar;
+botonAnalizar.onclick=
+analizar;
 
 
-/* =========================================================
-   INICIAR STOCKFISH AL CARGAR
-========================================================= */
+/* =====================================================
+   STOCKFISH AL CARGAR
+===================================================== */
 
 window.addEventListener(
     "load",
-    function() {
+    function(){
 
         cargarStockfish();
 

@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>¿Quién Está Mintiendo?</title>
+<title>Chess Scout</title>
 
 <style>
 *{
@@ -13,533 +14,346 @@
 }
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#0b0e13;
-    color:#e9edf2;
+    font-family:Arial, sans-serif;
+    background:#0d1117;
+    color:#fff;
     min-height:100vh;
 }
 
-button{
-    font-family:inherit;
-}
-
-.app{
+header{
+    height:75px;
     display:flex;
-    min-height:100vh;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-    width:250px;
-    background:#10141b;
-    border-right:1px solid #252b35;
-    padding:22px 16px;
-    position:fixed;
-    top:0;
-    left:0;
-    bottom:0;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    background:#111820;
+    border-bottom:1px solid #26313d;
 }
 
 .logo{
-    font-size:21px;
-    font-weight:800;
-    letter-spacing:.5px;
-    margin-bottom:6px;
+    font-size:25px;
+    font-weight:bold;
 }
 
 .logo span{
-    color:#7c9cff;
+    color:#8ab4f8;
 }
 
-.subtitle{
-    color:#707987;
-    font-size:12px;
-    margin-bottom:30px;
-}
-
-.nav-title{
-    color:#555e6d;
-    font-size:11px;
-    text-transform:uppercase;
-    margin:20px 8px 8px;
-    letter-spacing:1px;
-}
-
-.nav button{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:#89919d;
-    text-align:left;
-    padding:12px;
-    border-radius:8px;
-    cursor:pointer;
-    margin-bottom:4px;
-}
-
-.nav button:hover,
-.nav button.active{
-    background:#1b222d;
-    color:white;
-}
-
-.profile{
-    position:absolute;
-    left:16px;
-    right:16px;
-    bottom:18px;
-    background:#171c24;
-    border:1px solid #272e39;
-    padding:12px;
-    border-radius:9px;
-}
-
-.profile-name{
-    font-weight:bold;
+header p{
+    color:#8d99a8;
     font-size:14px;
 }
 
-.profile-level{
-    color:#7c9cff;
-    font-size:12px;
-    margin-top:4px;
+.container{
+    width:92%;
+    max-width:1250px;
+    margin:35px auto;
 }
 
-/* MAIN */
-
-.main{
-    margin-left:250px;
-    width:calc(100% - 250px);
-    padding:28px;
-}
-
-.topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.search-box{
+    background:#151d26;
+    border:1px solid #26313d;
+    padding:25px;
+    border-radius:15px;
     margin-bottom:25px;
 }
 
-.page-title{
+.search-box h1{
     font-size:28px;
-    font-weight:800;
+    margin-bottom:8px;
 }
 
-.page-description{
-    color:#737d8c;
-    margin-top:5px;
+.search-box p{
+    color:#8996a5;
+    margin-bottom:20px;
+}
+
+.search{
+    display:flex;
+    gap:10px;
+}
+
+.search input{
+    flex:1;
+    padding:15px;
+    border-radius:9px;
+    border:1px solid #34404d;
+    background:#0d1117;
+    color:white;
+    font-size:16px;
+    outline:none;
+}
+
+.search input:focus{
+    border-color:#8ab4f8;
+}
+
+button{
+    border:none;
+    border-radius:9px;
+    padding:0 22px;
+    background:#8ab4f8;
+    color:#101820;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    opacity:.9;
+}
+
+.player{
+    display:none;
+}
+
+.player-top{
+    background:#151d26;
+    border:1px solid #26313d;
+    border-radius:15px;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.player-name{
+    font-size:27px;
+    font-weight:bold;
+}
+
+.player-status{
+    color:#64d48b;
     font-size:14px;
+    margin-top:5px;
 }
-
-.case-number{
-    color:#727c8b;
-    font-size:13px;
-}
-
-/* STATS */
 
 .stats{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:14px;
+    gap:15px;
     margin-bottom:20px;
 }
 
-.stat{
-    background:#11161e;
-    border:1px solid #252c37;
-    padding:18px;
-    border-radius:10px;
-}
-
-.stat-label{
-    color:#707987;
-    font-size:12px;
-}
-
-.stat-value{
-    font-size:24px;
-    font-weight:800;
-    margin-top:7px;
-}
-
-/* CASE */
-
-.case-card{
-    background:#11161e;
-    border:1px solid #252c37;
-    border-radius:12px;
-    padding:25px;
-    margin-bottom:18px;
-}
-
-.case-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:20px;
-}
-
-.case-title{
-    font-size:22px;
-    font-weight:800;
-}
-
-.case-text{
-    color:#9ca5b1;
-    line-height:1.7;
-    margin-top:10px;
-    max-width:900px;
-}
-
-.difficulty{
-    background:#202833;
-    color:#b9c6ff;
-    padding:6px 10px;
-    border-radius:6px;
-    font-size:11px;
-    white-space:nowrap;
-}
-
-/* CHARACTERS */
-
-.characters{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:14px;
-}
-
-.person{
-    background:#121821;
-    border:1px solid #272f3b;
-    border-radius:10px;
-    padding:18px;
-    transition:.2s;
-}
-
-.person:hover{
-    border-color:#45516a;
-    transform:translateY(-2px);
-}
-
-.person-top{
-    display:flex;
-    gap:12px;
-    align-items:center;
-}
-
-.avatar{
-    width:45px;
-    height:45px;
-    border-radius:50%;
-    background:#252d39;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-    color:#aeb8c8;
-}
-
-.person-name{
-    font-weight:bold;
-}
-
-.person-role{
-    color:#687382;
-    font-size:12px;
-    margin-top:3px;
-}
-
-.statement{
-    margin-top:15px;
-    color:#aeb6c1;
-    font-size:14px;
-    line-height:1.6;
-    min-height:68px;
-}
-
-.person-actions{
-    display:flex;
-    gap:8px;
-    margin-top:15px;
-}
-
-.btn{
-    border:1px solid #303947;
-    background:#181f29;
-    color:#dce1e8;
-    padding:9px 12px;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:12px;
-}
-
-.btn:hover{
-    background:#222b38;
-}
-
-.btn.primary{
-    background:#526fd7;
-    border-color:#526fd7;
-    color:white;
-}
-
-.btn.primary:hover{
-    background:#607ce0;
-}
-
-.btn.danger{
-    background:#351d24;
-    border-color:#69333e;
-    color:#ffb6c0;
-}
-
-/* INVESTIGATION */
-
-.investigation{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:18px;
-}
-
-.panel{
-    background:#11161e;
-    border:1px solid #252c37;
-    border-radius:12px;
+.card{
+    background:#151d26;
+    border:1px solid #26313d;
+    border-radius:13px;
     padding:20px;
 }
 
-.panel-title{
-    font-size:15px;
-    font-weight:bold;
-    margin-bottom:14px;
-}
-
-.clue{
-    border-left:3px solid #526fd7;
-    background:#161c25;
-    padding:13px;
-    margin-bottom:9px;
-    color:#aeb7c4;
+.card-title{
+    color:#8794a3;
     font-size:13px;
-    line-height:1.5;
-}
-
-.clue.locked{
-    border-left-color:#414854;
-    color:#59616e;
-}
-
-/* LOG */
-
-.log{
-    height:250px;
-    overflow:auto;
-    background:#090c10;
-    border:1px solid #202631;
-    border-radius:8px;
-    padding:12px;
-    font-family:monospace;
-    font-size:12px;
-}
-
-.log-line{
-    margin-bottom:8px;
-    color:#8490a0;
-}
-
-.log-line.good{
-    color:#72d69b;
-}
-
-.log-line.bad{
-    color:#ff7e8e;
-}
-
-.log-line.info{
-    color:#8ea6ff;
-}
-
-/* MODAL */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:20;
-    padding:20px;
-}
-
-.modal.show{
-    display:flex;
-}
-
-.modal-box{
-    width:min(550px,100%);
-    background:#131921;
-    border:1px solid #303846;
-    border-radius:12px;
-    padding:25px;
-    box-shadow:0 20px 70px rgba(0,0,0,.5);
-}
-
-.modal-title{
-    font-size:20px;
-    font-weight:bold;
     margin-bottom:10px;
 }
 
-.modal-text{
-    color:#929ca9;
-    line-height:1.6;
-    font-size:14px;
-    white-space:pre-line;
+.card-value{
+    font-size:27px;
+    font-weight:bold;
 }
 
-.modal-buttons{
-    display:flex;
-    gap:10px;
-    justify-content:flex-end;
-    margin-top:20px;
+.green{
+    color:#64d48b;
 }
 
-/* CASES */
+.red{
+    color:#ff7373;
+}
 
-.case-list{
+.yellow{
+    color:#f4c95d;
+}
+
+.layout{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:15px;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
 }
 
-.case-item{
-    background:#121821;
-    border:1px solid #282f3b;
-    border-radius:10px;
-    padding:18px;
+.panel{
+    background:#151d26;
+    border:1px solid #26313d;
+    border-radius:15px;
+    padding:22px;
 }
 
-.case-item.locked{
-    opacity:.45;
+.panel h2{
+    margin-bottom:18px;
 }
 
-.case-item h3{
+.opening{
+    margin-bottom:15px;
+}
+
+.opening-info{
+    display:flex;
+    justify-content:space-between;
     margin-bottom:7px;
 }
 
-.case-item p{
-    color:#747e8c;
-    font-size:13px;
-    line-height:1.5;
+.bar{
+    width:100%;
+    height:9px;
+    background:#252e38;
+    border-radius:20px;
+    overflow:hidden;
 }
 
-.case-item button{
+.bar-fill{
+    height:100%;
+    border-radius:20px;
+    background:#8ab4f8;
+}
+
+.warning{
+    color:#ff7373;
+}
+
+.opening-list{
+    margin-top:20px;
+}
+
+.variant{
+    padding:15px 0;
+    border-bottom:1px solid #26313d;
+}
+
+.variant:last-child{
+    border-bottom:none;
+}
+
+.variant-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:5px;
+}
+
+.variant-name{
+    font-weight:bold;
+}
+
+.variant-score{
+    font-weight:bold;
+}
+
+.variant p{
+    color:#8996a5;
+    font-size:13px;
+}
+
+.analysis{
+    margin-top:20px;
+}
+
+.analysis-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.analysis-header span{
+    color:#8996a5;
+    font-size:13px;
+}
+
+.board{
+    width:100%;
+    max-width:500px;
+    aspect-ratio:1;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    border:4px solid #222;
+}
+
+.square{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:clamp(25px,5vw,50px);
+    cursor:pointer;
+    user-select:none;
+}
+
+.light{
+    background:#e8d0a9;
+}
+
+.dark{
+    background:#9b7653;
+}
+
+.move-info{
+    margin-top:15px;
+    background:#0d1117;
+    border:1px solid #26313d;
+    border-radius:10px;
+    padding:15px;
+    color:#aeb8c4;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:bold;
+    margin-left:5px;
+}
+
+.badge-red{
+    background:#452326;
+    color:#ff7777;
+}
+
+.badge-green{
+    background:#1d3b2b;
+    color:#68dc91;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
     margin-top:15px;
 }
 
-/* NOTIFICATION */
-
-.notification{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    background:#171e28;
-    border:1px solid #343d4b;
-    padding:14px 18px;
-    border-radius:9px;
-    display:none;
-    z-index:30;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
+.actions button{
+    padding:12px 16px;
 }
 
-.notification.show{
-    display:block;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:1000px){
-
-    .sidebar{
-        width:70px;
-        padding:15px 8px;
-    }
-
-    .logo{
-        font-size:0;
-        text-align:center;
-    }
-
-    .logo span{
-        font-size:20px;
-    }
-
-    .subtitle,
-    .nav-title,
-    .nav button span,
-    .profile{
-        display:none;
-    }
-
-    .nav button{
-        text-align:center;
-        font-size:18px;
-    }
-
-    .main{
-        margin-left:70px;
-        width:calc(100% - 70px);
-    }
-
+@media(max-width:800px){
     .stats{
         grid-template-columns:repeat(2,1fr);
     }
 
-    .characters{
-        grid-template-columns:1fr 1fr;
-    }
-}
-
-@media(max-width:700px){
-
-    .main{
-        padding:15px;
-    }
-
-    .topbar{
-        display:block;
-    }
-
-    .case-number{
-        margin-top:8px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .characters{
+    .layout{
         grid-template-columns:1fr;
     }
 
-    .investigation{
-        grid-template-columns:1fr;
+    .player-top{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
     }
 
-    .case-list{
-        grid-template-columns:1fr;
+    .search{
+        flex-direction:column;
     }
 
-    .case-header{
-        display:block;
+    .search button{
+        height:50px;
     }
 
-    .difficulty{
-        display:inline-block;
-        margin-top:12px;
+    header{
+        padding:0 18px;
+    }
+
+    header p{
+        display:none;
     }
 }
 </style>
@@ -547,1296 +361,567 @@ button{
 
 <body>
 
-<div class="app">
+<header>
+    <div class="logo">♞ Chess<span>Scout</span></div>
+    <p>Analizador de partidas de ajedrez</p>
+</header>
 
-<!-- SIDEBAR -->
+<div class="container">
 
-<aside class="sidebar">
+    <section class="search-box">
+        <h1>Buscar ajedrecista</h1>
+        <p>Escribí el nombre del jugador que querés analizar.</p>
 
-    <div class="logo">
-        WHO<span>LIED?</span>
-    </div>
+        <div class="search">
+            <input
+                id="playerInput"
+                type="text"
+                placeholder="Ej: Magnus Carlsen"
+            >
 
-    <div class="subtitle">
-        Centro de investigación
-    </div>
-
-    <div class="nav">
-
-        <div class="nav-title">Investigación</div>
-
-        <button class="active" onclick="showSection('investigation')">
-            🔎 <span>Investigar</span>
-        </button>
-
-        <button onclick="showSection('cases')">
-            📁 <span>Casos</span>
-        </button>
-
-        <div class="nav-title">Perfil</div>
-
-        <button onclick="showSection('achievements')">
-            🏆 <span>Logros</span>
-        </button>
-
-        <button onclick="resetGame()">
-            ⚙️ <span>Reiniciar</span>
-        </button>
-
-    </div>
-
-    <div class="profile">
-        <div class="profile-name">Detective</div>
-        <div class="profile-level">
-            Nivel <span id="sideLevel">1</span>
+            <button onclick="buscarJugador()">
+                ANALIZAR
+            </button>
         </div>
-    </div>
+    </section>
 
-</aside>
+    <main id="playerPanel" class="player">
+
+        <section class="player-top">
+            <div>
+                <div id="playerName" class="player-name">
+                    Jugador
+                </div>
+
+                <div class="player-status">
+                    ● Jugador encontrado
+                </div>
+            </div>
+
+            <button onclick="descargarPGN()">
+                ↓ Descargar PGN
+            </button>
+        </section>
+
+        <section class="stats">
+
+            <div class="card">
+                <div class="card-title">
+                    PARTIDAS ANALIZADAS
+                </div>
+
+                <div id="games" class="card-value">
+                    1.284
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    VICTORIAS
+                </div>
+
+                <div id="wins" class="card-value green">
+                    52%
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    TABLAS
+                </div>
+
+                <div id="draws" class="card-value yellow">
+                    27%
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    DERROTAS
+                </div>
+
+                <div id="losses" class="card-value red">
+                    21%
+                </div>
+            </div>
+
+        </section>
+
+        <section class="layout">
+
+            <!-- APERTURAS -->
+
+            <div class="panel">
+
+                <h2>📊 Rendimiento por apertura</h2>
+
+                <div class="opening">
+
+                    <div class="opening-info">
+                        <span>Apertura Inglesa</span>
+                        <strong>64%</strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:64%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="opening">
+
+                    <div class="opening-info">
+                        <span>Defensa Siciliana</span>
+                        <strong>58%</strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:58%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="opening">
+
+                    <div class="opening-info">
+                        <span>Gambito de Dama</span>
+                        <strong>57%</strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:57%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="opening">
+
+                    <div class="opening-info">
+                        <span>Defensa Caro-Kann</span>
+                        <strong class="warning">39%</strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:39%">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="opening">
+
+                    <div class="opening-info">
+                        <span>Ruy López</span>
+                        <strong>55%</strong>
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:55%">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
 
-<!-- MAIN -->
+            <!-- DEBILIDADES -->
 
-<main class="main">
+            <div class="panel">
 
-<section id="investigationSection">
+                <h2>⚠️ Variantes que más le molestan</h2>
 
-<div class="topbar">
+                <div class="opening-list">
 
-<div>
-    <div class="page-title">Investigación</div>
-    <div class="page-description">
-        Analizá las declaraciones y encontrá al mentiroso.
-    </div>
+                    <div class="variant">
+
+                        <div class="variant-top">
+
+                            <span class="variant-name">
+                                Caro-Kann — Advance
+                            </span>
+
+                            <span class="variant-score red">
+                                34%
+                            </span>
+
+                        </div>
+
+                        <p>
+                            29 partidas · 8 victorias · 9 tablas ·
+                            12 derrotas
+                        </p>
+
+                    </div>
+
+
+                    <div class="variant">
+
+                        <div class="variant-top">
+
+                            <span class="variant-name">
+                                Inglesa — 1...Nf6
+                            </span>
+
+                            <span class="variant-score red">
+                                41%
+                            </span>
+
+                        </div>
+
+                        <p>
+                            22 partidas · 7 victorias · 6 tablas ·
+                            9 derrotas
+                        </p>
+
+                    </div>
+
+
+                    <div class="variant">
+
+                        <div class="variant-top">
+
+                            <span class="variant-name">
+                                Caro-Kann — Classical
+                            </span>
+
+                            <span class="variant-score yellow">
+                                47%
+                            </span>
+
+                        </div>
+
+                        <p>
+                            38 partidas · rendimiento medio
+                        </p>
+
+                    </div>
+
+
+                    <div class="variant">
+
+                        <div class="variant-top">
+
+                            <span class="variant-name">
+                                Inglesa — 1...e5
+                            </span>
+
+                            <span class="variant-score green">
+                                63%
+                            </span>
+
+                        </div>
+
+                        <p>
+                            41 partidas · buen rendimiento
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- TABLERO -->
+
+        <section class="panel analysis">
+
+            <div class="analysis-header">
+
+                <h2>♟ Analizar variante</h2>
+
+                <span>
+                    Apertura Inglesa
+                </span>
+
+            </div>
+
+            <div id="board" class="board"></div>
+
+            <div class="move-info">
+
+                <strong>
+                    Variante seleccionada
+                </strong>
+
+                <br><br>
+
+                1. c4 Nf6 2. Nc3 e5 3. Nf3
+
+                <br><br>
+
+                Rendimiento del jugador:
+
+                <strong class="red">
+                    41%
+                </strong>
+
+                <span class="badge badge-red">
+                    DEBILIDAD
+                </span>
+
+            </div>
+
+            <div class="actions">
+
+                <button onclick="anterior()">
+                    ← Anterior
+                </button>
+
+                <button onclick="siguiente()">
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
 </div>
-
-<div class="case-number" id="caseNumber">
-    CASO #001
-</div>
-
-</div>
-
-
-<!-- STATS -->
-
-<div class="stats">
-
-<div class="stat">
-    <div class="stat-label">Puntos</div>
-    <div class="stat-value" id="score">0</div>
-</div>
-
-<div class="stat">
-    <div class="stat-label">Racha</div>
-    <div class="stat-value" id="streak">0</div>
-</div>
-
-<div class="stat">
-    <div class="stat-label">Nivel</div>
-    <div class="stat-value" id="level">1</div>
-</div>
-
-<div class="stat">
-    <div class="stat-label">Casos resueltos</div>
-    <div class="stat-value" id="solved">0</div>
-</div>
-
-</div>
-
-
-<!-- CASE -->
-
-<div class="case-card">
-
-<div class="case-header">
-
-<div>
-
-<div class="case-title" id="caseTitle">
-    El trofeo desaparecido
-</div>
-
-<div class="case-text" id="caseDescription">
-    Durante el recreo desapareció el trofeo principal
-    del colegio. Cuatro personas estuvieron cerca de
-    la sala donde estaba guardado.
-</div>
-
-</div>
-
-<div class="difficulty" id="difficulty">
-    NORMAL
-</div>
-
-</div>
-
-</div>
-
-
-<!-- CHARACTERS -->
-
-<div class="characters" id="characters"></div>
-
-
-<!-- INVESTIGATION -->
-
-<div class="investigation">
-
-<div class="panel">
-
-<div class="panel-title">
-    🔎 Evidencias encontradas
-</div>
-
-<div id="clues"></div>
-
-</div>
-
-
-<div class="panel">
-
-<div class="panel-title">
-    Registro de investigación
-</div>
-
-<div class="log" id="log"></div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- CASES SECTION -->
-
-<section id="casesSection" style="display:none">
-
-<div class="topbar">
-
-<div>
-    <div class="page-title">Casos</div>
-    <div class="page-description">
-        Elegí un caso para comenzar una investigación.
-    </div>
-</div>
-
-</div>
-
-<div class="case-list" id="caseList"></div>
-
-</section>
-
-
-<!-- ACHIEVEMENTS -->
-
-<section id="achievementsSection" style="display:none">
-
-<div class="topbar">
-
-<div>
-    <div class="page-title">Logros</div>
-    <div class="page-description">
-        Tus logros como detective.
-    </div>
-</div>
-
-</div>
-
-<div class="case-list" id="achievementList"></div>
-
-</section>
-
-</main>
-
-</div>
-
-
-<!-- MODAL -->
-
-<div class="modal" id="modal">
-
-<div class="modal-box">
-
-<div class="modal-title" id="modalTitle"></div>
-
-<div class="modal-text" id="modalText"></div>
-
-<div class="modal-buttons" id="modalButtons"></div>
-
-</div>
-
-</div>
-
-
-<div class="notification" id="notification"></div>
 
 
 <script>
 
-/* =========================================
-   DATOS DEL JUEGO
-========================================= */
+/* ============================
+   DATOS DE DEMOSTRACIÓN
+============================ */
 
-const cases = [
+const piezas = {
 
-{
-    id:1,
-    title:"El trofeo desaparecido",
-    description:
-    "Durante el recreo desapareció el trofeo principal del colegio. Cuatro personas estuvieron cerca de la sala donde estaba guardado.",
-    difficulty:"NORMAL",
-
-    clues:[
-        "La cámara del pasillo dejó de grabar durante exactamente 4 minutos.",
-        "Una persona afirma haber estado en la biblioteca, pero el registro de entrada dice otra cosa.",
-        "Se encontraron huellas de barro cerca de la ventana.",
-        "El trofeo pesaba demasiado para ser transportado fácilmente por una sola persona."
-    ],
-
-    people:[
-        {
-            name:"Lucas",
-            role:"Estudiante",
-            statement:"Yo estaba en la biblioteca leyendo. No fui a la sala del trofeo.",
-            truth:false,
-            interrogation:"Cuando le preguntás qué libro estaba leyendo, cambia de tema rápidamente."
-        },
-
-        {
-            name:"Sofía",
-            role:"Delegada",
-            statement:"Estuve en el patio durante todo el recreo. Varias personas me vieron.",
-            truth:true,
-            interrogation:"Dos estudiantes confirman que Sofía estuvo en el patio."
-        },
-
-        {
-            name:"Mateo",
-            role:"Encargado del salón",
-            statement:"Pasé por el pasillo, pero nunca entré a la sala.",
-            truth:true,
-            interrogation:"La cámara muestra a Mateo caminando por el pasillo."
-        },
-
-        {
-            name:"Valentina",
-            role:"Estudiante",
-            statement:"Yo estaba con Sofía en el patio todo el tiempo.",
-            truth:true,
-            interrogation:"Su historia coincide con la de Sofía."
-        }
-    ]
-},
-
-{
-    id:2,
-    title:"El laboratorio cerrado",
-    description:
-    "Un experimento escolar desapareció del laboratorio. Solo tres estudiantes tenían autorización para entrar.",
-    difficulty:"NORMAL",
-
-    clues:[
-        "La puerta fue abierta con una tarjeta de acceso.",
-        "El registro indica que una tarjeta fue utilizada dos veces.",
-        "Había una mochila abandonada junto al laboratorio.",
-        "El experimento estaba dentro de un armario cerrado."
-    ],
-
-    people:[
-        {
-            name:"Nicolás",
-            role:"Alumno",
-            statement:"Mi tarjeta estuvo conmigo todo el día.",
-            truth:true,
-            interrogation:"Muestra la tarjeta y coincide con el registro."
-        },
-
-        {
-            name:"Emma",
-            role:"Alumna",
-            statement:"Yo entré al laboratorio antes de que desapareciera el experimento.",
-            truth:true,
-            interrogation:"Su entrada está registrada correctamente."
-        },
-
-        {
-            name:"Bruno",
-            role:"Alumno",
-            statement:"Nunca tuve una tarjeta de acceso.",
-            truth:false,
-            interrogation:"El profesor confirma que Bruno recibió una tarjeta esa mañana."
-        },
-
-        {
-            name:"Agustín",
-            role:"Ayudante",
-            statement:"Yo estaba ordenando el depósito.",
-            truth:true,
-            interrogation:"El inventario confirma que estuvo allí."
-        }
-    ]
-},
-
-{
-    id:3,
-    title:"El celular perdido",
-    description:
-    "Durante una excursión desapareció un celular de una mochila. Todos dicen no haberlo tocado.",
-    difficulty:"DIFÍCIL",
-
-    clues:[
-        "El celular fue visto por última vez a las 14:20.",
-        "A las 14:27 alguien desbloqueó el dispositivo.",
-        "La mochila estaba en una mesa común.",
-        "Uno de los estudiantes afirmó no saber el código."
-    ],
-
-    people:[
-        {
-            name:"Tomás",
-            role:"Estudiante",
-            statement:"Yo no sabía el código del celular.",
-            truth:false,
-            interrogation:"Durante una conversación anterior había mencionado el código."
-        },
-
-        {
-            name:"Martina",
-            role:"Estudiante",
-            statement:"Estuve sacando fotos durante ese momento.",
-            truth:true,
-            interrogation:"Las fotos tienen metadatos compatibles con el horario."
-        },
-
-        {
-            name:"Julián",
-            role:"Estudiante",
-            statement:"Yo estaba sentado lejos de la mochila.",
-            truth:true,
-            interrogation:"Otro estudiante confirma su ubicación."
-        },
-
-        {
-            name:"Camila",
-            role:"Estudiante",
-            statement:"Vi el celular sobre la mesa a las 14:25.",
-            truth:true,
-            interrogation:"Su relato coincide con el último avistamiento."
-        }
-    ]
-},
-
-{
-    id:4,
-    title:"El examen cambiado",
-    description:
-    "El examen de matemática apareció modificado antes de comenzar la clase.",
-    difficulty:"DIFÍCIL",
-
-    clues:[
-        "El archivo fue modificado a las 07:42.",
-        "Solo dos computadoras tenían acceso.",
-        "El profesor llegó a las 07:50.",
-        "Una persona dijo que todavía estaba viajando."
-    ],
-
-    people:[
-        {
-            name:"Franco",
-            role:"Alumno",
-            statement:"A las 07:42 todavía estaba viajando.",
-            truth:false,
-            interrogation:"El registro de entrada al colegio muestra que llegó antes."
-        },
-
-        {
-            name:"Micaela",
-            role:"Alumna",
-            statement:"Llegué después de las 8.",
-            truth:true,
-            interrogation:"Su horario coincide con el registro."
-        },
-
-        {
-            name:"Santiago",
-            role:"Alumno",
-            statement:"Yo no tengo acceso a esa computadora.",
-            truth:true,
-            interrogation:"El profesor confirma que su cuenta no tenía permisos."
-        },
-
-        {
-            name:"Abril",
-            role:"Alumna",
-            statement:"Estaba esperando afuera del aula.",
-            truth:true,
-            interrogation:"Otra estudiante confirma haber hablado con ella."
-        }
-    ]
-},
-
-{
-    id:5,
-    title:"La pintura desaparecida",
-    description:
-    "Una pintura de la exposición escolar desapareció durante el cambio de turno.",
-    difficulty:"EXPERTO",
-
-    clues:[
-        "La alarma de la sala nunca fue activada.",
-        "La pintura salió por una puerta lateral.",
-        "Una persona conocía la ubicación de esa puerta.",
-        "El guardia vio una sombra llevando algo grande."
-    ],
-
-    people:[
-        {
-            name:"Renata",
-            role:"Artista",
-            statement:"No sabía que existía una puerta lateral.",
-            truth:false,
-            interrogation:"Había dibujado un plano de la sala anteriormente."
-        },
-
-        {
-            name:"Pedro",
-            role:"Visitante",
-            statement:"Yo estuve mirando las otras pinturas.",
-            truth:true,
-            interrogation:"El registro de visitantes coincide."
-        },
-
-        {
-            name:"Malena",
-            role:"Organizadora",
-            statement:"Estaba controlando las entradas.",
-            truth:true,
-            interrogation:"El registro de cámaras la muestra allí."
-        },
-
-        {
-            name:"Damián",
-            role:"Ayudante",
-            statement:"Estaba en el depósito.",
-            truth:true,
-            interrogation:"El inventario confirma su presencia."
-        }
-    ]
-}
-
-];
-
-
-/* =========================================
-   ESTADO
-========================================= */
-
-let game = JSON.parse(localStorage.getItem("whoLiedGame")) || {
-
-    score:0,
-    streak:0,
-    level:1,
-    solved:0,
-    unlocked:1,
-    achievements:[],
-
-    currentCase:1,
-    interrogated:[],
-    cluesFound:[]
+    "8":"♜",
+    "7":"♟",
+    "6":"",
+    "5":"",
+    "4":"",
+    "3":"",
+    "2":"♙",
+    "1":"♖"
 
 };
 
 
-/* =========================================
-   GUARDAR
-========================================= */
+/* ============================
+   BUSCAR JUGADOR
+============================ */
 
-function saveGame(){
+function buscarJugador(){
 
-    localStorage.setItem(
-        "whoLiedGame",
-        JSON.stringify(game)
-    );
+    const input =
+        document.getElementById("playerInput");
 
-}
+    const nombre =
+        input.value.trim();
 
+    if(nombre === ""){
 
-/* =========================================
-   OBTENER CASO
-========================================= */
+        alert("Escribí el nombre de un ajedrecista.");
 
-function getCurrentCase(){
-
-    return cases.find(c => c.id === game.currentCase);
-
-}
-
-
-/* =========================================
-   RENDER PRINCIPAL
-========================================= */
-
-function render(){
-
-    const c = getCurrentCase();
-
-    document.getElementById("caseNumber").textContent =
-        "CASO #" + String(c.id).padStart(3,"0");
-
-    document.getElementById("caseTitle").textContent =
-        c.title;
-
-    document.getElementById("caseDescription").textContent =
-        c.description;
-
-    document.getElementById("difficulty").textContent =
-        c.difficulty;
-
-    document.getElementById("score").textContent =
-        game.score;
-
-    document.getElementById("streak").textContent =
-        game.streak;
-
-    document.getElementById("level").textContent =
-        game.level;
-
-    document.getElementById("solved").textContent =
-        game.solved;
-
-    document.getElementById("sideLevel").textContent =
-        game.level;
-
-
-    renderCharacters(c);
-
-    renderClues(c);
-
-    renderLog();
-
-}
-
-
-/* =========================================
-   PERSONAJES
-========================================= */
-
-function renderCharacters(c){
-
-    const container =
-        document.getElementById("characters");
-
-    container.innerHTML="";
-
-    c.people.forEach((person,index)=>{
-
-        const div=document.createElement("div");
-
-        div.className="person";
-
-        const interrogated =
-            game.interrogated.includes(person.name);
-
-        div.innerHTML=`
-
-            <div class="person-top">
-
-                <div class="avatar">
-                    ${person.name.charAt(0)}
-                </div>
-
-                <div>
-                    <div class="person-name">
-                        ${person.name}
-                    </div>
-
-                    <div class="person-role">
-                        ${person.role}
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="statement">
-                “${person.statement}”
-            </div>
-
-            <div class="person-actions">
-
-                <button class="btn"
-                    onclick="interrogate('${person.name}')">
-
-                    ${interrogated ? "✓ Interrogado" : "Interrogar"}
-
-                </button>
-
-                <button class="btn danger"
-                    onclick="accuse('${person.name}')">
-
-                    Acusar
-                </button>
-
-            </div>
-
-        `;
-
-        container.appendChild(div);
-
-    });
-
-}
-
-
-/* =========================================
-   INTERROGAR
-========================================= */
-
-function interrogate(name){
-
-    const c=getCurrentCase();
-
-    const person=c.people.find(
-        p=>p.name===name
-    );
-
-    if(!game.interrogated.includes(name)){
-
-        game.interrogated.push(name);
-
-        saveGame();
-
-        addLog(
-            `Interrogaste a ${name}.`,
-            "info"
-        );
-
-    }
-
-    showModal(
-        "Interrogatorio: " + name,
-        person.interrogation,
-        [
-            {
-                text:"Cerrar",
-                action:closeModal
-            }
-        ]
-    );
-
-    render();
-
-}
-
-
-/* =========================================
-   ACUSAR
-========================================= */
-
-function accuse(name){
-
-    const c=getCurrentCase();
-
-    const person=c.people.find(
-        p=>p.name===name
-    );
-
-    if(person.truth){
-
-        game.streak=0;
-
-        addLog(
-            `Acusación incorrecta: ${name} decía la verdad.`,
-            "bad"
-        );
-
-        showModal(
-            "❌ Acusación incorrecta",
-            `${name} estaba diciendo la verdad.\n\nLa investigación continúa, pero perdiste la racha.`,
-            [
-                {
-                    text:"Seguir investigando",
-                    action:closeModal
-                }
-            ]
-        );
-
-    }else{
-
-        const bonus =
-            100 +
-            game.interrogated.length * 25 +
-            c.id * 30;
-
-        game.score += bonus;
-        game.solved++;
-        game.streak++;
-
-        if(c.id >= game.unlocked){
-
-            game.unlocked =
-                Math.min(
-                    cases.length,
-                    game.unlocked + 1
-                );
-
-        }
-
-        checkLevel();
-        checkAchievements();
-
-        addLog(
-            `¡Caso resuelto! ${name} estaba mintiendo.`,
-            "good"
-        );
-
-        saveGame();
-
-        showModal(
-            "✅ Caso resuelto",
-            `Excelente trabajo.\n\n${name} era quien estaba mintiendo.\n\nPuntos obtenidos: +${bonus}\nRacha actual: ${game.streak}`,
-            [
-                {
-                    text:"Siguiente caso",
-                    action:nextCase
-                },
-                {
-                    text:"Cerrar",
-                    action:closeModal
-                }
-            ]
-        );
-
-    }
-
-    saveGame();
-    render();
-
-}
-
-
-/* =========================================
-   SIGUIENTE CASO
-========================================= */
-
-function nextCase(){
-
-    closeModal();
-
-    let next=game.currentCase+1;
-
-    if(next>cases.length){
-
-        next=1;
-
-    }
-
-    if(next>game.unlocked){
-
-        next=game.unlocked;
-
-    }
-
-    game.currentCase=next;
-
-    game.interrogated=[];
-    game.cluesFound=[];
-
-    saveGame();
-
-    render();
-
-}
-
-
-/* =========================================
-   NIVEL
-========================================= */
-
-function checkLevel(){
-
-    const newLevel =
-        Math.floor(game.score / 500) + 1;
-
-    if(newLevel>game.level){
-
-        game.level=newLevel;
-
-        notify(
-            "🎉 Subiste al nivel " + newLevel
-        );
-
-    }
-
-}
-
-
-/* =========================================
-   PISTAS
-========================================= */
-
-function renderClues(c){
-
-    const container =
-        document.getElementById("clues");
-
-    container.innerHTML="";
-
-    c.clues.forEach((clue,index)=>{
-
-        const found =
-            game.cluesFound.includes(index);
-
-        const div =
-            document.createElement("div");
-
-        div.className =
-            found ? "clue" : "clue locked";
-
-        if(found){
-
-            div.textContent =
-                "✓ " + clue;
-
-        }else{
-
-            div.innerHTML =
-                `🔒 Pista bloqueada 
-                <button class="btn"
-                onclick="unlockClue(${index})">
-                Investigar
-                </button>`;
-
-        }
-
-        container.appendChild(div);
-
-    });
-
-}
-
-
-/* =========================================
-   DESBLOQUEAR PISTA
-========================================= */
-
-function unlockClue(index){
-
-    if(game.cluesFound.includes(index))
         return;
+    }
 
-    game.cluesFound.push(index);
+    document.getElementById("playerPanel")
+        .style.display = "block";
 
-    addLog(
-        "Encontraste una nueva evidencia.",
-        "info"
-    );
+    document.getElementById("playerName")
+        .textContent = nombre;
 
-    saveGame();
+    window.scrollTo({
 
-    render();
+        top:
+        document.getElementById("playerPanel")
+            .offsetTop - 20,
 
-}
+        behavior:"smooth"
 
-
-/* =========================================
-   LOG
-========================================= */
-
-function addLog(text,type=""){
-
-    const log =
-        document.getElementById("log");
-
-    const line =
-        document.createElement("div");
-
-    line.className =
-        "log-line " + type;
-
-    const time =
-        new Date().toLocaleTimeString(
-            [],
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
-    line.textContent =
-        `[${time}] ${text}`;
-
-    log.prepend(line);
+    });
 
 }
 
 
-/* =========================================
-   RENDER LOG
-========================================= */
+/* ============================
+   TABLERO
+============================ */
 
-function renderLog(){
+const posiciones = {
 
-    const log =
-        document.getElementById("log");
+    "a8":"♜",
+    "b8":"♞",
+    "c8":"♝",
+    "d8":"♛",
+    "e8":"♚",
+    "f8":"♝",
+    "g8":"♞",
+    "h8":"♜",
 
-    if(!log.innerHTML){
+    "a7":"♟",
+    "b7":"♟",
+    "c7":"♟",
+    "d7":"♟",
+    "e7":"♟",
+    "f7":"♟",
+    "g7":"♟",
+    "h7":"♟",
 
-        addLog(
-            "Sistema de investigación iniciado.",
-            "info"
-        );
+    "a2":"♙",
+    "b2":"♙",
+    "c2":"♙",
+    "d2":"♙",
+    "e2":"♙",
+    "f2":"♙",
+    "g2":"♙",
+    "h2":"♙",
 
-        addLog(
-            "Analizá las declaraciones antes de acusar.",
-            ""
-        );
+    "a1":"♖",
+    "b1":"♘",
+    "c1":"♗",
+    "d1":"♕",
+    "e1":"♔",
+    "f1":"♗",
+    "g1":"♘",
+    "h1":"♖"
+
+};
+
+
+function crearTablero(){
+
+    const board =
+        document.getElementById("board");
+
+    board.innerHTML="";
+
+    const letras =
+        ["a","b","c","d","e","f","g","h"];
+
+    for(let fila=8; fila>=1; fila--){
+
+        for(let col=0; col<8; col++){
+
+            const casilla =
+                letras[col] + fila;
+
+            const square =
+                document.createElement("div");
+
+            const color =
+                (fila + col) % 2 === 0
+                ? "light"
+                : "dark";
+
+            square.className =
+                "square " + color;
+
+            square.textContent =
+                posiciones[casilla] || "";
+
+            board.appendChild(square);
+
+        }
 
     }
 
 }
 
-
-/* =========================================
-   MODAL
-========================================= */
-
-function showModal(title,text,buttons=[]){
-
-    document.getElementById("modalTitle")
-        .textContent=title;
-
-    document.getElementById("modalText")
-        .textContent=text;
-
-    const container =
-        document.getElementById("modalButtons");
-
-    container.innerHTML="";
-
-    buttons.forEach(button=>{
-
-        const b=
-            document.createElement("button");
-
-        b.className="btn primary";
-
-        b.textContent=button.text;
-
-        b.onclick=button.action;
-
-        container.appendChild(b);
-
-    });
-
-    document
-        .getElementById("modal")
-        .classList.add("show");
-
-}
+crearTablero();
 
 
-function closeModal(){
+/* ============================
+   PGN
+============================ */
 
-    document
-        .getElementById("modal")
-        .classList.remove("show");
+function descargarPGN(){
+
+    const nombre =
+        document.getElementById("playerName")
+            .textContent;
+
+    const pgn = `[Event "Chess Scout"]
+[White "${nombre}"]
+[Black "Rival"]
+[Result "1-0"]
+
+1. c4 Nf6 2. Nc3 e5 3. Nf3 Nc6
+4. g3 Bb4 5. Bg2 O-O 6. O-O d6
+7. d3 Bxc3 8. bxc3`;
+
+    const archivo =
+        new Blob([pgn], {
+            type:"application/x-chess-pgn"
+        });
+
+    const url =
+        URL.createObjectURL(archivo);
+
+    const a =
+        document.createElement("a");
+
+    a.href=url;
+
+    a.download =
+        nombre.replaceAll(" ","_")
+        + "_partidas.pgn";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
 
 }
 
 
-/* =========================================
-   SECCIONES
-========================================= */
+/* ============================
+   MOVIMIENTOS
+============================ */
 
-function showSection(section){
+function siguiente(){
 
-    document.getElementById(
-        "investigationSection"
-    ).style.display =
-        section==="investigation"
-        ? "block"
-        : "none";
-
-    document.getElementById(
-        "casesSection"
-    ).style.display =
-        section==="cases"
-        ? "block"
-        : "none";
-
-    document.getElementById(
-        "achievementsSection"
-    ).style.display =
-        section==="achievements"
-        ? "block"
-        : "none";
-
-    document
-        .querySelectorAll(".nav button")
-        .forEach(btn=>btn.classList.remove("active"));
-
-    if(section==="cases")
-        renderCases();
-
-    if(section==="achievements")
-        renderAchievements();
+    alert(
+        "En la versión conectada a la base de partidas, acá se reproducirá el siguiente movimiento."
+    );
 
 }
 
+function anterior(){
 
-/* =========================================
-   LISTA DE CASOS
-========================================= */
-
-function renderCases(){
-
-    const container =
-        document.getElementById("caseList");
-
-    container.innerHTML="";
-
-    cases.forEach(c=>{
-
-        const unlocked =
-            c.id<=game.unlocked;
-
-        const div=
-            document.createElement("div");
-
-        div.className =
-            "case-item " +
-            (!unlocked ? "locked" : "");
-
-        div.innerHTML=`
-
-            <h3>
-                ${unlocked ? "📁" : "🔒"}
-                Caso #${String(c.id).padStart(3,"0")}
-            </h3>
-
-            <h3>${c.title}</h3>
-
-            <p>
-                ${unlocked
-                ? c.description
-                : "Resolvé el caso anterior para desbloquearlo."}
-            </p>
-
-            ${
-                unlocked
-                ?
-                `<button class="btn primary"
-                onclick="selectCase(${c.id})">
-                Investigar
-                </button>`
-                :
-                ""
-            }
-
-        `;
-
-        container.appendChild(div);
-
-    });
-
-}
-
-
-/* =========================================
-   SELECCIONAR CASO
-========================================= */
-
-function selectCase(id){
-
-    if(id>game.unlocked)
-        return;
-
-    game.currentCase=id;
-
-    game.interrogated=[];
-    game.cluesFound=[];
-
-    saveGame();
-
-    showSection("investigation");
-
-    render();
-
-}
-
-
-/* =========================================
-   LOGROS
-========================================= */
-
-const achievementsData=[
-
-{
-    id:"first",
-    title:"Primer caso",
-    text:"Resolvé tu primer caso.",
-    condition:()=>game.solved>=1
-},
-
-{
-    id:"five",
-    title:"Detective habitual",
-    text:"Resolvé 5 casos.",
-    condition:()=>game.solved>=5
-},
-
-{
-    id:"streak3",
-    title:"En racha",
-    text:"Conseguí una racha de 3.",
-    condition:()=>game.streak>=3
-},
-
-{
-    id:"level5",
-    title:"Detective experto",
-    text:"Llegá al nivel 5.",
-    condition:()=>game.level>=5
-},
-
-{
-    id:"points1000",
-    title:"Mil puntos",
-    text:"Conseguí 1000 puntos.",
-    condition:()=>game.score>=1000
-}
-
-];
-
-
-function checkAchievements(){
-
-    achievementsData.forEach(a=>{
-
-        if(
-            a.condition() &&
-            !game.achievements.includes(a.id)
-        ){
-
-            game.achievements.push(a.id);
-
-            notify(
-                "🏆 Logro desbloqueado: " +
-                a.title
-            );
-
-        }
-
-    });
-
-}
-
-
-function renderAchievements(){
-
-    const container =
-        document.getElementById(
-            "achievementList"
-        );
-
-    container.innerHTML="";
-
-    achievementsData.forEach(a=>{
-
-        const unlocked =
-            game.achievements.includes(a.id);
-
-        const div=
-            document.createElement("div");
-
-        div.className =
-            "case-item " +
-            (!unlocked ? "locked" : "");
-
-        div.innerHTML=`
-
-            <h3>
-                ${unlocked ? "🏆" : "🔒"}
-                ${a.title}
-            </h3>
-
-            <p>
-                ${a.text}
-            </p>
-
-        `;
-
-        container.appendChild(div);
-
-    });
-
-}
-
-
-/* =========================================
-   NOTIFICACIÓN
-========================================= */
-
-function notify(text){
-
-    const n=
-        document.getElementById(
-            "notification"
-        );
-
-    n.textContent=text;
-
-    n.classList.add("show");
-
-    setTimeout(()=>{
-
-        n.classList.remove("show");
-
-    },3000);
-
-}
-
-
-/* =========================================
-   REINICIAR
-========================================= */
-
-function resetGame(){
-
-    showModal(
-        "Reiniciar partida",
-        "¿Seguro que querés borrar todo tu progreso?",
-        [
-            {
-                text:"Cancelar",
-                action:closeModal
-            },
-            {
-                text:"Borrar progreso",
-                action:()=>{
-
-                    localStorage.removeItem(
-                        "whoLiedGame"
-                    );
-
-                    location.reload();
-
-                }
-            }
-        ]
+    alert(
+        "En la versión conectada a la base de partidas, acá se volverá al movimiento anterior."
     );
 
 }
 
 
-/* =========================================
-   INICIAR
-========================================= */
+/* ENTER PARA BUSCAR */
 
-render();
+document
+    .getElementById("playerInput")
+    .addEventListener("keydown", function(e){
+
+        if(e.key === "Enter"){
+
+            buscarJugador();
+
+        }
+
+    });
 
 </script>
 
 </body>
 </html>
+```

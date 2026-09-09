@@ -1245,28 +1245,60 @@ LÍNEA INICIAL
 =========================================================
 */
 
-function obtenerLinea(
-    pgn
-) {
+function obtenerLinea(pgn) {
 
-    /*
-    Buscamos directamente
-    la parte de movimientos.
-    */
+    const separacion = pgn.search(/\n\s*\n/);
 
-    const separacion =
-        pgn.search(
-            /\n\s*\n/
-        );
-
-
-    if (
-        separacion === -1
-    ) {
-
+    if (separacion === -1) {
         return "";
-
     }
+
+    let movimientos = pgn.substring(separacion);
+
+    movimientos = movimientos.replace(/\{[\s\S]*?\}/g, " ");
+
+    let anterior;
+
+    do {
+        anterior = movimientos;
+        movimientos = movimientos.replace(/\([^()]*\)/g, " ");
+    } while (movimientos !== anterior);
+
+    movimientos = movimientos.replace(/\d+\.(?:\.\.)?/g, " ");
+
+    movimientos = movimientos.replace(
+        /\b(?:1-0|0-1|1\/2-1\/2|\*)\b/g,
+        " "
+    );
+
+    movimientos = movimientos
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (!movimientos) {
+        return "";
+    }
+
+    const tokens = movimientos
+        .split(" ")
+        .filter(Boolean);
+
+    const movimientosSAN = tokens.filter(
+        movimiento => {
+
+            return /^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?$/
+                .test(movimiento)
+
+                ||
+
+                /^O-O(?:-O)?[+#]?$/.test(movimiento);
+        }
+    );
+
+    return movimientosSAN
+        .slice(0, 12)
+        .join(" ");
+}
 
 
     let movimientos =

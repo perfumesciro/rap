@@ -1,927 +1,686 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Scout</title>
+    <meta charset="UTF-8">
 
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-body{
-    font-family:Arial, sans-serif;
-    background:#0d1117;
-    color:#fff;
-    min-height:100vh;
-}
+    <title>Chess Scout</title>
 
-header{
-    height:75px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 35px;
-    background:#111820;
-    border-bottom:1px solid #26313d;
-}
-
-.logo{
-    font-size:25px;
-    font-weight:bold;
-}
-
-.logo span{
-    color:#8ab4f8;
-}
-
-header p{
-    color:#8d99a8;
-    font-size:14px;
-}
-
-.container{
-    width:92%;
-    max-width:1250px;
-    margin:35px auto;
-}
-
-.search-box{
-    background:#151d26;
-    border:1px solid #26313d;
-    padding:25px;
-    border-radius:15px;
-    margin-bottom:25px;
-}
-
-.search-box h1{
-    font-size:28px;
-    margin-bottom:8px;
-}
-
-.search-box p{
-    color:#8996a5;
-    margin-bottom:20px;
-}
-
-.search{
-    display:flex;
-    gap:10px;
-}
-
-.search input{
-    flex:1;
-    padding:15px;
-    border-radius:9px;
-    border:1px solid #34404d;
-    background:#0d1117;
-    color:white;
-    font-size:16px;
-    outline:none;
-}
-
-.search input:focus{
-    border-color:#8ab4f8;
-}
-
-button{
-    border:none;
-    border-radius:9px;
-    padding:0 22px;
-    background:#8ab4f8;
-    color:#101820;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.2s;
-}
-
-button:hover{
-    transform:translateY(-2px);
-    opacity:.9;
-}
-
-.player{
-    display:none;
-}
-
-.player-top{
-    background:#151d26;
-    border:1px solid #26313d;
-    border-radius:15px;
-    padding:25px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-
-.player-name{
-    font-size:27px;
-    font-weight:bold;
-}
-
-.player-status{
-    color:#64d48b;
-    font-size:14px;
-    margin-top:5px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-bottom:20px;
-}
-
-.card{
-    background:#151d26;
-    border:1px solid #26313d;
-    border-radius:13px;
-    padding:20px;
-}
-
-.card-title{
-    color:#8794a3;
-    font-size:13px;
-    margin-bottom:10px;
-}
-
-.card-value{
-    font-size:27px;
-    font-weight:bold;
-}
-
-.green{
-    color:#64d48b;
-}
-
-.red{
-    color:#ff7373;
-}
-
-.yellow{
-    color:#f4c95d;
-}
-
-.layout{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.panel{
-    background:#151d26;
-    border:1px solid #26313d;
-    border-radius:15px;
-    padding:22px;
-}
-
-.panel h2{
-    margin-bottom:18px;
-}
-
-.opening{
-    margin-bottom:15px;
-}
-
-.opening-info{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:7px;
-}
-
-.bar{
-    width:100%;
-    height:9px;
-    background:#252e38;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.bar-fill{
-    height:100%;
-    border-radius:20px;
-    background:#8ab4f8;
-}
-
-.warning{
-    color:#ff7373;
-}
-
-.opening-list{
-    margin-top:20px;
-}
-
-.variant{
-    padding:15px 0;
-    border-bottom:1px solid #26313d;
-}
-
-.variant:last-child{
-    border-bottom:none;
-}
-
-.variant-top{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:5px;
-}
-
-.variant-name{
-    font-weight:bold;
-}
-
-.variant-score{
-    font-weight:bold;
-}
-
-.variant p{
-    color:#8996a5;
-    font-size:13px;
-}
-
-.analysis{
-    margin-top:20px;
-}
-
-.analysis-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.analysis-header span{
-    color:#8996a5;
-    font-size:13px;
-}
-
-.board{
-    width:100%;
-    max-width:500px;
-    aspect-ratio:1;
-    margin:auto;
-    display:grid;
-    grid-template-columns:repeat(8,1fr);
-    border:4px solid #222;
-}
-
-.square{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:clamp(25px,5vw,50px);
-    cursor:pointer;
-    user-select:none;
-}
-
-.light{
-    background:#e8d0a9;
-}
-
-.dark{
-    background:#9b7653;
-}
-
-.move-info{
-    margin-top:15px;
-    background:#0d1117;
-    border:1px solid #26313d;
-    border-radius:10px;
-    padding:15px;
-    color:#aeb8c4;
-}
-
-.badge{
-    display:inline-block;
-    padding:5px 9px;
-    border-radius:6px;
-    font-size:11px;
-    font-weight:bold;
-    margin-left:5px;
-}
-
-.badge-red{
-    background:#452326;
-    color:#ff7777;
-}
-
-.badge-green{
-    background:#1d3b2b;
-    color:#68dc91;
-}
-
-.actions{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-}
-
-.actions button{
-    padding:12px 16px;
-}
-
-@media(max-width:800px){
-    .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .layout{
-        grid-template-columns:1fr;
-    }
-
-    .player-top{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-    }
-
-    .search{
-        flex-direction:column;
-    }
-
-    .search button{
-        height:50px;
-    }
-
-    header{
-        padding:0 18px;
-    }
-
-    header p{
-        display:none;
-    }
-}
-</style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
-    <div class="logo">♞ Chess<span>Scout</span></div>
-    <p>Analizador de partidas de ajedrez</p>
+    <div class="logo">
+        ♞ Chess<span>Scout</span>
+    </div>
+
+    <div class="subtitle">
+        Preparación de rivales
+    </div>
 </header>
 
-<div class="container">
 
-    <section class="search-box">
-        <h1>Buscar ajedrecista</h1>
-        <p>Escribí el nombre del jugador que querés analizar.</p>
+<main>
+
+    <section class="hero">
+
+        <h1>
+            Analizá a tu rival
+        </h1>
+
+        <p>
+            Buscá un jugador y estudiá sus
+            partidas reales de ajedrez.
+        </p>
 
         <div class="search">
+
             <input
-                id="playerInput"
+                id="usuario"
                 type="text"
-                placeholder="Ej: Magnus Carlsen"
+                placeholder="Usuario de Lichess..."
             >
 
-            <button onclick="buscarJugador()">
+            <button onclick="analizar()">
                 ANALIZAR
             </button>
+
         </div>
+
+        <div id="loading">
+            ♟ Analizando partidas reales...
+        </div>
+
+        <div id="error"></div>
+
     </section>
 
-    <main id="playerPanel" class="player">
 
-        <section class="player-top">
-            <div>
-                <div id="playerName" class="player-name">
-                    Jugador
-                </div>
+    <section
+        id="resultado"
+        class="resultado"
+    >
 
-                <div class="player-status">
-                    ● Jugador encontrado
-                </div>
+        <!-- JUGADOR -->
+
+        <div class="player-card">
+
+            <div
+                id="nombreJugador"
+                class="player-name"
+            >
+                Jugador
             </div>
 
-            <button onclick="descargarPGN()">
-                ↓ Descargar PGN
-            </button>
-        </section>
-
-        <section class="stats">
-
-            <div class="card">
-                <div class="card-title">
-                    PARTIDAS ANALIZADAS
-                </div>
-
-                <div id="games" class="card-value">
-                    1.284
-                </div>
+            <div
+                id="datosJugador"
+                class="player-data"
+            >
             </div>
 
-            <div class="card">
-                <div class="card-title">
-                    VICTORIAS
-                </div>
+        </div>
 
-                <div id="wins" class="card-value green">
-                    52%
-                </div>
-            </div>
 
-            <div class="card">
-                <div class="card-title">
-                    TABLAS
-                </div>
+        <!-- ESTADÍSTICAS -->
 
-                <div id="draws" class="card-value yellow">
-                    27%
-                </div>
-            </div>
+        <div class="stats">
 
-            <div class="card">
-                <div class="card-title">
-                    DERROTAS
-                </div>
-
-                <div id="losses" class="card-value red">
-                    21%
-                </div>
-            </div>
-
-        </section>
-
-        <section class="layout">
-
-            <!-- APERTURAS -->
-
-            <div class="panel">
-
-                <h2>📊 Rendimiento por apertura</h2>
-
-                <div class="opening">
-
-                    <div class="opening-info">
-                        <span>Apertura Inglesa</span>
-                        <strong>64%</strong>
-                    </div>
-
-                    <div class="bar">
-                        <div
-                            class="bar-fill"
-                            style="width:64%">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="opening">
-
-                    <div class="opening-info">
-                        <span>Defensa Siciliana</span>
-                        <strong>58%</strong>
-                    </div>
-
-                    <div class="bar">
-                        <div
-                            class="bar-fill"
-                            style="width:58%">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="opening">
-
-                    <div class="opening-info">
-                        <span>Gambito de Dama</span>
-                        <strong>57%</strong>
-                    </div>
-
-                    <div class="bar">
-                        <div
-                            class="bar-fill"
-                            style="width:57%">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="opening">
-
-                    <div class="opening-info">
-                        <span>Defensa Caro-Kann</span>
-                        <strong class="warning">39%</strong>
-                    </div>
-
-                    <div class="bar">
-                        <div
-                            class="bar-fill"
-                            style="width:39%">
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="opening">
-
-                    <div class="opening-info">
-                        <span>Ruy López</span>
-                        <strong>55%</strong>
-                    </div>
-
-                    <div class="bar">
-                        <div
-                            class="bar-fill"
-                            style="width:55%">
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- DEBILIDADES -->
-
-            <div class="panel">
-
-                <h2>⚠️ Variantes que más le molestan</h2>
-
-                <div class="opening-list">
-
-                    <div class="variant">
-
-                        <div class="variant-top">
-
-                            <span class="variant-name">
-                                Caro-Kann — Advance
-                            </span>
-
-                            <span class="variant-score red">
-                                34%
-                            </span>
-
-                        </div>
-
-                        <p>
-                            29 partidas · 8 victorias · 9 tablas ·
-                            12 derrotas
-                        </p>
-
-                    </div>
-
-
-                    <div class="variant">
-
-                        <div class="variant-top">
-
-                            <span class="variant-name">
-                                Inglesa — 1...Nf6
-                            </span>
-
-                            <span class="variant-score red">
-                                41%
-                            </span>
-
-                        </div>
-
-                        <p>
-                            22 partidas · 7 victorias · 6 tablas ·
-                            9 derrotas
-                        </p>
-
-                    </div>
-
-
-                    <div class="variant">
-
-                        <div class="variant-top">
-
-                            <span class="variant-name">
-                                Caro-Kann — Classical
-                            </span>
-
-                            <span class="variant-score yellow">
-                                47%
-                            </span>
-
-                        </div>
-
-                        <p>
-                            38 partidas · rendimiento medio
-                        </p>
-
-                    </div>
-
-
-                    <div class="variant">
-
-                        <div class="variant-top">
-
-                            <span class="variant-name">
-                                Inglesa — 1...e5
-                            </span>
-
-                            <span class="variant-score green">
-                                63%
-                            </span>
-
-                        </div>
-
-                        <p>
-                            41 partidas · buen rendimiento
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- TABLERO -->
-
-        <section class="panel analysis">
-
-            <div class="analysis-header">
-
-                <h2>♟ Analizar variante</h2>
+            <div class="stat">
 
                 <span>
-                    Apertura Inglesa
+                    Partidas
                 </span>
+
+                <strong id="total">
+                    0
+                </strong>
 
             </div>
 
-            <div id="board" class="board"></div>
 
-            <div class="move-info">
+            <div class="stat win">
 
-                <strong>
-                    Variante seleccionada
-                </strong>
-
-                <br><br>
-
-                1. c4 Nf6 2. Nc3 e5 3. Nf3
-
-                <br><br>
-
-                Rendimiento del jugador:
-
-                <strong class="red">
-                    41%
-                </strong>
-
-                <span class="badge badge-red">
-                    DEBILIDAD
+                <span>
+                    Victorias
                 </span>
+
+                <strong id="victorias">
+                    0
+                </strong>
 
             </div>
 
-            <div class="actions">
 
-                <button onclick="anterior()">
-                    ← Anterior
-                </button>
+            <div class="stat draw">
 
-                <button onclick="siguiente()">
-                    Siguiente →
-                </button>
+                <span>
+                    Tablas
+                </span>
+
+                <strong id="tablas">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat loss">
+
+                <span>
+                    Derrotas
+                </span>
+
+                <strong id="derrotas">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat">
+
+                <span>
+                    Puntuación
+                </span>
+
+                <strong id="porcentaje">
+                    0%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- APERTURAS -->
+
+        <section class="panel">
+
+            <h2>
+                📊 Aperturas
+            </h2>
+
+            <div id="aperturas">
+
+                <p class="info">
+                    Las aperturas aparecerán
+                    después del análisis.
+                </p>
 
             </div>
 
         </section>
 
-    </main>
 
-</div>
+        <!-- VARIANTES -->
+
+        <section class="panel">
+
+            <h2>
+                🎯 Variantes problemáticas
+            </h2>
+
+            <p class="info">
+
+                Acá aparecerán las líneas en las
+                que el jugador obtuvo peores
+                resultados según sus partidas.
+
+            </p>
+
+            <div id="variantes"></div>
+
+        </section>
+
+
+        <!-- PREPARACIÓN -->
+
+        <section class="panel">
+
+            <h2>
+                🧠 Preparación práctica
+            </h2>
+
+            <div id="preparacion">
+
+                <p class="info">
+
+                    Después podremos agregar
+                    recomendaciones de jugadas,
+                    planes y posiciones fáciles
+                    de jugar.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PARTIDAS -->
+
+        <section class="panel">
+
+            <h2>
+                ♟ Partidas encontradas
+            </h2>
+
+            <div id="partidas"></div>
+
+        </section>
+
+    </section>
+
+</main>
 
 
 <script>
 
-/* ============================
-   DATOS DE DEMOSTRACIÓN
-============================ */
+async function analizar() {
 
-const piezas = {
+    const usuario =
+        document
+        .getElementById("usuario")
+        .value
+        .trim();
 
-    "8":"♜",
-    "7":"♟",
-    "6":"",
-    "5":"",
-    "4":"",
-    "3":"",
-    "2":"♙",
-    "1":"♖"
+    const loading =
+        document
+        .getElementById("loading");
 
-};
+    const error =
+        document
+        .getElementById("error");
+
+    const resultado =
+        document
+        .getElementById("resultado");
 
 
-/* ============================
-   BUSCAR JUGADOR
-============================ */
+    if (!usuario) {
 
-function buscarJugador(){
-
-    const input =
-        document.getElementById("playerInput");
-
-    const nombre =
-        input.value.trim();
-
-    if(nombre === ""){
-
-        alert("Escribí el nombre de un ajedrecista.");
+        error.textContent =
+            "Escribí el usuario del jugador.";
 
         return;
     }
 
-    document.getElementById("playerPanel")
-        .style.display = "block";
 
-    document.getElementById("playerName")
-        .textContent = nombre;
+    error.textContent = "";
 
-    window.scrollTo({
+    loading.style.display = "block";
 
-        top:
-        document.getElementById("playerPanel")
-            .offsetTop - 20,
-
-        behavior:"smooth"
-
-    });
-
-}
+    resultado.style.display = "none";
 
 
-/* ============================
-   TABLERO
-============================ */
+    try {
 
-const posiciones = {
-
-    "a8":"♜",
-    "b8":"♞",
-    "c8":"♝",
-    "d8":"♛",
-    "e8":"♚",
-    "f8":"♝",
-    "g8":"♞",
-    "h8":"♜",
-
-    "a7":"♟",
-    "b7":"♟",
-    "c7":"♟",
-    "d7":"♟",
-    "e7":"♟",
-    "f7":"♟",
-    "g7":"♟",
-    "h7":"♟",
-
-    "a2":"♙",
-    "b2":"♙",
-    "c2":"♙",
-    "d2":"♙",
-    "e2":"♙",
-    "f2":"♙",
-    "g2":"♙",
-    "h2":"♙",
-
-    "a1":"♖",
-    "b1":"♘",
-    "c1":"♗",
-    "d1":"♕",
-    "e1":"♔",
-    "f1":"♗",
-    "g1":"♘",
-    "h1":"♖"
-
-};
+        const respuesta =
+            await fetch(
+                "/api/analizar/" +
+                encodeURIComponent(usuario)
+            );
 
 
-function crearTablero(){
+        const data =
+            await respuesta.json();
 
-    const board =
-        document.getElementById("board");
 
-    board.innerHTML="";
+        if (!respuesta.ok) {
 
-    const letras =
-        ["a","b","c","d","e","f","g","h"];
-
-    for(let fila=8; fila>=1; fila--){
-
-        for(let col=0; col<8; col++){
-
-            const casilla =
-                letras[col] + fila;
-
-            const square =
-                document.createElement("div");
-
-            const color =
-                (fila + col) % 2 === 0
-                ? "light"
-                : "dark";
-
-            square.className =
-                "square " + color;
-
-            square.textContent =
-                posiciones[casilla] || "";
-
-            board.appendChild(square);
+            throw new Error(
+                data.detail ||
+                "No se pudo analizar al jugador."
+            );
 
         }
+
+
+        mostrarResultados(data);
+
+    }
+
+    catch (e) {
+
+        error.textContent =
+            e.message;
+
+    }
+
+    finally {
+
+        loading.style.display = "none";
 
     }
 
 }
 
-crearTablero();
+
+function mostrarResultados(data) {
+
+    const jugador =
+        data.jugador;
+
+    const estadisticas =
+        data.estadisticas;
 
 
-/* ============================
-   PGN
-============================ */
-
-function descargarPGN(){
-
-    const nombre =
-        document.getElementById("playerName")
-            .textContent;
-
-    const pgn = `[Event "Chess Scout"]
-[White "${nombre}"]
-[Black "Rival"]
-[Result "1-0"]
-
-1. c4 Nf6 2. Nc3 e5 3. Nf3 Nc6
-4. g3 Bb4 5. Bg2 O-O 6. O-O d6
-7. d3 Bxc3 8. bxc3`;
-
-    const archivo =
-        new Blob([pgn], {
-            type:"application/x-chess-pgn"
-        });
-
-    const url =
-        URL.createObjectURL(archivo);
-
-    const a =
-        document.createElement("a");
-
-    a.href=url;
-
-    a.download =
-        nombre.replaceAll(" ","_")
-        + "_partidas.pgn";
-
-    a.click();
-
-    URL.revokeObjectURL(url);
-
-}
+    document
+        .getElementById("resultado")
+        .style.display = "block";
 
 
-/* ============================
-   MOVIMIENTOS
-============================ */
+    document
+        .getElementById("nombreJugador")
+        .textContent =
+        jugador.nombre;
 
-function siguiente(){
 
-    alert(
-        "En la versión conectada a la base de partidas, acá se reproducirá el siguiente movimiento."
+    document
+        .getElementById("datosJugador")
+        .textContent =
+        jugador.titulo
+        ?
+        jugador.titulo +
+        " · Lichess: " +
+        jugador.id
+        :
+        "Lichess: " +
+        jugador.id;
+
+
+    document
+        .getElementById("total")
+        .textContent =
+        estadisticas.total;
+
+
+    document
+        .getElementById("victorias")
+        .textContent =
+        estadisticas.victorias;
+
+
+    document
+        .getElementById("tablas")
+        .textContent =
+        estadisticas.tablas;
+
+
+    document
+        .getElementById("derrotas")
+        .textContent =
+        estadisticas.derrotas;
+
+
+    document
+        .getElementById("porcentaje")
+        .textContent =
+        estadisticas.porcentaje +
+        "%";
+
+
+    mostrarAperturas(
+        data.aperturas
+    );
+
+
+    mostrarVariantes(
+        data.variantes_problematicas
+    );
+
+
+    mostrarPartidas(
+        data.partidas
     );
 
 }
 
-function anterior(){
 
-    alert(
-        "En la versión conectada a la base de partidas, acá se volverá al movimiento anterior."
-    );
+function mostrarAperturas(aperturas) {
 
-}
+    const contenedor =
+        document
+        .getElementById("aperturas");
 
 
-/* ENTER PARA BUSCAR */
+    contenedor.innerHTML = "";
 
-document
-    .getElementById("playerInput")
-    .addEventListener("keydown", function(e){
 
-        if(e.key === "Enter"){
+    aperturas.forEach(apertura => {
 
-            buscarJugador();
+        const elemento =
+            document.createElement("div");
 
-        }
+
+        elemento.className =
+            "opening";
+
+
+        elemento.innerHTML = `
+
+            <div class="opening-title">
+
+                <strong>
+                    ${escapeHTML(
+                        apertura.nombre
+                    )}
+                </strong>
+
+                <strong>
+                    ${apertura.porcentaje}%
+                </strong>
+
+            </div>
+
+
+            <div class="bar">
+
+                <div
+                    style="
+                    width:${apertura.porcentaje}%;
+                    "
+                ></div>
+
+            </div>
+
+
+            <div class="opening-data">
+
+                ${apertura.partidas}
+                partidas
+
+                ·
+
+                ${apertura.victorias}
+                victorias
+
+                ·
+
+                ${apertura.tablas}
+                tablas
+
+                ·
+
+                ${apertura.derrotas}
+                derrotas
+
+            </div>
+
+        `;
+
+
+        contenedor.appendChild(
+            elemento
+        );
 
     });
+
+}
+
+
+function mostrarVariantes(variantes) {
+
+    const contenedor =
+        document
+        .getElementById("variantes");
+
+
+    contenedor.innerHTML = "";
+
+
+    if (!variantes.length) {
+
+        contenedor.innerHTML = `
+            <p class="info">
+                Todavía no hay suficientes
+                partidas para detectar variantes.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    variantes.forEach(variant => {
+
+        const elemento =
+            document.createElement("div");
+
+
+        elemento.className =
+            "variant";
+
+
+        elemento.innerHTML = `
+
+            <div class="variant-top">
+
+                <strong>
+                    ${escapeHTML(
+                        variant.apertura
+                    )}
+                </strong>
+
+                <strong>
+                    ${variant.porcentaje}%
+                </strong>
+
+            </div>
+
+
+            <div class="moves">
+
+                ${escapeHTML(
+                    variant.linea
+                )}
+
+            </div>
+
+
+            <div class="variant-data">
+
+                ${variant.partidas}
+                partidas
+
+                ·
+
+                ${variant.victorias}
+                victorias
+
+                ·
+
+                ${variant.tablas}
+                tablas
+
+                ·
+
+                ${variant.derrotas}
+                derrotas
+
+            </div>
+
+        `;
+
+
+        contenedor.appendChild(
+            elemento
+        );
+
+    });
+
+}
+
+
+function mostrarPartidas(partidas) {
+
+    const contenedor =
+        document
+        .getElementById("partidas");
+
+
+    contenedor.innerHTML = "";
+
+
+    partidas.forEach(partida => {
+
+        const elemento =
+            document.createElement("div");
+
+
+        elemento.className =
+            "game";
+
+
+        elemento.innerHTML = `
+
+            <strong>
+
+                ${escapeHTML(
+                    partida.blancas
+                )}
+
+                <span>
+                    vs
+                </span>
+
+                ${escapeHTML(
+                    partida.negras
+                )}
+
+            </strong>
+
+
+            <div class="game-data">
+
+                Fecha:
+                ${escapeHTML(
+                    partida.fecha
+                )}
+
+                ·
+
+                ${escapeHTML(
+                    partida.apertura
+                )}
+
+                ·
+
+                Resultado:
+                ${escapeHTML(
+                    partida.resultado
+                )}
+
+            </div>
+
+        `;
+
+
+        contenedor.appendChild(
+            elemento
+        );
+
+    });
+
+}
+
+
+function escapeHTML(text) {
+
+    return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+document
+    .getElementById("usuario")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                analizar();
+
+            }
+
+        }
+    );
 
 </script>
 
 </body>
+
 </html>
-```

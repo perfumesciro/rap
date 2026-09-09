@@ -1,21 +1,256 @@
-
+```html
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Chess Scout</title>
 
+    <!-- chess.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.4.0/chess.min.js"></script>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        /* =====================================================
+           BATALLA CONTRA EL JUGADOR
+           ===================================================== */
+
+        .battle-panel {
+            margin-top: 20px;
+            background: #fff1e8;
+            border: 1px solid #eadfd9;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow:
+                0 2px 5px rgba(80, 55, 40, 0.04);
+        }
+
+        .battle-panel h2 {
+            margin-top: 0;
+            color: #292522;
+        }
+
+        .battle-description {
+            color: #756d68;
+            line-height: 1.6;
+        }
+
+        .battle-start {
+            margin-top: 15px;
+            border: 0;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: #e8ad73;
+            color: #30251d;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .battle-start:hover {
+            background: #dda064;
+            transform: translateY(-1px);
+        }
+
+        .battle-area {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .battle-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .battle-controls button {
+            border: 1px solid #dfc5b2;
+            border-radius: 9px;
+            padding: 10px 15px;
+            background: #fff7f2;
+            color: #9a6438;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .battle-controls button:hover {
+            background: #ffe9d9;
+        }
+
+        .battle-controls button.active {
+            background: #e8ad73;
+            color: #30251d;
+            border-color: #d39a63;
+        }
+
+        .battle-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 620px) minmax(220px, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .chess-board {
+            width: min(100%, 620px);
+            aspect-ratio: 1 / 1;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            border: 5px solid #d5b9a3;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow:
+                0 5px 15px rgba(70, 45, 30, 0.12);
+        }
+
+        .square {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .square.light {
+            background: #f5dfcc;
+        }
+
+        .square.dark {
+            background: #b98559;
+        }
+
+        .square.selected {
+            box-shadow:
+                inset 0 0 0 4px #e7a45e;
+        }
+
+        .square.legal::after {
+            content: "";
+            width: 25%;
+            height: 25%;
+            border-radius: 50%;
+            background: rgba(50, 35, 25, 0.32);
+            position: absolute;
+        }
+
+        .square.capture::after {
+            content: "";
+            position: absolute;
+            inset: 7%;
+            border: 4px solid rgba(160, 65, 45, 0.55);
+            border-radius: 50%;
+        }
+
+        .piece {
+            font-size: clamp(30px, 6vw, 62px);
+            line-height: 1;
+            z-index: 2;
+            font-family:
+                "Segoe UI Symbol",
+                "Noto Sans Symbols 2",
+                sans-serif;
+            text-shadow:
+                0 1px 1px rgba(0,0,0,0.25);
+        }
+
+        .white-piece {
+            color: #fff;
+        }
+
+        .black-piece {
+            color: #201b18;
+        }
+
+        .battle-info {
+            background: #fff7f2;
+            border: 1px solid #eaded6;
+            border-radius: 11px;
+            padding: 17px;
+        }
+
+        .battle-player {
+            font-size: 20px;
+            font-weight: bold;
+            color: #302c29;
+        }
+
+        .battle-status {
+            margin-top: 8px;
+            color: #756d68;
+            line-height: 1.5;
+        }
+
+        .battle-mode {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #fff1e8;
+            border: 1px solid #eaded6;
+            color: #756d68;
+            font-size: 13px;
+        }
+
+        .move-list {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #fffaf7;
+            border: 1px solid #eaded6;
+            border-radius: 9px;
+            padding: 12px;
+            font-family: monospace;
+            line-height: 1.8;
+            color: #514a45;
+        }
+
+        .battle-reset {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dfc5b2;
+            border-radius: 8px;
+            background: #fff7f2;
+            color: #9a6438;
+            cursor: pointer;
+        }
+
+        .battle-reset:hover {
+            background: #ffe9d9;
+        }
+
+        @media (max-width: 850px) {
+
+            .battle-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .chess-board {
+                margin: auto;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
     <div class="logo">
         ♞ Chess<span>Scout</span>
     </div>
@@ -23,10 +258,12 @@
     <div class="subtitle">
         Análisis de jugadores
     </div>
+
 </header>
 
 
 <main>
+
 
     <!-- =====================================================
          BUSCADOR
@@ -57,8 +294,6 @@
         </div>
 
 
-        <!-- CARGANDO -->
-
         <div id="loading" class="loading">
 
             <div id="loadingTitulo">
@@ -70,7 +305,9 @@
             </div>
 
             <div class="loading-bar">
+
                 <div id="loadingProgreso"></div>
+
             </div>
 
         </div>
@@ -81,25 +318,38 @@
     </section>
 
 
+
     <!-- =====================================================
-         RESULTADOS
+         RESULTADO
          ===================================================== -->
 
-    <section id="resultado" class="resultado">
+    <section
+        id="resultado"
+        class="resultado"
+    >
 
-        <!-- JUGADOR -->
 
         <div class="player-card">
 
-            <div id="nombreJugador" class="player-name">
+            <div
+                id="nombreJugador"
+                class="player-name"
+            >
                 Jugador
             </div>
 
-            <div id="datosJugador" class="player-data"></div>
+            <div
+                id="datosJugador"
+                class="player-data"
+            ></div>
 
-            <div id="ratingJugador" class="player-data"></div>
+            <div
+                id="ratingJugador"
+                class="player-data"
+            ></div>
 
         </div>
+
 
 
         <!-- ESTADÍSTICAS -->
@@ -107,31 +357,61 @@
         <div class="stats">
 
             <div class="stat">
+
                 <span>Partidas</span>
-                <strong id="total">0</strong>
+
+                <strong id="total">
+                    0
+                </strong>
+
             </div>
+
 
             <div class="stat win">
+
                 <span>Victorias</span>
-                <strong id="victorias">0</strong>
+
+                <strong id="victorias">
+                    0
+                </strong>
+
             </div>
+
 
             <div class="stat draw">
+
                 <span>Tablas</span>
-                <strong id="tablas">0</strong>
+
+                <strong id="tablas">
+                    0
+                </strong>
+
             </div>
+
 
             <div class="stat loss">
+
                 <span>Derrotas</span>
-                <strong id="derrotas">0</strong>
+
+                <strong id="derrotas">
+                    0
+                </strong>
+
             </div>
 
+
             <div class="stat">
+
                 <span>Score</span>
-                <strong id="porcentaje">0%</strong>
+
+                <strong id="porcentaje">
+                    0%
+                </strong>
+
             </div>
 
         </div>
+
 
 
         <!-- INFORMACIÓN -->
@@ -142,12 +422,140 @@
                 📌 Sobre los datos
             </h2>
 
-            <div id="calidadDatos" class="info"></div>
+            <div
+                id="calidadDatos"
+                class="info"
+            ></div>
 
         </section>
 
 
-        <!-- APERTURAS -->
+
+        <!-- =================================================
+             BATALLA
+             ================================================= -->
+
+        <section
+            id="battlePanel"
+            class="battle-panel"
+        >
+
+            <h2>
+                ⚔️ Batallar contra este jugador
+            </h2>
+
+            <p class="battle-description">
+
+                Jugá contra una IA que intenta reproducir
+                el estilo de juego del jugador analizado.
+
+                Primero utiliza movimientos encontrados
+                en sus partidas reales y después continúa
+                con Stockfish.
+
+            </p>
+
+
+            <button
+                id="battleStart"
+                class="battle-start"
+            >
+                ⚔️ EMPEZAR BATALLA
+            </button>
+
+
+            <div
+                id="battleArea"
+                class="battle-area"
+            >
+
+
+                <div class="battle-controls">
+
+                    <button
+                        id="playWhite"
+                    >
+                        ♙ Jugar con blancas
+                    </button>
+
+                    <button
+                        id="playBlack"
+                    >
+                        ♟ Jugar con negras
+                    </button>
+
+                </div>
+
+
+                <div class="battle-layout">
+
+
+                    <!-- TABLERO -->
+
+                    <div
+                        id="chessBoard"
+                        class="chess-board"
+                    ></div>
+
+
+                    <!-- INFORMACIÓN -->
+
+                    <div class="battle-info">
+
+                        <div
+                            id="battlePlayer"
+                            class="battle-player"
+                        >
+                            Jugador
+                        </div>
+
+
+                        <div
+                            id="battleStatus"
+                            class="battle-status"
+                        >
+                            Elegí con qué color querés jugar.
+                        </div>
+
+
+                        <div
+                            id="battleMode"
+                            class="battle-mode"
+                        >
+                            IA esperando...
+                        </div>
+
+
+                        <div
+                            id="moveList"
+                            class="move-list"
+                        >
+                            No hay movimientos todavía.
+                        </div>
+
+
+                        <button
+                            id="battleReset"
+                            class="battle-reset"
+                        >
+                            Reiniciar partida
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             APERTURAS
+             ================================================= -->
 
         <section class="panel">
 
@@ -163,9 +571,11 @@
 
         </section>
 
+
     </section>
 
 </main>
+
 
 
 <script>
@@ -175,16 +585,14 @@
 CHESS SCOUT
 =========================================================
 
-Los datos vienen de partidas públicas reales de Lichess.
+Datos:
+Lichess API
 
-Esta versión intenta ser resistente a:
-- PGN incompletos
-- comentarios
-- variantes entre paréntesis
-- movimientos raros
-- partidas sin headers completos
-- nombres con caracteres especiales
-- resultados desconocidos
+Motor:
+Stockfish
+
+Biblioteca:
+chess.js
 
 =========================================================
 */
@@ -226,11 +634,15 @@ const resultado =
 
 /*
 =========================================================
-CONTROL
+ESTADO
 =========================================================
 */
 
 let analizando = false;
+
+let partidasActuales = [];
+
+let jugadorActual = null;
 
 
 /*
@@ -245,11 +657,14 @@ function mostrarCarga(
     progreso
 ) {
 
-    loading.style.display = "block";
+    loading.style.display =
+        "block";
 
-    loadingTitulo.textContent = titulo;
+    loadingTitulo.textContent =
+        titulo;
 
-    loadingTexto.textContent = texto;
+    loadingTexto.textContent =
+        texto;
 
     loadingProgreso.style.width =
         Math.max(
@@ -265,18 +680,14 @@ function mostrarCarga(
 
 function ocultarCarga() {
 
-    loading.style.display = "none";
+    loading.style.display =
+        "none";
 
-    loadingProgreso.style.width = "0%";
+    loadingProgreso.style.width =
+        "0%";
 
 }
 
-
-/*
-=========================================================
-ESPERAR
-=========================================================
-*/
 
 function esperar(
     tiempo = 20
@@ -305,13 +716,16 @@ async function analizar() {
         return;
     }
 
+
     const usuario =
         usuarioInput.value.trim();
 
 
-    error.textContent = "";
+    error.textContent =
+        "";
 
-    resultado.style.display = "none";
+    resultado.style.display =
+        "none";
 
 
     if (!usuario) {
@@ -324,21 +738,17 @@ async function analizar() {
     }
 
 
-    analizando = true;
+    analizando =
+        true;
 
-    botonAnalizar.disabled = true;
+    botonAnalizar.disabled =
+        true;
 
     botonAnalizar.textContent =
         "ANALIZANDO...";
 
 
     try {
-
-        /*
-        =============================================
-        JUGADOR
-        =============================================
-        */
 
         mostrarCarga(
             "♟ Buscando jugador...",
@@ -348,14 +758,14 @@ async function analizar() {
 
 
         const jugador =
-            await obtenerJugador(usuario);
+            await obtenerJugador(
+                usuario
+            );
 
 
-        /*
-        =============================================
-        PARTIDAS
-        =============================================
-        */
+        jugadorActual =
+            jugador;
+
 
         mostrarCarga(
             "📥 Cargando partidas...",
@@ -369,12 +779,6 @@ async function analizar() {
                 jugador.username
             );
 
-
-        /*
-        =============================================
-        SEPARAR PGN
-        =============================================
-        */
 
         mostrarCarga(
             "📚 Preparando partidas...",
@@ -398,15 +802,13 @@ async function analizar() {
         }
 
 
-        /*
-        =============================================
-        ANALIZAR
-        =============================================
-        */
+        partidasActuales =
+            partidas;
+
 
         mostrarCarga(
             "🧠 Analizando aperturas...",
-            "Reconstruyendo las líneas de juego.",
+            "Calculando resultados y variantes.",
             70
         );
 
@@ -420,12 +822,6 @@ async function analizar() {
                 jugador.username
             );
 
-
-        /*
-        =============================================
-        MOSTRAR
-        =============================================
-        */
 
         mostrarCarga(
             "📊 Preparando resultados...",
@@ -472,12 +868,14 @@ async function analizar() {
 
         ocultarCarga();
 
-        botonAnalizar.disabled = false;
+        botonAnalizar.disabled =
+            false;
 
         botonAnalizar.textContent =
             "ANALIZAR";
 
-        analizando = false;
+        analizando =
+            false;
 
     }
 
@@ -515,7 +913,9 @@ async function obtenerJugador(
     }
 
 
-    if (respuesta.status === 404) {
+    if (
+        respuesta.status === 404
+    ) {
 
         throw new Error(
             "No se encontró el usuario de Lichess: " +
@@ -525,10 +925,12 @@ async function obtenerJugador(
     }
 
 
-    if (respuesta.status === 429) {
+    if (
+        respuesta.status === 429
+    ) {
 
         throw new Error(
-            "Lichess está limitando las solicitudes. Esperá unos segundos e intentá nuevamente."
+            "Lichess está limitando las solicitudes. Esperá unos segundos."
         );
 
     }
@@ -543,19 +945,7 @@ async function obtenerJugador(
     }
 
 
-    try {
-
-        return await respuesta.json();
-
-    }
-
-    catch (e) {
-
-        throw new Error(
-            "Lichess devolvió una respuesta inesperada."
-        );
-
-    }
+    return await respuesta.json();
 
 }
 
@@ -591,7 +981,7 @@ async function descargarPartidas(
                 url,
                 {
                     headers: {
-                        "Accept":
+                        Accept:
                             "application/x-chess-pgn"
                     }
                 }
@@ -602,13 +992,15 @@ async function descargarPartidas(
     catch (e) {
 
         throw new Error(
-            "No se pudo descargar las partidas desde Lichess."
+            "No se pudieron descargar las partidas."
         );
 
     }
 
 
-    if (respuesta.status === 429) {
+    if (
+        respuesta.status === 429
+    ) {
 
         throw new Error(
             "Lichess está limitando las solicitudes. Esperá unos segundos."
@@ -655,7 +1047,8 @@ function separarPGN(
 ) {
 
     if (
-        typeof texto !== "string"
+        typeof texto !==
+        "string"
     ) {
 
         return [];
@@ -670,34 +1063,25 @@ function separarPGN(
         );
 
 
-    /*
-    Lichess normalmente separa
-    las partidas mediante [Event.
-    */
-
-    const partidas =
-        texto
-            .split(
-                /\n(?=\[Event\s)/g
-            )
-            .map(
-                partida =>
-                    partida.trim()
-            )
-            .filter(
-                partida =>
-                    partida.includes("[")
-            );
-
-
-    return partidas;
+    return texto
+        .split(
+            /\n(?=\[Event\s)/g
+        )
+        .map(
+            partida =>
+                partida.trim()
+        )
+        .filter(
+            partida =>
+                partida.includes("[")
+        );
 
 }
 
 
 /*
 =========================================================
-HEADER PGN
+HEADER
 =========================================================
 */
 
@@ -707,8 +1091,7 @@ function obtenerHeader(
 ) {
 
     if (
-        !pgn ||
-        !nombre
+        !pgn
     ) {
 
         return "";
@@ -726,7 +1109,9 @@ function obtenerHeader(
 
 
     const encontrado =
-        pgn.match(regex);
+        pgn.match(
+            regex
+        );
 
 
     return encontrado
@@ -735,12 +1120,6 @@ function obtenerHeader(
 
 }
 
-
-/*
-=========================================================
-ESCAPAR REGEX
-=========================================================
-*/
 
 function escaparRegex(
     texto
@@ -766,17 +1145,21 @@ function construirAnalisis(
     usuario
 ) {
 
-    let victorias = 0;
+    let victorias =
+        0;
 
-    let tablas = 0;
+    let tablas =
+        0;
 
-    let derrotas = 0;
+    let derrotas =
+        0;
 
 
-    const aperturas = {};
+    const aperturas =
+        {};
 
-
-    const variantes = {};
+    const variantes =
+        {};
 
 
     for (
@@ -807,12 +1190,6 @@ function construirAnalisis(
             let resultadoJugador =
                 "desconocido";
 
-
-            /*
-            =========================================
-            RESULTADO
-            =========================================
-            */
 
             if (
                 white.toLowerCase() ===
@@ -883,12 +1260,6 @@ function construirAnalisis(
             }
 
 
-            /*
-            =========================================
-            ESTADÍSTICAS
-            =========================================
-            */
-
             if (
                 resultadoJugador ===
                 "victoria"
@@ -917,12 +1288,6 @@ function construirAnalisis(
             }
 
 
-            /*
-            =========================================
-            APERTURA
-            =========================================
-            */
-
             const apertura =
                 obtenerApertura(
                     partida
@@ -938,17 +1303,23 @@ function construirAnalisis(
                     nombre:
                         apertura,
 
-                    partidas: 0,
+                    partidas:
+                        0,
 
-                    victorias: 0,
+                    victorias:
+                        0,
 
-                    tablas: 0,
+                    tablas:
+                        0,
 
-                    derrotas: 0,
+                    derrotas:
+                        0,
 
-                    juegos: [],
+                    juegos:
+                        [],
 
-                    variantes: {}
+                    variantes:
+                        {}
 
                 };
 
@@ -980,7 +1351,7 @@ function construirAnalisis(
 
             /*
             =========================================
-            VARIANTE
+            LÍNEA
             =========================================
             */
 
@@ -1010,15 +1381,20 @@ function construirAnalisis(
                         linea:
                             linea,
 
-                        partidas: 0,
+                        partidas:
+                            0,
 
-                        victorias: 0,
+                        victorias:
+                            0,
 
-                        tablas: 0,
+                        tablas:
+                            0,
 
-                        derrotas: 0,
+                        derrotas:
+                            0,
 
-                        juegos: []
+                        juegos:
+                            []
 
                     };
 
@@ -1041,10 +1417,12 @@ function construirAnalisis(
 
 
                 if (
-                    !datosApertura.variantes[linea]
+                    !datosApertura
+                        .variantes[linea]
                 ) {
 
-                    datosApertura.variantes[linea] =
+                    datosApertura
+                        .variantes[linea] =
                         variante;
 
                 }
@@ -1054,12 +1432,6 @@ function construirAnalisis(
         }
 
         catch (e) {
-
-            /*
-            Si una partida individual
-            tiene un PGN extraño,
-            no rompe todo el análisis.
-            */
 
             console.warn(
                 "Partida ignorada:",
@@ -1131,7 +1503,7 @@ function construirAnalisis(
 
 /*
 =========================================================
-AGREGAR RESULTADO
+RESULTADO
 =========================================================
 */
 
@@ -1183,7 +1555,7 @@ function agregarResultado(
 
 /*
 =========================================================
-DATOS DE PARTIDA
+DATOS PARTIDA
 =========================================================
 */
 
@@ -1286,7 +1658,9 @@ function obtenerApertura(
         );
 
 
-    if (opening) {
+    if (
+        opening
+    ) {
 
         return opening;
 
@@ -1300,7 +1674,9 @@ function obtenerApertura(
         );
 
 
-    if (eco) {
+    if (
+        eco
+    ) {
 
         return "ECO " + eco;
 
@@ -1314,19 +1690,7 @@ function obtenerApertura(
 
 /*
 =========================================================
-LÍNEA DE MOVIMIENTOS
-=========================================================
-
-Esta función NO intenta inventar movimientos.
-
-Elimina:
-- comentarios
-- variantes PGN
-- números
-- resultados
-
-y conserva solamente la línea principal.
-
+OBTENER LÍNEA
 =========================================================
 */
 
@@ -1366,9 +1730,7 @@ function obtenerLinea(
 
 
     /*
-    =========================================
-    COMENTARIOS
-    =========================================
+    Quitar comentarios
     */
 
     movimientos =
@@ -1379,11 +1741,7 @@ function obtenerLinea(
 
 
     /*
-    =========================================
-    VARIANTES
-    =========================================
-
-    Eliminamos variantes entre paréntesis.
+    Quitar variantes PGN.
     */
 
     let anterior;
@@ -1407,9 +1765,7 @@ function obtenerLinea(
 
 
     /*
-    =========================================
-    NÚMEROS
-    =========================================
+    Números
     */
 
     movimientos =
@@ -1420,9 +1776,7 @@ function obtenerLinea(
 
 
     /*
-    =========================================
-    RESULTADOS
-    =========================================
+    Resultados
     */
 
     movimientos =
@@ -1431,12 +1785,6 @@ function obtenerLinea(
             " "
         );
 
-
-    /*
-    =========================================
-    LIMPIEZA
-    =========================================
-    */
 
     movimientos =
         movimientos
@@ -1447,7 +1795,9 @@ function obtenerLinea(
             .trim();
 
 
-    if (!movimientos) {
+    if (
+        !movimientos
+    ) {
 
         return "";
 
@@ -1460,30 +1810,11 @@ function obtenerLinea(
             .filter(Boolean);
 
 
-    /*
-    =========================================
-    SAN
-    =========================================
-
-    Aceptamos:
-
-    e4
-    Nf3
-    Bb4
-    Ne7
-    Bxc6
-    Qxd5+
-    O-O
-    O-O-O
-    e8=Q
-    =========================================
-    */
-
     const movimientosSAN =
         tokens.filter(
             movimiento => {
 
-                const pieza =
+                const normal =
                     /^[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?$/
                         .test(
                             movimiento
@@ -1495,16 +1826,12 @@ function obtenerLinea(
                             movimiento
                         );
 
-                return pieza ||
+                return normal ||
                     enroque;
 
             }
         );
 
-
-    /*
-    Primeros 12 plies.
-    */
 
     return movimientosSAN
         .slice(
@@ -1512,23 +1839,6 @@ function obtenerLinea(
             12
         )
         .join(" ");
-
-}
-
-
-/*
-=========================================================
-REDONDEAR
-=========================================================
-*/
-
-function round(
-    numero
-) {
-
-    return Math.round(
-        numero * 10
-    ) / 10;
 
 }
 
@@ -1548,23 +1858,11 @@ function mostrarResultados(
         "block";
 
 
-    /*
-    =========================================
-    JUGADOR
-    =========================================
-    */
-
     document.getElementById(
         "nombreJugador"
     ).textContent =
         jugador.username;
 
-
-    /*
-    =========================================
-    INFORMACIÓN
-    =========================================
-    */
 
     document.getElementById(
         "datosJugador"
@@ -1578,12 +1876,6 @@ function mostrarResultados(
             "Lichess: " +
             jugador.username;
 
-
-    /*
-    =========================================
-    RATING
-    =========================================
-    */
 
     const rating =
         obtenerRating(
@@ -1600,12 +1892,6 @@ function mostrarResultados(
             :
             "Rating no disponible";
 
-
-    /*
-    =========================================
-    ESTADÍSTICAS
-    =========================================
-    */
 
     document.getElementById(
         "total"
@@ -1647,6 +1933,23 @@ function mostrarResultados(
     );
 
 
+    /*
+    Preparar batalla.
+    */
+
+    document.getElementById(
+        "battlePanel"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "battlePlayer"
+    ).textContent =
+        "⚔️ " +
+        jugador.username;
+
+
     resultado.scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -1683,7 +1986,9 @@ function obtenerRating(
     ) {
 
         if (
-            Number.isFinite(rating)
+            Number.isFinite(
+                rating
+            )
         ) {
 
             return rating;
@@ -1803,12 +2108,6 @@ function mostrarAperturas(
                 );
 
 
-            /*
-            =========================================
-            CABECERA
-            =========================================
-            */
-
             const titulo =
                 document.createElement(
                     "div"
@@ -1848,12 +2147,6 @@ function mostrarAperturas(
             );
 
 
-            /*
-            =========================================
-            INFORMACIÓN
-            =========================================
-            */
-
             const info =
                 document.createElement(
                     "div"
@@ -1874,12 +2167,6 @@ function mostrarAperturas(
                 apertura.derrotas +
                 " derrotas";
 
-
-            /*
-            =========================================
-            BARRA
-            =========================================
-            */
 
             const barra =
                 document.createElement(
@@ -1909,12 +2196,6 @@ function mostrarAperturas(
             );
 
 
-            /*
-            =========================================
-            CONTENIDO
-            =========================================
-            */
-
             const contenido =
                 document.createElement(
                     "div"
@@ -1930,9 +2211,7 @@ function mostrarAperturas(
 
 
             /*
-            =========================================
-            VARIANTES
-            =========================================
+            Variantes
             */
 
             const variantes =
@@ -1960,9 +2239,7 @@ function mostrarAperturas(
 
 
             /*
-            =========================================
-            PARTIDAS
-            =========================================
+            Partidas
             */
 
             if (
@@ -2107,12 +2384,6 @@ function mostrarAperturas(
             }
 
 
-            /*
-            =========================================
-            CLICK APERTURA
-            =========================================
-            */
-
             titulo.addEventListener(
                 "click",
                 () => {
@@ -2173,7 +2444,7 @@ function mostrarAperturas(
 
 /*
 =========================================================
-CREAR VARIANTE
+VARIANTE
 =========================================================
 */
 
@@ -2190,10 +2461,6 @@ function crearVariante(
     elemento.className =
         "variant";
 
-
-    /*
-    CABECERA
-    */
 
     const cabecera =
         document.createElement(
@@ -2236,12 +2503,6 @@ function crearVariante(
     );
 
 
-    /*
-    =========================================
-    MOVIMIENTOS
-    =========================================
-    */
-
     const movimientos =
         document.createElement(
             "div"
@@ -2255,12 +2516,6 @@ function crearVariante(
     movimientos.textContent =
         variante.linea;
 
-
-    /*
-    =========================================
-    DATOS
-    =========================================
-    */
 
     const datos =
         document.createElement(
@@ -2282,12 +2537,6 @@ function crearVariante(
         variante.derrotas +
         " derrotas";
 
-
-    /*
-    =========================================
-    PARTIDAS
-    =========================================
-    */
 
     const contenido =
         document.createElement(
@@ -2392,7 +2641,7 @@ function crearVariante(
 
 /*
 =========================================================
-CREAR PARTIDA
+PARTIDA
 =========================================================
 */
 
@@ -2445,36 +2694,6 @@ function crearPartida(
     }
 
 
-    const nombreRival =
-        escapeHTML(
-            partida.rival ||
-            "Rival desconocido"
-        );
-
-
-    const fecha =
-        escapeHTML(
-            partida.fecha ||
-            "Fecha desconocida"
-        );
-
-
-    const gameData =
-        document.createElement(
-            "div"
-        );
-
-
-    gameData.className =
-        "game-data";
-
-
-    gameData.textContent =
-        resultadoTexto +
-        " · " +
-        fecha;
-
-
     const nombre =
         document.createElement(
             "strong"
@@ -2486,21 +2705,34 @@ function crearPartida(
         "Rival desconocido";
 
 
+    const datos =
+        document.createElement(
+            "div"
+        );
+
+
+    datos.className =
+        "game-data";
+
+
+    datos.textContent =
+        resultadoTexto +
+        " · " +
+        (
+            partida.fecha ||
+            "Fecha desconocida"
+        );
+
+
     elemento.appendChild(
         nombre
     );
 
 
     elemento.appendChild(
-        gameData
+        datos
     );
 
-
-    /*
-    =========================================
-    ENLACE LICHESS
-    =========================================
-    */
 
     if (
         partida.site &&
@@ -2577,46 +2809,2047 @@ function calcularPorcentaje(
 }
 
 
+function round(
+    numero
+) {
+
+    return Math.round(
+        numero * 10
+    ) / 10;
+
+}
+
+
 /*
 =========================================================
-ESCAPE HTML
+=========================================================
+                MODO BATALLA
+=========================================================
 =========================================================
 */
 
-function escapeHTML(
-    texto
+
+let battleGame =
+    null;
+
+let battleColor =
+    "w";
+
+let battleSelectedSquare =
+    null;
+
+let battleThinking =
+    false;
+
+let stockfish =
+    null;
+
+let stockfishReady =
+    false;
+
+let stockfishSearchId =
+    0;
+
+
+/*
+=========================================================
+ELEMENTOS BATALLA
+=========================================================
+*/
+
+const battleStart =
+    document.getElementById(
+        "battleStart"
+    );
+
+const battleArea =
+    document.getElementById(
+        "battleArea"
+    );
+
+const chessBoard =
+    document.getElementById(
+        "chessBoard"
+    );
+
+const playWhite =
+    document.getElementById(
+        "playWhite"
+    );
+
+const playBlack =
+    document.getElementById(
+        "playBlack"
+    );
+
+const battleStatus =
+    document.getElementById(
+        "battleStatus"
+    );
+
+const battleMode =
+    document.getElementById(
+        "battleMode"
+    );
+
+const moveList =
+    document.getElementById(
+        "moveList"
+    );
+
+const battleReset =
+    document.getElementById(
+        "battleReset"
+    );
+
+
+/*
+=========================================================
+INICIAR BATALLA
+=========================================================
+*/
+
+battleStart.addEventListener(
+    "click",
+    () => {
+
+        battleArea.style.display =
+            "block";
+
+        battleStart.style.display =
+            "none";
+
+        iniciarMotor();
+
+        battleStatus.textContent =
+            "Elegí con qué color querés jugar.";
+
+    }
+);
+
+
+/*
+=========================================================
+COLOR
+=========================================================
+*/
+
+playWhite.addEventListener(
+    "click",
+    () => {
+
+        comenzarBatalla(
+            "w"
+        );
+
+    }
+);
+
+
+playBlack.addEventListener(
+    "click",
+    () => {
+
+        comenzarBatalla(
+            "b"
+        );
+
+    }
+);
+
+
+/*
+=========================================================
+INICIAR PARTIDA
+=========================================================
+*/
+
+function comenzarBatalla(
+    color
 ) {
 
-    return String(
-        texto || ""
-    )
+    battleColor =
+        color;
 
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
+    battleSelectedSquare =
+        null;
 
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
+    battleThinking =
+        false;
 
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
+    battleGame =
+        new Chess();
 
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
 
-    .replaceAll(
-        "'",
-        "&#039;"
+    playWhite.classList.toggle(
+        "active",
+        color === "w"
+    );
+
+
+    playBlack.classList.toggle(
+        "active",
+        color === "b"
+    );
+
+
+    battleStatus.textContent =
+        color === "w"
+            ?
+            "Jugás con blancas."
+            :
+            "Jugás con negras.";
+
+
+    battleMode.textContent =
+        "🟢 IA preparada: primeros movimientos basados en partidas reales.";
+
+
+    renderBoard();
+
+    actualizarMovimientos();
+
+
+    /*
+    Si juega la IA con blancas,
+    empieza automáticamente.
+    */
+
+    if (
+        battleColor === "b"
+    ) {
+
+        setTimeout(
+            movimientoIA,
+            500
+        );
+
+    }
+
+}
+
+
+/*
+=========================================================
+TABLERO
+=========================================================
+*/
+
+function renderBoard() {
+
+    if (
+        !battleGame
+    ) {
+
+        return;
+
+    }
+
+
+    chessBoard.innerHTML =
+        "";
+
+
+    const board =
+        battleGame.board();
+
+
+    /*
+    Si jugamos negras,
+    mostramos el tablero invertido.
+    */
+
+    const filas =
+        battleColor === "w"
+            ?
+            [0,1,2,3,4,5,6,7]
+            :
+            [7,6,5,4,3,2,1,0];
+
+
+    const columnas =
+        battleColor === "w"
+            ?
+            [0,1,2,3,4,5,6,7]
+            :
+            [7,6,5,4,3,2,1,0];
+
+
+    for (
+        const fila of filas
+    ) {
+
+        for (
+            const columna of columnas
+        ) {
+
+            const square =
+                document.createElement(
+                    "div"
+                );
+
+
+            square.className =
+                "square";
+
+
+            const claro =
+                (
+                    fila +
+                    columna
+                ) % 2 === 0;
+
+
+            square.classList.add(
+                claro
+                    ?
+                    "light"
+                    :
+                    "dark"
+            );
+
+
+            const nombre =
+                convertirCoordenada(
+                    fila,
+                    columna
+                );
+
+
+            square.dataset.square =
+                nombre;
+
+
+            const pieza =
+                board[fila][columna];
+
+
+            if (
+                pieza
+            ) {
+
+                const elementoPieza =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                elementoPieza.className =
+                    "piece";
+
+
+                elementoPieza.classList.add(
+                    pieza.color === "w"
+                        ?
+                        "white-piece"
+                        :
+                        "black-piece"
+                );
+
+
+                elementoPieza.textContent =
+                    simboloPieza(
+                        pieza.color,
+                        pieza.type
+                    );
+
+
+                square.appendChild(
+                    elementoPieza
+                );
+
+            }
+
+
+            if (
+                battleSelectedSquare ===
+                nombre
+            ) {
+
+                square.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            /*
+            Movimientos legales.
+            */
+
+            if (
+                battleSelectedSquare
+            ) {
+
+                try {
+
+                    const movimientos =
+                        battleGame.moves({
+                            square:
+                                battleSelectedSquare,
+                            verbose:
+                                true
+                        });
+
+
+                    const legal =
+                        movimientos.find(
+                            movimiento =>
+                                movimiento.to ===
+                                nombre
+                        );
+
+
+                    if (
+                        legal
+                    ) {
+
+                        square.classList.add(
+                            "legal"
+                        );
+
+
+                        if (
+                            legal.captured
+                        ) {
+
+                            square.classList.add(
+                                "capture"
+                            );
+
+                        }
+
+                    }
+
+                }
+
+                catch (e) {}
+
+            }
+
+
+            square.addEventListener(
+                "click",
+                () =>
+                    clickSquare(
+                        nombre
+                    )
+            );
+
+
+            chessBoard.appendChild(
+                square
+            );
+
+        }
+
+    }
+
+}
+
+
+/*
+=========================================================
+COORDENADAS
+=========================================================
+*/
+
+function convertirCoordenada(
+    fila,
+    columna
+) {
+
+    const letras =
+        "abcdefgh";
+
+    return (
+        letras[columna] +
+        (8 - fila)
     );
 
 }
+
+
+/*
+=========================================================
+PIEZAS
+=========================================================
+*/
+
+function simboloPieza(
+    color,
+    tipo
+) {
+
+    const piezasBlancas = {
+
+        p: "♙",
+        n: "♘",
+        b: "♗",
+        r: "♖",
+        q: "♕",
+        k: "♔"
+
+    };
+
+
+    const piezasNegras = {
+
+        p: "♟",
+        n: "♞",
+        b: "♝",
+        r: "♜",
+        q: "♛",
+        k: "♚"
+
+    };
+
+
+    return color === "w"
+        ?
+        piezasBlancas[tipo]
+        :
+        piezasNegras[tipo];
+
+}
+
+
+/*
+=========================================================
+CLICK TABLERO
+=========================================================
+*/
+
+function clickSquare(
+    square
+) {
+
+    if (
+        !battleGame ||
+        battleThinking
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+    No permitir mover
+    cuando es turno de la IA.
+    */
+
+    if (
+        battleGame.turn() !==
+        battleColor
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+    Seleccionar pieza.
+    */
+
+    if (
+        !battleSelectedSquare
+    ) {
+
+        const pieza =
+            battleGame.get(
+                square
+            );
+
+
+        if (
+            pieza &&
+            pieza.color ===
+            battleColor
+        ) {
+
+            battleSelectedSquare =
+                square;
+
+            renderBoard();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+    Cambiar pieza seleccionada.
+    */
+
+    const nuevaPieza =
+        battleGame.get(
+            square
+        );
+
+
+    if (
+        nuevaPieza &&
+        nuevaPieza.color ===
+        battleColor
+    ) {
+
+        battleSelectedSquare =
+            square;
+
+        renderBoard();
+
+        return;
+
+    }
+
+
+    /*
+    Intentar movimiento.
+    */
+
+    realizarMovimientoJugador(
+        battleSelectedSquare,
+        square
+    );
+
+}
+
+
+/*
+=========================================================
+MOVIMIENTO JUGADOR
+=========================================================
+*/
+
+function realizarMovimientoJugador(
+    desde,
+    hasta
+) {
+
+    try {
+
+        const movimiento =
+            battleGame.move({
+                from:
+                    desde,
+                to:
+                    hasta,
+                promotion:
+                    "q"
+            });
+
+
+        if (
+            !movimiento
+        ) {
+
+            battleStatus.textContent =
+                "Movimiento no válido.";
+
+            battleSelectedSquare =
+                null;
+
+            renderBoard();
+
+            return;
+
+        }
+
+
+        battleSelectedSquare =
+            null;
+
+
+        actualizarMovimientos();
+
+        renderBoard();
+
+
+        if (
+            comprobarFinal()
+        ) {
+
+            return;
+
+        }
+
+
+        setTimeout(
+            movimientoIA,
+            250
+        );
+
+    }
+
+    catch (e) {
+
+        battleSelectedSquare =
+            null;
+
+        renderBoard();
+
+    }
+
+}
+
+
+/*
+=========================================================
+MOVIMIENTO IA
+=========================================================
+*/
+
+async function movimientoIA() {
+
+    if (
+        !battleGame ||
+        battleThinking
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        battleGame.isGameOver()
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        battleGame.turn() ===
+        battleColor
+    ) {
+
+        return;
+
+    }
+
+
+    battleThinking =
+        true;
+
+
+    battleStatus.textContent =
+        "🤖 La IA está pensando...";
+
+
+    /*
+    =========================================
+    BUSCAR JUGADA REAL
+    =========================================
+    */
+
+    const jugadaReal =
+        obtenerMovimientoDelJugador();
+
+
+    if (
+        jugadaReal
+    ) {
+
+        try {
+
+            const movimiento =
+                battleGame.move(
+                    jugadaReal
+                );
+
+
+            if (
+                movimiento
+            ) {
+
+                battleMode.textContent =
+                    "♟ Jugada del repertorio real del jugador";
+
+
+                battleThinking =
+                    false;
+
+
+                actualizarMovimientos();
+
+                renderBoard();
+
+
+                if (
+                    comprobarFinal()
+                ) {
+
+                    return;
+
+                }
+
+
+                return;
+
+            }
+
+        }
+
+        catch (e) {
+
+            console.warn(
+                "La jugada real no pudo utilizarse:",
+                e
+            );
+
+        }
+
+    }
+
+
+    /*
+    =========================================
+    STOCKFISH
+    =========================================
+    */
+
+    battleMode.textContent =
+        "♟ Repertorio no encontrado para esta posición · 🤖 Stockfish";
+
+
+    const jugadaStockfish =
+        await obtenerMovimientoStockfish();
+
+
+    if (
+        jugadaStockfish
+    ) {
+
+        try {
+
+            const movimiento =
+                battleGame.move(
+                    jugadaStockfish
+                );
+
+
+            if (
+                movimiento
+            ) {
+
+                actualizarMovimientos();
+
+                renderBoard();
+
+            }
+
+        }
+
+        catch (e) {
+
+            console.error(
+                "Error realizando movimiento Stockfish:",
+                e
+            );
+
+        }
+
+    }
+
+
+    battleThinking =
+        false;
+
+
+    if (
+        !comprobarFinal()
+    ) {
+
+        battleStatus.textContent =
+            "Tu turno.";
+
+    }
+
+}
+
+
+/*
+=========================================================
+REPERTORIO DEL JUGADOR
+=========================================================
+
+Reconstruye cada partida con chess.js.
+
+Esto es importante porque NO compara solamente
+el texto "Bb4" o "Ne7".
+
+Compara la posición real del tablero.
+
+=========================================================
+*/
+
+function obtenerMovimientoDelJugador() {
+
+    if (
+        !battleGame ||
+        !partidasActuales.length ||
+        !jugadorActual
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+    El jugador solamente puede reproducir
+    sus primeros 7 movimientos.
+    */
+
+    const turnosJugador =
+        contarMovimientosJugador();
+
+
+    if (
+        turnosJugador >= 7
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+    FEN de la posición actual.
+    Los últimos campos pueden cambiar
+    por cuestiones irrelevantes para
+    el repertorio, por eso usamos
+    los primeros 4.
+    */
+
+    const posicionActual =
+        battleGame
+            .fen()
+            .split(" ")
+            .slice(0, 4)
+            .join(" ");
+
+
+    const candidatos =
+        [];
+
+
+    /*
+    Recorrer partidas reales.
+    */
+
+    for (
+        const pgn of partidasActuales
+    ) {
+
+        try {
+
+            const chess =
+                new Chess();
+
+
+            const white =
+                obtenerHeader(
+                    pgn,
+                    "White"
+                );
+
+            const black =
+                obtenerHeader(
+                    pgn,
+                    "Black"
+                );
+
+
+            let colorJugador =
+                null;
+
+
+            if (
+                white.toLowerCase() ===
+                jugadorActual.username.toLowerCase()
+            ) {
+
+                colorJugador =
+                    "w";
+
+            }
+
+            else if (
+                black.toLowerCase() ===
+                jugadorActual.username.toLowerCase()
+            ) {
+
+                colorJugador =
+                    "b";
+
+            }
+
+
+            if (
+                !colorJugador
+            ) {
+
+                continue;
+
+            }
+
+
+            /*
+            Obtener movimientos
+            reales del PGN.
+            */
+
+            const separacion =
+                pgn.search(
+                    /\n\s*\n/
+                );
+
+
+            if (
+                separacion === -1
+            ) {
+
+                continue;
+
+            }
+
+
+            let movimientos =
+                pgn.substring(
+                    separacion
+                );
+
+
+            /*
+            Quitar comentarios.
+            */
+
+            movimientos =
+                movimientos.replace(
+                    /\{[\s\S]*?\}/g,
+                    " "
+                );
+
+
+            /*
+            Quitar variantes.
+            */
+
+            let anterior;
+
+            do {
+
+                anterior =
+                    movimientos;
+
+                movimientos =
+                    movimientos.replace(
+                        /\([^()]*\)/g,
+                        " "
+                    );
+
+            }
+
+            while (
+                movimientos !== anterior
+            );
+
+
+            /*
+            Quitar números.
+            */
+
+            movimientos =
+                movimientos.replace(
+                    /\d+\.(?:\.\.)?/g,
+                    " "
+                );
+
+
+            movimientos =
+                movimientos.replace(
+                    /\b(?:1-0|0-1|1\/2-1\/2|\*)\b/g,
+                    " "
+                );
+
+
+            const tokens =
+                movimientos
+                    .split(/\s+/)
+                    .filter(Boolean);
+
+
+            let movimientosJugador =
+                0;
+
+
+            for (
+                const token of tokens
+            ) {
+
+                /*
+                Si llegamos a la posición
+                que estamos buscando,
+                comprobar si es turno del jugador.
+                */
+
+                const posicion =
+                    chess
+                        .fen()
+                        .split(" ")
+                        .slice(0, 4)
+                        .join(" ");
+
+
+                if (
+                    posicion ===
+                    posicionActual &&
+                    chess.turn() ===
+                    colorJugador &&
+                    movimientosJugador < 7
+                ) {
+
+                    try {
+
+                        const opciones =
+                            chess.moves({
+                                verbose:
+                                    true
+                            });
+
+
+                        const opcion =
+                            opciones.find(
+                                movimiento =>
+                                    movimiento.san ===
+                                    token
+                            );
+
+
+                        if (
+                            opcion
+                        ) {
+
+                            candidatos.push(
+                                opcion
+                            );
+
+                        }
+
+                    }
+
+                    catch (e) {}
+
+                }
+
+
+                /*
+                Intentar ejecutar
+                el movimiento real.
+                */
+
+                try {
+
+                    const hecho =
+                        chess.move(
+                            token
+                        );
+
+
+                    if (
+                        !hecho
+                    ) {
+
+                        break;
+
+                    }
+
+
+                    if (
+                        hecho.color ===
+                        colorJugador
+                    ) {
+
+                        movimientosJugador++;
+
+                    }
+
+                }
+
+                catch (e) {
+
+                    break;
+
+                }
+
+
+                if (
+                    movimientosJugador >=
+                    7 &&
+                    chess.turn() ===
+                    colorJugador
+                ) {
+
+                    /*
+                    Podemos seguir hasta encontrar
+                    la posición si fuera necesario,
+                    pero no necesitamos repertorio
+                    posterior al séptimo movimiento.
+                    */
+
+                }
+
+            }
+
+        }
+
+        catch (e) {
+
+            console.warn(
+                "PGN ignorado en repertorio:",
+                e
+            );
+
+        }
+
+    }
+
+
+    if (
+        !candidatos.length
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+    Contar frecuencia de cada jugada.
+    */
+
+    const frecuencias =
+        {};
+
+
+    candidatos.forEach(
+        movimiento => {
+
+            const clave =
+                movimiento.from +
+                "-" +
+                movimiento.to +
+                "-" +
+                (
+                    movimiento.promotion ||
+                    ""
+                );
+
+
+            frecuencias[clave] =
+                (
+                    frecuencias[clave] ||
+                    0
+                ) + 1;
+
+        }
+    );
+
+
+    let mejor =
+        null;
+
+    let mayor =
+        -1;
+
+
+    candidatos.forEach(
+        movimiento => {
+
+            const clave =
+                movimiento.from +
+                "-" +
+                movimiento.to +
+                "-" +
+                (
+                    movimiento.promotion ||
+                    ""
+                );
+
+
+            if (
+                frecuencias[clave] >
+                mayor
+            ) {
+
+                mayor =
+                    frecuencias[clave];
+
+                mejor =
+                    movimiento;
+
+            }
+
+        }
+    );
+
+
+    if (
+        !mejor
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        from:
+            mejor.from,
+
+        to:
+            mejor.to,
+
+        promotion:
+            mejor.promotion ||
+            "q"
+
+    };
+
+}
+
+
+/*
+=========================================================
+CONTAR MOVIMIENTOS DEL JUGADOR
+=========================================================
+*/
+
+function contarMovimientosJugador() {
+
+    if (
+        !battleGame ||
+        !jugadorActual
+    ) {
+
+        return 0;
+
+    }
+
+
+    const historial =
+        battleGame.history({
+            verbose:
+                true
+        });
+
+
+    let contador =
+        0;
+
+
+    historial.forEach(
+        movimiento => {
+
+            /*
+            La IA representa al jugador buscado.
+            */
+
+            const colorIA =
+                battleColor === "w"
+                    ?
+                    "b"
+                    :
+                    "w";
+
+
+            if (
+                movimiento.color ===
+                colorIA
+            ) {
+
+                contador++;
+
+            }
+
+        }
+    );
+
+
+    return contador;
+
+}
+
+
+/*
+=========================================================
+STOCKFISH
+=========================================================
+*/
+
+function iniciarMotor() {
+
+    if (
+        stockfish ||
+        stockfishReady
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        /*
+        Stockfish lite single-threaded.
+
+        Se carga desde jsDelivr.
+        */
+
+        stockfish =
+            new Worker(
+                "https://cdn.jsdelivr.net/npm/stockfish@18.0.8/src/stockfish-18-lite-single.js"
+            );
+
+
+        stockfish.onmessage =
+            function(event) {
+
+                const mensaje =
+                    String(
+                        event.data
+                    );
+
+
+                if (
+                    mensaje ===
+                    "readyok"
+                ) {
+
+                    stockfishReady =
+                        true;
+
+                }
+
+            };
+
+
+        stockfish.postMessage(
+            "uci"
+        );
+
+
+        stockfish.postMessage(
+            "isready"
+        );
+
+    }
+
+    catch (e) {
+
+        console.error(
+            "No se pudo iniciar Stockfish:",
+            e
+        );
+
+        stockfish =
+            null;
+
+    }
+
+}
+
+
+/*
+=========================================================
+PEDIR STOCKFISH
+=========================================================
+*/
+
+function obtenerMovimientoStockfish() {
+
+    return new Promise(
+        resolve => {
+
+            if (
+                !battleGame
+            ) {
+
+                resolve(null);
+
+                return;
+
+            }
+
+
+            /*
+            Intentar iniciar motor
+            si todavía no existe.
+            */
+
+            if (
+                !stockfish
+            ) {
+
+                iniciarMotor();
+
+            }
+
+
+            if (
+                !stockfish
+            ) {
+
+                resolve(
+                    obtenerMovimientoFallback()
+                );
+
+                return;
+
+            }
+
+
+            const id =
+                ++stockfishSearchId;
+
+
+            let terminado =
+                false;
+
+
+            const finalizar =
+                movimiento => {
+
+                    if (
+                        terminado
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    terminado =
+                        true;
+
+
+                    stockfish.onmessage =
+                        null;
+
+
+                    resolve(
+                        movimiento
+                    );
+
+                };
+
+
+            stockfish.onmessage =
+                function(event) {
+
+                    const mensaje =
+                        String(
+                            event.data
+                        );
+
+
+                    /*
+                    Buscar bestmove.
+                    */
+
+                    if (
+                        mensaje.startsWith(
+                            "bestmove "
+                        )
+                    ) {
+
+                        const partes =
+                            mensaje.split(
+                                /\s+/
+                            );
+
+
+                        const uci =
+                            partes[1];
+
+
+                        if (
+                            uci &&
+                            uci !==
+                            "(none)"
+                        ) {
+
+                            finalizar(
+                                convertirUCI(
+                                    uci
+                                )
+                            );
+
+                        }
+
+                        else {
+
+                            finalizar(
+                                null
+                            );
+
+                        }
+
+                    }
+
+                };
+
+
+            try {
+
+                stockfish.postMessage(
+                    "ucinewgame"
+                );
+
+
+                stockfish.postMessage(
+                    "position fen " +
+                    battleGame.fen()
+                );
+
+
+                /*
+                Profundidad moderada
+                para que funcione en navegador.
+                */
+
+                stockfish.postMessage(
+                    "go depth 12"
+                );
+
+
+                /*
+                Seguridad por si el motor
+                no responde.
+                */
+
+                setTimeout(
+                    () => {
+
+                        if (
+                            !terminado &&
+                            id ===
+                            stockfishSearchId
+                        ) {
+
+                            try {
+
+                                stockfish.postMessage(
+                                    "stop"
+                                );
+
+                            }
+
+                            catch (e) {}
+
+
+                            finalizar(
+                                obtenerMovimientoFallback()
+                            );
+
+                        }
+
+                    },
+                    7000
+                );
+
+            }
+
+            catch (e) {
+
+                console.error(
+                    e
+                );
+
+                finalizar(
+                    obtenerMovimientoFallback()
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+=========================================================
+UCI → MOVIMIENTO CHESS.JS
+=========================================================
+*/
+
+function convertirUCI(
+    uci
+) {
+
+    if (
+        !uci ||
+        uci.length < 4
+    ) {
+
+        return null;
+
+    }
+
+
+    return {
+
+        from:
+            uci.substring(
+                0,
+                2
+            ),
+
+        to:
+            uci.substring(
+                2,
+                4
+            ),
+
+        promotion:
+            uci.length >= 5
+                ?
+                uci.substring(
+                    4,
+                    5
+                )
+                :
+                "q"
+
+    };
+
+}
+
+
+/*
+=========================================================
+FALLBACK
+=========================================================
+
+Si Stockfish no puede cargarse,
+la partida no queda rota.
+
+Elegimos una jugada legal.
+=========================================================
+*/
+
+function obtenerMovimientoFallback() {
+
+    if (
+        !battleGame
+    ) {
+
+        return null;
+
+    }
+
+
+    const movimientos =
+        battleGame.moves({
+            verbose:
+                true
+        });
+
+
+    if (
+        !movimientos.length
+    ) {
+
+        return null;
+
+    }
+
+
+    /*
+    Preferir capturas.
+    */
+
+    const capturas =
+        movimientos.filter(
+            movimiento =>
+                movimiento.captured
+        );
+
+
+    const lista =
+        capturas.length
+            ?
+            capturas
+            :
+            movimientos;
+
+
+    const movimiento =
+        lista[
+            Math.floor(
+                Math.random() *
+                lista.length
+            )
+        ];
+
+
+    return {
+
+        from:
+            movimiento.from,
+
+        to:
+            movimiento.to,
+
+        promotion:
+            movimiento.promotion ||
+            "q"
+
+    };
+
+}
+
+
+/*
+=========================================================
+MOVIMIENTOS
+=========================================================
+*/
+
+function actualizarMovimientos() {
+
+    if (
+        !battleGame
+    ) {
+
+        return;
+
+    }
+
+
+    const historial =
+        battleGame.history();
+
+
+    if (
+        !historial.length
+    ) {
+
+        moveList.textContent =
+            "No hay movimientos todavía.";
+
+        return;
+
+    }
+
+
+    const lineas =
+        [];
+
+
+    for (
+        let i = 0;
+        i < historial.length;
+        i += 2
+    ) {
+
+        const numero =
+            Math.floor(
+                i / 2
+            ) + 1;
+
+
+        const blancas =
+            historial[i] ||
+            "";
+
+
+        const negras =
+            historial[i + 1] ||
+            "";
+
+
+        lineas.push(
+            numero +
+            ". " +
+            blancas +
+            (
+                negras
+                    ?
+                    " " + negras
+                    :
+                    ""
+            )
+        );
+
+    }
+
+
+    moveList.textContent =
+        lineas.join(
+            "\n"
+        );
+
+
+    moveList.scrollTop =
+        moveList.scrollHeight;
+
+}
+
+
+/*
+=========================================================
+FINAL
+=========================================================
+*/
+
+function comprobarFinal() {
+
+    if (
+        !battleGame
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        battleGame.isCheckmate()
+    ) {
+
+        const ganador =
+            battleGame.turn() ===
+            "w"
+                ?
+                "negras"
+                :
+                "blancas";
+
+
+        battleStatus.textContent =
+            "🏁 Jaque mate. Ganaron las " +
+            ganador +
+            ".";
+
+
+        battleThinking =
+            true;
+
+
+        return true;
+
+    }
+
+
+    if (
+        battleGame.isDraw()
+    ) {
+
+        battleStatus.textContent =
+            "🏁 La partida terminó en tablas.";
+
+
+        battleThinking =
+            true;
+
+
+        return true;
+
+    }
+
+
+    if (
+        battleGame.isStalemate()
+    ) {
+
+        battleStatus.textContent =
+            "🏁 Ahogado. Tablas.";
+
+
+        battleThinking =
+            true;
+
+
+        return true;
+
+    }
+
+
+    if (
+        battleGame.isThreefoldRepetition()
+    ) {
+
+        battleStatus.textContent =
+            "🏁 Repetición triple. Tablas.";
+
+
+        battleThinking =
+            true;
+
+
+        return true;
+
+    }
+
+
+    if (
+        battleGame.isInsufficientMaterial()
+    ) {
+
+        battleStatus.textContent =
+            "🏁 Material insuficiente. Tablas.";
+
+
+        battleThinking =
+            true;
+
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+/*
+=========================================================
+REINICIAR
+=========================================================
+*/
+
+battleReset.addEventListener(
+    "click",
+    () => {
+
+        if (
+            !battleColor
+        ) {
+
+            return;
+
+        }
+
+
+        comenzarBatalla(
+            battleColor
+        );
+
+    }
+);
 
 
 /*
@@ -2630,7 +4863,8 @@ usuarioInput.addEventListener(
     function(event) {
 
         if (
-            event.key === "Enter"
+            event.key ===
+            "Enter"
         ) {
 
             analizar();
@@ -2643,7 +4877,7 @@ usuarioInput.addEventListener(
 
 /*
 =========================================================
-BOTÓN
+BOTÓN ANALIZAR
 =========================================================
 */
 
@@ -2652,9 +4886,21 @@ botonAnalizar.addEventListener(
     analizar
 );
 
+
+/*
+=========================================================
+OCULTAR BATALLA AL PRINCIPIO
+=========================================================
+*/
+
+document.getElementById(
+    "battlePanel"
+).style.display =
+    "none";
+
 </script>
 
 </body>
 
 </html>
-
+```

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+```
+<title>Chess Scout</title>
 
-    <title>Chess Scout</title>
+<link rel="stylesheet" href="style.css">
+```
 
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -21,296 +21,405 @@
         ♞ Chess<span>Scout</span>
     </div>
 
-    <div class="subtitle">
-        Preparación de rivales
-    </div>
-</header>
+```
+<div class="subtitle">
+    Preparación de rivales
+</div>
+```
 
+</header>
 
 <main>
 
-    <section class="hero">
+<section class="hero">
 
-        <h1>
-            Analizá a tu rival
-        </h1>
+```
+<h1>Analizá a tu rival</h1>
 
-        <p>
-            Buscá un jugador y estudiá sus
-            partidas reales de ajedrez.
-        </p>
+<p>
+    Buscá partidas reales de Lichess y descubrí
+    cómo juega tu rival.
+</p>
 
-        <div class="search">
+<div class="search">
 
-            <input
-                id="usuario"
-                type="text"
-                placeholder="Usuario de Lichess..."
-            >
-
-            <button onclick="analizar()">
-                ANALIZAR
-            </button>
-
-        </div>
-
-        <div id="loading">
-            ♟ Analizando partidas reales...
-        </div>
-
-        <div id="error"></div>
-
-    </section>
-
-
-    <section
-        id="resultado"
-        class="resultado"
+    <input
+        id="usuario"
+        type="text"
+        placeholder="Tu jugador de Lichess..."
     >
 
-        <!-- JUGADOR -->
+    <input
+        id="rival"
+        type="text"
+        placeholder="Rival de Lichess..."
+    >
 
-        <div class="player-card">
+    <button onclick="analizar()">
+        ANALIZAR
+    </button>
 
-            <div
-                id="nombreJugador"
-                class="player-name"
-            >
-                Jugador
-            </div>
+</div>
 
-            <div
-                id="datosJugador"
-                class="player-data"
-            >
-            </div>
+<div id="loading">
+    ♟ Buscando partidas reales en Lichess...
+</div>
 
-        </div>
+<div id="error"></div>
+```
 
+</section>
 
-        <!-- ESTADÍSTICAS -->
+<section id="resultado" class="resultado">
 
-        <div class="stats">
+```
+<!-- JUGADOR -->
 
-            <div class="stat">
+<div class="player-card">
 
-                <span>
-                    Partidas
-                </span>
+    <div id="nombreJugador" class="player-name">
+        Jugador
+    </div>
 
-                <strong id="total">
-                    0
-                </strong>
+    <div id="datosJugador" class="player-data"></div>
 
-            </div>
+    <div id="rivalMostrado" class="player-data"></div>
 
+</div>
 
-            <div class="stat win">
 
-                <span>
-                    Victorias
-                </span>
+<!-- ESTADÍSTICAS -->
 
-                <strong id="victorias">
-                    0
-                </strong>
+<div class="stats">
 
-            </div>
+    <div class="stat">
+        <span>Partidas</span>
+        <strong id="total">0</strong>
+    </div>
 
+    <div class="stat win">
+        <span>Victorias</span>
+        <strong id="victorias">0</strong>
+    </div>
 
-            <div class="stat draw">
+    <div class="stat draw">
+        <span>Tablas</span>
+        <strong id="tablas">0</strong>
+    </div>
 
-                <span>
-                    Tablas
-                </span>
+    <div class="stat loss">
+        <span>Derrotas</span>
+        <strong id="derrotas">0</strong>
+    </div>
 
-                <strong id="tablas">
-                    0
-                </strong>
+    <div class="stat">
+        <span>Score</span>
+        <strong id="porcentaje">0%</strong>
+    </div>
 
-            </div>
+</div>
 
 
-            <div class="stat loss">
+<!-- AVISO DE DATOS -->
 
-                <span>
-                    Derrotas
-                </span>
+<section class="panel">
 
-                <strong id="derrotas">
-                    0
-                </strong>
+    <h2>📌 Sobre estos datos</h2>
 
-            </div>
+    <div id="calidadDatos" class="info"></div>
 
+</section>
 
-            <div class="stat">
 
-                <span>
-                    Puntuación
-                </span>
+<!-- APERTURAS -->
 
-                <strong id="porcentaje">
-                    0%
-                </strong>
+<section class="panel">
 
-            </div>
+    <h2>📊 Aperturas</h2>
 
-        </div>
+    <div id="aperturas">
+        <p class="info">
+            Las aperturas aparecerán después del análisis.
+        </p>
+    </div>
 
+</section>
 
-        <!-- APERTURAS -->
 
-        <section class="panel">
+<!-- INGLESA -->
 
-            <h2>
-                📊 Aperturas
-            </h2>
+<section class="panel">
 
-            <div id="aperturas">
+    <h2>🇬🇧 Apertura Inglesa</h2>
 
-                <p class="info">
-                    Las aperturas aparecerán
-                    después del análisis.
-                </p>
+    <div id="inglesa">
 
-            </div>
+        <p class="info">
+            Se analizarán las partidas reales en las que
+            apareció la Apertura Inglesa.
+        </p>
 
-        </section>
+    </div>
 
+</section>
 
-        <!-- VARIANTES -->
 
-        <section class="panel">
+<!-- CARO KANN -->
 
-            <h2>
-                🎯 Variantes problemáticas
-            </h2>
+<section class="panel">
 
-            <p class="info">
+    <h2>🛡️ Defensa Caro-Kann</h2>
 
-                Acá aparecerán las líneas en las
-                que el jugador obtuvo peores
-                resultados según sus partidas.
+    <div id="caroKann">
 
-            </p>
+        <p class="info">
+            Se analizarán las partidas reales en las que
+            apareció la Defensa Caro-Kann.
+        </p>
 
-            <div id="variantes"></div>
+    </div>
 
-        </section>
+</section>
 
 
-        <!-- PREPARACIÓN -->
+<!-- VARIANTES -->
 
-        <section class="panel">
+<section class="panel">
 
-            <h2>
-                🧠 Preparación práctica
-            </h2>
+    <h2>🎯 Variantes con peores resultados</h2>
 
-            <div id="preparacion">
+    <p class="info">
+        Se muestran solamente variantes que aparecen
+        realmente en las partidas encontradas.
+    </p>
 
-                <p class="info">
+    <div id="variantes"></div>
 
-                    Después podremos agregar
-                    recomendaciones de jugadas,
-                    planes y posiciones fáciles
-                    de jugar.
+</section>
 
-                </p>
 
-            </div>
+<!-- PREPARACIÓN -->
 
-        </section>
+<section class="panel">
 
+    <h2>🧠 Preparación práctica</h2>
 
-        <!-- PARTIDAS -->
+    <div id="preparacion">
 
-        <section class="panel">
+        <p class="info">
+            Esta sección se utilizará para preparar
+            planes humanos y posiciones sencillas,
+            sin depender solamente de la evaluación
+            de un módulo.
+        </p>
 
-            <h2>
-                ♟ Partidas encontradas
-            </h2>
+    </div>
 
-            <div id="partidas"></div>
+</section>
 
-        </section>
 
-    </section>
+<!-- PARTIDAS -->
+
+<section class="panel">
+
+    <h2>♟ Partidas encontradas</h2>
+
+    <div id="partidas"></div>
+
+</section>
+```
+
+</section>
 
 </main>
 
-
 <script>
+
+/*
+========================================================
+CHESS SCOUT
+========================================================
+
+Esta versión funciona directamente desde el navegador.
+
+Fuente utilizada:
+Lichess API pública.
+
+IMPORTANTE:
+Los porcentajes se calculan exclusivamente a partir
+de las partidas encontradas.
+
+No se inventan resultados.
+========================================================
+*/
+
+
+const MAX_PARTIDAS = 500;
+
+
+/* =====================================================
+   ANALIZAR
+===================================================== */
 
 async function analizar() {
 
     const usuario =
-        document
-        .getElementById("usuario")
+        document.getElementById("usuario")
+        .value
+        .trim();
+
+    const rival =
+        document.getElementById("rival")
         .value
         .trim();
 
     const loading =
-        document
-        .getElementById("loading");
+        document.getElementById("loading");
 
     const error =
-        document
-        .getElementById("error");
+        document.getElementById("error");
 
     const resultado =
-        document
-        .getElementById("resultado");
+        document.getElementById("resultado");
+
+
+    error.textContent = "";
 
 
     if (!usuario) {
 
         error.textContent =
-            "Escribí el usuario del jugador.";
+            "Escribí el usuario de Lichess del jugador.";
 
         return;
     }
 
 
-    error.textContent = "";
+    if (!rival) {
+
+        error.textContent =
+            "Escribí el usuario de Lichess del rival.";
+
+        return;
+    }
+
+
+    if (usuario.toLowerCase() === rival.toLowerCase()) {
+
+        error.textContent =
+            "El jugador y el rival no pueden ser la misma persona.";
+
+        return;
+    }
+
 
     loading.style.display = "block";
-
     resultado.style.display = "none";
 
 
     try {
 
-        const respuesta =
-            await fetch(
-                "/api/analizar/" +
-                encodeURIComponent(usuario)
-            );
+        /*
+        Primero comprobamos que ambos usuarios existan.
+        */
+
+        const jugador =
+            await obtenerJugador(usuario);
+
+        const jugadorRival =
+            await obtenerJugador(rival);
 
 
-        const data =
-            await respuesta.json();
+        /*
+        Descargamos partidas reales del jugador.
+        */
+
+        const partidasTexto =
+            await descargarPartidas(usuario);
 
 
-        if (!respuesta.ok) {
+        /*
+        Convertimos el PGN en partidas individuales.
+        */
+
+        const partidas =
+            separarPGN(partidasTexto);
+
+
+        /*
+        Nos quedamos solamente con las partidas
+        contra el rival indicado.
+        */
+
+        const enfrentamientos =
+            partidas.filter(partida => {
+
+                const white =
+                    obtenerHeader(partida, "White");
+
+                const black =
+                    obtenerHeader(partida, "Black");
+
+                return (
+
+                    (
+                        white.toLowerCase() ===
+                        usuario.toLowerCase()
+
+                        &&
+                        black.toLowerCase() ===
+                        rival.toLowerCase()
+                    )
+
+                    ||
+
+                    (
+                        black.toLowerCase() ===
+                        usuario.toLowerCase()
+
+                        &&
+                        white.toLowerCase() ===
+                        rival.toLowerCase()
+                    )
+
+                );
+
+            });
+
+
+        if (!enfrentamientos.length) {
 
             throw new Error(
-                data.detail ||
-                "No se pudo analizar al jugador."
+                "No encontramos partidas públicas de Lichess entre estos dos jugadores dentro de las partidas consultadas."
             );
 
         }
 
 
-        mostrarResultados(data);
+        const datos =
+            construirAnalisis(
+                enfrentamientos,
+                usuario,
+                rival
+            );
+
+
+        mostrarResultados(
+            datos,
+            jugador,
+            jugadorRival
+        );
+
 
     }
 
     catch (e) {
 
+        console.error(e);
+
         error.textContent =
-            e.message;
+            e.message ||
+            "Ocurrió un error al analizar las partidas.";
 
     }
 
@@ -323,101 +432,728 @@ async function analizar() {
 }
 
 
-function mostrarResultados(data) {
+/* =====================================================
+   OBTENER USUARIO
+===================================================== */
 
-    const jugador =
-        data.jugador;
+async function obtenerJugador(usuario) {
 
-    const estadisticas =
-        data.estadisticas;
-
-
-    document
-        .getElementById("resultado")
-        .style.display = "block";
-
-
-    document
-        .getElementById("nombreJugador")
-        .textContent =
-        jugador.nombre;
+    const respuesta =
+        await fetch(
+            "https://lichess.org/api/user/" +
+            encodeURIComponent(usuario)
+        );
 
 
-    document
-        .getElementById("datosJugador")
-        .textContent =
-        jugador.titulo
+    if (respuesta.status === 404) {
+
+        throw new Error(
+            "No se encontró el usuario de Lichess: " +
+            usuario
+        );
+
+    }
+
+
+    if (!respuesta.ok) {
+
+        throw new Error(
+            "Lichess no pudo devolver los datos de " +
+            usuario
+        );
+
+    }
+
+
+    return await respuesta.json();
+
+}
+
+
+/* =====================================================
+   DESCARGAR PARTIDAS
+===================================================== */
+
+async function descargarPartidas(usuario) {
+
+    const url =
+        "https://lichess.org/api/games/user/" +
+        encodeURIComponent(usuario) +
+        "?max=" +
+        MAX_PARTIDAS +
+        "&moves=true" +
+        "&tags=true" +
+        "&clocks=false" +
+        "&evals=false" +
+        "&opening=true";
+
+
+    const respuesta =
+        await fetch(url, {
+
+            headers: {
+
+                "Accept":
+                    "application/x-chess-pgn"
+
+            }
+
+        });
+
+
+    if (!respuesta.ok) {
+
+        throw new Error(
+            "Lichess no permitió descargar las partidas. Intentá nuevamente en unos segundos."
+        );
+
+    }
+
+
+    return await respuesta.text();
+
+}
+
+
+/* =====================================================
+   SEPARAR PGN
+===================================================== */
+
+function separarPGN(texto) {
+
+    /*
+    Cada partida PGN comienza normalmente con
+    [Event "..."].
+
+    Esto nos permite separar las partidas.
+    */
+
+    const bloques =
+        texto
+        .split(/\n(?=\[Event )/g)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    return bloques;
+
+}
+
+
+/* =====================================================
+   OBTENER HEADER PGN
+===================================================== */
+
+function obtenerHeader(pgn, nombre) {
+
+    const regex =
+        new RegExp(
+            "^\\[" +
+            nombre +
+            "\\s+\"([^\"]*)\"\\]",
+            "mi"
+        );
+
+
+    const encontrado =
+        pgn.match(regex);
+
+
+    return encontrado
+        ? encontrado[1]
+        : "";
+
+}
+
+
+/* =====================================================
+   CONSTRUIR ANÁLISIS
+===================================================== */
+
+function construirAnalisis(
+    partidas,
+    usuario,
+    rival
+) {
+
+    let victorias = 0;
+    let tablas = 0;
+    let derrotas = 0;
+
+
+    const aperturas = {};
+    const variantes = {};
+
+
+    partidas.forEach(partida => {
+
+        const white =
+            obtenerHeader(partida, "White");
+
+        const black =
+            obtenerHeader(partida, "Black");
+
+        const resultado =
+            obtenerHeader(partida, "Result");
+
+
+        let resultadoJugador =
+            "desconocido";
+
+
+        if (
+            white.toLowerCase() ===
+            usuario.toLowerCase()
+        ) {
+
+            if (resultado === "1-0")
+                resultadoJugador = "victoria";
+
+            else if (resultado === "0-1")
+                resultadoJugador = "derrota";
+
+            else if (resultado === "1/2-1/2")
+                resultadoJugador = "tablas";
+
+        }
+
+
+        if (
+            black.toLowerCase() ===
+            usuario.toLowerCase()
+        ) {
+
+            if (resultado === "0-1")
+                resultadoJugador = "victoria";
+
+            else if (resultado === "1-0")
+                resultadoJugador = "derrota";
+
+            else if (resultado === "1/2-1/2")
+                resultadoJugador = "tablas";
+
+        }
+
+
+        if (resultadoJugador === "victoria")
+            victorias++;
+
+        else if (resultadoJugador === "tablas")
+            tablas++;
+
+        else if (resultadoJugador === "derrota")
+            derrotas++;
+
+
+        /*
+        Apertura.
+        */
+
+        const apertura =
+            obtenerApertura(partida);
+
+
+        if (!aperturas[apertura]) {
+
+            aperturas[apertura] = {
+                partidas: 0,
+                victorias: 0,
+                tablas: 0,
+                derrotas: 0
+            };
+
+        }
+
+
+        agregarResultado(
+            aperturas[apertura],
+            resultadoJugador
+        );
+
+
+        /*
+        Línea inicial.
+        */
+
+        const linea =
+            obtenerLinea(partida);
+
+
+        if (linea) {
+
+            const clave =
+                apertura +
+                "|||" +
+                linea;
+
+
+            if (!variantes[clave]) {
+
+                variantes[clave] = {
+
+                    apertura:
+                        apertura,
+
+                    linea:
+                        linea,
+
+                    partidas: 0,
+
+                    victorias: 0,
+
+                    tablas: 0,
+
+                    derrotas: 0
+
+                };
+
+            }
+
+
+            agregarResultado(
+                variantes[clave],
+                resultadoJugador
+            );
+
+        }
+
+    });
+
+
+    const total =
+        victorias +
+        tablas +
+        derrotas;
+
+
+    const score =
+        total > 0
         ?
-        jugador.titulo +
+        round(
+            (
+                victorias +
+                tablas * 0.5
+            )
+            /
+            total
+            *
+            100
+        )
+        :
+        0;
+
+
+    return {
+
+        usuario,
+        rival,
+
+        total,
+
+        victorias,
+
+        tablas,
+
+        derrotas,
+
+        score,
+
+        aperturas:
+            convertirAperturas(aperturas),
+
+        variantes:
+            Object.values(variantes),
+
+        partidas
+
+    };
+
+}
+
+
+/* =====================================================
+   AGREGAR RESULTADO
+===================================================== */
+
+function agregarResultado(
+    objeto,
+    resultado
+) {
+
+    objeto.partidas++;
+
+
+    if (resultado === "victoria")
+        objeto.victorias++;
+
+    else if (resultado === "tablas")
+        objeto.tablas++;
+
+    else if (resultado === "derrota")
+        objeto.derrotas++;
+
+}
+
+
+/* =====================================================
+   APERTURA
+===================================================== */
+
+function obtenerApertura(pgn) {
+
+    const opening =
+        obtenerHeader(
+            pgn,
+            "Opening"
+        );
+
+
+    if (opening)
+        return opening;
+
+
+    const eco =
+        obtenerHeader(
+            pgn,
+            "ECO"
+        );
+
+
+    if (eco)
+        return "ECO " + eco;
+
+
+    return "Apertura desconocida";
+
+}
+
+
+/* =====================================================
+   LÍNEA INICIAL
+===================================================== */
+
+function obtenerLinea(pgn) {
+
+    /*
+    Buscamos la parte posterior a los headers.
+    */
+
+    const partes =
+        pgn.split(/\n\s*\n/);
+
+
+    let movimientos = "";
+
+
+    for (let i = 1; i < partes.length; i++) {
+
+        if (
+            !partes[i].startsWith("[")
+        ) {
+
+            movimientos +=
+                " " +
+                partes[i];
+
+        }
+
+    }
+
+
+    /*
+    Eliminamos comentarios PGN.
+    */
+
+    movimientos =
+        movimientos
+        .replace(/\{[^}]*\}/g, "")
+        .replace(/\([^)]*\)/g, "");
+
+
+    /*
+    Eliminamos números de jugada.
+    */
+
+    movimientos =
+        movimientos
+        .replace(/\d+\.(\.\.)?/g, "")
+        .trim();
+
+
+    /*
+    Eliminamos resultado.
+    */
+
+    movimientos =
+        movimientos
+        .replace(
+            /\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/,
+            ""
+        );
+
+
+    const tokens =
+        movimientos
+        .split(/\s+/)
+        .filter(Boolean);
+
+
+    /*
+    Primeros 12 plies = 6 jugadas completas.
+    */
+
+    return tokens
+        .slice(0, 12)
+        .join(" ");
+
+}
+
+
+/* =====================================================
+   CONVERTIR APERTURAS
+===================================================== */
+
+function convertirAperturas(aperturas) {
+
+    return Object.entries(aperturas)
+        .map(([nombre, datos]) => {
+
+            const porcentaje =
+                datos.partidas > 0
+                ?
+                round(
+                    (
+                        datos.victorias +
+                        datos.tablas * 0.5
+                    )
+                    /
+                    datos.partidas
+                    *
+                    100
+                )
+                :
+                0;
+
+
+            return {
+
+                nombre,
+
+                ...datos,
+
+                porcentaje
+
+            };
+
+        })
+        .sort(
+            (a, b) =>
+                b.partidas -
+                a.partidas
+        );
+
+}
+
+
+/* =====================================================
+   REDONDEAR
+===================================================== */
+
+function round(numero) {
+
+    return Math.round(
+        numero * 10
+    ) / 10;
+
+}
+
+
+/* =====================================================
+   MOSTRAR RESULTADOS
+===================================================== */
+
+function mostrarResultados(
+    data,
+    jugador,
+    rival
+) {
+
+    const resultado =
+        document.getElementById(
+            "resultado"
+        );
+
+
+    resultado.style.display =
+        "block";
+
+
+    document.getElementById(
+        "nombreJugador"
+    ).textContent =
+        jugador.username;
+
+
+    document.getElementById(
+        "datosJugador"
+    ).textContent =
+        jugador.title
+        ?
+        jugador.title +
         " · Lichess: " +
-        jugador.id
+        jugador.username
         :
         "Lichess: " +
-        jugador.id;
+        jugador.username;
 
 
-    document
-        .getElementById("total")
-        .textContent =
-        estadisticas.total;
+    document.getElementById(
+        "rivalMostrado"
+    ).textContent =
+        "Rival analizado: " +
+        rival.username;
 
 
-    document
-        .getElementById("victorias")
-        .textContent =
-        estadisticas.victorias;
+    document.getElementById(
+        "total"
+    ).textContent =
+        data.total;
 
 
-    document
-        .getElementById("tablas")
-        .textContent =
-        estadisticas.tablas;
+    document.getElementById(
+        "victorias"
+    ).textContent =
+        data.victorias;
 
 
-    document
-        .getElementById("derrotas")
-        .textContent =
-        estadisticas.derrotas;
+    document.getElementById(
+        "tablas"
+    ).textContent =
+        data.tablas;
 
 
-    document
-        .getElementById("porcentaje")
-        .textContent =
-        estadisticas.porcentaje +
+    document.getElementById(
+        "derrotas"
+    ).textContent =
+        data.derrotas;
+
+
+    document.getElementById(
+        "porcentaje"
+    ).textContent =
+        data.score +
         "%";
 
+
+    mostrarCalidad(data);
 
     mostrarAperturas(
         data.aperturas
     );
 
 
+    mostrarEspeciales(
+        data
+    );
+
+
     mostrarVariantes(
-        data.variantes_problematicas
+        data.variantes
     );
 
 
     mostrarPartidas(
-        data.partidas
+        data.partidas,
+        data.usuario
+    );
+
+
+    crearPreparacion(
+        data
     );
 
 }
 
 
+/* =====================================================
+   CALIDAD DE DATOS
+===================================================== */
+
+function mostrarCalidad(data) {
+
+    const contenedor =
+        document.getElementById(
+            "calidadDatos"
+        );
+
+
+    let mensaje = "";
+
+
+    if (data.total < 5) {
+
+        mensaje =
+            "🔴 Hay muy pocas partidas (" +
+            data.total +
+            "). Las estadísticas no son suficientemente sólidas para sacar conclusiones.";
+
+    }
+
+    else if (data.total < 15) {
+
+        mensaje =
+            "🟡 Se encontraron " +
+            data.total +
+            " partidas. Hay información útil, pero la muestra todavía es pequeña.";
+
+    }
+
+    else {
+
+        mensaje =
+            "🟢 Se encontraron " +
+            data.total +
+            " partidas. Las estadísticas tienen una muestra más útil, aunque siguen dependiendo de las partidas públicas disponibles.";
+
+    }
+
+
+    contenedor.textContent =
+        mensaje;
+
+}
+
+
+/* =====================================================
+   APERTURAS
+===================================================== */
+
 function mostrarAperturas(aperturas) {
 
     const contenedor =
-        document
-        .getElementById("aperturas");
+        document.getElementById(
+            "aperturas"
+        );
 
 
     contenedor.innerHTML = "";
 
 
+    if (!aperturas.length) {
+
+        contenedor.innerHTML =
+            "<p class='info'>No hay datos de aperturas.</p>";
+
+        return;
+
+    }
+
+
     aperturas.forEach(apertura => {
 
         const elemento =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         elemento.className =
@@ -440,17 +1176,16 @@ function mostrarAperturas(aperturas) {
 
             </div>
 
-
             <div class="bar">
 
                 <div
-                    style="
-                    width:${apertura.porcentaje}%;
-                    "
+                    style="width:${Math.min(
+                        apertura.porcentaje,
+                        100
+                    )}%"
                 ></div>
 
             </div>
-
 
             <div class="opening-data">
 
@@ -486,33 +1221,244 @@ function mostrarAperturas(aperturas) {
 }
 
 
-function mostrarVariantes(variantes) {
+/* =====================================================
+   INGLESA / CARO-KANN
+===================================================== */
+
+function mostrarEspeciales(data) {
+
+    const inglesa =
+        filtrarApertura(
+            data.aperturas,
+            [
+                "English",
+                "Inglesa",
+                "Apertura Inglesa"
+            ]
+        );
+
+
+    const caro =
+        filtrarApertura(
+            data.aperturas,
+            [
+                "Caro-Kann",
+                "Caro Kann",
+                "Caro–Kann"
+            ]
+        );
+
+
+    mostrarEspecial(
+        "inglesa",
+        inglesa,
+        "Apertura Inglesa"
+    );
+
+
+    mostrarEspecial(
+        "caroKann",
+        caro,
+        "Defensa Caro-Kann"
+    );
+
+}
+
+
+function filtrarApertura(
+    aperturas,
+    nombres
+) {
+
+    return aperturas.filter(apertura => {
+
+        const nombre =
+            apertura.nombre.toLowerCase();
+
+        return nombres.some(
+            buscada =>
+                nombre.includes(
+                    buscada.toLowerCase()
+                )
+        );
+
+    });
+
+}
+
+
+function mostrarEspecial(
+    id,
+    aperturas,
+    titulo
+) {
 
     const contenedor =
-        document
-        .getElementById("variantes");
+        document.getElementById(id);
 
 
     contenedor.innerHTML = "";
 
 
-    if (!variantes.length) {
+    if (!aperturas.length) {
 
         contenedor.innerHTML = `
+
             <p class="info">
-                Todavía no hay suficientes
-                partidas para detectar variantes.
+
+                No encontramos partidas
+                identificadas como
+                ${titulo}
+                dentro de la muestra.
+
             </p>
+
         `;
 
         return;
+
     }
 
 
-    variantes.forEach(variant => {
+    aperturas.forEach(apertura => {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "opening";
+
+
+        div.innerHTML = `
+
+            <div class="opening-title">
+
+                <strong>
+                    ${escapeHTML(
+                        apertura.nombre
+                    )}
+                </strong>
+
+                <strong>
+                    ${apertura.porcentaje}%
+                </strong>
+
+            </div>
+
+            <div class="opening-data">
+
+                ${apertura.partidas}
+                partidas
+
+                ·
+
+                ${apertura.victorias}
+                victorias
+
+                ·
+
+                ${apertura.tablas}
+                tablas
+
+                ·
+
+                ${apertura.derrotas}
+                derrotas
+
+            </div>
+
+        `;
+
+
+        contenedor.appendChild(
+            div
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   VARIANTES
+===================================================== */
+
+function mostrarVariantes(variantes) {
+
+    const contenedor =
+        document.getElementById(
+            "variantes"
+        );
+
+
+    contenedor.innerHTML = "";
+
+
+    /*
+    Para evitar conclusiones falsas,
+    necesitamos al menos 2 partidas.
+    */
+
+    const suficientes =
+        variantes
+        .filter(v => v.partidas >= 2)
+        .map(v => {
+
+            const porcentaje =
+                round(
+                    (
+                        v.victorias +
+                        v.tablas * 0.5
+                    )
+                    /
+                    v.partidas
+                    *
+                    100
+                );
+
+
+            return {
+                ...v,
+                porcentaje
+            };
+
+        })
+        .sort(
+            (a, b) =>
+                a.porcentaje -
+                b.porcentaje
+        )
+        .slice(0, 15);
+
+
+    if (!suficientes.length) {
+
+        contenedor.innerHTML = `
+
+            <p class="info">
+
+                No hay suficientes partidas
+                repetidas para señalar una
+                variante como problemática.
+
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    suficientes.forEach(variant => {
 
         const elemento =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         elemento.className =
@@ -579,11 +1525,88 @@ function mostrarVariantes(variantes) {
 }
 
 
-function mostrarPartidas(partidas) {
+/* =====================================================
+   PREPARACIÓN
+===================================================== */
+
+function crearPreparacion(data) {
 
     const contenedor =
-        document
-        .getElementById("partidas");
+        document.getElementById(
+            "preparacion"
+        );
+
+
+    /*
+    Por ahora NO inventamos planes.
+
+    La página solamente presenta
+    evidencia estadística real.
+
+    Después podemos agregar un sistema
+    de análisis de posiciones.
+    */
+
+    contenedor.innerHTML = `
+
+        <div class="info">
+
+            <strong>
+                Preparación basada en evidencia
+            </strong>
+
+            <br><br>
+
+            Se encontraron
+            <strong>
+                ${data.total}
+            </strong>
+            partidas entre
+            <strong>
+                ${escapeHTML(data.usuario)}
+            </strong>
+            y
+            <strong>
+                ${escapeHTML(data.rival)}
+            </strong>.
+
+            <br><br>
+
+            Para recomendar una variante de
+            preparación seria necesitamos analizar
+            las posiciones y no solamente mirar
+            porcentajes.
+
+            <br><br>
+
+            <strong>
+                Próximo paso:
+            </strong>
+
+            analizar las posiciones de las
+            variantes repetidas y construir
+            planes humanos.
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PARTIDAS
+===================================================== */
+
+function mostrarPartidas(
+    partidas,
+    usuario
+) {
+
+    const contenedor =
+        document.getElementById(
+            "partidas"
+        );
 
 
     contenedor.innerHTML = "";
@@ -591,8 +1614,51 @@ function mostrarPartidas(partidas) {
 
     partidas.forEach(partida => {
 
+        const white =
+            obtenerHeader(
+                partida,
+                "White"
+            );
+
+
+        const black =
+            obtenerHeader(
+                partida,
+                "Black"
+            );
+
+
+        const fecha =
+            obtenerHeader(
+                partida,
+                "Date"
+            );
+
+
+        const apertura =
+            obtenerApertura(
+                partida
+            );
+
+
+        const resultado =
+            obtenerHeader(
+                partida,
+                "Result"
+            );
+
+
+        const id =
+            obtenerHeader(
+                partida,
+                "Site"
+            );
+
+
         const elemento =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         elemento.className =
@@ -603,17 +1669,13 @@ function mostrarPartidas(partidas) {
 
             <strong>
 
-                ${escapeHTML(
-                    partida.blancas
-                )}
+                ${escapeHTML(white)}
 
                 <span>
                     vs
                 </span>
 
-                ${escapeHTML(
-                    partida.negras
-                )}
+                ${escapeHTML(black)}
 
             </strong>
 
@@ -621,24 +1683,34 @@ function mostrarPartidas(partidas) {
             <div class="game-data">
 
                 Fecha:
-                ${escapeHTML(
-                    partida.fecha
-                )}
+                ${escapeHTML(fecha)}
 
                 ·
 
-                ${escapeHTML(
-                    partida.apertura
-                )}
+                ${escapeHTML(apertura)}
 
                 ·
 
                 Resultado:
-                ${escapeHTML(
-                    partida.resultado
-                )}
+                ${escapeHTML(resultado)}
 
             </div>
+
+            ${
+                id && id.startsWith("https://lichess.org/")
+                ?
+                `
+                <a
+                    href="${escapeHTML(id)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Ver partida en Lichess →
+                </a>
+                `
+                :
+                ""
+            }
 
         `;
 
@@ -652,6 +1724,10 @@ function mostrarPartidas(partidas) {
 }
 
 
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
 function escapeHTML(text) {
 
     return String(text || "")
@@ -664,23 +1740,37 @@ function escapeHTML(text) {
 }
 
 
+/* =====================================================
+   ENTER
+===================================================== */
+
 document
     .getElementById("usuario")
     .addEventListener(
         "keydown",
         function(event) {
 
-            if (event.key === "Enter") {
-
+            if (event.key === "Enter")
                 analizar();
-
-            }
 
         }
     );
 
+
+document
+    .getElementById("rival")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter")
+                analizar();
+
+        }
+    );
+
+
 </script>
 
 </body>
-
 </html>

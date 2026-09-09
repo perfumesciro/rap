@@ -1,5 +1,5 @@
 /* =========================================================
-   CHESS SCOUT — ESTILO AJEDREZ MODERNO
+   CHESS SCOUT — ESTILO CLARO TIPO LICHESS
    ========================================================= */
 
 * {
@@ -8,10 +8,17 @@
 
 body {
     margin: 0;
-    background: #151513;
-    color: #eee9df;
-    font-family: Arial, Helvetica, sans-serif;
+
+    background: #fff7f5;
+
+    color: #252321;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
+
 
 /* =========================================================
    HEADER
@@ -26,23 +33,26 @@ header {
 
     padding: 0 6%;
 
-    background: #1d1c19;
+    background: #fff1e8;
 
-    border-bottom: 1px solid #36332d;
+    border-bottom: 1px solid #eadfd9;
 }
 
 .logo {
     font-size: 25px;
+
     font-weight: bold;
+
     letter-spacing: -0.5px;
 }
 
 .logo span {
-    color: #c7a76c;
+    color: #b87532;
 }
 
 .subtitle {
-    color: #aaa397;
+    color: #756d68;
+
     font-size: 14px;
 }
 
@@ -53,7 +63,9 @@ header {
 
 main {
     width: 90%;
+
     max-width: 1150px;
+
     margin: auto;
 }
 
@@ -67,21 +79,28 @@ main {
 
     padding: 35px;
 
-    background: #211f1b;
+    background: #fff1e8;
 
-    border: 1px solid #3a3730;
-    border-radius: 16px;
+    border: 1px solid #eadfd9;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 2px 5px rgba(80, 55, 40, 0.05);
 }
 
 .hero h1 {
     margin: 0;
 
-    font-size: 36px;
-    letter-spacing: -0.5px;
+    font-size: 38px;
+
+    letter-spacing: -0.8px;
+
+    color: #282522;
 }
 
 .hero p {
-    color: #aaa398;
+    color: #756d68;
 
     line-height: 1.6;
 }
@@ -94,7 +113,7 @@ main {
 .search {
     display: flex;
 
-    gap: 10px;
+    gap: 12px;
 
     margin-top: 25px;
 }
@@ -106,13 +125,13 @@ main {
 
     padding: 0 18px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    border: 1px solid #49443a;
+    border: 1px solid #dfd3cc;
 
-    background: #151513;
+    background: #fff7f5;
 
-    color: #eee9df;
+    color: #292623;
 
     font-size: 16px;
 
@@ -122,24 +141,29 @@ main {
 }
 
 .search input::placeholder {
-    color: #817b70;
+    color: #948b85;
 }
 
 .search input:focus {
-    border-color: #b9985c;
-    box-shadow: 0 0 0 2px rgba(185, 152, 92, 0.08);
+    border-color: #e1a66c;
+
+    box-shadow:
+        0 0 0 3px rgba(225, 166, 108, 0.14);
 }
+
+
+/* BOTÓN */
 
 .search button {
     border: 0;
 
-    padding: 0 28px;
+    padding: 0 30px;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    background: #b9985c;
+    background: #e8ad73;
 
-    color: #191713;
+    color: #30251d;
 
     font-weight: bold;
 
@@ -149,8 +173,17 @@ main {
 }
 
 .search button:hover {
-    background: #c7a76c;
+    background: #dda064;
+
     transform: translateY(-1px);
+}
+
+.search button:disabled {
+    opacity: 0.65;
+
+    cursor: wait;
+
+    transform: none;
 }
 
 
@@ -161,9 +194,63 @@ main {
 #loading {
     display: none;
 
-    margin-top: 20px;
+    margin-top: 22px;
 
-    color: #aaa398;
+    padding: 16px;
+
+    background: #fff7f2;
+
+    border: 1px solid #eeddd2;
+
+    border-radius: 12px;
+
+    color: #665e59;
+}
+
+#loadingTitulo {
+    font-size: 16px;
+
+    font-weight: bold;
+
+    color: #3a332e;
+}
+
+#loadingTexto {
+    margin-top: 5px;
+
+    font-size: 14px;
+
+    color: #817770;
+}
+
+
+/* BARRA DE CARGA */
+
+.loading-bar {
+    width: 100%;
+
+    height: 7px;
+
+    margin-top: 13px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #f0ddd0;
+}
+
+#loadingProgreso {
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: 10px;
+
+    background: #e3a56b;
+
+    transition:
+        width 0.35s ease;
 }
 
 
@@ -172,9 +259,11 @@ main {
    ========================================================= */
 
 #error {
-    color: #e4776f;
+    color: #bd5b51;
 
     margin-top: 15px;
+
+    font-size: 14px;
 }
 
 
@@ -196,23 +285,28 @@ main {
 .player-card {
     margin-top: 20px;
 
-    background: #211f1b;
+    background: #fff1e8;
 
-    border: 1px solid #3a3730;
+    border: 1px solid #eadfd9;
 
-    border-radius: 14px;
+    border-radius: 15px;
 
-    padding: 24px;
+    padding: 25px;
+
+    box-shadow:
+        0 2px 5px rgba(80, 55, 40, 0.04);
 }
 
 .player-name {
-    font-size: 29px;
+    font-size: 30px;
 
     font-weight: bold;
+
+    color: #292522;
 }
 
 .player-data {
-    color: #aaa398;
+    color: #756d68;
 
     margin-top: 8px;
 
@@ -227,7 +321,8 @@ main {
 .stats {
     display: grid;
 
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns:
+        repeat(5, 1fr);
 
     gap: 12px;
 
@@ -235,17 +330,20 @@ main {
 }
 
 .stat {
-    background: #211f1b;
+    background: #fff1e8;
 
-    border: 1px solid #3a3730;
+    border: 1px solid #eadfd9;
 
-    padding: 19px;
+    padding: 20px;
 
-    border-radius: 13px;
+    border-radius: 14px;
+
+    box-shadow:
+        0 2px 4px rgba(80, 55, 40, 0.035);
 }
 
 .stat span {
-    color: #9d978c;
+    color: #817871;
 
     font-size: 13px;
 }
@@ -253,9 +351,11 @@ main {
 .stat strong {
     display: block;
 
-    font-size: 27px;
+    font-size: 28px;
 
     margin-top: 8px;
+
+    color: #292522;
 }
 
 
@@ -264,15 +364,15 @@ main {
    ========================================================= */
 
 .win strong {
-    color: #7fc58d;
+    color: #4c9a61;
 }
 
 .draw strong {
-    color: #d1b76a;
+    color: #b18a26;
 }
 
 .loss strong {
-    color: #d87870;
+    color: #c75f55;
 }
 
 
@@ -283,23 +383,26 @@ main {
 .panel {
     margin-top: 20px;
 
-    background: #211f1b;
+    background: #fff1e8;
 
-    border: 1px solid #3a3730;
+    border: 1px solid #eadfd9;
 
-    border-radius: 14px;
+    border-radius: 15px;
 
-    padding: 24px;
+    padding: 25px;
+
+    box-shadow:
+        0 2px 5px rgba(80, 55, 40, 0.04);
 }
 
 .panel h2 {
     margin-top: 0;
 
-    color: #eee9df;
+    color: #292522;
 }
 
 .info {
-    color: #aaa398;
+    color: #756d68;
 
     line-height: 1.6;
 }
@@ -312,30 +415,38 @@ main {
 .opening {
     padding: 0;
 
-    margin-top: 9px;
+    margin-top: 10px;
 
-    background: #191814;
+    background: #fff7f2;
 
-    border: 1px solid #38352e;
+    border: 1px solid #eaded6;
 
-    border-radius: 11px;
+    border-radius: 12px;
 
     overflow: hidden;
 
-    transition: border-color 0.2s;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
 
 .opening:hover {
-    border-color: #5a5141;
+    border-color: #dfc4ae;
+
+    box-shadow:
+        0 2px 5px rgba(100, 65, 40, 0.04);
 }
 
 
-/* CABECERA DE APERTURA */
+/* =========================================================
+   CABECERA DE APERTURA
+   ========================================================= */
 
 .opening-title {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 15px;
@@ -348,51 +459,52 @@ main {
 }
 
 .opening-title:hover {
-    background: #1d1b17;
+    background: #fff1e8;
 }
 
 .opening-title strong:first-child {
-    color: #eee9df;
+    color: #302c29;
 }
 
 .opening-title strong:last-child {
-    color: #c7a76c;
+    color: #b87532;
 }
 
 
-/* FLECHA */
+/* =========================================================
+   FLECHA
+   ========================================================= */
 
 .opening-title::before {
     content: "▸";
 
-    color: #b9985c;
+    color: #c4864d;
 
     font-size: 17px;
 
     margin-right: 2px;
 }
 
-
-/*
-   Cuando posteriormente el JavaScript agregue
-   la clase "open", la flecha queda hacia abajo.
-*/
-
 .opening.open > .opening-title::before {
     content: "▾";
 }
 
 
-/* BARRA */
+/* =========================================================
+   BARRA
+   ========================================================= */
 
 .bar {
-    height: 5px;
+    height: 6px;
 
-    background: #302d27;
+    background: #f0dfd4;
 
     border-radius: 10px;
 
-    margin: 0 18px 12px;
+    margin:
+        0
+        18px
+        12px;
 
     overflow: hidden;
 }
@@ -400,20 +512,34 @@ main {
 .bar div {
     height: 100%;
 
-    background: #b9985c;
+    background: #dda064;
 
     border-radius: 10px;
 }
 
 
-/* INFORMACIÓN DE APERTURA */
+/* =========================================================
+   INFORMACIÓN APERTURA
+   ========================================================= */
 
 .opening-data {
-    color: #979186;
+    color: #817871;
 
     font-size: 13px;
 
-    padding: 0 18px 16px;
+    padding:
+        0
+        18px
+        16px;
+}
+
+
+/* =========================================================
+   CONTENIDO DE APERTURA
+   ========================================================= */
+
+.opening-content {
+    padding-bottom: 12px;
 }
 
 
@@ -422,21 +548,23 @@ main {
    ========================================================= */
 
 .variant {
-    background: #171612;
+    background: #fff1e8;
 
-    border: 1px solid #35322b;
+    border: 1px solid #eaded6;
 
     padding: 16px;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
-    margin: 10px 12px;
+    margin:
+        10px 12px;
 
-    transition: 0.2s;
+    transition:
+        0.2s;
 }
 
 .variant:hover {
-    border-color: #51493c;
+    border-color: #dcc0aa;
 }
 
 .variant-top {
@@ -445,36 +573,87 @@ main {
     justify-content: space-between;
 
     gap: 10px;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+.variant-top strong:first-child {
+    color: #403a35;
 }
 
 .variant-top strong:last-child {
-    color: #c7a76c;
+    color: #b87532;
 }
+
+
+/* =========================================================
+   MOVIMIENTOS
+   ========================================================= */
 
 .moves {
     margin-top: 11px;
 
-    padding: 11px;
+    padding: 12px;
 
-    background: #11110f;
+    background: #fff8f5;
 
-    border-radius: 7px;
+    border: 1px solid #eee0d8;
+
+    border-radius: 8px;
 
     font-family: monospace;
 
-    color: #d8d1c4;
+    color: #514a45;
 
     line-height: 1.7;
 
     overflow-x: auto;
 }
 
+
+/* =========================================================
+   DATOS VARIANTE
+   ========================================================= */
+
 .variant-data {
-    color: #898379;
+    color: #817871;
 
     margin-top: 9px;
 
     font-size: 13px;
+}
+
+
+/* =========================================================
+   BOTÓN MOSTRAR PARTIDAS
+   ========================================================= */
+
+.show-games {
+    margin-top: 13px;
+
+    padding: 8px 13px;
+
+    border: 1px solid #dfc5b2;
+
+    border-radius: 8px;
+
+    background: #fff7f2;
+
+    color: #9a6438;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.show-games:hover {
+    background: #ffe9d9;
+
+    border-color: #d6ad8e;
 }
 
 
@@ -485,9 +664,9 @@ main {
 .game {
     padding: 14px 16px;
 
-    background: #191814;
+    background: #fffaf7;
 
-    border: 1px solid #35322b;
+    border: 1px solid #eaded6;
 
     border-radius: 9px;
 
@@ -497,23 +676,24 @@ main {
 }
 
 .game:hover {
-    border-color: #544b3d;
+    border-color: #d8bda7;
 
-    background: #1c1a16;
+    background: #fff5ef;
 }
 
 .game strong {
-    color: #e9e3d8;
+    color: #302c29;
 }
 
 .game span {
-    color: #777167;
+    color: #8b817a;
 
-    margin: 0 7px;
+    margin:
+        0 7px;
 }
 
 .game-data {
-    color: #918b80;
+    color: #817871;
 
     margin-top: 7px;
 
@@ -522,7 +702,7 @@ main {
 
 
 /* =========================================================
-   ENLACES DE PARTIDAS
+   ENLACES
    ========================================================= */
 
 .game a {
@@ -530,30 +710,31 @@ main {
 
     margin-top: 9px;
 
-    color: #c7a76c;
+    color: #b87532;
 
     text-decoration: none;
 
     font-size: 13px;
+
+    font-weight: 600;
 }
 
 .game a:hover {
+    color: #955d2c;
+
     text-decoration: underline;
 }
 
 
 /* =========================================================
-   PREPARACIÓN
+   PARTIDAS DE APERTURA
    ========================================================= */
 
-#preparacion {
-    background: #191814;
-
-    border: 1px solid #35322b;
-
-    border-radius: 10px;
-
-    padding: 19px;
+.opening-games {
+    margin:
+        0
+        12px
+        12px;
 }
 
 
@@ -566,17 +747,28 @@ main {
 }
 
 ::-webkit-scrollbar-track {
-    background: #151513;
+    background: #fff7f5;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #403c34;
+    background: #dccfc8;
 
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #5a5141;
+    background: #c9b7ac;
+}
+
+
+/* =========================================================
+   SELECCIÓN DE TEXTO
+   ========================================================= */
+
+::selection {
+    background: #ffd9bd;
+
+    color: #35291f;
 }
 
 
@@ -587,16 +779,22 @@ main {
 @media (max-width: 900px) {
 
     .stats {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
 }
 
 
+/* =========================================================
+   TABLET / CELULAR
+   ========================================================= */
+
 @media (max-width: 700px) {
 
     header {
-        padding: 0 5%;
+        padding:
+            0 5%;
     }
 
     .subtitle {
@@ -622,6 +820,10 @@ main {
 }
 
 
+/* =========================================================
+   CELULAR PEQUEÑO
+   ========================================================= */
+
 @media (max-width: 500px) {
 
     main {
@@ -637,11 +839,15 @@ main {
     }
 
     .panel {
-        padding: 17px;
+        padding: 18px;
     }
 
-    .opening-title {
-        padding: 15px;
+    .hero {
+        margin-top: 20px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
     }
 
 }

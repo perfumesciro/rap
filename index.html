@@ -2,717 +2,894 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#151513">
-<title>Chess Scout</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#151513">
+  <title>Chess Scout | Analizador de ajedrez</title>
+  <link rel="stylesheet" href="style.css">
 
-<style>
-/* Estilos adicionales para el analizador de debilidades */
-.analysis-panel{margin-top:22px;background:#1d1e1a;border:1px solid #35362f;border-radius:13px;padding:20px;color:#f1f0e8}
-.analysis-panel h2{margin-top:0}
-.analysis-panel p{color:#aaa99d;line-height:1.6}
-.analysis-button{background:#c7a76c;color:#171611;border:0;padding:12px 17px;border-radius:7px;font-weight:bold;cursor:pointer}
-.analysis-button:disabled{opacity:.55;cursor:wait}
-.analysis-options{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:15px 0}
-.analysis-options label{display:block;font-size:12px;color:#aaa99d;margin-bottom:7px}
-.analysis-options input,.analysis-options select{background:#151513;color:#f1f0e8;border:1px solid #414239;padding:11px;border-radius:7px;max-width:100%}
-.analysis-options .field{flex:1;min-width:150px}
-.analysis-status{font-size:13px;color:#c7a76c;margin-top:12px;overflow-wrap:anywhere}
-.analysis-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
-.analysis-stat{background:#25261f;border:1px solid #393a31;border-radius:9px;padding:14px;min-width:0}
-.analysis-stat strong{display:block;font-size:25px;margin:8px 0}
-.analysis-stat span{font-size:12px;color:#aaa99d}
-.analysis-item{background:#25261f;border:1px solid #393a31;border-radius:9px;padding:13px;margin-top:9px;overflow-wrap:anywhere}
-.analysis-item strong{color:#f1f0e8}
-.analysis-item p{font-size:13px;margin:7px 0}
-.analysis-bad{color:#ef8880}
-.analysis-warn{color:#e5c37a}
-.analysis-good{color:#8bc69a}
-.analysis-muted{font-size:12px;color:#aaa99d}
-.analysis-tag{display:inline-block;border:1px solid #49483b;border-radius:20px;padding:5px 8px;font-size:11px;margin:3px}
-.analysis-list{padding-left:20px;line-height:1.8;color:#e2dfd4}
-.analysis-item code{white-space:normal;overflow-wrap:anywhere;font-size:11px;color:#c7a76c}
-.analysis-hidden{display:none!important}
-.analysis-heading{margin-top:23px!important}
-@media(max-width:600px){
- .analysis-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
- .analysis-panel{padding:14px}
-}
-</style>
+  <style>
+    :root {
+      --bg: #151513;
+      --panel: #20201d;
+      --panel2: #292923;
+      --text: #f4f1e8;
+      --muted: #aaa99e;
+      --gold: #c7a76c;
+      --green: #8ebf91;
+      --red: #e58b83;
+      --border: #3a3932;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 9px;
+      padding: 12px 16px;
+      font-weight: 700;
+      transition: opacity .2s, transform .2s;
+    }
+
+    button:hover { opacity: .88; }
+    button:active { transform: scale(.98); }
+    button:disabled { cursor: wait; opacity: .55; }
+
+    .app {
+      width: min(1150px, 94%);
+      margin: auto;
+      padding: 28px 0 50px;
+    }
+
+    header { margin-bottom: 25px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      background: var(--gold);
+      color: #171713;
+      font-size: 28px;
+    }
+
+    h1 { margin: 0; font-size: clamp(25px, 4vw, 35px); }
+    .subtitle { color: var(--muted); margin-top: 7px; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    h2 { margin-top: 0; font-size: 21px; }
+    h3 { font-size: 17px; }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input, select {
+      min-width: 0;
+      background: #11110f;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 13px;
+      border-radius: 9px;
+    }
+
+    input { flex: 1; }
+    .primary { background: var(--gold); color: #171713; }
+    .secondary { background: var(--panel2); color: var(--text); }
+
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+
+    .status {
+      padding: 12px;
+      border-radius: 9px;
+      background: #292923;
+      margin-top: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .status.error {
+      color: #ffd0ca;
+      border: 1px solid #784c46;
+    }
+
+    .status.success {
+      color: #d8f0d9;
+      border: 1px solid #496c4d;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      background: var(--panel2);
+      border-radius: 11px;
+      padding: 15px;
+      min-width: 0;
+    }
+
+    .stat-label { color: var(--muted); font-size: 13px; }
+    .stat-value { font-size: 25px; font-weight: 800; margin-top: 8px; }
+
+    .bar {
+      display: flex;
+      width: 100%;
+      height: 12px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #383831;
+      margin: 12px 0;
+    }
+
+    .bar-win { background: var(--green); }
+    .bar-draw { background: var(--gold); }
+    .bar-loss { background: var(--red); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .list-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .list-item:last-child { border-bottom: 0; }
+
+    .game {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px;
+      margin-top: 10px;
+    }
+
+    .game summary { cursor: pointer; font-weight: 700; }
+    .game p { color: var(--muted); font-size: 14px; }
+
+    .weakness-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 30px;
+      background: #383831;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .weakness-card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 14px;
+      margin-top: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .weakness-card p { line-height: 1.5; }
+    .weakness-card a { color: var(--gold); }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      border-radius: 20px;
+      background: #3a3932;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width .2s;
+    }
+
+    .small { font-size: 13px; }
+    .section-note { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+      .app { width: 92%; padding-top: 20px; }
+      .panel { padding: 15px; }
+    }
+  </style>
 </head>
 
 <body>
-<header>
-    <div class="logo">♞ Chess<span>Scout</span></div>
-    <div class="subtitle">Análisis de jugadores</div>
-</header>
-
-<main>
-<section class="hero">
-    <h1>Analizá un jugador</h1>
-    <p>Escribí su usuario de Lichess y revisá sus partidas, resultados, aperturas y debilidades.</p>
-
-    <div class="search">
-        <input id="usuario" type="text" placeholder="Usuario de Lichess..." autocomplete="off">
-        <button id="botonAnalizar" onclick="analizar()">ANALIZAR</button>
-    </div>
-
-    <div id="loading" class="loading">
-        <div id="loadingTitulo">⏳ Cargando partidas...</div>
-        <div id="loadingTexto">Esto puede tomar unos segundos.</div>
-        <div class="loading-bar"><div id="loadingProgreso"></div></div>
-    </div>
-
-    <div id="error" role="alert"></div>
-</section>
-
-<section id="resultado" class="resultado">
-
-    <div class="player-card">
-        <div id="nombreJugador" class="player-name">Jugador</div>
-        <div id="datosJugador" class="player-data"></div>
-        <div id="ratingJugador" class="player-data"></div>
-    </div>
-
-    <div class="stats">
-        <div class="stat"><span>Partidas</span><strong id="total">0</strong></div>
-        <div class="stat win"><span>Victorias</span><strong id="victorias">0</strong></div>
-        <div class="stat draw"><span>Tablas</span><strong id="tablas">0</strong></div>
-        <div class="stat loss"><span>Derrotas</span><strong id="derrotas">0</strong></div>
-        <div class="stat"><span>Score</span><strong id="porcentaje">0%</strong></div>
-    </div>
+  <main class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">♞</div>
+        <div>
+          <h1>Chess Scout</h1>
+          <div class="subtitle">Estudiá rivales. Encontrá patrones. Mejorá tu ajedrez.</div>
+        </div>
+      </div>
+    </header>
 
     <section class="panel">
-        <h2>📌 Sobre los datos</h2>
-        <div id="calidadDatos" class="info"></div>
+      <h2>Buscar jugador de Lichess</h2>
+      <p class="section-note">
+        Ingresá el nombre de usuario de Lichess para consultar sus partidas,
+        estadísticas, aperturas y patrones de juego.
+      </p>
+
+      <form id="searchForm" class="search-row">
+        <input
+          id="usuario"
+          type="text"
+          placeholder="Usuario de Lichess"
+          autocomplete="off"
+          required
+        >
+        <button class="primary" id="searchButton" type="submit">
+          Analizar jugador
+        </button>
+      </form>
+
+      <div id="mainStatus" class="status hidden" role="status"></div>
+      <div id="loading" class="status hidden" role="status">
+        Cargando historial de partidas...
+      </div>
     </section>
 
-    <section class="panel">
-        <h2>📊 Aperturas</h2>
-        <p class="info">Abrí una apertura para ver sus variantes y partidas.</p>
-        <div id="aperturas"></div>
-    </section>
+    <div id="results" class="hidden">
+      <section class="panel">
+        <h2 id="playerTitle">Perfil del jugador</h2>
+        <p id="playerDescription" class="muted"></p>
 
-    <!-- NUEVA FUNCIÓN: ANÁLISIS DE DEBILIDADES -->
-    <section class="analysis-panel">
-        <h2>♞ Analizador avanzado de debilidades</h2>
-        <p>Examiná jugadas reales del rival con Stockfish para encontrar errores tácticos, pérdidas de evaluación y posiciones que conviene estudiar.</p>
-
-        <div class="analysis-options">
-            <div class="field">
-                <label for="debilidadUsuario">Usuario de Lichess</label>
-                <input id="debilidadUsuario" placeholder="Usuario del rival">
-            </div>
-            <div class="field" style="max-width:170px">
-                <label for="cantidadDebilidad">Partidas para analizar</label>
-                <select id="cantidadDebilidad">
-                    <option value="5">5 partidas</option>
-                    <option value="10" selected>10 partidas</option>
-                    <option value="20">20 partidas</option>
-                    <option value="30">30 partidas</option>
-                </select>
-            </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Partidas cargadas</div>
+            <div class="stat-value" id="totalGames">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Victorias</div>
+            <div class="stat-value" id="wins">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Empates</div>
+            <div class="stat-value" id="draws">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Derrotas</div>
+            <div class="stat-value" id="losses">0</div>
+          </div>
         </div>
 
-        <button class="analysis-button" id="botonDebilidades" onclick="analizarDebilidades()">
-            🔍 Analizar debilidades con Stockfish
+        <div class="bar" aria-label="Distribución de resultados">
+          <div class="bar-win" id="winBar"></div>
+          <div class="bar-draw" id="drawBar"></div>
+          <div class="bar-loss" id="lossBar"></div>
+        </div>
+        <p class="small muted" id="resultSummary"></p>
+      </section>
+
+      <section class="panel">
+        <h2>Debilidades del rival</h2>
+        <div class="weakness-header">
+          <p class="section-note">
+            Se analizan las últimas 50 partidas disponibles y hasta 25 jugadas
+            del jugador en cada partida. El análisis avanzado requiere el servidor.
+          </p>
+          <span class="pill">50 partidas · 25 jugadas</span>
+        </div>
+
+        <button id="weaknessButton" class="primary" type="button">
+          Analizar últimas 50 partidas
         </button>
 
-        <div id="estadoDebilidades" class="analysis-status" role="status"></div>
+        <div id="weaknessStatus" class="status hidden" role="status"></div>
 
-        <div id="informeDebilidades" class="analysis-hidden">
-            <div class="analysis-stats">
-                <div class="analysis-stat"><span>Partidas examinadas</span><strong id="dPartidas">0</strong></div>
-                <div class="analysis-stat"><span>Jugadas analizadas</span><strong id="dJugadas">0</strong></div>
-                <div class="analysis-stat"><span>Errores graves</span><strong id="dGraves">0</strong></div>
-                <div class="analysis-stat"><span>Errores importantes</span><strong id="dErrores">0</strong></div>
-                <div class="analysis-stat"><span>Imprecisiones</span><strong id="dImprecisiones">0</strong></div>
-                <div class="analysis-stat"><span>Porcentaje de score</span><strong id="dScore">—</strong></div>
-            </div>
-
-            <h3 class="analysis-heading">🎯 Recomendaciones</h3>
-            <div id="dRecomendaciones"></div>
-
-            <h3 class="analysis-heading">📚 Aperturas más frecuentes</h3>
-            <div id="dAperturas"></div>
-
-            <h3 class="analysis-heading">⚠️ Errores detectados</h3>
-            <p class="analysis-muted">La pérdida de evaluación es una estimación del motor, no una prueba automática de una debilidad permanente.</p>
-            <div id="dDebilidades"></div>
-
-            <h3 class="analysis-heading">♟ Partidas examinadas</h3>
-            <div id="dListaPartidas"></div>
-            <p class="analysis-muted" id="dNota"></p>
+        <div id="weaknessProgress" class="hidden">
+          <div class="progress-track">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <div id="progressText" class="small muted">
+            Preparando análisis...
+          </div>
         </div>
-    </section>
 
-</section>
-</main>
+        <div id="weaknessResults" class="hidden">
+          <div class="stats" style="margin-top:16px">
+            <div class="stat">
+              <div class="stat-label">Partidas analizadas</div>
+              <div class="stat-value" id="analyzedGames">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Jugadas revisadas</div>
+              <div class="stat-value" id="analyzedMoves">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Errores detectados</div>
+              <div class="stat-value" id="mistakeCount">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Color analizado</div>
+              <div class="stat-value" id="analyzedColor">—</div>
+            </div>
+          </div>
 
-<script>
-/*
- * CONFIGURACIÓN
- *
- * Si frontend y backend están en el mismo dominio,
- * dejá API_BASE como "".
- *
- * Si tu web está en GitHub Pages y el backend en Render,
- * reemplazá "" por la URL real de tu servicio Render,
- * por ejemplo: https://tu-servicio.onrender.com
- */
-const API_BASE = "";
+          <h3>Patrones y debilidades detectadas</h3>
+          <div id="weaknessList"></div>
 
-const MAX_PARTIDAS = 500;
+          <h3>Errores encontrados</h3>
+          <div id="mistakesList"></div>
 
-const $ = id => document.getElementById(id);
+          <p class="section-note" id="weaknessFootnote"></p>
+        </div>
+      </section>
 
-const usuarioInput = $("usuario");
-const botonAnalizar = $("botonAnalizar");
-const loading = $("loading");
-const loadingTitulo = $("loadingTitulo");
-const loadingTexto = $("loadingTexto");
-const loadingProgreso = $("loadingProgreso");
-const error = $("error");
-const resultado = $("resultado");
+      <div class="two-col">
+        <section class="panel">
+          <h2>Aperturas más jugadas</h2>
+          <div id="openingsList"></div>
+        </section>
 
-function mostrarCarga(titulo, texto, progreso) {
-    loading.style.display = "block";
-    loadingTitulo.textContent = titulo;
-    loadingTexto.textContent = texto;
-    loadingProgreso.style.width = progreso + "%";
-}
+        <section class="panel">
+          <h2>Variantes más jugadas</h2>
+          <div id="variantsList"></div>
+        </section>
+      </div>
 
-function ocultarCarga() {
-    loading.style.display = "none";
-    loadingProgreso.style.width = "0%";
-}
+      <section class="panel">
+        <h2>Historial de partidas</h2>
+        <p class="section-note">
+          Se muestran hasta las últimas 500 partidas disponibles en el historial
+          descargado. El análisis de debilidades utiliza solamente las últimas 50.
+        </p>
+        <div id="gamesList"></div>
+        <button id="showMoreGames" class="secondary hidden" type="button">
+          Mostrar más partidas
+        </button>
+      </section>
+    </div>
+  </main>
 
-function esperar(tiempo = 20) {
-    return new Promise(resolve => setTimeout(resolve, tiempo));
-}
+  <script>
+    /*
+      Si publicás el HTML en GitHub Pages y el backend en Render,
+      reemplazá la cadena vacía por la URL real de tu servicio Render.
+      Ejemplo: https://tu-servicio.onrender.com
+    */
+    const API_BASE = "";
 
-async function analizar() {
-    const usuario = usuarioInput.value.trim();
+    const MAX_PARTIDAS = 500;
+    const MAX_PARTIDAS_DEBILIDADES = 50;
+    const MAX_JUGADAS_POR_PARTIDA = 25;
+    const PARTIDAS_POR_PANTALLA = 25;
 
-    error.textContent = "";
-    resultado.style.display = "none";
+    let usuarioActual = "";
+    let partidas = [];
+    let partidasVisibles = 0;
+    let solicitudActual = 0;
 
-    if (!usuario) {
-        error.textContent = "Escribí un usuario de Lichess.";
+    const $ = (id) => document.getElementById(id);
+
+    function mostrarEstado(id, mensaje, tipo = "") {
+      const el = $(id);
+      el.textContent = mensaje;
+      el.className = "status" + (tipo ? " " + tipo : "");
+      el.classList.remove("hidden");
+    }
+
+    function ocultarEstado(id) {
+      $(id).classList.add("hidden");
+    }
+
+    function textoSeguro(value, fallback = "No disponible") {
+      if (value === null || value === undefined || value === "") return fallback;
+      return String(value);
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function numero(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    async function fetchConTimeout(url, options = {}, timeoutMs = 30000) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+      try {
+        return await fetch(url, {
+          ...options,
+          signal: controller.signal
+        });
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    async function fetchJSON(url, options = {}) {
+      const response = await fetchConTimeout(url, options);
+      if (!response.ok) {
+        throw new Error("El servidor respondió con estado " + response.status + ".");
+      }
+      return response.json();
+    }
+
+    async function cargarJugador(username, requestId) {
+      $("searchButton").disabled = true;
+      $("weaknessButton").disabled = true;
+      $("loading").classList.remove("hidden");
+      $("results").classList.add("hidden");
+      ocultarEstado("mainStatus");
+
+      try {
+        const profile = await fetchJSON(
+          "https://lichess.org/api/user/" + encodeURIComponent(username)
+        );
+
+        if (requestId !== solicitudActual) return;
+
+        const gamesURL =
+          "https://lichess.org/api/games/user/" +
+          encodeURIComponent(username) +
+          "?max=" + MAX_PARTIDAS +
+          "&moves=true&opening=true&pgnInJson=true";
+
+        const response = await fetchConTimeout(gamesURL, {
+          headers: { "Accept": "application/x-ndjson" }
+        }, 45000);
+
+        if (!response.ok) {
+          throw new Error("Lichess no pudo entregar el historial (HTTP " +
+            response.status + ").");
+        }
+
+        const raw = await response.text();
+        if (requestId !== solicitudActual) return;
+
+        partidas = parsearPartidas(raw).slice(0, MAX_PARTIDAS);
+        usuarioActual = profile.username || username;
+        renderPerfil(profile);
+        renderEstadisticas();
+        renderAperturas();
+        renderPartidasIniciales();
+
+        $("results").classList.remove("hidden");
+        $("weaknessButton").disabled = false;
+
+        if (partidas.length === 0) {
+          mostrarEstado(
+            "mainStatus",
+            "El perfil existe, pero no se encontraron partidas públicas disponibles.",
+            "error"
+          );
+        } else {
+          mostrarEstado(
+            "mainStatus",
+            "Historial cargado: " + partidas.length +
+            " partidas disponibles. El análisis de debilidades usa las últimas 50.",
+            "success"
+          );
+        }
+      } catch (error) {
+        if (requestId !== solicitudActual) return;
+
+        const message = error.name === "AbortError"
+          ? "La solicitud tardó demasiado. Probá de nuevo en unos segundos."
+          : (error.message || "No se pudo cargar el jugador.");
+
+        mostrarEstado("mainStatus", message, "error");
+      } finally {
+        if (requestId === solicitudActual) {
+          $("loading").classList.add("hidden");
+          $("searchButton").disabled = false;
+        }
+      }
+    }
+
+    function parsearPartidas(raw) {
+      const parsed = [];
+
+      for (const line of raw.split(/\r?\n/)) {
+        if (!line.trim()) continue;
+        try {
+          const game = JSON.parse(line);
+          if (game && (game.moves !== undefined || game.pgn)) parsed.push(game);
+        } catch (_) {
+          // Ignorar una línea incompleta sin cancelar todo el historial.
+        }
+      }
+
+      return parsed;
+    }
+
+    function getJugadores(game) {
+      const white = game.players?.white || {};
+      const black = game.players?.black || {};
+
+      return {
+        white: white.user?.name || white.name || "Blancas",
+        black: black.user?.name || black.name || "Negras",
+        whiteRating: white.rating ?? "—",
+        blackRating: black.rating ?? "—"
+      };
+    }
+
+    function getColorUsuario(game) {
+      const players = getJugadores(game);
+      if (players.white.toLowerCase() === usuarioActual.toLowerCase()) return "white";
+      if (players.black.toLowerCase() === usuarioActual.toLowerCase()) return "black";
+      return null;
+    }
+
+    function getResultadoUsuario(game) {
+      const color = getColorUsuario(game);
+      if (!color) return "other";
+
+      if (game.winner === color) return "win";
+      if (game.winner === undefined || game.winner === null) return "draw";
+      return "loss";
+    }
+
+    function renderPerfil(profile) {
+      $("playerTitle").textContent = profile.username || usuarioActual;
+      const perfs = profile.perfs || {};
+      const ratings = Object.entries(perfs)
+        .filter(([_, data]) => data && Number.isFinite(data.rating))
+        .map(([name, data]) => name + ": " + data.rating)
+        .slice(0, 5);
+
+      $("playerDescription").textContent =
+        "Seguidores: " + numero(profile.nbFollowers) +
+        " · Partidas totales registradas: " + numero(profile.count?.all) +
+        (ratings.length ? " · Ratings: " + ratings.join(" | ") : "");
+    }
+
+    function renderEstadisticas() {
+      let wins = 0, draws = 0, losses = 0;
+
+      for (const game of partidas) {
+        const result = getResultadoUsuario(game);
+        if (result === "win") wins++;
+        else if (result === "draw") draws++;
+        else if (result === "loss") losses++;
+      }
+
+      const total = wins + draws + losses;
+      $("totalGames").textContent = total;
+      $("wins").textContent = wins;
+      $("draws").textContent = draws;
+      $("losses").textContent = losses;
+
+      $("winBar").style.width = total ? (wins / total * 100) + "%" : "0%";
+      $("drawBar").style.width = total ? (draws / total * 100) + "%" : "0%";
+      $("lossBar").style.width = total ? (losses / total * 100) + "%" : "0%";
+
+      $("resultSummary").textContent = total
+        ? "Porcentaje de victorias: " + (wins / total * 100).toFixed(1) +
+          "% · Empates: " + (draws / total * 100).toFixed(1) +
+          "% · Derrotas: " + (losses / total * 100).toFixed(1) + "%"
+        : "No hay resultados para mostrar.";
+    }
+
+    function nombreApertura(game) {
+      if (game.opening?.name) return game.opening.name;
+      if (game.pgn) {
+        const match = game.pgn.match(/\[Opening "([^"]+)"\]/);
+        if (match) return match[1];
+      }
+      return "Apertura no identificada";
+    }
+
+    function renderAperturas() {
+      const openings = new Map();
+      const variants = new Map();
+
+      for (const game of partidas) {
+        const opening = nombreApertura(game);
+        openings.set(opening, (openings.get(opening) || 0) + 1);
+
+        const variant = game.variant || "standard";
+        variants.set(variant, (variants.get(variant) || 0) + 1);
+      }
+
+      $("openingsList").innerHTML = ordenarMap(openings, 12);
+      $("variantsList").innerHTML = ordenarMap(variants, 12, true);
+    }
+
+    function ordenarMap(map, limit, variantMode = false) {
+      const entries = [...map.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
+      if (!entries.length) return '<p class="muted">Todavía no hay datos.</p>';
+
+      return entries.map(([name, count]) => `
+        <div class="list-item">
+          <strong>${escapeHTML(variantMode ? nombreVariante(name) : name)}</strong>
+          <span class="muted"> — ${count} partidas</span>
+        </div>
+      `).join("");
+    }
+
+    function nombreVariante(value) {
+      const names = {
+        standard: "Ajedrez estándar",
+        chess960: "Chess960",
+        crazyhouse: "Crazyhouse",
+        antichess: "Antichess",
+        atomic: "Atomic",
+        horde: "Horde",
+        kingOfTheHill: "King of the Hill",
+        racingKings: "Racing Kings",
+        threeCheck: "Three-check",
+        fromPosition: "Desde una posición"
+      };
+      return names[value] || value;
+    }
+
+    function renderPartidasIniciales() {
+      partidasVisibles = 0;
+      $("gamesList").innerHTML = "";
+      agregarPartidas();
+    }
+
+    function agregarPartidas() {
+      const container = $("gamesList");
+      const end = Math.min(partidasVisibles + PARTIDAS_POR_PANTALLA, partidas.length);
+
+      for (let i = partidasVisibles; i < end; i++) {
+        const game = partidas[i];
+        const players = getJugadores(game);
+        const result = getResultadoUsuario(game);
+        const date = game.createdAt
+          ? new Date(game.createdAt).toLocaleDateString("es-AR")
+          : "Fecha desconocida";
+
+        const resultText = result === "win" ? "Victoria"
+          : result === "loss" ? "Derrota"
+          : result === "draw" ? "Empate"
+          : "Resultado desconocido";
+
+        const link = game.id ? "https://lichess.org/" + encodeURIComponent(game.id) : "";
+
+        const details = document.createElement("details");
+        details.className = "game";
+        details.innerHTML = `
+          <summary>
+            ${i + 1}. ${escapeHTML(players.white)} vs ${escapeHTML(players.black)}
+          </summary>
+          <p>Fecha: ${escapeHTML(date)}</p>
+          <p>Resultado para el jugador: ${escapeHTML(resultText)}</p>
+          <p>Apertura: ${escapeHTML(nombreApertura(game))}</p>
+          <p>Ritmo: ${escapeHTML(game.speed || "No disponible")}</p>
+          <p>${link ? `<a href="${link}" target="_blank" rel="noopener noreferrer">Abrir partida en Lichess</a>` : ""}</p>
+        `;
+        container.appendChild(details);
+      }
+
+      partidasVisibles = end;
+      $("showMoreGames").classList.toggle("hidden", partidasVisibles >= partidas.length);
+    }
+
+    $("showMoreGames").addEventListener("click", agregarPartidas);
+
+    /*
+      El backend debe analizar 50 partidas y hasta 25 jugadas del jugador
+      por partida. Se mandan también los IDs más recientes como referencia.
+      El servidor debe seguir limitando y verificando esos valores.
+    */
+    async function analizarDebilidades() {
+      if (!usuarioActual) return;
+
+      const recentGames = partidas.slice(0, MAX_PARTIDAS_DEBILIDADES);
+      if (!recentGames.length) {
+        mostrarEstado("weaknessStatus", "Primero cargá un jugador con partidas disponibles.", "error");
         return;
-    }
+      }
 
-    botonAnalizar.disabled = true;
-    botonAnalizar.textContent = "ANALIZANDO...";
+      $("weaknessButton").disabled = true;
+      $("weaknessResults").classList.add("hidden");
+      $("weaknessProgress").classList.remove("hidden");
+      $("progressFill").style.width = "5%";
+      $("progressText").textContent =
+        "Enviando las últimas " + recentGames.length + " partidas para análisis...";
 
-    try {
-        mostrarCarga("♟ Buscando jugador...", "Conectando con Lichess.", 10);
-        const jugador = await obtenerJugador(usuario);
+      mostrarEstado(
+        "weaknessStatus",
+        "Analizando hasta 25 jugadas propias por partida. Puede tardar varios minutos.",
+        ""
+      );
 
-        mostrarCarga("📥 Cargando partidas...", "Descargando partidas públicas.", 30);
-        const partidasTexto = await descargarPartidas(usuario);
-
-        mostrarCarga("📚 Preparando partidas...", "Organizando partidas reales.", 55);
-        const partidas = separarPGN(partidasTexto);
-
-        if (!partidas.length) {
-            throw new Error("No encontramos partidas públicas de este jugador.");
+      try {
+        if (!API_BASE) {
+          throw new Error(
+            "Falta configurar API_BASE con la URL de tu servidor FastAPI en Render."
+          );
         }
 
-        mostrarCarga("🧠 Analizando aperturas...", "Calculando resultados y variantes.", 75);
-        await esperar();
-
-        const datos = construirAnalisis(partidas, usuario);
-
-        mostrarCarga("📊 Preparando resultados...", "Ya casi terminamos.", 90);
-        await esperar();
-
-        mostrarResultados(datos, jugador);
-
-        mostrarCarga("✅ Análisis terminado", datos.total + " partidas con resultado analizadas.", 100);
-        await esperar(350);
-
-    } catch (e) {
-        console.error(e);
-        error.textContent = e.message || "Ocurrió un error al analizar al jugador.";
-    } finally {
-        ocultarCarga();
-        botonAnalizar.disabled = false;
-        botonAnalizar.textContent = "ANALIZAR";
-    }
-}
-
-async function obtenerJugador(usuario) {
-    const respuesta = await fetch(
-        "https://lichess.org/api/user/" + encodeURIComponent(usuario)
-    );
-
-    if (respuesta.status === 404) {
-        throw new Error("No se encontró el usuario de Lichess: " + usuario);
-    }
-    if (!respuesta.ok) {
-        throw new Error("Lichess no pudo devolver la información del jugador.");
-    }
-    return respuesta.json();
-}
-
-async function descargarPartidas(usuario) {
-    const url = "https://lichess.org/api/games/user/" +
-        encodeURIComponent(usuario) +
-        "?max=" + MAX_PARTIDAS +
-        "&moves=true&tags=true&clocks=false&evals=false&opening=true";
-
-    const respuesta = await fetch(url, {
-        headers: { "Accept": "application/x-chess-pgn" }
-    });
-
-    if (!respuesta.ok) {
-        throw new Error("Lichess no permitió descargar las partidas. Intentá nuevamente.");
-    }
-    return respuesta.text();
-}
-
-function separarPGN(texto) {
-    return texto.replace(/\r\n/g, "\n")
-        .split(/\n(?=\[Event )/g)
-        .map(partida => partida.trim())
-        .filter(Boolean);
-}
-
-function obtenerHeader(pgn, nombre) {
-    const regex = new RegExp("^\\[" + nombre + "\\s+\"([^\"]*)\"\\]", "mi");
-    const encontrado = pgn.match(regex);
-    return encontrado ? encontrado[1] : "";
-}
-
-function construirAnalisis(partidas, usuario) {
-    let victorias = 0, tablas = 0, derrotas = 0;
-    const aperturas = {};
-    const variantes = {};
-
-    for (const partida of partidas) {
-        const white = obtenerHeader(partida, "White");
-        const black = obtenerHeader(partida, "Black");
-        const resultadoPartida = obtenerHeader(partida, "Result");
-
-        let resultadoJugador = "desconocido";
-
-        if (white.toLowerCase() === usuario.toLowerCase()) {
-            if (resultadoPartida === "1-0") resultadoJugador = "victoria";
-            else if (resultadoPartida === "0-1") resultadoJugador = "derrota";
-            else if (resultadoPartida === "1/2-1/2") resultadoJugador = "tablas";
-        } else if (black.toLowerCase() === usuario.toLowerCase()) {
-            if (resultadoPartida === "0-1") resultadoJugador = "victoria";
-            else if (resultadoPartida === "1-0") resultadoJugador = "derrota";
-            else if (resultadoPartida === "1/2-1/2") resultadoJugador = "tablas";
-        }
-
-        if (resultadoJugador === "victoria") victorias++;
-        else if (resultadoJugador === "tablas") tablas++;
-        else if (resultadoJugador === "derrota") derrotas++;
-
-        const apertura = obtenerApertura(partida);
-
-        if (!aperturas[apertura]) {
-            aperturas[apertura] = {
-                nombre: apertura, partidas: 0, victorias: 0,
-                tablas: 0, derrotas: 0, juegos: [], variantes: {}
-            };
-        }
-
-        const datosApertura = aperturas[apertura];
-        agregarResultado(datosApertura, resultadoJugador);
-
-        const datosPartida = crearDatosPartida(partida, usuario, resultadoJugador);
-        datosApertura.juegos.push(datosPartida);
-
-        const linea = obtenerLinea(partida);
-
-        if (linea) {
-            const clave = apertura + "|||" + linea;
-
-            if (!variantes[clave]) {
-                variantes[clave] = {
-                    apertura, linea, partidas: 0, victorias: 0,
-                    tablas: 0, derrotas: 0, juegos: []
-                };
-            }
-
-            const variante = variantes[clave];
-            agregarResultado(variante, resultadoJugador);
-            variante.juegos.push(datosPartida);
-            datosApertura.variantes[linea] = variante;
-        }
-    }
-
-    const total = victorias + tablas + derrotas;
-    const score = total ? round((victorias + tablas * 0.5) / total * 100) : 0;
-
-    return {
-        usuario, total, victorias, tablas, derrotas, score,
-        aperturas: Object.values(aperturas).sort((a,b) => b.partidas-a.partidas),
-        variantes: Object.values(variantes), partidas
-    };
-}
-
-function agregarResultado(objeto, resultadoJugador) {
-    if (!["victoria","tablas","derrota"].includes(resultadoJugador)) return;
-    objeto.partidas++;
-    if (resultadoJugador === "victoria") objeto.victorias++;
-    else if (resultadoJugador === "tablas") objeto.tablas++;
-    else objeto.derrotas++;
-}
-
-function crearDatosPartida(pgn, usuario, resultadoJugador) {
-    const white = obtenerHeader(pgn, "White");
-    const black = obtenerHeader(pgn, "Black");
-    return {
-        rival: white.toLowerCase() === usuario.toLowerCase() ? black : white,
-        white, black,
-        fecha: obtenerHeader(pgn, "Date"),
-        resultado: obtenerHeader(pgn, "Result"),
-        resultadoJugador,
-        site: obtenerHeader(pgn, "Site")
-    };
-}
-
-function obtenerApertura(pgn) {
-    return obtenerHeader(pgn, "Opening") ||
-        (obtenerHeader(pgn, "ECO") ? "ECO " + obtenerHeader(pgn, "ECO") : "Apertura desconocida");
-}
-
-function obtenerLinea(pgn) {
-    const separacion = pgn.search(/\n\s*\n/);
-    if (separacion === -1) return "";
-
-    let movimientos = pgn.substring(separacion);
-    movimientos = movimientos.replace(/\{[^}]*\}/g, "");
-    movimientos = movimientos.replace(/\([^()]*\)/g, "");
-    movimientos = movimientos.replace(/\d+\.(\.\.)?/g, "");
-    movimientos = movimientos.replace(/\s*(1-0|0-1|1\/2-1\/2|\*)\s*$/, "");
-
-    return movimientos.split(/\s+/).filter(Boolean).slice(0,12).join(" ");
-}
-
-function round(numero) {
-    return Math.round(numero * 10) / 10;
-}
-
-function escapeHTML(texto) {
-    return String(texto ?? "").replace(/[&<>"']/g, c => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
-    })[c]);
-}
-
-function obtenerRating(jugador) {
-    const ratings = [
-        jugador.perfs?.blitz?.rating,
-        jugador.perfs?.rapid?.rating,
-        jugador.perfs?.classical?.rating,
-        jugador.perfs?.bullet?.rating
-    ];
-    return ratings.find(rating => rating) || null;
-}
-
-function calcularPorcentaje(datos) {
-    if (!datos.partidas) return 0;
-    return round((datos.victorias + datos.tablas * 0.5) / datos.partidas * 100);
-}
-
-function mostrarResultados(data, jugador) {
-    resultado.style.display = "block";
-    $("nombreJugador").textContent = jugador.username;
-    $("datosJugador").textContent = jugador.title
-        ? jugador.title + " · Lichess: " + jugador.username
-        : "Lichess: " + jugador.username;
-
-    const rating = obtenerRating(jugador);
-    $("ratingJugador").textContent = rating ? "Rating: " + rating : "Rating no disponible";
-
-    $("total").textContent = data.total;
-    $("victorias").textContent = data.victorias;
-    $("tablas").textContent = data.tablas;
-    $("derrotas").textContent = data.derrotas;
-    $("porcentaje").textContent = data.score + "%";
-
-    if (data.total < 5) {
-        $("calidadDatos").textContent = "Hay pocas partidas con resultado. No conviene sacar conclusiones fuertes todavía.";
-    } else if (data.total < 15) {
-        $("calidadDatos").textContent = "La muestra es pequeña. Las estadísticas pueden ser útiles, pero todavía son limitadas.";
-    } else {
-        $("calidadDatos").textContent = "Los datos se calculan a partir de las partidas públicas descargadas de Lichess.";
-    }
-
-    mostrarAperturas(data.aperturas);
-    $("debilidadUsuario").value = jugador.username;
-
-    resultado.scrollIntoView({behavior:"smooth", block:"start"});
-}
-
-function mostrarAperturas(aperturas) {
-    const contenedor = $("aperturas");
-    contenedor.replaceChildren();
-
-    if (!aperturas.length) {
-        contenedor.textContent = "No hay datos de aperturas.";
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-
-    aperturas.forEach(apertura => {
-        const elemento = document.createElement("div");
-        elemento.className = "opening";
-
-        const titulo = document.createElement("div");
-        titulo.className = "opening-title";
-        titulo.innerHTML = `<strong>${escapeHTML(apertura.nombre)}</strong><strong>${calcularPorcentaje(apertura)}%</strong>`;
-        titulo.style.cursor = "pointer";
-
-        const info = document.createElement("div");
-        info.className = "opening-data";
-        info.textContent = `${apertura.partidas} partidas · ${apertura.victorias} victorias · ${apertura.tablas} tablas · ${apertura.derrotas} derrotas`;
-
-        const barra = document.createElement("div");
-        barra.className = "bar";
-        const progreso = document.createElement("div");
-        progreso.style.width = Math.min(calcularPorcentaje(apertura),100) + "%";
-        barra.appendChild(progreso);
-
-        const contenido = document.createElement("div");
-        contenido.className = "opening-content";
-        contenido.style.display = "none";
-
-        const variantes = Object.values(apertura.variantes).sort((a,b)=>b.partidas-a.partidas);
-
-        variantes.forEach(variante => {
-            const v = document.createElement("div");
-            v.className = "variant";
-
-            const vTitle = document.createElement("button");
-            vTitle.className = "show-games";
-            vTitle.textContent = `Variante · ${variante.partidas} partidas · score ${calcularPorcentaje(variante)}%`;
-
-            const vMoves = document.createElement("div");
-            vMoves.className = "moves";
-            vMoves.textContent = variante.linea;
-
-            const vGames = document.createElement("div");
-            vGames.style.display = "none";
-
-            vTitle.addEventListener("click", () => {
-                const open = vGames.style.display === "none";
-                vGames.style.display = open ? "block" : "none";
-                if (open && !vGames.dataset.loaded) {
-                    variante.juegos.slice(0,30).forEach(j => vGames.appendChild(crearPartida(j)));
-                    vGames.dataset.loaded = "1";
-                }
-            });
-
-            v.append(vTitle,vMoves,vGames);
-            contenido.appendChild(v);
-        });
-
-        const gameButton = document.createElement("button");
-        gameButton.className = "show-games";
-        gameButton.textContent = "Mostrar partidas de esta apertura";
-
-        const gameList = document.createElement("div");
-        gameList.style.display = "none";
-
-        gameButton.addEventListener("click", () => {
-            const open = gameList.style.display === "none";
-            gameList.style.display = open ? "block" : "none";
-            gameButton.textContent = open ? "Ocultar partidas" : "Mostrar partidas de esta apertura";
-
-            if (open && !gameList.dataset.loaded) {
-                apertura.juegos.slice(0,50).forEach(j => gameList.appendChild(crearPartida(j)));
-                gameList.dataset.loaded = "1";
-            }
-        });
-
-        contenido.append(gameButton,gameList);
-
-        titulo.addEventListener("click", () => {
-            const open = contenido.style.display === "none";
-            contenido.style.display = open ? "block" : "none";
-            elemento.classList.toggle("open",open);
-        });
-
-        elemento.append(titulo,barra,info,contenido);
-        fragment.appendChild(elemento);
-    });
-
-    contenedor.appendChild(fragment);
-}
-
-function crearPartida(partida) {
-    const elemento = document.createElement("div");
-    elemento.className = "game";
-
-    const resultadoTexto = {
-        victoria:"🟢 Victoria", derrota:"🔴 Derrota", tablas:"🟡 Tablas"
-    }[partida.resultadoJugador] || "Resultado desconocido";
-
-    let enlace = "";
-    if (/^https:\/\/lichess\.org\/[A-Za-z0-9]+/.test(partida.site || "")) {
-        enlace = `<a href="${escapeHTML(partida.site)}" target="_blank" rel="noopener noreferrer">Ver partida en Lichess →</a>`;
-    }
-
-    elemento.innerHTML = `
-        <strong>${escapeHTML(partida.rival || "Rival desconocido")}</strong>
-        <div class="game-data">${resultadoTexto} · ${escapeHTML(partida.fecha || "Fecha desconocida")}</div>
-        ${enlace}
-    `;
-    return elemento;
-}
-
-/*
-=====================================================
-NUEVO: ANALIZADOR DE DEBILIDADES CON STOCKFISH
-=====================================================
-*/
-
-async function analizarDebilidades() {
-    const usuario = $("debilidadUsuario").value.trim() || usuarioInput.value.trim();
-    const maxGames = Number($("cantidadDebilidad").value);
-    const boton = $("botonDebilidades");
-    const estado = $("estadoDebilidades");
-    const informe = $("informeDebilidades");
-
-    if (!usuario) {
-        estado.textContent = "Primero escribí el usuario de Lichess.";
-        return;
-    }
-
-    boton.disabled = true;
-    boton.textContent = "ANALIZANDO...";
-    estado.textContent = "Conectando con el servidor y Stockfish. Puede tardar.";
-    informe.classList.add("analysis-hidden");
-
-    try {
-        const response = await fetch(API_BASE + "/api/analyze", {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({username:usuario,max_games:maxGames})
-        });
+        const payload = {
+          username: usuarioActual,
+          max_games: MAX_PARTIDAS_DEBILIDADES,
+          max_moves_per_game: MAX_JUGADAS_POR_PARTIDA,
+          game_ids: recentGames.map(game => game.id).filter(Boolean)
+        };
+
+        $("progressFill").style.width = "15%";
+        $("progressText").textContent = "El servidor está procesando las partidas...";
+
+        const response = await fetchConTimeout(
+          API_BASE.replace(/\/+$/, "") + "/api/analyze",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          },
+          300000
+        );
 
         let data;
         try {
-            data = await response.json();
-        } catch {
-            throw new Error("El servidor no devolvió JSON válido. Revisá la URL del backend.");
+          data = await response.json();
+        } catch (_) {
+          throw new Error("El servidor no devolvió una respuesta JSON válida.");
         }
 
         if (!response.ok) {
-            throw new Error(data.detail || "No se pudo completar el análisis.");
+          throw new Error(data.detail || data.error ||
+            "El servidor devolvió un error HTTP " + response.status + ".");
         }
 
+        $("progressFill").style.width = "100%";
+        $("progressText").textContent = "Análisis terminado.";
+
         renderDebilidades(data);
-        informe.classList.remove("analysis-hidden");
-        estado.textContent = "✅ Informe terminado para " + data.username + ".";
-    } catch (e) {
-        console.error(e);
-        estado.textContent = "Error: " + e.message +
-            " Si la web está en GitHub Pages, configurá API_BASE con la URL de Render y habilitá CORS en el servidor.";
-    } finally {
-        boton.disabled = false;
-        boton.textContent = "🔍 Analizar debilidades con Stockfish";
-    }
-}
+        mostrarEstado("weaknessStatus", "Análisis completado.", "success");
+      } catch (error) {
+        const message = error.name === "AbortError"
+          ? "El análisis tardó demasiado y la solicitud se canceló. El servidor debe procesar las partidas por etapas."
+          : (error.message || "No se pudo completar el análisis.");
 
-function renderDebilidades(data) {
-    const counts = data.severity_counts || {};
-    const results = data.results || {};
-
-    $("dPartidas").textContent = data.games_found ?? 0;
-    $("dJugadas").textContent = data.moves_analyzed ?? 0;
-    $("dGraves").textContent = counts.Blunders ?? 0;
-    $("dErrores").textContent = counts.Mistakes ?? 0;
-    $("dImprecisiones").textContent = counts.Inaccuracies ?? 0;
-
-    const scored = (results.win || 0) + (results.draw || 0) + (results.loss || 0);
-    $("dScore").textContent = scored
-        ? round(((results.win || 0) + (results.draw || 0)*0.5)/scored*100) + "%"
-        : "—";
-
-    $("dRecomendaciones").replaceChildren();
-    (data.recommendations || []).forEach(texto => {
-        const div = document.createElement("div");
-        div.className = "analysis-item";
-        div.textContent = texto;
-        $("dRecomendaciones").appendChild(div);
-    });
-
-    $("dAperturas").replaceChildren();
-    const openings = data.common_openings || [];
-
-    if (!openings.length) {
-        $("dAperturas").textContent = "No se identificaron aperturas en esta muestra.";
-    } else {
-        openings.forEach(item => {
-            const div = document.createElement("div");
-            div.className = "analysis-item";
-            div.innerHTML = `<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.games)} partidas de la muestra</p>`;
-            $("dAperturas").appendChild(div);
-        });
+        mostrarEstado("weaknessStatus", message, "error");
+        $("progressText").textContent =
+          "No se completó el análisis. Revisá la conexión con el servidor y su registro de errores.";
+      } finally {
+        $("weaknessButton").disabled = false;
+      }
     }
 
-    $("dDebilidades").replaceChildren();
-    const weaknesses = data.weaknesses || [];
+    function renderDebilidades(data) {
+      $("weaknessResults").classList.remove("hidden");
 
-    if (!weaknesses.length) {
-        $("dDebilidades").textContent = "No se detectaron pérdidas de evaluación de 80 centipawns o más en las jugadas examinadas.";
-    } else {
-        weaknesses.forEach(item => {
-            const div = document.createElement("div");
-            div.className = "analysis-item";
+      const analyzedGames = numero(data.analyzed_games ?? data.games_analyzed);
+      const analyzedMoves = numero(data.analyzed_moves ?? data.moves_analyzed);
+      const mistakes = Array.isArray(data.mistakes) ? data.mistakes
+        : Array.isArray(data.errors) ? data.errors : [];
 
-            const severityClass = item.severity === "Blunder"
-                ? "analysis-bad"
-                : item.severity === "Mistake"
-                    ? "analysis-warn"
-                    : "analysis-good";
+      $("analyzedGames").textContent = analyzedGames;
+      $("analyzedMoves").textContent = analyzedMoves;
+      $("mistakeCount").textContent = numero(data.mistake_count ?? mistakes.length);
+      $("analyzedColor").textContent = data.color
+        ? nombreVariante(data.color)
+        : "Ambos / mixto";
 
-            div.innerHTML = `
-                <span class="${severityClass}"><strong>${escapeHTML(item.severity)}</strong></span>
-                <span class="analysis-tag">Pérdida: ${escapeHTML(item.drop_cp)} cp</span>
-                <p>Partida ${escapeHTML(item.game)} · Jugada ${escapeHTML(item.move_number)} · ${item.color === "white" ? "Blancas" : "Negras"}</p>
-                <p>Jugó <strong>${escapeHTML(item.played)}</strong> · Alternativa del motor: <strong>${escapeHTML(item.best)}</strong></p>
-                <p>Apertura: ${escapeHTML(item.opening)}</p>
-                <details>
-                    <summary>Ver posición FEN</summary>
-                    <code>${escapeHTML(item.fen)}</code>
-                </details>
+      const weaknesses = Array.isArray(data.weaknesses)
+        ? data.weaknesses
+        : Array.isArray(data.patterns) ? data.patterns : [];
+
+      $("weaknessList").innerHTML = weaknesses.length
+        ? weaknesses.map(item => {
+            if (typeof item === "string") {
+              return `<div class="weakness-card"><p>${escapeHTML(item)}</p></div>`;
+            }
+
+            const title = item.title || item.name || item.type || "Patrón detectado";
+            const description = item.description || item.message || item.detail || "";
+            const count = item.count ?? item.occurrences;
+            return `
+              <div class="weakness-card">
+                <strong>${escapeHTML(title)}</strong>
+                ${count !== undefined ? `<span class="pill">${escapeHTML(count)} casos</span>` : ""}
+                <p>${escapeHTML(description || "El servidor detectó este patrón en las partidas analizadas.")}</p>
+              </div>
             `;
-            $("dDebilidades").appendChild(div);
-        });
+          }).join("")
+        : '<p class="muted">El servidor no devolvió patrones de debilidad. Puede que todavía no haya suficientes datos.</p>';
+
+      $("mistakesList").innerHTML = mistakes.length
+        ? mistakes.slice(0, 100).map((item, index) => {
+            if (typeof item === "string") {
+              return `<div class="weakness-card"><strong>Error ${index + 1}</strong><p>${escapeHTML(item)}</p></div>`;
+            }
+
+            const gameId = item.game_id || item.gameId || item.id;
+            const gameUrl = gameId
+              ? "https://lichess.org/" + encodeURIComponent(gameId)
+              : "";
+            const title = item.title || item.type || "Jugada para revisar";
+            const move = item.move_number ?? item.move ?? item.ply;
+            const loss = item.eval_loss ?? item.centipawn_loss ?? item.loss;
+            const description = item.description || item.message || item.reason || "";
+
+            return `
+              <div class="weakness-card">
+                <strong>${escapeHTML(title)}</strong>
+                ${move !== undefined ? `<p>Jugada: ${escapeHTML(move)}</p>` : ""}
+                ${loss !== undefined ? `<p>Pérdida estimada: ${escapeHTML(loss)}</p>` : ""}
+                ${description ? `<p>${escapeHTML(description)}</p>` : ""}
+                ${item.fen ? `<p class="small">FEN: ${escapeHTML(item.fen)}</p>` : ""}
+                ${gameUrl ? `<p><a href="${gameUrl}" target="_blank" rel="noopener noreferrer">Ver partida</a></p>` : ""}
+              </div>
+            `;
+          }).join("")
+        : '<p class="muted">No se devolvieron errores individuales.</p>';
+
+      $("weaknessFootnote").textContent =
+        "Partidas solicitadas: " + MAX_PARTIDAS_DEBILIDADES +
+        ". Máximo solicitado: " + MAX_JUGADAS_POR_PARTIDA +
+        " jugadas del jugador por partida. El resultado depende de las partidas públicas, la respuesta del servidor y la configuración de Stockfish.";
     }
 
-    $("dListaPartidas").replaceChildren();
-    (data.games || []).forEach((game,index) => {
-        const div = document.createElement("div");
-        div.className = "analysis-item";
-        div.innerHTML = `
-            <strong>Partida ${index+1}: ${escapeHTML(game.opening)}</strong>
-            <p>${game.color === "white" ? "Blancas" : "Negras"} · Resultado: ${escapeHTML(game.result)} · ${escapeHTML(game.plies)} medias jugadas</p>
-            <p>Jugadas examinadas: ${escapeHTML(game.analyzed_moves)} · Errores detectados: ${game.mistakes.length}</p>
-        `;
-        $("dListaPartidas").appendChild(div);
+    $("searchForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const username = $("usuario").value.trim();
+      if (!username) {
+        mostrarEstado("mainStatus", "Ingresá un usuario de Lichess.", "error");
+        return;
+      }
+
+      solicitudActual++;
+      partidas = [];
+      usuarioActual = "";
+      $("weaknessResults").classList.add("hidden");
+      $("weaknessProgress").classList.add("hidden");
+      cargarJugador(username, solicitudActual);
     });
 
-    $("dNota").textContent = data.note || "";
-}
-
-usuarioInput.addEventListener("keydown", event => {
-    if (event.key === "Enter") analizar();
-});
-
-$("debilidadUsuario").addEventListener("keydown", event => {
-    if (event.key === "Enter") analizarDebilidades();
-});
-</script>
+    $("weaknessButton").addEventListener("click", analizarDebilidades);
+  </script>
 </body>
 </html>
